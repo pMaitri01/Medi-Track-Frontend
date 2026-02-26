@@ -94,23 +94,27 @@ export default function Register() {
     </select>
 
     <input
-      type="text"
+      type="date"
       name="dob"
-      placeholder="Date of Birth"
-      onFocus={(e) => (e.target.type = "date")}
-      onBlur={(e) => {
-        if (!e.target.value) e.target.type = "text";
-      }}
+      max={new Date().toISOString().split("T")[0]} // 👈 prevents future dates
       onChange={handleChange}
       required
     />
+
   </div>
 
   {/* CONTACT DETAILS */}
   <h3 className="section-title">Contact Details</h3>
 
   <div className="row">
-    <input type="text" name="mobile" placeholder="Mobile Number" onChange={handleChange} required />
+    <input type="tel"
+      name="mobile"
+      placeholder="Mobile Number"
+      maxLength="10"
+      pattern="[0-9]{10}"
+      onChange={handleChange}
+      required
+    />
     <input type="email" name="email" placeholder="Email Address" onChange={handleChange} required />
   </div>
 
