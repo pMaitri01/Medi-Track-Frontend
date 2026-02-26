@@ -7,7 +7,7 @@ import Img from "../images/LogoP.png"
 function Navbar() {
   const [showDropdown, setShowDropdown] = useState(false);
   const dropdownRef = useRef(null);
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -23,10 +23,10 @@ function Navbar() {
     };
   }, []);
 
-  const handleLogout = () => {
-    localStorage.removeItem("token"); // if using auth
-    navigate("/login");
-  };
+  // const handleLogout = () => {
+  //   localStorage.removeItem("token"); // if using auth
+  //   navigate("/login");
+  // };
 
   return (
     <nav className="navbar">
@@ -53,7 +53,7 @@ function Navbar() {
             src="https://i.pravatar.cc/40"
             alt="Profile"
             className="profile-img"
-            // onClick={() => setShowDropdown(!showDropdown)}
+               onClick={() => setShowDropdown(!showDropdown)}
           />
 
           {/* {showDropdown && (
