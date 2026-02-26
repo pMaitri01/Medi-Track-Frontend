@@ -1,0 +1,79 @@
+body {
+  margin: 0;
+  font-family: "Segoe UI", sans-serif;
+  font-size: 50px;
+}
+
+/* Background */
+.doctor-login-container {
+  height: 100vh;
+  background:#5e78e9;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Card */
+.admin-login-card {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(12px);
+  padding: 40px;
+  border-radius: 16px;
+  width: 400px;
+  color: #fff;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+}
+
+/* Title */
+.admin-login-card h2 {
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+/* Inputs */
+.admin-input-group {
+  margin-bottom: 20px;
+}
+
+.admin-input-group label {
+  font-size: 14px;
+  display: block;
+  margin-bottom: 5px;
+}
+.admin-text-primary{
+  color: white;
+  text-decoration: none;
+}
+.admin-input-group input {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-radius: 8px;
+  outline: none;
+}
+/* Button */
+.admin-login-btn {
+  width: 100%;
+  padding: 12px;
+  background:#EDE4C2;
+  border: none;
+  border-radius: 8px;
+  color: #6B7445;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+  margin-bottom:5px !important;
+}
+
+.admin-login-btn:hover {
+  background: #547792; 
+  color: black;
+}
+
+/* Forgot */
+.admin-forgot {
+  text-align: right;
+  font-size: 13px;
+  margin-top: 10px;
+  cursor: pointer;
+}

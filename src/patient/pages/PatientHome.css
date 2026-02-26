@@ -1,0 +1,151 @@
+body {
+  margin: 0;
+  background: #cfe8ef;
+  font-family: "Poppins", sans-serif;
+}
+
+.page-wrapper {
+  padding: 40px;
+}
+
+.main-card {
+  background: #ffffff;
+  border-radius: 30px;
+  padding: 30px 50px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+}
+
+/* Navbar */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  font-weight: 600;
+  font-size: 20px;
+  color: #1b6f75;
+}
+
+.navbar ul {
+  list-style: none;
+  display: flex;
+  gap: 30px;
+  color: #444;
+}
+
+.navbar li {
+  cursor: pointer;
+}
+
+.navbar .active {
+  font-weight: 600;
+}
+
+/* Layout */
+.content {
+  display: flex;
+  margin-top: 40px;
+  gap: 40px;
+}
+
+.left-section {
+  background: #e6f4f5;
+  padding: 40px;
+  border-radius: 25px;
+  width: 55%;
+}
+
+.rating {
+  font-size: 14px;
+  margin-bottom: 15px;
+  color: #444;
+}
+
+.left-section h1 {
+  font-size: 36px;
+  color: #134e4a;
+}
+
+.left-section p {
+  margin: 20px 0;
+  color: #555;
+}
+
+.buttons {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 30px;
+}
+
+.primary-btn {
+  background: #1b6f75;
+  color: white;
+  padding: 12px 22px;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+}
+
+.secondary-btn {
+  background: white;
+  color: #1b6f75;
+  padding: 12px 22px;
+  border-radius: 12px;
+  border: 1px solid #1b6f75;
+  cursor: pointer;
+}
+
+.mini-cards {
+  display: flex;
+  gap: 20px;
+}
+
+.mini-card {
+  padding: 20px;
+  border-radius: 20px;
+  width: 45%;
+}
+
+.peach {
+  background: #f7d6c4;
+}
+
+.purple {
+  background: #e2d6f5;
+}
+
+.next-appointment {
+  margin-top: 30px;
+  background: white;
+  padding: 20px;
+  border-radius: 15px;
+}
+
+/* RIGHT SIDE */
+.right-section {
+  position: relative;
+  width: 45%;
+}
+
+.right-section img {
+  width: 100%;
+  border-radius: 25px;
+}
+
+.stats {
+  position: absolute;
+  bottom: -20px;
+  left: 20px;
+  display: flex;
+  gap: 20px;
+}
+
+.stat-card {
+  background: white;
+  padding: 15px 20px;
+  border-radius: 15px;
+  text-align: center;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+}

@@ -1,0 +1,55 @@
+.otp-container h2{
+  font-size: 25px;
+}
+
+input{
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ced4da;
+  border-radius: 8px;
+  margin-bottom: 15px;
+  outline: none;
+  transition: 0.3s;
+  margin-top: 3px !important;
+}
+input:focus {
+  border-color: #0aa5a5;
+  box-shadow: 0 0 5px rgba(10, 165, 165, 0.3);
+}
+.password-field {
+  position: relative;
+  width: 100%;
+  margin-bottom: 15px;
+}
+
+.password-field input {
+  width: 100%;
+  padding: 10px 40px 10px 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.toggle-eye {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  font-size: 16px;
+}
+
+button {
+  width: 100%;
+  padding: 10px;
+  background-color: #0aa5a5;
+  color: #ffffff;
+  border: none;
+  margin-top: 10px !important;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+button:hover {
+  background-color: #088f8f;
+}

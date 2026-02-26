@@ -1,0 +1,160 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+/* BACKGROUND */
+.register-container {
+  height: 100vh;
+  background-color:#BFEAEA;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* MAIN CARD */
+.register-card {
+  display: flex;
+  width: 1000px;
+  height: 600px;
+  /* background: #e6e6e6; */
+    background-color: #F2F2F2;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+}
+
+/* LEFT IMAGE */
+.left-section {
+  width: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #F2F2F2 !important;
+}
+
+.left-section img {
+  width: 100%;
+  height: 100%;
+  position:cover;
+}
+
+/* RIGHT SIDE */
+.right-section {
+  width: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f2f2f2 !important;
+}
+
+/* FORM BOX */
+.form-box {
+  /* background: #b7d3d3; */
+  background-color: #CFE5E5;
+  padding: 20px;
+  border-radius: 12px;
+  width: 95%;
+  max-height: 90%;
+  overflow-y: auto;
+}
+
+.form-box h2 {
+  text-align: center;
+  margin-bottom: 10px;
+  color: #0a8f8f;
+}
+
+/* SECTION TITLE */
+.section-title {
+  font-size: 15px;
+  font-weight: 600;
+  margin: 12px 0 6px;
+  color: #0a8f8f;
+  border-left: 3px solid #0a8f8f;
+  padding-left: 8px;
+}
+
+/* ROW ALIGNMENT */
+.row {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.row input,
+.row select {
+  flex: 1;
+}
+
+/* INPUTS */
+input,
+select,
+textarea {
+  width: 100%;
+  padding: 9px;
+  border-radius: 6px;
+  border: none;
+  outline: none;
+  font-size: 13px;
+}
+
+/* ADDRESS FULL WIDTH */
+textarea {
+  resize: none;
+  height: 55px;
+  margin-bottom: 8px;
+  width: 105%;
+  margin-left: -10px !important;
+}
+
+/* BUTTON */
+button {
+  width: 100%;
+  padding: 10px;
+  background-color: #0a8f8f;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  margin-top: 10px;
+  cursor: pointer;
+  font-size: 14px;
+  border-radius: 10px !important;
+
+}
+
+button:hover {
+  background-color: #086f6f;
+}
+
+/* LOGIN LINK */
+.login-link {
+  text-align: center;
+  font-size: 12px;
+  margin-top: 8px;
+}
+
+.login-link span {
+  color: #0a8f8f;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+/* SCROLLBAR (optional nice UI) */
+.form-box::-webkit-scrollbar {
+  width: 5px;
+}
+
+.form-box::-webkit-scrollbar-thumb {
+  background: #0a8f8f;
+  border-radius: 10px;
+}
+.log{
+  text-align: center !important;
+  margin-top: 10px !important;
+}
+.text-primary{
+  margin-left: 3px;
+}

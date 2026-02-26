@@ -1,0 +1,135 @@
+/* Background */
+.otp-container {
+  height: 100vh;
+  background-color: #bfeaea;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Main Box */
+.otp-wrapper {
+  width: 900px;
+  height: 450px;
+  background: #f2f2f2;  /*   */
+  border-radius: 20px;
+  display: flex;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+/* Left Side */
+.otp-left {
+  flex: 1;
+  background-color: white;  /* #cfe5e5 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.otp-left img {
+  width: 75%;
+}
+
+/* Right Side */
+.otp-right {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Card */
+.otp-card {
+  background: #cfe5e5;
+  padding: 40px;
+  border-radius: 15px;
+  width: 320px;
+  text-align: center;
+}
+
+.otp-card h2 {
+  color: #0aa5a5;
+  margin-bottom: 10px;
+}
+
+.otp-card p {
+  font-size: 14px;
+  margin-bottom: 20px;
+  color: #555;
+}
+
+/* OTP Inputs */
+.otp-input-group {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px;
+}
+
+.otp-input-group input {
+  width: 50px;
+  height: 50px;
+  text-align: center;
+  font-size: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  outline: none;
+}
+
+.otp-input-group input:focus {
+  border-color: #0aa5a5;
+}
+
+/* Button */
+.otp-btn {
+  width: 100%;
+  padding: 10px;
+  background-color: #0aa5a5;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.otp-btn:hover {
+  background-color: #088f8f;
+}
+
+/* Error */
+.otp-error {
+  color: red !important;
+  font-size: 13px;
+  margin-bottom: 10px;
+}
+.text-primary{
+  margin-bottom: 30px;
+  font-size: 15px;
+}
+.resend-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px; /* space between text and button */
+  margin-top: 15px;
+  font-size: 18px;
+}
+
+.resend-btn {
+  background: none;
+  border: none;
+  color: #0aa5a5;
+  cursor: pointer;
+  font-weight: 600;
+  margin-top: 0px !important;
+  padding: 5px;
+  width: 70px;
+}
+
+.resend-btn:hover {
+  text-decoration: underline;
+  background: none;
+  border-radius: 5px;
+}
+
+
