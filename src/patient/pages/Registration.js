@@ -23,6 +23,7 @@ export default function Register() {
   };
      const navigate = useNavigate();
 
+//handle subit function
   const handleSubmit = async (e) => {
   e.preventDefault();
 
