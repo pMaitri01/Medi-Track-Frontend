@@ -32,6 +32,34 @@ export default function Register() {
     return;
   }
 
+  // Mobile no.
+
+  const handleChange = (e) => {
+  const { name, value } = e.target;
+
+  if (name === "mobile") {
+    // Allow only digits
+    if (/^\d*$/.test(value)) {
+      // Allow max 10 digits only
+      if (value.length <= 10) {
+        setFormData({ ...formData, mobile: value });
+      }
+    }
+    return;
+  }
+
+  // email
+
+  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9-]+\.[a-zA-Z]{2,}$/;
+
+  if (!emailRegex.test(formData.email)) {
+    alert("Enter valid email (example: abc@gmail.com)");
+    return;
+  }
+
+  setFormData({ ...formData, [name]: value });
+};
+
   try {
     const { confirmPassword, ...dataToSend } = formData;
 
@@ -108,15 +136,31 @@ export default function Register() {
   <h3 className="section-title">Contact Details</h3>
 
   <div className="row">
-    <input type="tel"
+    <input
+      type="text"
       name="mobile"
       placeholder="Mobile Number"
-      maxLength="10"
-      pattern="[0-9]{10}"
+      value={formData.mobile}
       onChange={handleChange}
+      onKeyPress={(e) => {
+        if (!/[0-9]/.test(e.key)) {
+          e.preventDefault(); 
+        }
+      }}
+      maxLength="10"
       required
     />
-    <input type="email" name="email" placeholder="Email Address" onChange={handleChange} required />
+    <input 
+      type="email"
+      name="email"
+      placeholder="Email Address"
+      value={formData.email}
+      onChange={handleChange}
+      pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9-]+\.[a-zA-Z]{2,}$"
+      title="Enter valid email (example: abc@gmail.com)"
+      required
+    />
+    
   </div>
 
   <textarea name="address" placeholder="Full Address" onChange={handleChange} required />
