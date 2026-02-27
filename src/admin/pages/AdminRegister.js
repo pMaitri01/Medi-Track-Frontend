@@ -65,9 +65,9 @@ export default function DoctorRegister() {
       );
 
       const data = await response.json();
-      console.log("Response from backend:", data);
+      // console.log("Response from backend:", data);// for print data in console.
 
-      alert("Doctor Registered Successfully ✅");
+      alert("Doctor Registered Successfully");
     } catch (error) {
       console.error("Error:", error);
     }
