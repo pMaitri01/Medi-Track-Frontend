@@ -12,9 +12,39 @@ export default function AdminLogin() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(formData);
+    const newErrors = {};
+  if (Object.keys(newErrors).length === 0) {
+    try {
+      const response = await fetch(
+        "http://localhost:5000/api/Doctor/login",  
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email: formData.email,
+            password: formData.password,
+          }),
+        }
+      );
+
+      const data = await response.json();
+
+      if (response.ok) {
+        alert("Login Successful");
+      }
+      else{
+        alert(data.message);
+      }
+
+    } catch (error) {
+      console.error(error);
+      alert("Server Error");
+    }
+  } 
   };
 
   return (
