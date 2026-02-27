@@ -46,15 +46,33 @@ export default function DoctorRegister() {
     return newErrors;
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const validationErrors = validate();
-    setErrors(validationErrors);
+  const handleSubmit = async (e) => {
+  e.preventDefault();
+  const validationErrors = validate();
+  setErrors(validationErrors);
 
-    if (Object.keys(validationErrors).length === 0) {
+  if (Object.keys(validationErrors).length === 0) {
+    try {
+      const response = await fetch(
+        "http://localhost:5000/api/doctor/register",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        }
+      );
+
+      const data = await response.json();
+      console.log("Response from backend:", data);
+
       alert("Doctor Registered Successfully ✅");
+    } catch (error) {
+      console.error("Error:", error);
     }
-  };
+  }
+};
 
   return (
     <div className="admin-register-container">
