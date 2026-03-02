@@ -60,6 +60,19 @@ export default function Register() {
   setFormData({ ...formData, [name]: value });
 };
 
+// password 
+if (formData.password.length < 4) {
+    alert("Password must be at least 4 characters");
+    return;
+  }
+
+  // ✅ Password match validation
+  if (formData.password !== formData.confirmPassword) {
+    alert("Passwords do not match");
+    return;
+  }
+
+
   try {
     const { confirmPassword, ...dataToSend } = formData;
 
