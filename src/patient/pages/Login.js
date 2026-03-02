@@ -96,6 +96,8 @@ export default function Login() {
 
       if (response.ok) {
         alert("Login Successful");
+        localStorage.setItem("token", data.token);// store the token which send from the backend
+        localStorage.setItem("user", JSON.stringify(data.user));
         navigate("/PatientHome");
       }
       else{
