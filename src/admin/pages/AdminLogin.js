@@ -56,6 +56,8 @@ export default function AdminLogin() {
 
       if (response.ok) {
         alert("Login Successful");
+        localStorage.setItem("token", data.token);
+        localStorage.setItem("doc", JSON.stringify(data.doc));
       }
       else{
         alert(data.message);
