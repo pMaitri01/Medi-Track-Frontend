@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 import "../css/AdminLogin.css";
 
 export default function AdminLogin() {
@@ -7,6 +8,8 @@ export default function AdminLogin() {
     email: "",
     password: "",
   });
+  const [errors, setErrors] = useState({});
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -15,7 +18,25 @@ export default function AdminLogin() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const newErrors = {};
-  if (Object.keys(newErrors).length === 0) {
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9-]+\.[a-zA-Z]{2,}$/;
+
+  if (!emailRegex.test(formData.email)) {
+    newErrors.email = "Enter valid email (example: abc@gmail.com)";
+  }
+
+  // Password validation
+  if (formData.password.length < 4) {
+    newErrors.password = "Password must be at least 4 characters";
+  }
+
+  // 👉 Set errors
+  setErrors(newErrors);
+
+  // Stop if errors exist
+  if (Object.keys(newErrors).length > 0) return;
+
+
+  // if (Object.keys(newErrors).length === 0) {
     try {
       const response = await fetch(
         "http://localhost:5000/api/Doctor/login",  
@@ -44,7 +65,7 @@ export default function AdminLogin() {
       console.error(error);
       alert("Server Error");
     }
-  } 
+  // } 
   };
 
   return (
@@ -63,20 +84,34 @@ export default function AdminLogin() {
               onChange={handleChange}
               required
             />
+            {errors.email && <p className="error">{errors.email}</p>}
           </div>
 
-          <div className="admin-input-group">
-            {/* <label>Password</label> */}
+           <div className="admin-input-group">
+
+          {/* wrapper ONLY for input + icon */}
+          <div className="password-wrapper">
             <input
-              type="password"
+              type={showPassword ? "text" : "password"}
               name="password"
               placeholder="Enter password"
               value={formData.password}
               onChange={handleChange}
               required
             />
+
+            <span
+              className="eye-icon"
+              onClick={() => setShowPassword(!showPassword)}
+            >
+              {showPassword ? <FaEyeSlash /> : <FaEye />}
+            </span>
           </div>
-           {/* <p className="admin-forgot">Forgot Password?</p> */}
+
+          {/* error OUTSIDE wrapper */}
+          {errors.password && <p className="error">{errors.password}</p>}
+
+        </div>
           <small className="admin-text-primary">
                   <Link to="./demo" className="admin-text-primary">
                       Forgot Password?
