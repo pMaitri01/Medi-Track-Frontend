@@ -10,10 +10,10 @@
   background: #fff;
   padding: 30px;
   width: 520px;
-  height: 90% !important;
+  height: auto !important;
   border-radius: 15px;
   box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-  overflow-y: scroll;
+  /* overflow-y: scroll; */
 }
 
 .admin-title {
@@ -75,3 +75,19 @@
 .admin-register-btn:hover {
   background: #4a63d8;
 }
+.input-group {
+  display: flex;
+  flex-direction: column;  /* 👈 THIS IS THE KEY */
+  width: 100%;
+}
+
+.error {
+  color: red;
+  font-size: 12px;
+  margin-top: 4px;
+}
+/* .error {
+  color: red;
+  font-size: 12px;
+  margin-top: 4px;
+} */

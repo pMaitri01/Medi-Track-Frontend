@@ -7,7 +7,7 @@ import ResetPwd from './patient/pages/ResetPwd';
 import Registration from './patient/pages/Registration';
 import PatientHome from './patient/pages/PatientHome';
 import AdminLogin from './admin/pages/AdminLogin';
-import AdminRegister from './admin/pages/AdminRegister';
+import AdminSignUp from './admin/pages/AdminSignUp';
 import DoctorDashboard from './admin/pages/DoctorDashboard';
 
 
@@ -21,7 +21,7 @@ function App() {
         <Route path='/ResetPwd' element={<ResetPwd/>} />
         <Route path='/Registration' element={<Registration/>}/>
         <Route path='/AdminLogin' element={<AdminLogin/>}/>
-        <Route path='/AdminRegister' element={<AdminRegister/>}/> 
+        <Route path='/AdminSignUp' element={<AdminSignUp/>}/> 
         <Route path='/DoctorDashboard' element={<DoctorDashboard/>}/>
         <Route path='/PatientHome' element={<PatientHome/>}/>
 
