@@ -18,20 +18,50 @@ export default function Register() {
     confirmPassword: ""
   });
 
+  // const handleChange = (e) => {
+  //   setFormData({ ...formData, [e.target.name]: e.target.value });
+  //   // First Name & Last Name (only alphabets)
+  // if (name === "fname" || name === "lname") {
+  //   if (/^[A-Za-z]*$/.test(value)) {
+  //     setFormData({ ...formData, [name]: value });
+  //   }
+  //   return;
+  // }
+  // };
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
+  const { name, value } = e.target; // ✅ VERY IMPORTANT
+
+  // ✅ First Name & Last Name (only alphabets)
+  if (name === "fname" || name === "lname") {
+    if (/^[A-Za-z]*$/.test(value)) {
+      setFormData((prev) => ({ ...prev, [name]: value }));
+    }
+    return;
+  }
+
+  // ✅ Mobile (only digits, max 10)
+  if (name === "mobile") {
+    if (/^\d*$/.test(value) && value.length <= 10) {
+      setFormData((prev) => ({ ...prev, mobile: value }));
+    }
+    return;
+  }
+
+  // ✅ Normal fields
+  setFormData((prev) => ({ ...prev, [name]: value }));
+};
      const navigate = useNavigate();
 
 //handle subit function
   const handleSubmit = async (e) => {
+    
   e.preventDefault();
 
   if (formData.password !== formData.confirmPassword) {
     alert("Passwords do not match");
     return;
   }
-
+  
   // Mobile no.
 
   const handleChange = (e) => {
@@ -61,9 +91,10 @@ export default function Register() {
 };
 
 // password 
-if (formData.password.length < 4) {
-    alert("Password must be at least 4 characters");
-    return;
+const passRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/;
+if(!passRegex.test(formData.password)){
+  alert("Enter a strong password (min 6 chars with A-Z, a-z, 0-9 & special character).");
+  return;
   }
 
   // ✅ Password match validation
@@ -123,8 +154,16 @@ if (formData.password.length < 4) {
   <h3 className="section-title">Basic Information</h3>
 
   <div className="row">
-    <input type="text" name="fname" placeholder="First Name" onChange={handleChange} required />
-    <input type="text" name="lname" placeholder="Last Name" onChange={handleChange} required />
+    <input type="text" name="fname" placeholder="First Name" onChange={handleChange} onKeyPress={(e) => {
+    if (!/[A-Za-z ]/.test(e.key)) {
+      e.preventDefault(); // ❌ blocks numbers & symbols
+    }
+  }}required />
+    <input type="text" name="lname" placeholder="Last Name" onChange={handleChange} onKeyPress={(e) => {
+    if (!/[A-Za-z ]/.test(e.key)) {
+      e.preventDefault(); // ❌ blocks numbers & symbols
+    }
+  }}required />
   </div>
 
   <div className="row">
@@ -134,11 +173,15 @@ if (formData.password.length < 4) {
       <option>Female</option>
       <option>Other</option>
     </select>
-
     <input
-      type="date"
+      type="text"
       name="dob"
-      max={new Date().toISOString().split("T")[0]} // 👈 prevents future dates
+      placeholder="DOB"
+      onFocus={(e) => (e.target.type = "date")}
+      onBlur={(e) => {
+        if (!e.target.value) e.target.type = "text";
+      }}
+      max={new Date().toISOString().split("T")[0]}
       onChange={handleChange}
       required
     />
