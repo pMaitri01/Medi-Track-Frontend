@@ -33,7 +33,7 @@ export default function Login() {
       if (!value) {
         error = "Email is required";
       } else if (!/\S+@\S+\.\S+/.test(value)) {
-        error = "Invalid email format";
+        error = "Enter valid email (example: abc@gmail.com)";
       }
     }
 
@@ -125,7 +125,7 @@ export default function Login() {
           <form onSubmit={handleSubmit}>
             {/* Email */}
             <input
-              type="text"
+              type="email"
               name="email"
               className={`form-control mb-3 ${
                 errors.email ? "is-invalid" : ""
