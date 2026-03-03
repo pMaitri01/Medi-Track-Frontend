@@ -5,7 +5,6 @@ import "../css/AdminSignUp.css";
 export default function DoctorSignUp() {
   const [formData, setFormData] = useState({
     fullName: "",
-    mobile: "",
     email: "",
     password: "",
     confirmPassword: ""
@@ -76,7 +75,7 @@ const handleBlur = (e) => {
       return;
     }
     else{
-      alert("Doctor su")
+      alert("Doctor successfully register")
     }
 
     try {
