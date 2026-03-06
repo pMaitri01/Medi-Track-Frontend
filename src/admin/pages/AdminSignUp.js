@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 import "../css/AdminSignUp.css";
 
 export default function DoctorSignUp() {
@@ -10,7 +11,10 @@ export default function DoctorSignUp() {
     confirmPassword: ""
   });
   const [errors, setErrors] = useState({});
-  // ✅ handleChange REQUIRED
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  
+  //handleChange REQUIRED
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -21,7 +25,7 @@ const handleBlur = (e) => {
   const { name, value } = e.target;
   let newErrors = { ...errors };
 
-  // ✅ Full Name
+  //Full Name
   if (name === "fullName") {
     if (!value) {
       newErrors.fullName = "Full Name required";
@@ -32,31 +36,37 @@ const handleBlur = (e) => {
     }
   }
 
-  // ✅ Email
+  // Email
   if (name === "email") {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     if (!value) {
       newErrors.email = "Email required";
     } else if (!emailRegex.test(value)) {
-      newErrors.email = "Enter valid email";
+      newErrors.email = "Enter valid email (eg: abc@gmail.com)";
     } else {
       delete newErrors.email;
     }
   }
 
-  // ✅ Password
+  // Password
   if (name === "password") {
+    const strongPassword =
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/;
+
     if (!value) {
       newErrors.password = "Password required";
-    } else if (value.length < 4) {
-      newErrors.password = "Min 4 characters required";
-    } else {
+    } 
+    else if (!strongPassword.test(value)) {
+      newErrors.password =
+        " Password Must be Strong (Min 8 chars, 1 Uppercase, 1 Lowercase, 1 Number, 1 Special char)";
+    } 
+    else {
       delete newErrors.password;
     }
   }
 
-  // ✅ Confirm Password
+  // Confirm Password
   if (name === "confirmPassword") {
     if (value !== formData.password) {
       newErrors.confirmPassword = "Passwords do not match";
@@ -67,7 +77,7 @@ const handleBlur = (e) => {
 
   setErrors(newErrors);
 };
-  // ✅ No validation
+  //No validation
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (Object.keys(errors).length > 0) {
@@ -118,7 +128,7 @@ const handleBlur = (e) => {
           />
           {errors.fullName && <p className="error">{errors.fullName}</p>}
 
-          <div className="admin-row">
+          {/* <div className="admin-row"> */}
             <input
               type="email"
               name="email"
@@ -127,27 +137,45 @@ const handleBlur = (e) => {
               onBlur={handleBlur}
             />
             {errors.email && <p className="error">{errors.email}</p>}
-          </div>
+          {/* </div> */}
 
           <div className="admin-row">
-            <input
-              type="password"
-              name="password"
-              placeholder="Password"
-              onChange={handleChange}
-              onBlur={handleBlur}
-            />
+
+            <div className="input-group">
+              <input
+                type={showPassword ? "text" : "password"}
+                name="password"
+                placeholder="Password"
+                onChange={handleChange}
+                onBlur={handleBlur}
+              />
+                <span
+                  className="eye-icon"
+                  onClick={() => setShowPassword(!showPassword)}
+                >
+                  {showPassword ? <FaEyeSlash /> : <FaEye />}
+                </span>
               {errors.password && <p className="error">{errors.password}</p>}
-            <input
-              type="password"
-              name="confirmPassword"
-              placeholder="Confirm Password"
-              onChange={handleChange}
-              onBlur={handleBlur}
-            />
-            {errors.confirmPassword && (
-  <p className="error">{errors.confirmPassword}</p>
-)}
+            </div>
+
+            <div className="input-group">
+             <input
+                type={showConfirmPassword ? "text" : "password"}
+                name="confirmPassword"
+                placeholder="Confirm Password"
+                onChange={handleChange}
+                onBlur={handleBlur}
+              />
+              <span
+                  className="eye-icon"
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                >
+                  {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
+                </span>
+              {errors.confirmPassword && (
+                <p className="error">{errors.confirmPassword}</p>
+              )}
+            </div>
           </div>
 
           <button type="submit" className="admin-register-btn">

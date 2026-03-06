@@ -38,9 +38,7 @@
 /* .admin-register-card select{
   margin-top: 3px;
 } */
-.admin-register-card input,
-.admin-register-card select,
-.admin-register-card textarea {
+.admin-register-card input{
   width: 100%;
   padding: 10px;
   border-radius: 8px;
@@ -76,6 +74,7 @@
   background: #4a63d8;
 }
 .input-group {
+  position: relative;
   display: flex;
   flex-direction: column;  /* 👈 THIS IS THE KEY */
   width: 100%;
@@ -86,8 +85,32 @@
   font-size: 12px;
   margin-top: 4px;
 }
-/* .error {
-  color: red;
-  font-size: 12px;
-  margin-top: 4px;
-} */
+.admin-register-card input{
+  padding-right: 35px;
+}
+.eye-icon {
+  position: absolute;
+  right: 12px;
+  top:46px;
+  transform: translateY(-100%);
+  cursor: pointer;
+  color: #555;
+}
+
+
+.password-wrapper{
+  position: relative;
+  display: flex;
+  align-items: center;
+  border: 1px solid #ccc;
+  border-radius: 8px;   /* 👈 apply radius here */
+  overflow: hidden;     /* keeps rounded corners */
+}
+
+.password-wrapper input{
+  border: none;
+  outline: none;
+  width: 100%;
+  padding: 10px;
+  padding-right: 35px;  /* space for eye icon */
+}
