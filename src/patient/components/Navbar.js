@@ -7,8 +7,12 @@ import Img from "../images/LogoP.png"
 function Navbar() {
   const [showDropdown, setShowDropdown] = useState(false);
   const dropdownRef = useRef(null);
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
 
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    navigate("/");
+  };
   // Close dropdown when clicking outside
   useEffect(() => {
     function handleClickOutside(event) {
@@ -56,12 +60,12 @@ function Navbar() {
                onClick={() => setShowDropdown(!showDropdown)}
           />
 
-          {/* {showDropdown && (
+          {showDropdown && (
             <div className="dropdown">
               <p onClick={() => navigate("/profile")}>My Profile</p>
               <p className="logout" onClick={handleLogout}>Logout</p>
             </div>
-          )} */}
+          )}
         </div>
       </div>
     </nav>
