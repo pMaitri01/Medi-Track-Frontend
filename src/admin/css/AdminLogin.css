@@ -50,6 +50,7 @@ body {
   width: 100%;
   padding: 10px;
   border-radius: 8px;
+  border: 1px solid #dcdcdc !important;
 }
 /* Button */
 .admin-login-btn {
@@ -100,4 +101,8 @@ body {
   transform: translateY(-50%);
   cursor: pointer;
   color: #555;
+}
+.admin-text-primary{
+  color: #7087EB !important;
+  margin-left: 5px;
 }
