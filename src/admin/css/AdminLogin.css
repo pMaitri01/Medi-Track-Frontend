@@ -59,12 +59,12 @@ body {
   background:#EDE4C2;
   border: none;
   border-radius: 8px;
-  color:black;
+  color:white;
   font-weight: bold;
   cursor: pointer;
   transition: 0.3s;
   margin-bottom:5px !important;
-  background: #547792; 
+  background: #5E78E9; 
 
 }
 
@@ -93,11 +93,13 @@ body {
   width: 100%;
   padding-right: 40px;
 }
-
+.password-wrapper{
+  border:none !important;
+}
 .eye-icon {
   position: absolute;
   right: 12px;
-  top: 50%;
+  top: 39px !important;
   transform: translateY(-50%);
   cursor: pointer;
   color: #555;

@@ -14,23 +14,42 @@ export default function AdminLogin() {
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
+  const handleBlur = (e) => {
+  const { name, value } = e.target;
+  let newErrors = { ...errors };
 
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  if (name === "email") {
+    if (!value) {
+      newErrors.email = "Email is required";
+    } else if (!emailRegex.test(value)) {
+      newErrors.email = "Enter valid email (example: abc@gmail.com)";
+    } else {
+      delete newErrors.email;
+    }
+  }
+
+  if (name === "password") {
+    const passwordRegex =
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+
+    if (!value) {
+      newErrors.password = "Password is required";
+    } else if (!passwordRegex.test(value)) {
+      newErrors.password =
+        "Password must be strong (Min 8 chars, 1 Uppercase, 1 Lowercase, 1 Number, 1 Special char)";
+    } else {
+      delete newErrors.password;
+    }
+  }
+
+  setErrors(newErrors);
+};
   const handleSubmit = async (e) => {
     e.preventDefault();
     const newErrors = {};
-    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9-]+\.[a-zA-Z]{2,}$/;
 
-  if (!emailRegex.test(formData.email)) {
-    newErrors.email = "Enter valid email (example: abc@gmail.com)";
-  }
-
-  // Password validation
-  if (formData.password.length < 4) {
-    newErrors.password = "Password must be at least 4 characters";
-  }
-
-  // 👉 Set errors
-  setErrors(newErrors);
 
   // Stop if errors exist
   if (Object.keys(newErrors).length > 0) return;
@@ -84,6 +103,7 @@ export default function AdminLogin() {
               placeholder="Enter your email"
               value={formData.email}
               onChange={handleChange}
+              onBlur={handleBlur}
               required
             />
             {errors.email && <p className="error">{errors.email}</p>}
@@ -99,6 +119,7 @@ export default function AdminLogin() {
               placeholder="Enter password"
               value={formData.password}
               onChange={handleChange}
+              onBlur={handleBlur}
               required
             />
 
