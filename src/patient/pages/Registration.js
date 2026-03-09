@@ -74,9 +74,7 @@ export default function Register() {
  
 
   // email
-
-const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9-]+\.[a-zA-Z]{2,}$/;
-  if (!emailRegex.test(formData.email)) {
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;  if (!emailRegex.test(formData.email)) {
     newErrors.email = "Enter valid email (example: abc@gmail.com)";
   }
 // pwd
@@ -205,7 +203,6 @@ const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9-]+\.[a-zA-Z]{2,}$/;
       placeholder="Email Address"
       value={formData.email}
       onChange={handleChange}
-      pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9-]+\.[a-zA-Z]{2,}$"
       title="Enter valid email (example: abc@gmail.com)"
       required
     />
