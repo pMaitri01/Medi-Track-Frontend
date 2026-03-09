@@ -158,3 +158,8 @@ button:hover {
 .text-primary{
   margin-left: 3px;
 }
+.error{
+  color: red;
+  font-size: 13px;
+  margin-top: 3px;
+}

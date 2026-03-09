@@ -17,6 +17,7 @@ export default function Register() {
     password: "",
     confirmPassword: ""
   });
+  const [errors, setErrors] = useState({});
 
   // const handleChange = (e) => {
   //   setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -46,28 +47,8 @@ export default function Register() {
     }
     return;
   }
-
-  // ✅ Normal fields
-  setFormData((prev) => ({ ...prev, [name]: value }));
-};
-     const navigate = useNavigate();
-
-//handle subit function
-  const handleSubmit = async (e) => {
-    
-  e.preventDefault();
-
-  if (formData.password !== formData.confirmPassword) {
-    alert("Passwords do not match");
-    return;
-  }
-  
-  // Mobile no.
-
-  const handleChange = (e) => {
-  const { name, value } = e.target;
-
-  if (name === "mobile") {
+  // Mobile Number 
+   if (name === "mobile") {
     // Allow only digits
     if (/^\d*$/.test(value)) {
       // Allow max 10 digits only
@@ -77,32 +58,42 @@ export default function Register() {
     }
     return;
   }
+  // ✅ Normal fields
+  setFormData((prev) => ({ ...prev, [name]: value }));
+};
+     const navigate = useNavigate();
+
+//handle subit function
+  const handleSubmit = async (e) => {
+    
+  e.preventDefault();
+   let newErrors = {};
+
+  // const { name, value } = e.target;
+
+ 
 
   // email
 
-  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9-]+\.[a-zA-Z]{2,}$/;
-
+const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9-]+\.[a-zA-Z]{2,}$/;
   if (!emailRegex.test(formData.email)) {
-    alert("Enter valid email (example: abc@gmail.com)");
-    return;
+    newErrors.email = "Enter valid email (example: abc@gmail.com)";
+  }
+// pwd
+  const passRegex =
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{6,}$/;
+
+  if (!passRegex.test(formData.password)) {
+    newErrors.password =
+      "Password must contain uppercase, lowercase, number & special character";
   }
 
-  setFormData({ ...formData, [name]: value });
-};
-
-// password 
-const passRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/;
-if(!passRegex.test(formData.password)){
-  alert("Enter a strong password (min 6 chars with A-Z, a-z, 0-9 & special character).");
-  return;
-  }
-
-  // ✅ Password match validation
+  // Confirm password match
   if (formData.password !== formData.confirmPassword) {
-    alert("Passwords do not match");
-    return;
+    newErrors.confirmPassword = "Passwords do not match";
   }
 
+  setErrors(newErrors);
 
   try {
     const { confirmPassword, ...dataToSend } = formData;
@@ -123,12 +114,14 @@ if(!passRegex.test(formData.password)){
       navigate("/"); // 👈 redirect to login page
 
     } else {
-      alert(data.error || "Registration Failed");
+        setErrors({ server: data.error || "Registration Failed" });
+        // alert(data.error || "Registration Failed");
     }
 
   } catch (error) {
     console.error("Error:", error);
-    alert("Server Error");
+    setErrors({ server: "Server Error" });
+    // alert("Server Error");
   }
 };
 
@@ -216,7 +209,7 @@ if(!passRegex.test(formData.password)){
       title="Enter valid email (example: abc@gmail.com)"
       required
     />
-    
+    {errors.email && <p className="error">{errors.email}</p>}
   </div>
 
   <textarea name="address" placeholder="Full Address" onChange={handleChange} required />
@@ -226,7 +219,9 @@ if(!passRegex.test(formData.password)){
 
   <div className="row">
     <input type="password" name="password" placeholder="Password" onChange={handleChange} required />
+    {errors.password && <p className="error">{errors.password}</p>}
     <input type="password" name="confirmPassword" placeholder="Confirm Password" onChange={handleChange} required />
+    {errors.confirmPassword && <p className="error">{errors.confirmPassword}</p>}
   </div>
 
   <button type="submit">Register</button>
