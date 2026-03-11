@@ -20,92 +20,33 @@ export default function Register() {
   const [errors, setErrors] = useState({});
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  // const handleChange = (e) => {
-  //   setFormData({ ...formData, [e.target.name]: e.target.value });
-  //   // First Name & Last Name (only alphabets)
-  // if (name === "fname" || name === "lname") {
-  //   if (/^[A-Za-z]*$/.test(value)) {
-  //     setFormData({ ...formData, [name]: value });
-  //   }
-  //   return;
-  // }
-  // };
-  const handleChange = (e) => {
-  const { name, value } = e.target; // ✅ VERY IMPORTANT
-
-  // ✅ First Name & Last Name (only alphabets)
-  if (name === "fname" || name === "lname") {
-    if (/^[A-Za-z]*$/.test(value)) {
-      setFormData((prev) => ({ ...prev, [name]: value }));
-    }
-    return;
-  }
-
-  // ✅ Mobile (only digits, max 10)
-  if (name === "mobile") {
-    if (/^\d*$/.test(value) && value.length <= 10) {
-      setFormData((prev) => ({ ...prev, mobile: value }));
-    }
-    return;
-  }
-  // Mobile Number 
-   if (name === "mobile") {
-    // Allow only digits
-    if (/^\d*$/.test(value)) {
-      // Allow max 10 digits only
-      if (value.length <= 10) {
-        setFormData({ ...formData, mobile: value });
-      }
-    }
-    return;
-  }
-  // ✅ Normal fields
-  setFormData((prev) => ({ ...prev, [name]: value }));
-};
      const navigate = useNavigate();
+const handleChange = (e) => {
+  const { name, value } = e.target;
+  let newErrors = { ...errors };
 
-//handle subit function
-  const handleSubmit = async (e) => {
-    
-  e.preventDefault();
-   let newErrors = {};
-
-   const { name, value } = e.target;
-   setFormData((prev) => ({ ...prev, [name]: value }));
-
-  // name 
-   if (name === "fname" || name === "lname") {
+  // First Name / Last Name
+  if (name === "fname" || name === "lname") {
     if (!/^[A-Za-z]*$/.test(value)) {
       newErrors[name] = "Only alphabets allowed";
     } else {
       delete newErrors[name];
     }
   }
+// email
+if (name === "email") {
+  const emailRegex =
+    /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
-  // email
-  //   const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;  
-  //   if (!emailRegex.test(formData.email)) {
-  //   newErrors.email = "Enter valid email (example: abc@gmail.com)";
-  // }
-  if (name === "email") {
-    const emailRegex =
-      /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-
-    if (!emailRegex.test(value)) {
-      newErrors.email = "Enter valid email (example: abc@gmail.com)";
-    } else {
+  // If user already had error, remove it when valid
+  if (errors.email) {
+    if (emailRegex.test(value)) {
       delete newErrors.email;
     }
   }
-// pwd
-  // const passRegex =
-  //   /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{6,}$/;
-
-  // if (!passRegex.test(formData.password)) {
-  //   newErrors.password =
-  //     "Password must contain uppercase, lowercase, number & special character";
-  // }
-  if (name === "password"){
+}
+  // Password
+  if (name === "password") {
     const passRegex =
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{6,}$/;
 
@@ -117,10 +58,7 @@ export default function Register() {
     }
   }
 
-  // Confirm password match
-  // if (formData.password !== formData.confirmPassword) {
-  //   newErrors.confirmPassword = "Passwords do not match";
-  // }
+  // Confirm Password
   if (name === "confirmPassword") {
     if (value !== formData.password) {
       newErrors.confirmPassword = "Passwords do not match";
@@ -128,6 +66,41 @@ export default function Register() {
       delete newErrors.confirmPassword;
     }
   }
+
+  setErrors(newErrors);
+
+  setFormData((prev) => ({
+    ...prev,
+    [name]: value
+  }));
+};
+//handle blur function
+
+const handleBlur = (e) => {
+  const { name, value } = e.target;
+  let newErrors = { ...errors };
+
+  if (name === "email") {
+    const emailRegex =
+      /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+    if (!emailRegex.test(value)) {
+      newErrors.email = "Enter valid email (example: abc@gmail.com)";
+    } else {
+      delete newErrors.email;
+    }
+  }
+
+  setErrors(newErrors);
+};
+//handle subit function
+  const handleSubmit = async (e) => {
+    
+  e.preventDefault();
+   let newErrors = {};
+
+   const { name, value } = e.target;
+   setFormData((prev) => ({ ...prev, [name]: value }));
 
   setErrors(newErrors);
    if (Object.keys(newErrors).length > 0) {
@@ -245,6 +218,7 @@ export default function Register() {
       placeholder="Email Address"
       value={formData.email}
       onChange={handleChange}
+      onBlur={handleBlur}
       title="Enter valid email (example: abc@gmail.com)"
       required
     />
@@ -273,7 +247,6 @@ export default function Register() {
         {showPassword ? <FaEyeSlash /> : <FaEye />}
       </span>
     </div>
-    {errors.password && <p className="error">{errors.password}</p>}
     <div className="password-field-1" id="pwd">
       <input
         type={showConfirmPassword ? "text" : "password"}
@@ -290,7 +263,10 @@ export default function Register() {
         {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
       </span>
     </div>
-    {errors.confirmPassword && <p className="error">{errors.confirmPassword}</p>}
+    {/* <div className="errormsg"> */}
+      {errors.password && <p className="error">{errors.password}</p>}
+      {errors.confirmPassword && <p className="error">{errors.confirmPassword}</p>}
+    {/* </div> */}
   </div>
 
   <button type="submit">Register</button>

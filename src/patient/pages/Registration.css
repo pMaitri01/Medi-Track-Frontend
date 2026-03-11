@@ -118,7 +118,7 @@ button {
   color: white;
   border: none;
   border-radius: 6px;
-  margin-top: 10px;
+  margin-top: 3px !important;
   cursor: pointer;
   font-size: 14px;
   border-radius: 10px !important;
@@ -153,37 +153,11 @@ button:hover {
 }
 .log{
   text-align: center !important;
-  margin-top: 10px !important;
+  margin-top: 5px !important;
 }
 .text-primary{
   margin-left: 3px;
 }
-/* .error{
-  color: red;
-  font-size: 13px;
-  margin-top: 3px;
-}
-
-.password-field {
-  position: relative;
-  width: 100%;
-}
-
-.password-field input {
-  width: 100%;
-  padding-right: 40px;
-}
-
-.eye-icon {
-  position: absolute;
-  right: 30px !important;
-  top: 50%;
-  transform: translateY(-50%);
-  cursor: pointer;
-  color: gray;
-  font-size: 18px;
-} */
-
 
 .row{
   display: flex;
@@ -222,11 +196,15 @@ button:hover {
   font-size: 18px;
 }
 .error{
-  position: absolute;
+  position: inherit;
   font-size: 12px;
   color: red;
-  margin-top: 4px;
+  /* margin-top: 4px; */
 }
+p.error{
+    margin-bottom: 0rem !important;
+}
+
 .row{
   display: flex;
   gap: 10px;
