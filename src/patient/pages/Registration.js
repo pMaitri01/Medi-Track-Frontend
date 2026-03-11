@@ -1,7 +1,7 @@
  import React, { useState } from "react";
  import { useNavigate } from "react-router-dom";
  import { Link } from "react-router-dom";
-
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 import "./Registration.css";
 import registerImage from "../images/register.jpeg";
 
@@ -18,7 +18,8 @@ export default function Register() {
     confirmPassword: ""
   });
   const [errors, setErrors] = useState({});
-
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   // const handleChange = (e) => {
   //   setFormData({ ...formData, [e.target.name]: e.target.value });
   //   // First Name & Last Name (only alphabets)
@@ -69,26 +70,63 @@ export default function Register() {
   e.preventDefault();
    let newErrors = {};
 
-  // const { name, value } = e.target;
+   const { name, value } = e.target;
+   setFormData((prev) => ({ ...prev, [name]: value }));
 
- 
+  // name 
+   if (name === "fname" || name === "lname") {
+    if (!/^[A-Za-z]*$/.test(value)) {
+      newErrors[name] = "Only alphabets allowed";
+    } else {
+      delete newErrors[name];
+    }
+  }
 
   // email
-    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;  if (!emailRegex.test(formData.email)) {
-    newErrors.email = "Enter valid email (example: abc@gmail.com)";
+  //   const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;  
+  //   if (!emailRegex.test(formData.email)) {
+  //   newErrors.email = "Enter valid email (example: abc@gmail.com)";
+  // }
+  if (name === "email") {
+    const emailRegex =
+      /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+    if (!emailRegex.test(value)) {
+      newErrors.email = "Enter valid email (example: abc@gmail.com)";
+    } else {
+      delete newErrors.email;
+    }
   }
 // pwd
-  const passRegex =
-    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{6,}$/;
+  // const passRegex =
+  //   /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{6,}$/;
 
-  if (!passRegex.test(formData.password)) {
-    newErrors.password =
-      "Password must contain uppercase, lowercase, number & special character";
+  // if (!passRegex.test(formData.password)) {
+  //   newErrors.password =
+  //     "Password must contain uppercase, lowercase, number & special character";
+  // }
+  if (name === "password"){
+    const passRegex =
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{6,}$/;
+
+    if (!passRegex.test(value)) {
+      newErrors.password =
+        "Password must contain uppercase, lowercase, number & special character";
+    } else {
+      delete newErrors.password;
+    }
   }
 
   // Confirm password match
-  if (formData.password !== formData.confirmPassword) {
-    newErrors.confirmPassword = "Passwords do not match";
+  // if (formData.password !== formData.confirmPassword) {
+  //   newErrors.confirmPassword = "Passwords do not match";
+  // }
+  if (name === "confirmPassword") {
+    if (value !== formData.password) {
+      newErrors.confirmPassword = "Passwords do not match";
+    } else {
+      delete newErrors.confirmPassword;
+    }
   }
 
   setErrors(newErrors);
@@ -219,9 +257,39 @@ export default function Register() {
   <h3 className="section-title">Login Credentials</h3>
 
   <div className="row">
-    <input type="password" name="password" placeholder="Password" onChange={handleChange} required />
+    <div className="password-field-1" id="pwd">
+      <input
+        type={showPassword ? "text" : "password"}
+        name="password"
+        placeholder="Password"
+        onChange={handleChange}
+        required
+      />
+
+      <span
+        className="eye-icon"
+        onClick={() => setShowPassword(!showPassword)}
+      >
+        {showPassword ? <FaEyeSlash /> : <FaEye />}
+      </span>
+    </div>
     {errors.password && <p className="error">{errors.password}</p>}
-    <input type="password" name="confirmPassword" placeholder="Confirm Password" onChange={handleChange} required />
+    <div className="password-field-1" id="pwd">
+      <input
+        type={showConfirmPassword ? "text" : "password"}
+        name="confirmPassword"
+        placeholder="Confirm Password"
+        onChange={handleChange}
+        required
+      />
+
+      <span
+        className="eye-icon"
+        onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+      >
+        {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
+      </span>
+    </div>
     {errors.confirmPassword && <p className="error">{errors.confirmPassword}</p>}
   </div>
 

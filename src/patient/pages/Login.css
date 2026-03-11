@@ -96,7 +96,9 @@ input{
 .password-wrapper {
   position: relative;
 }
-
+.password-field input {
+  border: 0 px solid #dee2e6 !important;
+  }
 .password-wrapper input {
   padding-right: 40px; /* space for eye icon */
 }

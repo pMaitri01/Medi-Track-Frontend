@@ -58,7 +58,7 @@
   border-radius: 12px;
   width: 95%;
   max-height: 90%;
-  overflow-y: auto;
+  overflow-y: hidden;
 }
 
 .form-box h2 {
@@ -158,8 +158,78 @@ button:hover {
 .text-primary{
   margin-left: 3px;
 }
-.error{
+/* .error{
   color: red;
   font-size: 13px;
   margin-top: 3px;
+}
+
+.password-field {
+  position: relative;
+  width: 100%;
+}
+
+.password-field input {
+  width: 100%;
+  padding-right: 40px;
+}
+
+.eye-icon {
+  position: absolute;
+  right: 30px !important;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: gray;
+  font-size: 18px;
+} */
+
+
+.row{
+  display: flex;
+  gap: 10px;
+  margin-bottom: 8px;
+  align-items: flex-start;
+}
+
+/* PASSWORD FIELD */
+.password-field-1{
+  position: relative;
+  flex: 1;
+  width: 50% !important;
+}
+
+/* INPUT */
+.password-field-1 input{
+  padding-right: 35px;
+  border: none;
+  outline: none;
+}
+#pwd{
+  left: -12px;
+}
+#pwd input{
+  width: 113% !important;
+}
+
+.eye-icon{
+  position: absolute;
+  right: -5px !important;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: gray;
+  font-size: 18px;
+}
+.error{
+  position: absolute;
+  font-size: 12px;
+  color: red;
+  margin-top: 4px;
+}
+.row{
+  display: flex;
+  gap: 10px;
+  margin-bottom: 8px;
+  align-items: center;
 }
