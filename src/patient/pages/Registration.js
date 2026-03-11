@@ -153,17 +153,17 @@ const handleBlur = (e) => {
     console.log(data);
 
     if (response.ok) {
-      // alert("Patient Registered Successfully");
-      navigate("/"); // 👈 redirect to login page
+      alert(data.msg);
+      navigate("/");
 
     } else {
-        setErrors({ server: data.error || "Registration Failed" });
+        setErrors({ server: data.msg });
         // alert(data.error || "Registration Failed");
     }
 
   } catch (error) {
     console.error("Error:", error);
-    setErrors({ server: "Server Error" });
+    setErrors({ server: "Server error" });
     // alert("Server Error");
   }
 };
@@ -296,6 +296,7 @@ const handleBlur = (e) => {
     {/* <div className="errormsg"> */}
       {errors.password && <p className="error">{errors.password}</p>}
       {errors.confirmPassword && <p className="error">{errors.confirmPassword}</p>}
+      {errors.server && <p className="error">{errors.server}</p>}
     {/* </div> */}
   </div>
 

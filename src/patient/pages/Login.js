@@ -95,7 +95,7 @@ export default function Login() {
       const data = await response.json();
 
       if (response.ok) {
-        alert("Login Successful");
+        alert(data.message);//print login successfull msg in alart
         localStorage.setItem("token", data.token);// store the token which send from the backend
         localStorage.setItem("user", JSON.stringify(data.user));
         navigate("/PatientHome");
