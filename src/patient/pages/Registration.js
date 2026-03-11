@@ -99,14 +99,44 @@ const handleBlur = (e) => {
   e.preventDefault();
    let newErrors = {};
 
-   const { name, value } = e.target;
-   setFormData((prev) => ({ ...prev, [name]: value }));
-
-  setErrors(newErrors);
-   if (Object.keys(newErrors).length > 0) {
-    return;
+   // First Name
+  if (!/^[A-Za-z]+$/.test(formData.fname)) {
+    newErrors.fname = "Only alphabets allowed";
   }
 
+  // Last Name
+  if (!/^[A-Za-z]+$/.test(formData.lname)) {
+    newErrors.lname = "Only alphabets allowed";
+  }
+
+  // Email
+  const emailRegex =
+    /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+  if (!emailRegex.test(formData.email)) {
+    newErrors.email = "Enter valid email";
+  }
+
+  // Password
+  const passRegex =
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{6,}$/;
+
+  if (!passRegex.test(formData.password)) {
+    newErrors.password =
+      "Password must contain uppercase, lowercase, number & special character";
+  }
+
+  // Confirm Password
+  if (formData.password !== formData.confirmPassword) {
+    newErrors.confirmPassword = "Passwords do not match";
+  }
+
+  setErrors(newErrors);
+
+  // ❌ Stop form submission if errors exist
+  if (Object.keys(newErrors).length > 0) {
+    return;
+  }
 
   try {
     const { confirmPassword, ...dataToSend } = formData;
