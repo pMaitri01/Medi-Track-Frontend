@@ -141,7 +141,7 @@ const handleBlur = (e) => {
 
           <div className="admin-row">
 
-            <div className="input-group">
+            <div className="admin-input">
               <input
                 type={showPassword ? "text" : "password"}
                 name="password"
@@ -150,7 +150,7 @@ const handleBlur = (e) => {
                 onBlur={handleBlur}
               />
                 <span
-                  className="eye-icon"
+                  className="eye-icon-SignUpPwd"
                   onClick={() => setShowPassword(!showPassword)}
                 >
                   {showPassword ? <FaEyeSlash /> : <FaEye />}
@@ -158,7 +158,7 @@ const handleBlur = (e) => {
               {errors.password && <p className="error">{errors.password}</p>}
             </div>
 
-            <div className="input-group">
+            <div className="admin-input">
              <input
                 type={showConfirmPassword ? "text" : "password"}
                 name="confirmPassword"
@@ -167,7 +167,7 @@ const handleBlur = (e) => {
                 onBlur={handleBlur}
               />
               <span
-                  className="eye-icon"
+                  className="eye-icon-SignUpPwd"
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                 >
                   {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}

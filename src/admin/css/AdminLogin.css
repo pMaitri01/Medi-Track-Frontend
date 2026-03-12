@@ -96,10 +96,10 @@ body {
 .password-wrapper{
   border:none !important;
 }
-.eye-icon {
+.eye-icon-1 {
   position: absolute;
   right: 12px;
-  top: 39px !important;
+  top: 27px !important;
   transform: translateY(-50%);
   cursor: pointer;
   color: #555;

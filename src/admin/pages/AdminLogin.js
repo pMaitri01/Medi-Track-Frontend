@@ -124,7 +124,7 @@ export default function AdminLogin() {
             />
 
             <span
-              className="eye-icon"
+              className="eye-icon-1"
               onClick={() => setShowPassword(!showPassword)}
             >
               {showPassword ? <FaEyeSlash /> : <FaEye />}
@@ -148,7 +148,7 @@ export default function AdminLogin() {
            <small className="admin-txtregister">
               Don’t have account? 
                {/* <span className="text-primary"> Register</span>  */}
-              <Link to="./demo" className="admin-text-primary">
+              <Link to="/AdminSignUp" className="admin-text-primary">
                 Register
               </Link>
             </small>

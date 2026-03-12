@@ -73,7 +73,7 @@
 .admin-register-btn:hover {
   background: #4a63d8;
 }
-.input-group {
+.admin-input{
   position: relative;
   display: flex;
   flex-direction: column;  /* 👈 THIS IS THE KEY */
@@ -88,10 +88,10 @@
 .admin-register-card input{
   padding-right: 35px;
 }
-.eye-icon {
+.eye-icon-SignUpPwd{
   position: absolute;
   right: 12px;
-  top:46px;
+  top:45px;
   transform: translateY(-100%);
   cursor: pointer;
   color: #555;
@@ -113,4 +113,6 @@
   width: 100%;
   padding: 10px;
   padding-right: 35px;  /* space for eye icon */
+  border-top-left-radius: 10px !important;
+  border-bottom-left-radius: 10px !important;
 }
