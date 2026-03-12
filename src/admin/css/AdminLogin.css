@@ -34,7 +34,7 @@ body {
 
 /* Inputs */
 .admin-input-group {
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 }
 
 .admin-input-group label {
@@ -43,8 +43,11 @@ body {
   margin-bottom: 5px;
 }
 .admin-text-primary{
-  color: white;
+  color: white !important;
+}
+.admin-text-fpwd{
   text-decoration: none;
+
 }
 .admin-input-group input {
   width: 100%;
@@ -65,7 +68,7 @@ body {
   transition: 0.3s;
   margin-bottom:5px !important;
   background: #5E78E9; 
-
+  margin-top: 10px !important;
 }
 
 .admin-login-btn:hover {

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import "../css/AdminSignUp.css";
 
@@ -13,14 +13,35 @@ export default function DoctorSignUp() {
   const [errors, setErrors] = useState({});
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  
+  const navigate = useNavigate();
   //handleChange REQUIRED
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
+    const { name, value } = e.target;   // get name and value from input
+    let newErrors = { ...errors }; 
+    // setFormData({
+    //   ...formData,
+    //   [e.target.name]: e.target.value
+    // });
+    const updatedFormData = {
+    ...formData,
+    [name]: value
   };
+
+  setFormData(updatedFormData);
+  // pwd and cpwd field validation 
+  if (
+    updatedFormData.confirmPassword &&
+    updatedFormData.password !== updatedFormData.confirmPassword
+  ) {
+    newErrors.confirmPassword = "Passwords do not match";
+  } else {
+    delete newErrors.confirmPassword;
+  }
+
+  setErrors(newErrors);
+};
+  // let newErrors = { ...errors };
+  // };
 const handleBlur = (e) => {
   const { name, value } = e.target;
   let newErrors = { ...errors };
@@ -59,7 +80,7 @@ const handleBlur = (e) => {
     } 
     else if (!strongPassword.test(value)) {
       newErrors.password =
-        " Password Must be Strong (Min 8 chars, 1 Uppercase, 1 Lowercase, 1 Number, 1 Special char)";
+        " Password Must be Strong (Min 6 chars, 1 Uppercase, 1 Lowercase, 1 Number, 1 Special char)";
     } 
     else {
       delete newErrors.password;
@@ -85,7 +106,7 @@ const handleBlur = (e) => {
       return;
     }
     else{
-      alert("Doctor successfully register")
+      navigate("/AdminLogin");
     }
 
     try {
@@ -101,7 +122,15 @@ const handleBlur = (e) => {
       );
 
       const data = await response.json();
-      alert("Doctor Registered Successfully");
+      alert(data.msg);
+      setFormData({
+      fullName: "",
+      email: "",
+      password: "",
+      confirmPassword: ""
+    });
+
+    setErrors({});
     } catch (error) {
       console.error("Error:", error);
     }
@@ -117,6 +146,7 @@ const handleBlur = (e) => {
             type="text"
             name="fullName"
             placeholder="Full Name"
+            value={formData.fullName}
             onChange={handleChange}
             onKeyPress={(e) => {
               if (!/[A-Za-z ]/.test(e.key)) {
@@ -132,6 +162,7 @@ const handleBlur = (e) => {
             <input
               type="email"
               name="email"
+              value={formData.email}
               placeholder="Email Address"
               onChange={handleChange}
               onBlur={handleBlur}
@@ -146,6 +177,7 @@ const handleBlur = (e) => {
                 type={showPassword ? "text" : "password"}
                 name="password"
                 placeholder="Password"
+                value={formData.password}
                 onChange={handleChange}
                 onBlur={handleBlur}
               />
@@ -162,6 +194,7 @@ const handleBlur = (e) => {
              <input
                 type={showConfirmPassword ? "text" : "password"}
                 name="confirmPassword"
+                value={formData.confirmPassword}
                 placeholder="Confirm Password"
                 onChange={handleChange}
                 onBlur={handleBlur}

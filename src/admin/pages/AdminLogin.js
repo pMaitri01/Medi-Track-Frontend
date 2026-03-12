@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import "../css/AdminLogin.css";
 
@@ -10,7 +10,7 @@ export default function AdminLogin() {
   });
   const [errors, setErrors] = useState({});
   const [showPassword, setShowPassword] = useState(false);
-
+  const navigate = useNavigate();
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -36,10 +36,9 @@ export default function AdminLogin() {
 
     if (!value) {
       newErrors.password = "Password is required";
-    } else if (!passwordRegex.test(value)) {
-      newErrors.password =
-        "Password must be strong (Min 8 chars, 1 Uppercase, 1 Lowercase, 1 Number, 1 Special char)";
-    } else {
+    } else if (value.length < 6) {
+    newErrors.password = "Password must be at least 6 characters";
+  } else {
       delete newErrors.password;
     }
   }
@@ -75,18 +74,30 @@ export default function AdminLogin() {
 
       if (response.ok) {
         alert("Login Successful");
+        setFormData({
+          fullName: "",
+          email: "",
+          password: "",
+          confirmPassword: ""
+        });
+
+        setErrors({});
         localStorage.setItem("token", data.token);
         localStorage.setItem("doc", JSON.stringify(data.doc));
+        navigate("/DoctorDashboard");   // redirect page
+
       }
       else{
-        alert(data.message);
+        setErrors({
+            ...errors,
+            password: data.message || "password Incorrect"
+        });      
       }
 
     } catch (error) {
       console.error(error);
       alert("Server Error");
     }
-  // } 
   };
 
   return (
@@ -136,7 +147,7 @@ export default function AdminLogin() {
 
         </div>
           <small className="admin-text-primary">
-                  <Link to="./demo" className="admin-text-primary">
+                  <Link to="./demo" className="admin-text-fpwd">
                       Forgot Password?
                   </Link>
 
