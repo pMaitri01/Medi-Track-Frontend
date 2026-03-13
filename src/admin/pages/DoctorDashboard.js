@@ -65,10 +65,13 @@ export default function DoctorDashboard() {
 
       <div style={{ 
         marginLeft: sidebarWidth, 
-        transition: "0.3s ease", 
+        width: `calc(100% - ${sidebarWidth})`,
+        height: "100vh",    // Match screen height
         display: "flex", 
         flexDirection: "column", 
-        minHeight: "100vh" 
+        transition: "0.3s ease",
+        overflowY: "auto",  // 🔥 THIS ENABLES THE SCROLL
+        overflowX: "hidden"
       }}>
         <DoctorHeader open={open} />
 
