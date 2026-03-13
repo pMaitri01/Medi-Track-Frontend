@@ -47,7 +47,10 @@ body {
 }
 .admin-text-fpwd{
   text-decoration: none;
-
+  color: #5e78e9;
+}
+.admin-text-rmbr{
+  color: black;
 }
 .admin-input-group input {
   width: 100%;
@@ -72,8 +75,8 @@ body {
 }
 
 .admin-login-btn:hover {
-  background: #547792; 
-  color: black;
+  background: #4a63d8; 
+  color: white;
 }
 
 /* Forgot */
@@ -107,7 +110,12 @@ body {
   cursor: pointer;
   color: #555;
 }
+
+.admin-txtregister{
+  color: black;
+}
 .admin-text-primary{
   color: #7087EB !important;
   margin-left: 5px;
+  text-decoration: none;
 }
