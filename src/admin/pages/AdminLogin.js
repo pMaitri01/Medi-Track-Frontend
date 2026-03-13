@@ -146,12 +146,19 @@ export default function AdminLogin() {
           {errors.password && <p className="error">{errors.password}</p>}
 
         </div>
-          <small className="admin-text-primary">
-                  <Link to="./demo" className="admin-text-fpwd">
-                      Forgot Password?
-                  </Link>
 
-          </small>
+            <div className="d-flex justify-content-between">
+                          <small className="admin-text-rmbr">
+                            <input type="checkbox" className="ckb"/> Remember me
+                          </small>
+                          <small className="admin-text-primary">
+                              <Link to="/forgotpassword" className="admin-text-fpwd">
+                                  Forgot Password?
+                              </Link>
+            
+                          </small>
+                        </div>
+
           <button type="submit" className="admin-login-btn">
             Login
           </button>
