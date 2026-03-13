@@ -1,14 +1,7 @@
-import React, { useState } from "react";
-import {
-  FaTachometerAlt,
-  FaUserMd,
-  FaCalendarCheck,
-  FaHistory
-} from "react-icons/fa";
-
+import React from "react";
+import { FaTachometerAlt, FaUserMd, FaCalendarCheck, FaHistory } from "react-icons/fa";
 import userImg from "../images/Logo-1.png";
 
-/* Toggle Icon */
 const SidebarCollapseIcon = ({ size = 24, color = "#6b7280", arrowColor = "#374151", open, ...props }) => {
   return (
     <svg
@@ -24,25 +17,13 @@ const SidebarCollapseIcon = ({ size = 24, color = "#6b7280", arrowColor = "#3741
       {...props}
     >
       <rect x="4" y="4" width="40" height="40" rx="6" ry="6" stroke={color} strokeWidth="2"/>
-
       <line x1="16" y1="8" x2="16" y2="40" stroke={color} strokeWidth="2"/>
-
-      <polyline
-        points="24,18 30,24 24,30"
-        fill="none"
-        stroke={arrowColor}
-        strokeWidth="3"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
+      <polyline points="24,18 30,24 24,30" fill="none" stroke={arrowColor} strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
 };
 
-export default function DoctorNavbar() {
-
-  const [open, setOpen] = useState(true);
-
+export default function DoctorNavbar({ open, setOpen }) {
   const styles = {
     sidebar: {
       width: open ? "250px" : "100px",
@@ -51,113 +32,73 @@ export default function DoctorNavbar() {
       color: "#fff",
       padding: "10px",
       position: "fixed",
+      left: 0,
+      top: 0,
       transition: "0.3s",
       display: "flex",
-      flexDirection: "column"   // important
+      flexDirection: "column",
+      zIndex: 1000
     },
-
-    menuContainer: {
-      flexGrow: 1
-    },    
+    menuContainer: { flexGrow: 1 },
     menuItem: {
       padding: open ? "12px 15px" : "12px 0",
       margin: "10px 0",
       display: "flex",
       alignItems: "center",
-      justifyContent: open ? "flex-start" : "center", // center icons when closed
+      justifyContent: open ? "flex-start" : "center",
       gap: open ? "10px" : "0",
       borderRadius: "8px",
       cursor: "pointer"
     },
-
-    active: {
-      background: "#F4F0E4",
-      color: "#0AA5A5"
-    },
-
+    active: { background: "#F4F0E4", color: "#0AA5A5" },
     img: {
-      width: open ? "120px" : "70px",
-      height: open ? "130px" : "85px",
+      width: open ? "120px" : "60px",
+      height: open ? "130px" : "70px",
       borderRadius: "10%",
       display: "block",
-      margin: "0 auto 20px"
+      margin: "0 auto 20px",
+      transition: "0.3s"
     },
-
-    icon: {
-      fontSize: open ? "18px" : "25px",
-      minWidth: "30px"
+    icon: { fontSize: open ? "18px" : "25px", minWidth: "30px" },
+    footer: { marginTop: "auto", width: "100%" },
+    separator: { borderTop: "1px solid rgba(255,255,255,0.3)", width: "100%" },
+    toggleBtn: {
+      cursor: "pointer",
+      display: "flex",
+      justifyContent: open ? "flex-end" : "center",
+      alignItems: "center",
+      width: "100%",
+      marginTop: "5px"
     },
-    footer: {
-      marginTop: "auto",      // pushes footer to bottom
-      width: "100%"
-    },
-
-separator: {
-  borderTop: "1px solid rgba(255,255,255,0.3)",
-  width: "100%",
-  marginBottom: "0px"    // gap between line and toggle
-},
-
-toggleBtn: {
-  cursor: "pointer",
-  display: "flex",
-  justifyContent: open ? "flex-end" : "center",  // keeps icon at right
-  alignItems: "center",
-  width: "100%",               // take full sidebar width
-  marginTop: "5px"
-},
   };
 
   return (
     <div style={styles.sidebar}>
-
-      <img src={userImg} alt="profile" style={styles.img} />
-
+      <img src={userImg} alt="logo" style={styles.img} />
       <div style={styles.menuContainer}>
-
         <div style={{ ...styles.menuItem, ...styles.active }}>
           <FaTachometerAlt style={styles.icon}/>
           {open && "Dashboard"}
         </div>
-
         <div style={styles.menuItem}>
           <FaUserMd style={styles.icon}/>
           {open && "Patient List"}
         </div>
-
         <div style={styles.menuItem}>
           <FaCalendarCheck style={styles.icon}/>
-          {open && "Appointment Management"}
+          {open && "Appointments"}
         </div>
-
         <div style={styles.menuItem}>
           <FaHistory style={styles.icon}/>
-          {open && "Appointment History"}
+          {open && "History"}
         </div>
-
       </div>
-      {/* Toggle Button Fixed Bottom */}
-      {/* Footer Section */}
       <div style={styles.footer}>
-
-        {/* Separator Line */}
         <div style={styles.separator}></div>
-
-        {/* Toggle Button */}
-        <div
-          style={styles.toggleBtn}
-          onClick={() => setOpen(!open)}
-        >
-          <SidebarCollapseIcon
-            size={34}
-            color="#E5E7EB"
-            arrowColor="#ffffff"
-            open={open}
-          />
+        <div style={styles.toggleBtn} onClick={() => setOpen(!open)}>
+          <SidebarCollapseIcon size={34} color="#E5E7EB" arrowColor="#ffffff" open={open} />
         </div>
-
       </div>
-
     </div>
   );
 }
