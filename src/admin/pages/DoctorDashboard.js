@@ -2,7 +2,10 @@ import React, { useState } from "react";
 import DoctorNavbar from "../components/DoctorNavbar";
 import DoctorHeader from "../components/DoctorHeader";
 import DoctorFooter from "../components/DoctorFooter";
+import Calendar from "../components/Calendar";
+
 import { FaUserFriends, FaHospitalUser, FaClock } from "react-icons/fa";
+
 
 export default function DoctorDashboard() {
   const [open, setOpen] = useState(true);
@@ -101,7 +104,10 @@ export default function DoctorDashboard() {
             </div>
             <div style={cardStyle}>
               <h4 style={titleStyle}>Calendar</h4>
-              <div style={placeholderBox}>Date Picker</div>
+              <div style={placeholderBox}>
+                  
+                  <Calendar/>
+              </div>
             </div>
           </div>
 
@@ -152,7 +158,7 @@ const subLabelStyle = { margin: 0, color: "#94a3b8", fontSize: "11px" };
 const placeholderBox = {
   flex: 1,
   marginTop: "15px",
-  border: "2px dashed #F1F5F9",
+  // border: "2px dashed #F1F5F9",
   borderRadius: "10px",
   display: "flex",
   alignItems: "center",

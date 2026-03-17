@@ -106,7 +106,6 @@ const handleBlur = (e) => {
       return;
     }
     else{
-      navigate("/AdminLogin");
     }
 
     try {
@@ -129,6 +128,7 @@ const handleBlur = (e) => {
       password: "",
       confirmPassword: ""
     });
+    navigate("/AdminLogin");
 
     setErrors({});
     } catch (error) {

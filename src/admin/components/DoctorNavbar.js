@@ -1,6 +1,7 @@
 import React from "react";
 import { FaTachometerAlt, FaUserMd, FaCalendarCheck, FaHistory } from "react-icons/fa";
 import userImg from "../images/Logo-1.png";
+import { useNavigate } from "react-router-dom";
 
 const SidebarCollapseIcon = ({ size = 24, color = "#6b7280", arrowColor = "#374151", open, ...props }) => {
   return (
@@ -24,6 +25,7 @@ const SidebarCollapseIcon = ({ size = 24, color = "#6b7280", arrowColor = "#3741
 };
 
 export default function DoctorNavbar({ open, setOpen }) {
+  const navigate = useNavigate();
   const styles = {
     sidebar: {
       width: open ? "250px" : "100px",
@@ -74,7 +76,13 @@ export default function DoctorNavbar({ open, setOpen }) {
 
   return (
     <div style={styles.sidebar}>
-      <img src={userImg} alt="logo" style={styles.img} />
+      {/* <img src={userImg} alt="logo" style={styles.img}/> */}
+      <img
+        src={userImg}
+        alt="logo"
+        style={styles.img}
+        onClick={() => navigate("/DoctorDashboard")}
+        />
       <div style={styles.menuContainer}>
         <div style={{ ...styles.menuItem, ...styles.active }}>
           <FaTachometerAlt style={styles.icon}/>

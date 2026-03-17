@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import { FaBell, FaChevronDown } from "react-icons/fa";
 import userImg from "../images/user.png";
+import { useNavigate } from "react-router-dom";
 
 export default function DoctorHeader({ open }) {
   const [showProfile, setShowProfile] = useState(false);
   const sidebarWidth = open ? "0px" : "0px";
-
+  const navigate = useNavigate();
   const styles = {
     header: {
       marginLeft: sidebarWidth,
@@ -25,7 +26,13 @@ export default function DoctorHeader({ open }) {
       border: "1px solid #e5e7eb", borderRadius: "8px", width: "150px", zIndex: 100
     }
   };
+  const handleLogout = () => {
+  const confirmLogout = window.confirm("Are you sure you want to logout?");
 
+  if (confirmLogout) {
+    navigate("/admin-login"); // redirect to login page
+  }
+};
   return (
     <div style={styles.header}>
       <span style={{ fontWeight: "500" }}>Hi, Maitri 👋 Welcome to Medi-Track</span>
@@ -37,7 +44,8 @@ export default function DoctorHeader({ open }) {
           {showProfile && (
             <div style={styles.dropdown}>
               <div style={{ padding: "10px", fontSize: "14px" }}>👤 Profile</div>
-              <div style={{ padding: "10px", fontSize: "14px", borderTop: "1px solid #eee" }}>🚪 Logout</div>
+              <div style={{ padding: "10px", fontSize: "14px", borderTop: "1px solid #eee" }}   onClick={handleLogout}
+              >🚪 Logout</div>
             </div>
           )}
         </div>
