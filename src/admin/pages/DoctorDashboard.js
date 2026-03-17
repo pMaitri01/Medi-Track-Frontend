@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import DoctorNavbar from "../components/DoctorNavbar";
 import DoctorHeader from "../components/DoctorHeader";
 import DoctorFooter from "../components/DoctorFooter";
@@ -6,12 +6,21 @@ import Calendar from "../components/Calendar";
 
 import { FaUserFriends, FaHospitalUser, FaClock } from "react-icons/fa";
 
-
 export default function DoctorDashboard() {
   const [open, setOpen] = useState(true);
+  const [patientCount, setPatientCount] = useState(0);
 
   // Layout Constants
   const sidebarWidth = open ? "250px" : "100px";
+
+   useEffect(() => {
+    fetch("http://localhost:5000/api/patient/count")
+      .then(res => res.json())
+      .then(data => {
+        setPatientCount(data.totalPatients);
+      })
+      .catch(err => console.log("ERROR:", err));
+  }, []);
 
   return (
     <div style={{ minHeight: "100vh", background: "#F8F9FD" }}>
@@ -34,7 +43,7 @@ export default function DoctorDashboard() {
           {/* --- TOP ROW: STAT CARDS --- */}
           <div style={gridStyle(3)}>
             {[
-              { label: "Total Patient", icon: <FaUserFriends /> },
+              { label: "Total Patient", icon: <FaUserFriends />, value: patientCount},
               { label: "Today Patient", icon: <FaHospitalUser /> },
               { label: "Today Appointments", icon: <FaClock /> }
             ].map((card, i) => (
@@ -42,8 +51,8 @@ export default function DoctorDashboard() {
                 <div style={iconCircleStyle}>{card.icon}</div>
                 <div>
                   <p style={labelStyle}>{card.label}</p>
-                  <h3 style={valueStyle}>--</h3> {/* Backend Data Point */}
-                  <p style={subLabelStyle}>Loading...</p>
+                  <h3 style={valueStyle}>{card.value}</h3> {/* Backend Data Point */}
+                  <p style={subLabelStyle}>Live Data</p>
                 </div>
               </div>
             ))}
