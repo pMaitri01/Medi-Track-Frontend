@@ -1,6 +1,6 @@
 import React from "react";
 import Navbar from "../components/Navbar";
-import "./PatientHome.css";
+import "../css/PatientHome.css";
 
 export default function PatientHome() {
   return (

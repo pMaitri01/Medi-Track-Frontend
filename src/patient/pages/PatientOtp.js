@@ -1,9 +1,9 @@
 import React, { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import forgotImage from "../images/Otp.jpg";
-import "./Otp.css";
+import "../css/PatientOtp.css";
 
-export default function OtpPage() {
+export default function PatientOtp() {
   const navigate = useNavigate();
   const [otp, setOtp] = useState(new Array(4).fill(""));
   const [error, setError] = useState("");

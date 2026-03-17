@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import resetImage from "../images/ResetPwd-1.jpeg"; // add a relevant image
-import "./ResetPwd.css"; 
+import "../css/PatientResetPwd.css"; 
 
-export default function ResetPwd() {
+export default function PatientResetPwd() {
   const navigate = useNavigate();
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");

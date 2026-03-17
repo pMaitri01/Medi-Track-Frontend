@@ -2,10 +2,10 @@
  import { useNavigate } from "react-router-dom";
  import { Link } from "react-router-dom";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import "./Registration.css";
+import "../css/PatientRegistration.css";
 import registerImage from "../images/register.jpeg";
 
-export default function Register() {
+export default function PatientRegistration() {
   const [formData, setFormData] = useState({
     fname: "",
     lname: "",

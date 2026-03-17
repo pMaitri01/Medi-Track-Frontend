@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import "./Login.css";
+import "../css/PatientLogin.css";
 import patientImage from "../images/patient-1.jpg";
 import { Link } from "react-router-dom";
 
-export default function Login() {
+export default function PatientLogin() {
   const [formData, setFormData] = useState({
     email: "",
     password: ""
