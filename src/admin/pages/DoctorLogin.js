@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import "../css/AdminLogin.css";
 
-export default function AdminLogin() {
+export default function DoctorLogin() {
   const [formData, setFormData] = useState({
     email: "",
     password: "",

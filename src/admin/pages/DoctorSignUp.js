@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { toast } from "react-toastify";
 import { Link, useNavigate } from "react-router-dom";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import "../css/AdminSignUp.css";
@@ -37,7 +38,9 @@ export default function DoctorSignUp() {
   } else {
     delete newErrors.confirmPassword;
   }
-
+  if (name === "email") {
+  delete newErrors.email;
+  }
   setErrors(newErrors);
 };
   // let newErrors = { ...errors };
@@ -121,10 +124,12 @@ const handleBlur = (e) => {
       );
 
       const data = await response.json();
-      alert(data.msg || data.message);
+      // alert(data.msg || data.message);
      
       if (response.ok) {
-      setFormData({
+        toast.success(data.msg || " Doctor Registered Successfully ✅");
+        
+        setFormData({
         fullName: "",
         email: "",
         password: "",
@@ -132,7 +137,16 @@ const handleBlur = (e) => {
       });
 
       setErrors({});
-      navigate("/AdminLogin");   // ✅ now correct
+      setTimeout(() => {
+          navigate("/DoctorLogin");
+        }, 1000);    
+      }
+      else {
+      // ✅ Show backend error below email field
+      setErrors((prev) => ({
+        ...prev,
+        email: data.msg || data.message
+      }));
     }
     } catch (error) {
       console.error("Error:", error);
