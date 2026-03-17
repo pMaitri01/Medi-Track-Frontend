@@ -7,8 +7,8 @@ import registerImage from "../images/register.jpeg";
 
 export default function Register() {
   const [formData, setFormData] = useState({
-    fname: "",
-    lname: "",
+    fisrtName: "",
+    lastName: "",
     gender: "",
     dob: "",
     mobile: "",
@@ -26,7 +26,7 @@ const handleChange = (e) => {
   let newErrors = { ...errors };
 
   // First Name / Last Name
-  if (name === "fname" || name === "lname") {
+  if (name === "firstName" || name === "lastName") {
     if (!/^[A-Za-z]*$/.test(value)) {
       newErrors[name] = "Only alphabets allowed";
     } else {
@@ -190,12 +190,12 @@ const handleBlur = (e) => {
   <h3 className="section-title">Basic Information</h3>
 
   <div className="row">
-    <input type="text" name="fname" placeholder="First Name" onChange={handleChange} onKeyPress={(e) => {
+    <input type="text" name="firstName" placeholder="First Name" onChange={handleChange} onKeyPress={(e) => {
     if (!/[A-Za-z ]/.test(e.key)) {
       e.preventDefault(); // ❌ blocks numbers & symbols
     }
   }}required />
-    <input type="text" name="lname" placeholder="Last Name" onChange={handleChange} onKeyPress={(e) => {
+    <input type="text" name="lastName" placeholder="Last Name" onChange={handleChange} onKeyPress={(e) => {
     if (!/[A-Za-z ]/.test(e.key)) {
       e.preventDefault(); // ❌ blocks numbers & symbols
     }
