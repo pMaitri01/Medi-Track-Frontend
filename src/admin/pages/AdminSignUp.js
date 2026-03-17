@@ -121,18 +121,23 @@ const handleBlur = (e) => {
       );
 
       const data = await response.json();
-      alert(data.msg);
+      alert(data.msg || data.message);
+     
+      if (response.ok) {
       setFormData({
-      fullName: "",
-      email: "",
-      password: "",
-      confirmPassword: ""
-    });
-    navigate("/AdminLogin");
+        fullName: "",
+        email: "",
+        password: "",
+        confirmPassword: ""
+      });
 
-    setErrors({});
+      setErrors({});
+      navigate("/AdminLogin");   // ✅ now correct
+    }
     } catch (error) {
       console.error("Error:", error);
+      alert("Server error");
+
     }
   };
 
