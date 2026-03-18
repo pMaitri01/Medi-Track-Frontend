@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { FaBell, FaChevronDown } from "react-icons/fa";
+import { FaBell, FaChevronDown, FaChevronUp } from "react-icons/fa";
 import userImg from "../images/user.png";
 import { useNavigate } from "react-router-dom";
 
@@ -27,18 +27,18 @@ export default function DoctorHeader({ open }) {
     }
   };
   const handleLogout = () => {
-  const confirmLogout = window.confirm("Are you sure you want to logout?");
+    const confirmLogout = window.confirm("Are you sure you want to logout?");
 
-  if (confirmLogout) {
-    navigate("/admin-login"); // redirect to login page
-  }
-};
+    if (confirmLogout) {
+      navigate("/admin-login"); // redirect to login page
+    }
+  };
   return (
     <div style={styles.header}>
       <span style={{ fontWeight: "500" }}>Hi, Maitri 👋 Welcome to Medi-Track</span>
       <div style={{ display: "flex", alignItems: "center", gap: "20px" }}>
         <FaBell style={{ cursor: "pointer", color: "#64748b" }} />
-        <div style={styles.profile} onClick={() => setShowProfile(!showProfile)}>
+        {/* <div style={styles.profile} onClick={() => setShowProfile(!showProfile)}>
           <img src={userImg} alt="profile" style={styles.img} />
           <FaChevronDown size={12} />
           {showProfile && (
@@ -46,6 +46,24 @@ export default function DoctorHeader({ open }) {
               <div style={{ padding: "10px", fontSize: "14px" }}>👤 Profile</div>
               <div style={{ padding: "10px", fontSize: "14px", borderTop: "1px solid #eee" }}   onClick={handleLogout}
               >🚪 Logout</div>
+            </div>
+          )}
+        </div> */}
+        <div style={styles.profile} onClick={() => setShowProfile(!showProfile)}>
+          <img src={userImg} alt="profile" style={styles.img} />
+
+          {/* 🔥 Toggle arrow */}
+          {showProfile ? <FaChevronUp size={12} /> : <FaChevronDown size={12} />}
+
+          {showProfile && (
+            <div style={styles.dropdown}>
+              <div style={{ padding: "10px", fontSize: "14px" }}>👤 Profile</div>
+              <div
+                style={{ padding: "10px", fontSize: "14px", borderTop: "1px solid #eee" }}
+                onClick={handleLogout}
+              >
+                🚪 Logout
+              </div>
             </div>
           )}
         </div>
