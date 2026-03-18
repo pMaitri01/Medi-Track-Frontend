@@ -1,0 +1,194 @@
+:root {
+  --primary-teal: #49a8af;
+  --secondary-teal: #368e94;
+  --bg-gray: #f8fafc;
+  --border-color: #e2e8f0;
+  --text-dark: #334155;
+  --text-light: #64748b;
+  --view-blue: #4a90a4;
+  --delete-red: #d68383;
+}
+
+.patient-list-container {
+  padding: 24px;
+  background-color: var(--bg-gray);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: var(--text-dark);
+}
+
+.list-header {
+  margin-bottom: 20px;
+}
+
+.title-section {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.title-section h2 {
+  font-size: 1.5rem;
+  color: #4b5563;
+  font-weight: 600;
+}
+
+/* Filter Bar Styles */
+.filter-bar {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  gap: 15px;
+}
+
+.search-input-wrapper {
+  flex: 1;
+}
+
+.search-input {
+  width: 100%;
+  padding: 10px 15px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  background: white;
+}
+
+.filter-options {
+  display: flex;
+  gap: 10px;
+}
+
+.filter-btn {
+  padding: 8px 16px;
+  border: 1px solid var(--border-color);
+  background: white;
+  border-radius: 8px;
+  color: var(--text-light);
+  cursor: pointer;
+}
+
+.export-btn {
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.export-btn.outline {
+  border: 1px solid var(--border-color);
+  background: white;
+  color: var(--text-light);
+}
+
+.export-btn.filled {
+  background-color: var(--primary-teal);
+  color: white;
+  border: none;
+}
+
+/* Table Styles */
+.table-wrapper {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  overflow: hidden;
+}
+
+.patient-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.patient-table th {
+  background-color: #fcfcfc;
+  padding: 15px;
+  font-size: 0.85rem;
+  color: var(--text-light);
+  font-weight: 500;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.patient-table td {
+  padding: 12px 15px;
+  border-bottom: 1px solid #f1f5f9;
+  font-size: 0.9rem;
+  vertical-align: middle;
+}
+
+.name-cell {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 500;
+}
+
+.patient-avatar {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.contact-cell {
+  color: var(--primary-teal);
+}
+
+.id-cell {
+  color: var(--text-light);
+}
+
+/* Button Styles */
+.action-cells {
+  display: flex;
+  gap: 8px;
+}
+
+.view-btn, .delete-btn {
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: none;
+  color: white;
+  font-size: 0.8rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.view-btn { background-color: var(--view-blue); }
+.delete-btn { background-color: var(--delete-red); }
+
+/* Pagination */
+.footer-pagination {
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: var(--text-light);
+  font-size: 0.85rem;
+}
+
+.pagination-controls {
+  display: flex;
+  gap: 5px;
+}
+
+.page-num {
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+}
+
+.page-num.active {
+  background-color: var(--primary-teal);
+  color: white;
+}
+
+.page-nav {
+  padding: 0 10px;
+  background: none;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  cursor: pointer;
+}

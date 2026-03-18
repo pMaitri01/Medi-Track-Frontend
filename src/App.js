@@ -8,7 +8,7 @@ import PatientOtp from './patient/pages/PatientOtp';
 import PatientResetPwd from './patient/pages/PatientResetPwd';
 import PatientRegistration from './patient/pages/PatientRegistration';
 import PatientHome from './patient/pages/PatientHome';
-import PatientList from './patient/pages/PatientList';
+import PatientList from './admin/pages/PatientList';
 import DoctorLogin from './admin/pages/DoctorLogin';
 import DoctorSignUp from './admin/pages/DoctorSignUp';
 import DoctorDashboard from './admin/pages/DoctorDashboard';
