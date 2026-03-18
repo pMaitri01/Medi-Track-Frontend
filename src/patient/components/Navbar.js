@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { FaBell } from "react-icons/fa";
+// import { FaBell } from "react-icons/fa";
+import { FaBell, FaUserCircle,FaChevronDown } from "react-icons/fa";
 import "./Navbar.css";
 import Img from "../images/LogoP.png"
 
@@ -51,22 +52,26 @@ function Navbar() {
       {/* Right Side */}
       <div className="nav-right">
         <FaBell className="icon" />
+        <div className="profile-container" ref={dropdownRef}>
+  <div 
+    className="profile-trigger"
+    onClick={() => setShowDropdown(!showDropdown)}
+  >
+    <FaUserCircle className="profile-icon" />
+    <FaChevronDown className={`arrow-icon ${showDropdown ? "rotate" : ""}`} />
+  </div>
 
-        <div className="profile-section" ref={dropdownRef}>
-          <img
-            src="https://i.pravatar.cc/40"
-            alt="Profile"
-            className="profile-img"
-               onClick={() => setShowDropdown(!showDropdown)}
-          />
-
-          {showDropdown && (
-            <div className="dropdown">
-              <p onClick={() => navigate("/profile")}>My Profile</p>
-              <p className="logout" onClick={handleLogout}>Logout</p>
-            </div>
-          )}
-        </div>
+  {showDropdown && (
+    <div className="profile-dropdown">
+      <div className="dropdown-item">
+        <span>👤</span> Profile
+      </div>
+      <div className="dropdown-item logout" onClick={handleLogout}>
+        <span>🚪</span> Logout
+      </div>
+    </div>
+  )}
+</div>
       </div>
     </nav>
   );

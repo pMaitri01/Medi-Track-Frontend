@@ -116,3 +116,26 @@
   border-top-left-radius: 10px !important;
   border-bottom-left-radius: 10px !important;
 }
+
+
+
+/* Fix close button position */
+/* Moves the 'X' button to the top right corner */
+.Toastify__close-button {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 20px;
+  align-self: flex-start; /* Prevents it from centering vertically */
+}
+
+/* Adjusts the toast body so text doesn't hit the 'X' */
+.Toastify__toast-body {
+  align-items: center;
+  padding-right: 20px; 
+}
+
+/* Optional: Make the progress bar thicker to match your 1st pic */
+.Toastify__progress-bar {
+  height: 4px;
+}
