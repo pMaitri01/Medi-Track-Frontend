@@ -45,7 +45,7 @@ export default function PatientOtp() {
     }
 
     if (enteredOtp === "1234") {
-      navigate("/ResetPwd");
+      navigate("/PatientResetPwd");
     } else {
       setError("Invalid OTP");
     }
