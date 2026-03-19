@@ -8,14 +8,17 @@
   --view-blue: #4a90a4;
   --delete-red: #d68383;
 }
+body{
+    overflow-y: scroll !important;
 
-.patient-list-container {
-  padding: 24px;
-  background-color: var(--bg-gray);
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  color: var(--text-dark);
 }
+.patient-list-container {
+  padding: 24px 60px;
+  background-color: #f4f2ee;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  padding: 24px 60px;
 
+}
 .list-header {
   margin-bottom: 20px;
 }
@@ -191,4 +194,319 @@
   border: 1px solid var(--border-color);
   border-radius: 6px;
   cursor: pointer;
+}
+/* Search Row */
+.search-top-row {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.main-search-container {
+    position: relative;
+    width: 400px;
+}
+
+.search-icon-inside {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #666;
+}
+
+.linkedin-search-input {
+    width: 100%;
+    padding: 12px 12px 12px 45px;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    background: white;
+    font-size: 15px;
+}
+.search-input {
+    width: 100%;}
+.global-filter-btn {
+    background: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #666;
+    font-weight: 500;
+    cursor: pointer;
+}
+.filter-select{
+  width: 100%;
+  margin-right: 100px;
+  margin-top: 3px;
+  height: 4px;
+}
+/* Pills Row */
+.filter-pills-row {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 25px;
+    position: relative;
+}
+
+.pill-wrapper {
+    position: relative;
+}
+
+.filter-pill {
+    background: white;
+    border: 1px solid #c9c9c9;
+    border-radius: 4px;
+    padding: 6px 14px;
+    font-size: 14px;
+    color: #666;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 20px;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.filter-pill:hover { background: #f3f3f3; }
+
+.active-pill {
+    background: #ebebeb; /* Grey highlight when selection exists */
+    color: #333;
+    border-color: #999;
+}
+
+.focused-pill {
+    outline: 2px solid #000;
+}
+
+/* Floating Panel (The Core of the Request) */
+.pill-dropdown-panel {
+    position: absolute;
+    top: 45px;
+    left: 0;
+    width: 320px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 0 0 1px rgba(0,0,0,0.08), 0 10px 20px rgba(0,0,0,0.15);
+    z-index: 1000;
+    padding-bottom: 10px;
+}
+
+.panel-header-search {
+    display: flex;
+    align-items: center;
+    padding: 12px;
+    gap: 10px;
+}
+
+.panel-header-search input {
+    flex: 1;
+    border: 1px solid #e0e0e0;
+    padding: 8px 30px;
+    border-radius: 4px;
+    font-size: 14px;
+    background: #f9f9f9;
+}
+
+.inner-search-icon { position: absolute; left: 22px; color: #666; }
+.settings-icon { color: #666; cursor: pointer; }
+
+.selection-count-row {
+    padding: 10px 15px;
+    font-weight: 600;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.options-list {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 15px;
+    cursor: pointer;
+    /* transition: background 0.2s; */
+}
+
+.dropdown-item:hover { background: #f3f3f3; }
+
+.dropdown-item input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    accent-color: #0a66c2; /* LinkedIn Blue */
+}
+
+.filter-pill-text {
+    background: none;
+    border: none;
+    color: #666;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.export-pill-btn {
+    background: #4db6ac;
+    color: white;
+    border: none;
+    padding: 8px 25px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+}
+.filter-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  gap: 15px;
+}
+
+.search-input-wrapper {
+  flex-grow: 1;
+}
+
+.search-input {
+  width: 100%;
+  padding: 10px 15px;
+  border: 1px solid #4db6ac; /* The teal color from your image */
+  border-radius: 8px;
+  outline: none;
+}
+
+.filter-options {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.filter-select {
+  padding: 10px 15px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  background-color: white;
+  color: #5f6368;
+  cursor: pointer;
+  min-width: 120px;
+}
+
+.export-btn.filled {
+  background-color: #4db6ac;
+  color: white;
+  border: none;
+  padding: 10px 25px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.export-btn.filled:hover {
+  background-color: #3d968d;
+}
+.filter-group label {
+  font-size: 12px;
+  font-weight: 700;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.filter-grid{
+  display: flex;
+}
+.filter-group{
+  width: 200px;
+  display: flex;
+  margin-right: 100px;
+}
+/* 5. The Dropdown (Select) Styling */
+.filter-group select, 
+.filter-group input[type="date"] {
+  height: 42px;
+  width: 200px;
+  padding: 0 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  background-color: white;
+  font-size: 14px;
+  color: #334155;
+  cursor: pointer;
+  outline: none;
+  transition: all 0.2s ease;
+  /* Custom arrow for a cleaner look */
+  appearance: none;
+  /* background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E"); */
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 14px;
+}
+.filter-group select:hover {
+  border-color: #4db6ac;
+}
+#fage{
+  margin-left: 60px;
+}
+.filter-group select:focus {
+  border-color: #4db6ac;
+  box-shadow: 0 0 0 3px rgba(77, 182, 172, 0.15);
+}
+
+/* 6. Action Buttons in Drawer */
+.filter-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 20px;
+  padding-top: 15px;
+  border-top: 1px dashed #e2e8f0;
+  margin-bottom: 10px;
+  justify-content: center;
+}
+
+.apply-filter-btn {
+  background-color: #4db6ac;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  width: 10% !important;
+}
+.apply-filter-btn:hover
+{
+   background: #4db6ac;
+  color: white;
+}
+.reset-filter-btn {
+  background: #4db6ac;
+  color: white;
+  width: 10% !important;
+  border-radius: 6px;
+  font-weight: 600 !important;
+  font-size: 14px !important;
+  font-weight: 500;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.reset-filter-btn:hover {
+   background: #4db6ac;
+  color: white;
+}
+.page-nav{
+  background-color: #49A8AF;
+  color: white;
+}
+.page-num {
+  padding-top: 7px;
 }
