@@ -19,10 +19,7 @@ export default function DoctorSignUp() {
   const handleChange = (e) => {
     const { name, value } = e.target;   // get name and value from input
     let newErrors = { ...errors }; 
-    // setFormData({
-    //   ...formData,
-    //   [e.target.name]: e.target.value
-    // });
+    
     const updatedFormData = {
     ...formData,
     [name]: value
@@ -238,7 +235,7 @@ const handleBlur = (e) => {
         <div className="log">
           <small className="txtlog">
             Already have account?
-            <Link to="/AdminLogin" className="text-primary">
+            <Link to="/DoctorLogin" className="text-primary">
               Login
             </Link>
           </small>

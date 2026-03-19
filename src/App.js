@@ -32,7 +32,7 @@ function App() {
       </Routes>
       <ToastContainer 
         position="top-center" // This moves it to the top middle
-        autoClose={10000}
+        autoClose={1000}
         hideProgressBar={true}
         newestOnTop={false}
         closeOnClick

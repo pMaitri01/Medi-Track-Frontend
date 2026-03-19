@@ -165,7 +165,7 @@ export default function DoctorLogin() {
            <small className="admin-txtregister">
               Don’t have account? 
                {/* <span className="text-primary"> Register</span>  */}
-              <Link to="/AdminSignUp" className="admin-text-primary">
+              <Link to="/DoctorSignUp" className="admin-text-primary">
                 Register
               </Link>
             </small>

@@ -30,7 +30,7 @@ export default function DoctorHeader({ open }) {
     const confirmLogout = window.confirm("Are you sure you want to logout?");
 
     if (confirmLogout) {
-      navigate("/admin-login"); // redirect to login page
+      navigate("/DoctorLogin"); // redirect to login page
     }
   };
   return (
