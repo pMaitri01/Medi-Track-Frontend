@@ -85,6 +85,7 @@ export default function PatientLogin() {
           headers: {
             "Content-Type": "application/json",
           },
+          credentials: "include",
           body: JSON.stringify({
             email: formData.email,
             password: formData.password,
@@ -96,7 +97,6 @@ export default function PatientLogin() {
 
       if (response.ok) {
         alert(data.message);//print login successfull msg in alart
-        localStorage.setItem("token", data.token);// store the token which send from the backend
         localStorage.setItem("user", JSON.stringify(data.user));
         navigate("/PatientHome");
       }

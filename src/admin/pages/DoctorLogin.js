@@ -63,6 +63,7 @@ export default function DoctorLogin() {
           headers: {
             "Content-Type": "application/json",
           },
+          credentials: "include",
           body: JSON.stringify({
             email: formData.email,
             password: formData.password,
@@ -82,8 +83,6 @@ export default function DoctorLogin() {
         });
 
         setErrors({});
-        localStorage.setItem("token", data.token);
-        localStorage.setItem("doc", JSON.stringify(data.doc));
         navigate("/DoctorDashboard");   // redirect page
 
       }
