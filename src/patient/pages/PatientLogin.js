@@ -85,6 +85,7 @@ export default function PatientLogin() {
           headers: {
             "Content-Type": "application/json",
           },
+          credentials: "include",
           body: JSON.stringify({
             email: formData.email,
             password: formData.password,
@@ -96,7 +97,6 @@ export default function PatientLogin() {
 
       if (response.ok) {
         alert(data.message);//print login successfull msg in alart
-        localStorage.setItem("token", data.token);// store the token which send from the backend
         localStorage.setItem("user", JSON.stringify(data.user));
         navigate("/PatientHome");
       }
@@ -174,7 +174,7 @@ export default function PatientLogin() {
                 <input type="checkbox" className="ckb"/> Remember me
               </small>
               <small className="text-primary">
-                  <Link to="/forgotpassword" className="text-primary">
+                  <Link to="/PatientForgotPwd" className="text-primary">
                       Forgot Password?
                   </Link>
 
@@ -188,7 +188,7 @@ export default function PatientLogin() {
             <small className="txtreg">
               Don’t have account?
               {/* <span className="text-primary"> Register</span> */}
-              <Link to="/Registration" className="text-primary">
+              <Link to="/PatientRegistration" className="text-primary">
                 Register
               </Link>
             </small>

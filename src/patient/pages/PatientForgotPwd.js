@@ -32,7 +32,7 @@ export default function PatientForgotPwd() {
 
     // If valid
     setError("");
-    navigate("/otp");
+    navigate("/PatientOtp");
   };
 
   return (

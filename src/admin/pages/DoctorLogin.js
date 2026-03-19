@@ -63,6 +63,7 @@ export default function DoctorLogin() {
           headers: {
             "Content-Type": "application/json",
           },
+          credentials: "include",
           body: JSON.stringify({
             email: formData.email,
             password: formData.password,
@@ -82,8 +83,6 @@ export default function DoctorLogin() {
         });
 
         setErrors({});
-        localStorage.setItem("token", data.token);
-        localStorage.setItem("doc", JSON.stringify(data.doc));
         navigate("/DoctorDashboard");   // redirect page
 
       }
@@ -166,7 +165,7 @@ export default function DoctorLogin() {
            <small className="admin-txtregister">
               Don’t have account? 
                {/* <span className="text-primary"> Register</span>  */}
-              <Link to="/AdminSignUp" className="admin-text-primary">
+              <Link to="/DoctorSignUp" className="admin-text-primary">
                 Register
               </Link>
             </small>

@@ -235,7 +235,7 @@ const handleBlur = (e) => {
         <div className="log">
           <small className="txtlog">
             Already have account?
-            <Link to="/AdminLogin" className="text-primary">
+            <Link to="/DoctorLogin" className="text-primary">
               Login
             </Link>
           </small>
