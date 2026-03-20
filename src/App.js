@@ -14,6 +14,7 @@ import DoctorSignUp from './admin/pages/DoctorSignUp';
 import DoctorDashboard from './admin/pages/DoctorDashboard';
 import BookAppointment from './patient/pages/BookAppointment';
 import ProtectedRoute from './components/ProtectedRoute';
+import AppointmentView from './admin/pages/AppointmentView';
 
 function App() {
   return (
