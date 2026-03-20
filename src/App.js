@@ -12,11 +12,8 @@ import PatientList from './admin/pages/PatientList';
 import DoctorLogin from './admin/pages/DoctorLogin';
 import DoctorSignUp from './admin/pages/DoctorSignUp';
 import DoctorDashboard from './admin/pages/DoctorDashboard';
-<<<<<<< HEAD
 import AppointmentView from './admin/pages/AppointmentView';
-=======
 import BookAppointment from './patient/pages/BookAppointment';
->>>>>>> cae6dfbde6e38c94321d0347200a222c5b8e39fb
 import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {
@@ -27,17 +24,6 @@ function App() {
         <Route path="/Patientforgotpwd" element={<PatientForgotPwd />} />
         <Route path='/PatientOtp' element={<PatientOtp/>} />
         <Route path='/PatientResetPwd' element={<PatientResetPwd/>} />
-<<<<<<< HEAD
-        <Route path='/PatientRegistration' element={<ProtectedRoute><PatientRegistration/></ProtectedRoute>}/>
-        <Route path='/PatientHome' element={<PatientHome/>}/>
-        {/* <Route path='/PatientHome' element={<ProtectedRoute><PatientHome/></ProtectedRoute>}/> */}
-        {/* <Route path='/PatientList' element={<ProtectedRoute><PatientList/></ProtectedRoute>}/> */}
-        <Route path='/PatientList' element={<PatientList/>}/>
-        <Route path='/DoctorLogin' element={<DoctorLogin/>}/>
-        <Route path='/DoctorSignUp' element={<DoctorSignUp/>}/> 
-        <Route path='/DoctorDashboard' element={<ProtectedRoute><DoctorDashboard/></ProtectedRoute>}/>
-        <Route path='/AppointmentView' element={<AppointmentView/>}/>
-=======
         <Route path='/PatientRegistration' element={<PatientRegistration/>}/>
         <Route path='/PatientHome' element={<PatientHome/>}/>
         <Route path='/PatientList' element={<PatientList/>}/>
@@ -45,8 +31,9 @@ function App() {
         <Route path='/DoctorSignUp' element={<DoctorSignUp/>}/> 
         <Route path='/DoctorDashboard' element={<DoctorDashboard/>}/>
         <Route path='/BookAppointment' element={<BookAppointment/>}/>
+        <Route path='/AppointmentView' element={<AppointmentView/>}/>
 
->>>>>>> cae6dfbde6e38c94321d0347200a222c5b8e39fb
+
       </Routes>
       <ToastContainer 
         position="top-center" // This moves it to the top middle

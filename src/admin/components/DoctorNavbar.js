@@ -96,7 +96,9 @@ export default function DoctorNavbar({ open, setOpen }) {
           <FaUserMd style={styles.icon}/>
           {open && "Patient List"}
         </div>
-        <div style={styles.menuItem}>
+        <div style={styles.menuItem}
+            onClick={() => navigate("/AppointmentView")}
+        >
           <FaCalendarCheck style={styles.icon}/>
           {open && "Appointments"}
         </div>
