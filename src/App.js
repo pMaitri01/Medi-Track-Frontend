@@ -13,7 +13,6 @@ import DoctorLogin from './admin/pages/DoctorLogin';
 import DoctorSignUp from './admin/pages/DoctorSignUp';
 import DoctorDashboard from './admin/pages/DoctorDashboard';
 import ProtectedRoute from './components/ProtectedRoute';
-import BookAppointment from './patient/pages/BookAppointment';
 
 function App() {
   return (
@@ -23,13 +22,12 @@ function App() {
         <Route path="/Patientforgotpwd" element={<PatientForgotPwd />} />
         <Route path='/PatientOtp' element={<PatientOtp/>} />
         <Route path='/PatientResetPwd' element={<PatientResetPwd/>} />
-        <Route path='/PatientRegistration' element={<ProtectedRoute><PatientRegistration/></ProtectedRoute>}/>
-        <Route path='/BookAppointment' element={<BookAppointment />} />
-<Route path='/PatientHome' element={<ProtectedRoute><PatientHome/></ProtectedRoute>}/>
-<Route path='/PatientList' element={<ProtectedRoute><PatientList/></ProtectedRoute>}/>
+        <Route path='/PatientRegistration' element={<PatientRegistration/>}/>
+        <Route path='/PatientHome' element={<PatientHome/>}/>
+        <Route path='/PatientList' element={<PatientList/>}/>
         <Route path='/DoctorLogin' element={<DoctorLogin/>}/>
         <Route path='/DoctorSignUp' element={<DoctorSignUp/>}/> 
-        <Route path='/DoctorDashboard' element={<ProtectedRoute><DoctorDashboard/></ProtectedRoute>}/>
+        <Route path='/DoctorDashboard' element={<DoctorDashboard/>}/>
 
       </Routes>
       <ToastContainer 
