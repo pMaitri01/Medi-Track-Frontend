@@ -26,13 +26,23 @@ export default function DoctorHeader({ open }) {
       border: "1px solid #e5e7eb", borderRadius: "8px", width: "150px", zIndex: 100
     }
   };
-  const handleLogout = () => {
-    const confirmLogout = window.confirm("Are you sure you want to logout?");
 
-    if (confirmLogout) {
-      navigate("/DoctorLogin"); // redirect to login page
-    }
-  };
+  const handleLogout = async () => {
+  try {
+    await fetch("http://localhost:5000/api/Doctor/logout", {
+      method: "POST",
+      credentials: "include",
+    });
+
+    localStorage.removeItem("doc"); // optional
+    alert("Logged out");
+
+    window.location.href = "/DoctorLogin";
+  } catch (error) {
+    console.error(error);
+  }
+};
+
   return (
     <div style={styles.header}>
       <span style={{ fontWeight: "500" }}>Hi, Maitri 👋 Welcome to Medi-Track</span>
