@@ -84,11 +84,15 @@ export default function DoctorNavbar({ open, setOpen }) {
         onClick={() => navigate("/DoctorDashboard")}
         />
       <div style={styles.menuContainer}>
-        <div style={{ ...styles.menuItem, ...styles.active }}>
+        <div style={{ ...styles.menuItem, ...styles.active }}
+             onClick={() => navigate("/DoctorDashboard")}
+        >
           <FaTachometerAlt style={styles.icon}/>
           {open && "Dashboard"}
         </div>
-        <div style={styles.menuItem}>
+        <div style={styles.menuItem}
+             onClick={() => navigate("/PatientList")}
+        >
           <FaUserMd style={styles.icon}/>
           {open && "Patient List"}
         </div>

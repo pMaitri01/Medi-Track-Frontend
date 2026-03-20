@@ -12,12 +12,11 @@ body{
     overflow-y: scroll !important;
 
 }
-.patient-list-container {
-  padding: 24px 60px;
-  background-color: #f4f2ee;
+ .patient-list-container {
+  padding: 24px 30px; /* Reduced from 60px to prevent extra horizontal gaps */
+  background-color: transparent; /* Wrapper now handles background */
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  padding: 24px 60px;
-
+  box-sizing: border-box;
 }
 .list-header {
   margin-bottom: 20px;
@@ -145,7 +144,7 @@ body{
   gap: 8px;
 }
 
-.view-btn, .delete-btn {
+/* .view-btn, .delete-btn {
   padding: 6px 12px;
   border-radius: 6px;
   border: none;
@@ -155,10 +154,35 @@ body{
   display: flex;
   align-items: center;
   gap: 4px;
+} */
+
+.view-btn, .delete-btn {
+  padding: 2px 2px 2px 2px;
+  border-radius: 6px;
+  border: none;
+  color: white;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  
+  /* Flexbox magic for centering */
+  display: inline-flex;
+  align-items: center;     /* Vertical centering */
+  justify-content: center;  /* Horizontal centering */
+  gap: 6px;                /* Space between icon and text */
+  
+  transition: opacity 0.2s ease, transform 0.1s ease;
+  min-width: 50px;         /* Optional: gives buttons uniform width */
 }
 
-.view-btn { background-color: var(--view-blue); }
-.delete-btn { background-color: var(--delete-red); }
+.view-btn {
+   background-color: var(--view-blue); 
+  font-size: 25px;
+}
+.delete-btn { 
+  background-color: var(--delete-red); 
+  font-size: 25px;
+}
 
 /* Pagination */
 .footer-pagination {
@@ -408,6 +432,7 @@ body{
   border-radius: 8px;
   cursor: pointer;
   font-weight: 500;
+  width: 100%;
 }
 
 .export-btn.filled:hover {
@@ -422,9 +447,11 @@ body{
 }
 .filter-grid{
   display: flex;
+  justify-content: center;
+
 }
 .filter-group{
-  width: 200px;
+  width: 150px;
   display: flex;
   margin-right: 100px;
 }

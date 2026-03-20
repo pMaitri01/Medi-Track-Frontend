@@ -12,6 +12,7 @@ import PatientList from './admin/pages/PatientList';
 import DoctorLogin from './admin/pages/DoctorLogin';
 import DoctorSignUp from './admin/pages/DoctorSignUp';
 import DoctorDashboard from './admin/pages/DoctorDashboard';
+import AppointmentView from './admin/pages/AppointmentView';
 import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {
@@ -23,12 +24,14 @@ function App() {
         <Route path='/PatientOtp' element={<PatientOtp/>} />
         <Route path='/PatientResetPwd' element={<PatientResetPwd/>} />
         <Route path='/PatientRegistration' element={<ProtectedRoute><PatientRegistration/></ProtectedRoute>}/>
-<Route path='/PatientHome' element={<ProtectedRoute><PatientHome/></ProtectedRoute>}/>
-<Route path='/PatientList' element={<ProtectedRoute><PatientList/></ProtectedRoute>}/>
+        <Route path='/PatientHome' element={<PatientHome/>}/>
+        {/* <Route path='/PatientHome' element={<ProtectedRoute><PatientHome/></ProtectedRoute>}/> */}
+        {/* <Route path='/PatientList' element={<ProtectedRoute><PatientList/></ProtectedRoute>}/> */}
+        <Route path='/PatientList' element={<PatientList/>}/>
         <Route path='/DoctorLogin' element={<DoctorLogin/>}/>
         <Route path='/DoctorSignUp' element={<DoctorSignUp/>}/> 
         <Route path='/DoctorDashboard' element={<ProtectedRoute><DoctorDashboard/></ProtectedRoute>}/>
-
+        <Route path='/AppointmentView' element={<AppointmentView/>}/>
       </Routes>
       <ToastContainer 
         position="top-center" // This moves it to the top middle
