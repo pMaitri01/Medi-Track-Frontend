@@ -1,0 +1,153 @@
+.appointment-container {
+  padding: 80px 40px 20px;
+  background: #f4f2ee;
+  min-height: 100vh;
+}
+
+.list-header h2 {
+  margin-bottom: 20px;
+  color: #4b5563;
+}
+
+.filter-bar {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.search-input {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #4db6ac;
+  border-radius: 8px;
+}
+
+.filter-btn,
+.export-btn {
+  padding: 2px;
+  border: none;
+  background: #4db6ac;
+  color: white;
+  border-radius: 8px;
+  cursor: pointer;
+  width: 90px;
+  height: 42px !important;
+}
+
+.filter-drawer {
+  background: white;
+  padding: 15px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+.filter-grid {
+  display: flex;
+  gap: 20px;
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.filter-group select,
+.filter-group input {
+  padding: 8px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+.filter-footer {
+  margin-top: 15px;
+  display: flex;
+  gap: 10px;
+}
+
+.apply-btn,
+.reset-btn {
+  padding: 8px 20px;
+  border: none;
+  background: #4db6ac;
+  color: white;
+  border-radius: 6px;
+}
+
+.table-wrapper {
+  background: white;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th {
+  background: #f9fafb;
+  padding: 12px;
+  text-align: left;
+}
+
+td {
+  padding: 12px;
+  border-top: 1px solid #eee;
+}
+
+.name-cell {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.name-cell img {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+}
+
+/* Status Colors */
+.status {
+  padding: 5px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+}
+
+.status.pending {
+  background: #fef3c7;
+}
+
+.status.accepted {
+  background: #d1fae5;
+}
+
+.status.rejected {
+  background: #fee2e2;
+}
+
+/* Action Buttons */
+.action-cell {
+  display: flex;
+  gap: 8px;
+}
+
+.accept-btn {
+  background-color: #4db6ac;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.reject-btn {
+  background-color: #e57373;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 12px;
+}
