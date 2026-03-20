@@ -48,17 +48,7 @@ export default function DoctorHeader({ open }) {
       <span style={{ fontWeight: "500" }}>Hi, Maitri 👋 Welcome to Medi-Track</span>
       <div style={{ display: "flex", alignItems: "center", gap: "20px" }}>
         <FaBell style={{ cursor: "pointer", color: "#64748b" }} />
-        {/* <div style={styles.profile} onClick={() => setShowProfile(!showProfile)}>
-          <img src={userImg} alt="profile" style={styles.img} />
-          <FaChevronDown size={12} />
-          {showProfile && (
-            <div style={styles.dropdown}>
-              <div style={{ padding: "10px", fontSize: "14px" }}>👤 Profile</div>
-              <div style={{ padding: "10px", fontSize: "14px", borderTop: "1px solid #eee" }}   onClick={handleLogout}
-              >🚪 Logout</div>
-            </div>
-          )}
-        </div> */}
+  
         <div style={styles.profile} onClick={() => setShowProfile(!showProfile)}>
           <img src={userImg} alt="profile" style={styles.img} />
 
