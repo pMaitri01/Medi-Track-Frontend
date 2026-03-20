@@ -12,7 +12,6 @@ import PatientList from './admin/pages/PatientList';
 import DoctorLogin from './admin/pages/DoctorLogin';
 import DoctorSignUp from './admin/pages/DoctorSignUp';
 import DoctorDashboard from './admin/pages/DoctorDashboard';
-import AppointmentView from './admin/pages/AppointmentView';
 import BookAppointment from './patient/pages/BookAppointment';
 import ProtectedRoute from './components/ProtectedRoute';
 
@@ -25,14 +24,13 @@ function App() {
         <Route path='/PatientOtp' element={<PatientOtp/>} />
         <Route path='/PatientResetPwd' element={<PatientResetPwd/>} />
         <Route path='/PatientRegistration' element={<PatientRegistration/>}/>
-        <Route path='/PatientHome' element={<PatientHome/>}/>
-        <Route path='/PatientList' element={<PatientList/>}/>
+        <Route path='/PatientHome' element={<ProtectedRoute><PatientHome/></ProtectedRoute>}/>
+        <Route path='/PatientList' element={<ProtectedRoute><PatientList/></ProtectedRoute>}/>
         <Route path='/DoctorLogin' element={<DoctorLogin/>}/>
         <Route path='/DoctorSignUp' element={<DoctorSignUp/>}/> 
         <Route path='/DoctorDashboard' element={<DoctorDashboard/>}/>
         <Route path='/BookAppointment' element={<BookAppointment/>}/>
         <Route path='/AppointmentView' element={<AppointmentView/>}/>
-
 
       </Routes>
       <ToastContainer 

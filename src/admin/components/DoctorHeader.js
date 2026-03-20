@@ -119,6 +119,21 @@ export default function DoctorHeader({ open }) {
   };
 
   const handleLogout = async () => {
+  try {
+    await fetch("http://localhost:5000/api/Doctor/logout", {
+      method: "POST",
+      credentials: "include",
+    });
+
+    // localStorage.removeItem("doc"); // optional
+    alert("Logged out");
+
+    window.location.href = "/DoctorLogin";
+  } catch (error) {
+    console.error(error);
+  }
+};
+
     try {
       await fetch("http://localhost:5000/api/Doctor/logout", { method: "POST", credentials: "include" });
       localStorage.removeItem("doc");
