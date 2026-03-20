@@ -12,7 +12,7 @@ import PatientList from './admin/pages/PatientList';
 import DoctorLogin from './admin/pages/DoctorLogin';
 import DoctorSignUp from './admin/pages/DoctorSignUp';
 import DoctorDashboard from './admin/pages/DoctorDashboard';
-// import ProtectedRoute from './components/ProtectedRoute';
+import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {
   return (
