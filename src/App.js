@@ -28,12 +28,8 @@ function App() {
         <Route path='/PatientList' element={<ProtectedRoute><PatientList/></ProtectedRoute>}/>
         <Route path='/DoctorLogin' element={<DoctorLogin/>}/>
         <Route path='/DoctorSignUp' element={<DoctorSignUp/>}/> 
-<<<<<<< HEAD
-        <Route path='/DoctorDashboard' element={<ProtectedRoute><DoctorDashboard/></ProtectedRoute>}/>
-=======
         <Route path='/DoctorDashboard' element={<DoctorDashboard/>}/>
         <Route path='/BookAppointment' element={<BookAppointment/>}/>
->>>>>>> c411e26e80219146f322bcd1d7c12ea514c0e7ac
 
       </Routes>
       <ToastContainer 
