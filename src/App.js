@@ -12,6 +12,7 @@ import PatientList from './admin/pages/PatientList';
 import DoctorLogin from './admin/pages/DoctorLogin';
 import DoctorSignUp from './admin/pages/DoctorSignUp';
 import DoctorDashboard from './admin/pages/DoctorDashboard';
+import BookAppointment from './patient/pages/BookAppointment';
 import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {
@@ -28,6 +29,7 @@ function App() {
         <Route path='/DoctorLogin' element={<DoctorLogin/>}/>
         <Route path='/DoctorSignUp' element={<DoctorSignUp/>}/> 
         <Route path='/DoctorDashboard' element={<DoctorDashboard/>}/>
+        <Route path='/BookAppointment' element={<BookAppointment/>}/>
 
       </Routes>
       <ToastContainer 
