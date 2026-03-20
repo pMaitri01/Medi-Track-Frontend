@@ -119,12 +119,29 @@ export default function DoctorHeader({ open }) {
   };
 
   const handleLogout = async () => {
+<<<<<<< HEAD
+  try {
+    await fetch("http://localhost:5000/api/Doctor/logout", {
+      method: "POST",
+      credentials: "include",
+    });
+
+    // localStorage.removeItem("doc"); // optional
+    alert("Logged out");
+
+    window.location.href = "/DoctorLogin";
+  } catch (error) {
+    console.error(error);
+  }
+};
+=======
     try {
       await fetch("http://localhost:5000/api/Doctor/logout", { method: "POST", credentials: "include" });
       localStorage.removeItem("doc");
       window.location.href = "/DoctorLogin";
     } catch (error) { console.error(error); }
   };
+>>>>>>> c411e26e80219146f322bcd1d7c12ea514c0e7ac
 
   return (
     <div style={styles.header}>

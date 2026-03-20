@@ -24,12 +24,16 @@ function App() {
         <Route path='/PatientOtp' element={<PatientOtp/>} />
         <Route path='/PatientResetPwd' element={<PatientResetPwd/>} />
         <Route path='/PatientRegistration' element={<PatientRegistration/>}/>
-        <Route path='/PatientHome' element={<PatientHome/>}/>
-        <Route path='/PatientList' element={<PatientList/>}/>
+        <Route path='/PatientHome' element={<ProtectedRoute><PatientHome/></ProtectedRoute>}/>
+        <Route path='/PatientList' element={<ProtectedRoute><PatientList/></ProtectedRoute>}/>
         <Route path='/DoctorLogin' element={<DoctorLogin/>}/>
         <Route path='/DoctorSignUp' element={<DoctorSignUp/>}/> 
+<<<<<<< HEAD
+        <Route path='/DoctorDashboard' element={<ProtectedRoute><DoctorDashboard/></ProtectedRoute>}/>
+=======
         <Route path='/DoctorDashboard' element={<DoctorDashboard/>}/>
         <Route path='/BookAppointment' element={<BookAppointment/>}/>
+>>>>>>> c411e26e80219146f322bcd1d7c12ea514c0e7ac
 
       </Routes>
       <ToastContainer 
