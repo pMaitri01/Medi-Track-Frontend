@@ -34,7 +34,7 @@ export default function DoctorHeader({ open }) {
       credentials: "include",
     });
 
-    localStorage.removeItem("doc"); // optional
+    // localStorage.removeItem("doc"); // optional
     alert("Logged out");
 
     window.location.href = "/DoctorLogin";

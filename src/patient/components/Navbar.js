@@ -10,9 +10,20 @@ function Navbar() {
   const dropdownRef = useRef(null);
   const navigate = useNavigate();
 
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    navigate("/");
+  const handleLogout = async () => {
+    try{
+      await fetch("http://localhost:5000/api/Patient/logout" ,{
+        method: "POST",
+        credentials: "include",
+      })
+       
+      localStorage.removeItem("doc");
+      alert("logged out");
+
+      window.location.href = "/";
+    }catch(error){
+      console.log(error);
+    }
   };
   // Close dropdown when clicking outside
   useEffect(() => {
