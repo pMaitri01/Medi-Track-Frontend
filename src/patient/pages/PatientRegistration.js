@@ -141,7 +141,7 @@ const handleBlur = (e) => {
   try {
     const { confirmPassword, ...dataToSend } = formData;
 
-    const response = await fetch(`${process.env.REACT_APP_API_URL}/api/patients/register`, {
+    const response = await fetch(`${process.env.REACT_APP_API_URL}/api/patient/register`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
