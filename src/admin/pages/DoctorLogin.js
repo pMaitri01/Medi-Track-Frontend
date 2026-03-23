@@ -57,7 +57,7 @@ export default function DoctorLogin() {
   // if (Object.keys(newErrors).length === 0) {
     try {
       const response = await fetch(
-        "http://localhost:5000/api/Doctor/login",  
+        `${process.env.REACT_APP_API_URL}/Doctor/login`,
         {
           method: "POST",
           headers: {

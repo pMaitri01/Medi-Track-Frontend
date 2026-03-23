@@ -110,7 +110,7 @@ const handleBlur = (e) => {
 
     try {
       const response = await fetch(
-        "http://localhost:5000/api/doctor/register",
+        `${process.env.REACT_APP_API_URL}/doctor/register`,
         {
           method: "POST",
           headers: {

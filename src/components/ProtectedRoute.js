@@ -1,27 +1,28 @@
 import { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
 
-const ProtectedRoute = ({ children }) => {
+const ProtectedRoute = ({ children, role }) => {
   const [isAuth, setIsAuth] = useState(null);
 
+  // decide API based on role
+  const url =
+    role === "doctor"
+      ? `${process.env.REACT_APP_API_URL}/Doctor/profile`
+      : `${process.env.REACT_APP_API_URL}/Patient/profile`;
+
+  const redirectPath = role === "doctor" ? "/DoctorLogin" : "/";
+
   useEffect(() => {
-    fetch("http://localhost:5000/api/Doctor/profile", {
-      method: "GET",
+    fetch(url, {
       credentials: "include",
     })
-      .then((res) => {
-        if (res.ok) {
-          setIsAuth(true);
-        } else {
-          setIsAuth(false);
-        }
-      })
+      .then((res) => setIsAuth(res.ok))
       .catch(() => setIsAuth(false));
-  }, []);
+  }, [url]);
 
   if (isAuth === null) return <p>Loading...</p>;
 
-  return isAuth ? children : <Navigate to="/DoctorLogin" />;
+  return isAuth ? children : <Navigate to={redirectPath} />;
 };
 
 export default ProtectedRoute;

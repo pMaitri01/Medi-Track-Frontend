@@ -79,7 +79,7 @@ export default function PatientLogin() {
   if (Object.keys(newErrors).length === 0) {
     try {
       const response = await fetch(
-        "http://localhost:5000/api/patient/login",  
+        `${process.env.REACT_APP_API_URL}/patient/login`,  
         {
           method: "POST",
           headers: {
