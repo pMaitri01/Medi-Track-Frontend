@@ -100,13 +100,13 @@ const handleBlur = (e) => {
    let newErrors = {};
 
    // First Name
-  if (!/^[A-Za-z]+$/.test(formData.fname)) {
-    newErrors.fname = "Only alphabets allowed";
+  if (!/^[A-Za-z]+$/.test(formData.firstName)) {
+    newErrors.firstName = "Only alphabets allowed";
   }
 
   // Last Name
-  if (!/^[A-Za-z]+$/.test(formData.lname)) {
-    newErrors.lname = "Only alphabets allowed";
+  if (!/^[A-Za-z]+$/.test(formData.lastName)) {
+    newErrors.lastName = "Only alphabets allowed";
   }
 
   // Email
