@@ -7,8 +7,8 @@ const ProtectedRoute = ({ children, role }) => {
   // decide API based on role
   const url =
     role === "doctor"
-      ? `${process.env.REACT_APP_API_URL}/Doctor/profile`
-      : `${process.env.REACT_APP_API_URL}/Patient/profile`;
+      ? `${process.env.REACT_APP_API_URL}/api/Doctor/profile`
+      : `${process.env.REACT_APP_API_URL}/api/Patient/profile`;
 
   const redirectPath = role === "doctor" ? "/DoctorLogin" : "/";
 
