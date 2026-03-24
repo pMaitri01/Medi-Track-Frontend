@@ -1,5 +1,5 @@
 .appointment-card {
-  padding: 30px;
+  padding: 18px;
   background: #fff;
   border-radius: 12px;
 }
@@ -9,7 +9,7 @@
   justify-content: space-between;
   align-items: center;
   border-bottom: 2px solid #f1f5f9;
-  padding-bottom: 15px;
+  /* padding-bottom: 15px; */
   margin-bottom: 25px;
 }
 
@@ -34,7 +34,16 @@
 .label-text {
   display: block;
   font-weight: 700;
-  margin-bottom: 15px;
+  /* margin-bottom: 15px; */
+  color: #1e293b;
+  font-size: 0.95rem;
+}
+
+.label-date {
+  margin-top: 10px;
+  display: block;
+  font-weight: 700;
+  /* margin-bottom: 15px; */
   color: #1e293b;
   font-size: 0.95rem;
 }
@@ -156,6 +165,7 @@
   border-radius: 8px;
   font-weight: 700;
   cursor: pointer;
+  flex: 1;
 }
 .booking-submit-btn:hover
 {
@@ -165,4 +175,34 @@
   background: #e2e8f0;
   color: #94a3b8;
   cursor: not-allowed;
+}
+
+/* --- BUTTON GROUP (Cancel + Confirm) --- */
+
+.button-group {
+  display: flex;
+  gap: 15px;
+  margin-top: 30px;
+}
+
+/* Cancel Button */
+.cancel-btn {
+  flex: 1;
+  padding: 15px;
+  background: #e2e8f0;
+  color: #1e293b;
+  border: none;
+  border-radius: 8px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.cancel-btn:hover {
+  background: #cbd5e1;
+}
+
+/* Confirm Button Adjustment */
+.booking-submit-btn {
+  flex: 1; /* Equal width as cancel */
 }

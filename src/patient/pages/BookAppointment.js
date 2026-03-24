@@ -321,18 +321,30 @@
 // export default BookAppointment;
 
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css'; 
 import '../css/BookAppointment.css';
 
 const BookAppointment = ({ onClose }) => {
+  const [selectedDoctor, setSelectedDoctor] = useState("");
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedTime, setSelectedTime] = useState(null);
   const [isBooked, setIsBooked] = useState(false);
+  const [doctors, setDoctors] = useState([]);
+
+  useEffect(() => {
+  fetch("http://localhost:5000/api/Doctor/book")
+    .then(res => res.json())
+    .then(data => {
+      console.log("Doctors:", data);
+      setDoctors(data);
+    })
+    .catch(err => console.error(err));
+}, []);
 
   // Simulated time slots
-  const timeSlots = ["09:00 AM", "10:30 AM", "12:00 PM", "02:30 PM", "04:00 PM", "05:30 PM"];
+  const timeSlots = ["09:00 AM", "09:30 AM", "10:00 PM", "10:30 PM", "11:00 PM", "11:30 PM"];
 
   const handleDateChange = (date) => {
     setSelectedDate(date);
@@ -345,7 +357,7 @@ const BookAppointment = ({ onClose }) => {
   };
 
   const handleBooking = () => {
-    if (selectedDate && selectedTime) {
+    if (selectedDoctor && selectedDate && selectedTime) {
       setIsBooked(true);
       setTimeout(() => onClose(), 2000);
     }
@@ -371,7 +383,23 @@ const BookAppointment = ({ onClose }) => {
       <div className="appointment-grid">
         {/* Left: Live Calendar */}
         <div className="calendar-container">
-          <label className="label-text">1. Select Date</label>
+        {/* 🔹 Doctor Dropdown */}
+          <label className="label-text">1. Select Doctor</label>
+          <select
+            className="doctor-dropdown"
+            value={selectedDoctor}
+            onChange={(e) => setSelectedDoctor(e.target.value)}
+          >
+            <option value="">-- Choose Doctor --</option>
+            {doctors.map((doc) => (
+              <option key={doc._id} value={doc._id}>
+                {doc.fullName}
+              </option>
+            ))}
+          </select>
+
+          {/* 🔹 Calendar */}
+          <label className="label-date">2. Select Date</label>
           <Calendar 
             onChange={handleDateChange} 
             value={selectedDate} 
@@ -384,7 +412,7 @@ const BookAppointment = ({ onClose }) => {
 
         {/* Right: Time Slots (Only shows if date is selected) */}
         <div className="slots-container">
-          <label className="label-text">2. Select Time Slot</label>
+          <label className="label-text">3. Select Time Slot</label>
           {selectedDate ? (
             <div className="slots-grid">
               {timeSlots.map((time) => (
@@ -402,13 +430,23 @@ const BookAppointment = ({ onClose }) => {
           )}
 
           {/* Confirm Button: Enabled only if time is selected */}
-          <button 
-            className="booking-submit-btn" 
-            disabled={!selectedTime}
-            onClick={handleBooking}
-          >
-            Confirm Appointment
-          </button>
+          <div className="button-group">
+            <button 
+              className="booking-submit-btn" 
+              disabled={!selectedDoctor || !selectedDate || !selectedTime}
+              onClick={handleBooking}
+            >
+              Confirm Appointment
+            </button>
+
+            <button 
+              className="cancel-btn"
+              onClick={onClose}
+            >
+              Cancel
+            </button>
+            
+          </div>
         </div>
       </div>
     </div>
