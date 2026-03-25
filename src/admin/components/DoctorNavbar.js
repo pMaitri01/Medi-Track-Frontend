@@ -2,6 +2,7 @@ import React from "react";
 import { FaTachometerAlt, FaUserMd, FaCalendarCheck, FaHistory } from "react-icons/fa";
 import userImg from "../images/Logo-1.png";
 import { useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 const SidebarCollapseIcon = ({ size = 24, color = "#6b7280", arrowColor = "#374151", open, ...props }) => {
   return (
@@ -26,6 +27,8 @@ const SidebarCollapseIcon = ({ size = 24, color = "#6b7280", arrowColor = "#3741
 
 export default function DoctorNavbar({ open, setOpen }) {
   const navigate = useNavigate();
+  const location = useLocation();
+  const isActive = (path) => location.pathname === path;
   const styles = {
     sidebar: {
       width: open ? "250px" : "100px",
@@ -84,20 +87,32 @@ export default function DoctorNavbar({ open, setOpen }) {
         onClick={() => navigate("/DoctorDashboard")}
         />
       <div style={styles.menuContainer}>
-        <div style={{ ...styles.menuItem, ...styles.active }}
-             onClick={() => navigate("/DoctorDashboard")}
+        <div
+          style={{
+            ...styles.menuItem,
+            ...(location.pathname === "/DoctorDashboard" && styles.active)
+          }}
+          onClick={() => navigate("/DoctorDashboard")}
         >
           <FaTachometerAlt style={styles.icon}/>
           {open && "Dashboard"}
         </div>
-        <div style={styles.menuItem}
-             onClick={() => navigate("/PatientList")}
+        <div
+          style={{
+            ...styles.menuItem,
+            ...(location.pathname === "/PatientList" && styles.active)
+          }}
+          onClick={() => navigate("/PatientList")}
         >
           <FaUserMd style={styles.icon}/>
           {open && "Patient List"}
         </div>
-        <div style={styles.menuItem}
-            onClick={() => navigate("/AppointmentView")}
+        <div
+          style={{
+            ...styles.menuItem,
+            ...(location.pathname === "/AppointmentView" && styles.active)
+          }}
+          onClick={() => navigate("/AppointmentView")}
         >
           <FaCalendarCheck style={styles.icon}/>
           {open && "Appointments"}
