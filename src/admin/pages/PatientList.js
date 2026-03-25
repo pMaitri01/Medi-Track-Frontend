@@ -1,30 +1,23 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import '../css/PatientList.css';
 import DoctorHeader from '../components/DoctorHeader';
 import DoctorNavbar from '../components/DoctorNavbar';
-
-const patientsData = [
-  { id: 'P001', name: 'John Doe', age: 30, gender: 'M', contact: '1234:5678', email: 'johndoe@acd.com', date: '17/04/2024', img: 'https://i.pravatar.cc/150?u=P001' },
-  { id: 'P002', name: 'Mary Smith', age: 45, gender: 'F', contact: '9677:5678', email: 'mary.smith@email.com', date: '18/04/2024', img: 'https://i.pravatar.cc/150?u=P002' },
-  { id: 'P003', name: 'David Brown', age: 28, gender: 'M', contact: '9757:5678', email: 'david.brown@email.com', date: '18/04/2024', img: 'https://i.pravatar.cc/150?u=P003' },
-  { id: 'P004', name: 'Sarah Johnson', age: 50, gender: 'F', contact: '6733:5678', email: 'sarah.johnson@email.com', date: '18/04/2024', img: 'https://i.pravatar.cc/150?u=P004' },
-  { id: 'P005', name: 'Michael Lee', age: 35, gender: 'M', contact: '9733:5678', email: 'michael.lee@email.com', date: '18/04/2024', img: 'https://i.pravatar.cc/150?u=P005' },
-  { id: 'P006', name: 'Emily Davis', age: 29, gender: 'F', contact: '9567:5678', email: 'emily.davis@email.com', date: '18/04/2024', img: 'https://i.pravatar.cc/150?u=P006' },
-  { id: 'P007', name: 'James Wilson', age: 62, gender: 'M', contact: '9733:5678', email: 'james.wilson@email.com', date: '18/04/2024', img: 'https://i.pravatar.cc/150?u=P007' },
-  { id: 'P008', name: 'Emma Taylor', age: 22, gender: 'F', contact: '9757:5678', email: 'emma.taylor@email.com', date: '18/04/2024', img: 'https://i.pravatar.cc/150?u=P008' },
-];
+import axios from "axios";
 
 const PatientList = () => {
   const [open, setOpen] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const [patients, setPatients] = useState([]);
   const [filters, setFilters] = useState({
     age: 'All',
     date: '',
     status: 'All',
     gender: 'All'
   });
-
+  useEffect(() => {
+  fetchPatients();
+}, []);
   const toggleFilter = () => setIsFilterOpen(!isFilterOpen);
 
   // Dynamic style for the content area to move with Sidebar
@@ -36,6 +29,62 @@ const PatientList = () => {
     backgroundColor: "#f4f2ee"
   };
 
+  
+// Filteration 
+const filteredPatients = patients.filter((p) => {
+  // 🔍 Search filter
+  const matchesSearch =
+    p.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    p.phone.includes(searchTerm) ||
+    p._id.includes(searchTerm);
+
+  //  Age filter
+  let matchesAge = true;
+  if (filters.age === "0-18") matchesAge = p.age <= 18;
+  else if (filters.age === "19-45") matchesAge = p.age >= 19 && p.age <= 45;
+  else if (filters.age === "45+") matchesAge = p.age > 45;
+
+  //  Gender filter
+  let matchesGender = true;
+  if (filters.gender !== "All") {
+    matchesGender = p.gender === filters.gender;
+  }
+
+  // Date filter
+  let matchesDate = true;
+  if (filters.date) {
+    const patientDate = new Date(p.createdAt).toISOString().split("T")[0];
+    matchesDate = patientDate === filters.date;
+  }
+
+  return matchesSearch && matchesAge && matchesGender && matchesDate;
+});
+
+  // API for Fetcing Patient Data
+  const fetchPatients = async () => {
+  try {
+    const res = await axios.get("http://localhost:5000/api/patient/"); // adjust URLhttp://localhost:5000/api/patient/count
+    setPatients(res.data);
+  } catch (error) {
+    console.error("Error fetching patients:", error);
+  }
+};
+
+// API For Deleting Patient
+const handleDelete = async (id) => {
+  if (!window.confirm("Are you sure you want to delete this patient?")) return;
+
+  try {
+    await axios.delete(`http://localhost:5000/api/patient/${id}`);
+
+    // remove from UI instantly
+    setPatients((prev) => prev.filter((p) => p._id !== id));
+
+    alert("Patient deleted successfully");
+  } catch (error) {
+    console.error("Delete error:", error);
+  }
+};
   return (
     <>
       {/* Sidebar gets the state */}
@@ -115,8 +164,8 @@ const PatientList = () => {
                     <label>Gender</label>
                     <select value={filters.gender} onChange={(e) => setFilters({...filters, gender: e.target.value})}>
                       <option value="All">All Genders</option>
-                      <option value="M">Male</option>
-                      <option value="F">Female</option>
+                      <option value="Male">Male</option>
+                      <option value="Female">Female</option>
                     </select>
                   </div>
                 </div>
@@ -139,7 +188,6 @@ const PatientList = () => {
             <table className="patient-table">
               <thead>
                 <tr>
-                  <th><input type="checkbox" /></th>
                   <th>Name</th>
                   <th>Age / Gender</th>
                   <th>Contact</th>
@@ -149,32 +197,78 @@ const PatientList = () => {
                   <th>Actions</th>
                 </tr>
               </thead>
-              <tbody>
-                {patientsData.map((patient) => (
-                  <tr key={patient.id}>
-                    <td><input type="checkbox" /></td>
-                    <td className="name-cell">
-                      <img src={patient.img} alt={patient.name} className="patient-avatar" />
-                      {patient.name}
-                    </td>
-                    <td>{patient.age} / {patient.gender}</td>
-                    <td className="contact-cell">📞 {patient.contact}</td>
-                    <td>{patient.email}</td>
-                    <td className="id-cell">{patient.id}</td>
-                    <td>{patient.date}</td>
-                    <td className="action-cells">
-                      <button className="view-btn">👁</button>
-                      <button className="delete-btn">🗑</button>
-                    </td>
-                  </tr>
+              {/* <tbody>
+                {filteredPatients.map((patient) => (
+                  <tr key={patient._id}>
+                  
+                  <td className="name-cell">
+                    {patient.name}
+                  </td>
+
+                  <td>{patient.age} / {patient.gender}</td>
+
+                  <td className="contact-cell">📞 {patient.phone}</td>
+
+                  <td>{patient.email}</td>
+
+                  <td className="id-cell">{patient._id}</td>
+
+                  <td>{new Date(patient.createdAt).toLocaleDateString()}</td>
+
+                  <td className="action-cells">
+                    <button className="view-btn">👁</button>
+
+                    <button
+                      className="delete-btn"
+                      onClick={() => handleDelete(patient._id)}
+                    >  🗑
+                    </button>
+                  </td>
+                </tr>
                 ))}
-              </tbody>
+              </tbody> */}
+              <tbody>
+  {filteredPatients.length > 0 ? (
+    filteredPatients.map((patient) => (
+      <tr key={patient._id}>
+        <td className="name-cell">{patient.name}</td>
+
+        <td>{patient.age} / {patient.gender}</td>
+
+        <td className="contact-cell">📞 {patient.phone}</td>
+
+        <td>{patient.email}</td>
+
+        <td className="id-cell">{patient._id}</td>
+
+        <td>{new Date(patient.createdAt).toLocaleDateString()}</td>
+
+        <td className="action-cells">
+          <button className="view-btn">👁</button>
+
+          <button
+            className="delete-btn"
+            onClick={() => handleDelete(patient._id)}
+          >
+            🗑
+          </button>
+        </td>
+      </tr>
+    ))
+  ) : (
+    <tr>
+      <td colSpan="7" style={{ textAlign: "center" }}>
+        No Patients Found
+      </td>
+    </tr>
+  )}
+</tbody>
             </table>
           </div>
-
+          
           {/* Pagination Section */}
           <div className="footer-pagination">
-            <span>Showing 1 to {patientsData.length} of {patientsData.length} entries</span>
+            <span>Showing 1 to {filteredPatients.length} of {patients.length} entries</span>
             <div className="pagination-controls">
               <button className="page-nav">Previous</button>
               <button className="page-num active">1</button>
