@@ -9,12 +9,19 @@ const PatientList = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [patients, setPatients] = useState([]);
-  const [filters, setFilters] = useState({
-    age: 'All',
-    date: '',
-    status: 'All',
-    gender: 'All'
-  });
+ const [filters, setFilters] = useState({
+  age: 'All',
+  date: '',
+  status: 'All',
+  gender: 'All'
+});
+
+const [appliedFilters, setAppliedFilters] = useState({
+  age: 'All',
+  date: '',
+  status: 'All',
+  gender: 'All'
+});
   useEffect(() => {
   fetchPatients();
 }, []);
@@ -32,29 +39,25 @@ const PatientList = () => {
   
 // Filteration 
 const filteredPatients = patients.filter((p) => {
-  // 🔍 Search filter
   const matchesSearch =
     p.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     p.phone.includes(searchTerm) ||
     p._id.includes(searchTerm);
 
-  //  Age filter
   let matchesAge = true;
-  if (filters.age === "0-18") matchesAge = p.age <= 18;
-  else if (filters.age === "19-45") matchesAge = p.age >= 19 && p.age <= 45;
-  else if (filters.age === "45+") matchesAge = p.age > 45;
+  if (appliedFilters.age === "0-18") matchesAge = p.age <= 18;
+  else if (appliedFilters.age === "19-45") matchesAge = p.age >= 19 && p.age <= 45;
+  else if (appliedFilters.age === "45+") matchesAge = p.age > 45;
 
-  //  Gender filter
   let matchesGender = true;
-  if (filters.gender !== "All") {
-    matchesGender = p.gender === filters.gender;
+  if (appliedFilters.gender !== "All") {
+    matchesGender = p.gender === appliedFilters.gender;
   }
 
-  // Date filter
   let matchesDate = true;
-  if (filters.date) {
+  if (appliedFilters.date) {
     const patientDate = new Date(p.createdAt).toISOString().split("T")[0];
-    matchesDate = patientDate === filters.date;
+    matchesDate = patientDate === appliedFilters.date;
   }
 
   return matchesSearch && matchesAge && matchesGender && matchesDate;
@@ -171,11 +174,16 @@ const handleDelete = async (id) => {
                 </div>
                 
                 <div className="filter-footer">
-                  <button className="apply-filter-btn">Apply Filter</button>
+                  <button className="apply-filter-btn" 
+                    onClick={() => setAppliedFilters(filters)}>Apply Filter</button>
                   <button 
                     className="reset-filter-btn" 
-                    onClick={() => setFilters({age:'All', date:'', status:'All', gender:'All'})}
-                  >
+                      onClick={() => {
+                          const reset = { age: 'All', date: '', status: 'All', gender: 'All' };
+                          setFilters(reset);
+                          setAppliedFilters(reset);
+                        }}
+                    >
                     Reset
                   </button>
                 </div>

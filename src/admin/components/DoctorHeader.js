@@ -118,21 +118,7 @@ export default function DoctorHeader({ open }) {
     seeMore: { padding: "10px", textAlign: "center", fontSize: "13px", color: "#0AA5A5", fontWeight: "600", cursor: "pointer", display: "block", textDecoration: "none" }
   };
 
-//   const handleLogout = async () => {
-//   try {
-//     await fetch("http://localhost:5000/api/Doctor/logout", {
-//       method: "POST",
-//       credentials: "include",
-//     });
 
-//     // localStorage.removeItem("doc"); // optional
-//     alert("Logged out");
-
-//     window.location.href = "/DoctorLogin";
-//   } catch (error) {
-//     console.error(error);
-//   }
-// };
 const handleLogout = async () => {
   try {
     await fetch("http://localhost:5000/api/Doctor/logout", {
