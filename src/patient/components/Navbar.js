@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link} from "react-router-dom";
 // import { FaBell } from "react-icons/fa";
 import { FaBell, FaUserCircle,FaChevronDown } from "react-icons/fa";
 import "./Navbar.css";
