@@ -649,7 +649,7 @@ html, body {
   max-width: 900px;
   width: 95%;
   max-height: 90vh;
-  overflow-y: auto;
+  /* overflow-y: auto; */
   position: relative;
   box-shadow: 0px 5px 15px rgba(0,0,0,0.5);
 }

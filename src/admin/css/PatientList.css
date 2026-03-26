@@ -8,10 +8,10 @@
   --view-blue: #4a90a4;
   --delete-red: #d68383;
 }
-body{
+/* body{
     overflow-y: scroll !important;
 
-}
+} */
  .patient-list-container {
   padding: 24px 30px; /* Reduced from 60px to prevent extra horizontal gaps */
   background-color: transparent; /* Wrapper now handles background */
