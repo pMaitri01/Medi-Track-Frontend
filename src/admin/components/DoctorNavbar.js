@@ -28,7 +28,7 @@ const SidebarCollapseIcon = ({ size = 24, color = "#6b7280", arrowColor = "#3741
 export default function DoctorNavbar({ open, setOpen }) {
   const navigate = useNavigate();
   const location = useLocation();
-  const isActive = (path) => location.pathname === path;
+  
   const styles = {
     sidebar: {
       width: open ? "250px" : "100px",
