@@ -8,8 +8,10 @@ import PatientOtp from './patient/pages/PatientOtp';
 import PatientResetPwd from './patient/pages/PatientResetPwd';
 import PatientRegistration from './patient/pages/PatientRegistration';
 import PatientHome from './patient/pages/PatientHome';
+import DoctorList from './patient/pages/DoctorList';
 import PatientList from './admin/pages/PatientList';
 import DoctorLogin from './admin/pages/DoctorLogin';
+import DoctorProfile from './admin/pages/DoctorProfile';
 import DoctorSignUp from './admin/pages/DoctorSignUp';
 import DoctorDashboard from './admin/pages/DoctorDashboard';
 import BookAppointment from './patient/pages/BookAppointment';
@@ -27,7 +29,9 @@ function App() {
         <Route path='/PatientRegistration' element={<PatientRegistration/>}/>
         <Route path='/PatientHome' element={<ProtectedRoute role="patient"><PatientHome/></ProtectedRoute>}/>
         <Route path='/PatientList' element={<ProtectedRoute role="doctor"><PatientList/></ProtectedRoute>}/>
+        <Route path='/DoctorList' element={<DoctorList/>}/>
         <Route path='/DoctorLogin' element={<DoctorLogin/>}/>
+        <Route path='/DoctorProfile' element={<DoctorProfile/>}/>
         <Route path='/DoctorSignUp' element={<DoctorSignUp/>}/> 
         <Route path='/DoctorDashboard' element={<ProtectedRoute role="doctor"><DoctorDashboard/></ProtectedRoute>}/>
         <Route path='/BookAppointment' element={<ProtectedRoute role="patient"><BookAppointment/></ProtectedRoute>}/>
