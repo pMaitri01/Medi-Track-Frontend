@@ -300,14 +300,14 @@ const handleBlur = (e) => {
     {/* </div> */}
   </div>
 
-  <button type="submit">Register</button>
-<div className="log">
-  <small className="txtlog">
-    Already have account?
-    <Link to="/" className="text-primary">
-      Login
-    </Link>
-  </small>
+      <button type="submit" className="PReg">Register</button>
+      <div className="log">
+        <small className="txtlog">
+          Already have account?
+          <Link to="/" className="text-primary">
+            Login
+          </Link>
+        </small>
 </div>
 
 </form>

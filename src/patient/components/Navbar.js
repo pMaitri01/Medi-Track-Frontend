@@ -53,7 +53,7 @@ function Navbar() {
       {/* Navigation Links */}
       <ul className="nav-links">
         <li><Link to="/">Home</Link></li>
-        <li><Link to="/doctors">Doctors</Link></li>
+        <li><Link to="/DoctorList">Doctors</Link></li>
         <li><Link to="/history">Appointment History</Link></li>
         <li><Link to="/records">Medical Records</Link></li>
         <li><Link to="/prescriptions">Prescriptions</Link></li>

@@ -39,7 +39,7 @@ input:focus {
   font-size: 16px;
 }
 
-button {
+.otp-btn button {
   width: 100%;
   padding: 10px;
   background-color: #0aa5a5;
