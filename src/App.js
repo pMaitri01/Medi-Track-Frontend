@@ -17,6 +17,13 @@ import DoctorDashboard from './doctor/pages/DoctorDashboard';
 import BookAppointment from './patient/pages/BookAppointment';
 import ProtectedRoute from './components/ProtectedRoute';
 import AppointmentView from './doctor/pages/AppointmentView';
+import AdminLayout from './admin/pages/AdminLayout';
+import AdminDashboard from './admin/pages/AdminDashboard';
+import DoctorManagement from './admin/pages/DoctorManagement';
+import PatientManagement from './admin/pages/PatientManagement';
+import AppointmentManagement from './admin/pages/AppointmentManagement';
+import AdminProfile from './admin/pages/AdminProfile';
+import NotificationManagement from './admin/pages/NotificationManagement';
 
 function App() {
   return (
@@ -36,6 +43,14 @@ function App() {
         <Route path='/DoctorDashboard' element={<ProtectedRoute role="doctor"><DoctorDashboard/></ProtectedRoute>}/>
         <Route path='/BookAppointment' element={<ProtectedRoute role="patient"><BookAppointment/></ProtectedRoute>}/>
         <Route path='/AppointmentView' element={<ProtectedRoute role="doctor"><AppointmentView/></ProtectedRoute>}/>
+        <Route path='/admin' element={<AdminLayout/>}>
+          <Route path='dashboard'    element={<AdminDashboard/>} />
+          <Route path='doctors'      element={<DoctorManagement/>} />
+          <Route path='patients'     element={<PatientManagement/>} />
+          <Route path='appointments' element={<AppointmentManagement/>} />
+          <Route path='profile'        element={<AdminProfile/>} />
+          <Route path='notifications'  element={<NotificationManagement/>} />
+        </Route>
 
       </Routes>
       <ToastContainer 

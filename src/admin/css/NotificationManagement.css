@@ -1,0 +1,307 @@
+/* ── FLOATING TOAST ── */
+.nm-toast {
+  position: fixed;
+  top: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9999;
+  background: #16a34a;
+  color: #fff;
+  padding: 13px 28px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0 8px 24px rgba(22,163,74,0.35);
+  animation: nm-slide-in 0.25s ease;
+  white-space: nowrap;
+}
+
+@keyframes nm-slide-in {
+  from { opacity: 0; top: 0; }
+  to   { opacity: 1; top: 24px; }
+}
+
+/* ── PAGE ── */
+.nm-page {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* ── CARD ── */
+.nm-card {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  overflow: hidden;
+}
+
+.nm-card-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 16px;
+  font-weight: 700;
+  color: #1e293b;
+  padding: 18px 24px;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.nm-count {
+  margin-left: auto;
+  background: #f1f5f9;
+  color: #64748b;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 2px 10px;
+  border-radius: 20px;
+}
+
+/* ── SUCCESS ALERT ── */
+.nm-success {
+  margin: 16px 24px 0;
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  color: #16a34a;
+  border-radius: 8px;
+  padding: 10px 16px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+/* ── FORM ── */
+.nm-form {
+  padding: 20px 24px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.nm-field {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.nm-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #475569;
+}
+
+.nm-req { color: #ef4444; }
+
+.nm-select,
+.nm-textarea {
+  padding: 10px 14px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 14px;
+  color: #1e293b;
+  background: #f8fafc;
+  outline: none;
+  font-family: inherit;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  width: 100%;
+}
+
+.nm-select {
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  padding-right: 36px;
+  cursor: pointer;
+  min-height: 44px;
+}
+
+.nm-textarea { resize: vertical; min-height: 100px; }
+
+.nm-select:focus,
+.nm-textarea:focus {
+  border-color: #2563eb;
+  background: #fff;
+  box-shadow: 0 0 0 3px rgba(37,99,235,0.1);
+}
+
+.nm-input-error { border-color: #ef4444 !important; }
+.nm-input-error:focus { box-shadow: 0 0 0 3px rgba(239,68,68,0.1) !important; }
+
+.nm-error {
+  font-size: 12px;
+  color: #ef4444;
+}
+
+.nm-char-count {
+  font-size: 11px;
+  color: #94a3b8;
+  text-align: right;
+}
+
+.nm-form-footer {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.nm-send-btn {
+  padding: 10px 28px;
+  background: #2563eb;
+  color: #fff;
+  border: none;
+  border-radius: 9px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.18s, box-shadow 0.18s;
+  box-shadow: 0 2px 6px rgba(37,99,235,0.3);
+}
+.nm-send-btn:hover {
+  background: #1d4ed8;
+  box-shadow: 0 4px 12px rgba(37,99,235,0.35);
+}
+
+/* ── NOTIFICATION LIST ── */
+.nm-empty {
+  padding: 48px 24px;
+  text-align: center;
+  color: #94a3b8;
+}
+.nm-empty span { font-size: 36px; display: block; margin-bottom: 10px; }
+.nm-empty p    { font-size: 14px; }
+
+.nm-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.nm-item {
+  padding: 16px 24px;
+  border-top: 1px solid #f1f5f9;
+  transition: background 0.15s;
+}
+.nm-item:hover { background: #f8fafc; }
+
+.nm-item-top {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+}
+
+/* target tags */
+.nm-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
+.nm-tag-all     { background: #eff6ff; color: #2563eb; }
+.nm-tag-doctor  { background: #f0fdf4; color: #16a34a; }
+.nm-tag-patient { background: #faf5ff; color: #9333ea; }
+
+.nm-time {
+  font-size: 12px;
+  color: #94a3b8;
+  margin-left: auto;
+}
+
+.nm-delete-btn {
+  background: none;
+  border: none;
+  color: #cbd5e1;
+  font-size: 14px;
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 4px;
+  transition: color 0.15s, background 0.15s;
+  line-height: 1;
+}
+.nm-delete-btn:hover { color: #ef4444; background: #fef2f2; }
+
+.nm-message {
+  font-size: 14px;
+  color: #334155;
+  margin: 0;
+  line-height: 1.6;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 480px) {
+  .nm-form       { padding: 16px; }
+  .nm-card-title { padding: 14px 16px; }
+  .nm-item       { padding: 14px 16px; }
+  .nm-send-btn   { width: 100%; text-align: center; }
+  .nm-form-footer { justify-content: stretch; }
+}
+
+/* ── DELETE CONFIRM DIALOG ── */
+.nm-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.45);
+  backdrop-filter: blur(3px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 16px;
+}
+
+.nm-dialog {
+  background: #fff;
+  border-radius: 16px;
+  padding: 36px 32px;
+  width: 100%;
+  max-width: 360px;
+  text-align: center;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.18);
+}
+
+.nm-dialog-icon { font-size: 44px; margin-bottom: 12px; }
+
+.nm-dialog h3 {
+  font-size: 18px;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0 0 8px;
+}
+
+.nm-dialog p {
+  font-size: 13px;
+  color: #64748b;
+  margin: 0 0 24px;
+  line-height: 1.6;
+}
+
+.nm-dialog-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+.nm-btn-cancel,
+.nm-btn-confirm {
+  padding: 9px 24px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: opacity 0.18s;
+  font-family: inherit;
+}
+.nm-btn-cancel:hover,
+.nm-btn-confirm:hover { opacity: 0.85; }
+
+.nm-btn-cancel  { background: #f1f5f9; color: #475569; border: 1px solid #e2e8f0; }
+.nm-btn-confirm { background: #dc2626; color: #fff; }

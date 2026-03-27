@@ -1,0 +1,311 @@
+/* ── HEADER BAR ── */
+.ah-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 62px;
+  padding: 0 24px;
+  background: #ffffff;
+  border-bottom: 1px solid #e2e8f0;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  flex-shrink: 0;
+}
+
+/* ── LEFT ── */
+.ah-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.ah-hamburger {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 22px;
+  cursor: pointer;
+  color: #475569;
+  padding: 4px 6px;
+  border-radius: 6px;
+  line-height: 1;
+  transition: background 0.15s;
+}
+.ah-hamburger:hover { background: #f1f5f9; }
+
+.ah-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0;
+}
+
+/* ── RIGHT ── */
+.ah-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* ── BELL BUTTON ── */
+.ah-bell-wrap {
+  position: relative;
+}
+
+.ah-icon-btn {
+  position: relative;
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  font-size: 18px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s;
+}
+.ah-icon-btn:hover { background: #f1f5f9; }
+
+.ah-badge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  background: #ef4444;
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  min-width: 18px;
+  height: 18px;
+  border-radius: 9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 4px;
+  border: 2px solid #fff;
+  line-height: 1;
+}
+
+/* ── DROPDOWN ── */
+.ah-dropdown {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  width: 320px;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.13);
+  z-index: 200;
+  overflow: hidden;
+}
+
+.ah-dropdown-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px 12px;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.ah-dropdown-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.ah-clear-btn {
+  background: none;
+  border: none;
+  font-size: 12px;
+  color: #2563eb;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 4px;
+  transition: background 0.15s;
+}
+.ah-clear-btn:hover { background: #eff6ff; }
+
+/* ── NOTIFICATION LIST ── */
+.ah-notif-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-height: 320px;
+  overflow-y: auto;
+}
+
+.ah-notif-list::-webkit-scrollbar { width: 4px; }
+.ah-notif-list::-webkit-scrollbar-track { background: transparent; }
+.ah-notif-list::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 4px; }
+
+.ah-notif-empty {
+  padding: 32px 16px;
+  text-align: center;
+  font-size: 13px;
+  color: #94a3b8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.ah-notif-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 12px 16px;
+  border-top: 1px solid #f8fafc;
+  transition: background 0.15s;
+}
+.ah-notif-item:hover { background: #f8fafc; }
+
+.ah-notif-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #2563eb;
+  flex-shrink: 0;
+  margin-top: 5px;
+}
+
+.ah-notif-body { flex: 1; min-width: 0; }
+
+.ah-notif-msg {
+  font-size: 13px;
+  color: #334155;
+  margin: 0 0 3px;
+  line-height: 1.5;
+}
+
+.ah-notif-time {
+  font-size: 11px;
+  color: #94a3b8;
+}
+
+.ah-notif-dismiss {
+  background: none;
+  border: none;
+  color: #cbd5e1;
+  font-size: 12px;
+  cursor: pointer;
+  padding: 2px 4px;
+  border-radius: 4px;
+  flex-shrink: 0;
+  transition: color 0.15s, background 0.15s;
+  line-height: 1;
+}
+.ah-notif-dismiss:hover { color: #ef4444; background: #fef2f2; }
+
+/* ── PROFILE AVATAR ── */
+.ah-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #2563eb;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.18s;
+}
+.ah-avatar:hover { opacity: 0.85; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 768px) {
+  .ah-hamburger { display: flex; }
+  .ah-dropdown  { width: 290px; right: -10px; }
+}
+
+/* ── PROFILE DROPDOWN ── */
+.ah-profile-wrap {
+  position: relative;
+}
+
+.ah-profile-dropdown {
+  width: 220px;
+  right: 0;
+}
+
+.ah-profile-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+}
+
+.ah-profile-avatar-lg {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: #2563eb;
+  color: #fff;
+  font-size: 18px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.ah-profile-name {
+  font-size: 14px;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0 0 2px;
+}
+
+.ah-profile-email {
+  font-size: 11px;
+  color: #94a3b8;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 130px;
+}
+
+.ah-profile-divider {
+  border: none;
+  border-top: 1px solid #f1f5f9;
+  margin: 0;
+}
+
+.ah-profile-menu {
+  list-style: none;
+  margin: 0;
+  padding: 6px 0;
+}
+
+.ah-profile-menu li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #334155;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.ah-profile-menu li:hover {
+  background: #f8fafc;
+  color: #1e293b;
+}
+
+.ah-profile-logout {
+  color: #dc2626 !important;
+}
+
+.ah-profile-logout:hover {
+  background: #fef2f2 !important;
+}

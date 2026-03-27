@@ -1,0 +1,221 @@
+/* ── PAGE ── */
+.dm-page {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* ── HEADER ── */
+.dm-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.dm-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0 0 4px;
+}
+
+.dm-subtitle {
+  font-size: 13px;
+  color: #64748b;
+  margin: 0;
+}
+
+/* ── FILTER TABS ── */
+.dm-filters {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.dm-filter-btn {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 18px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  background: #fff;
+  font-size: 13px;
+  font-weight: 500;
+  color: #475569;
+  cursor: pointer;
+  transition: all 0.18s;
+}
+
+.dm-filter-btn:hover {
+  background: #f1f5f9;
+  border-color: #cbd5e1;
+}
+
+.dm-filter-active {
+  background: #2563eb !important;
+  color: #fff !important;
+  border-color: #2563eb !important;
+}
+
+.dm-filter-count {
+  background: rgba(255,255,255,0.25);
+  padding: 1px 7px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.dm-filter-active .dm-filter-count {
+  background: rgba(255,255,255,0.3);
+  color: #fff;
+}
+
+/* ── TABLE WRAPPER ── */
+.dm-table-wrap {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  overflow: hidden;
+}
+
+.dm-empty {
+  padding: 48px;
+  text-align: center;
+  color: #94a3b8;
+  font-size: 14px;
+}
+
+/* ── TABLE ── */
+.dm-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.dm-table thead tr {
+  background: #f8fafc;
+}
+
+.dm-table th {
+  padding: 13px 18px;
+  text-align: left;
+  font-size: 12px;
+  font-weight: 700;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+}
+
+.dm-table td {
+  padding: 14px 18px;
+  color: #334155;
+  border-top: 1px solid #f1f5f9;
+  vertical-align: middle;
+}
+
+.dm-table tbody tr:hover {
+  background: #f8fafc;
+}
+
+.dm-name {
+  font-weight: 600;
+  color: #1e293b;
+}
+
+/* ── STATUS BADGES ── */
+.dm-badge {
+  display: inline-block;
+  padding: 3px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.dm-badge-pending  { background: #fff7ed; color: #ea580c; }
+.dm-badge-approved { background: #f0fdf4; color: #16a34a; }
+.dm-badge-rejected { background: #fef2f2; color: #dc2626; }
+
+/* ── ACTION BUTTONS ── */
+.dm-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.dm-btn {
+  padding: 6px 14px;
+  border: none;
+  border-radius: 7px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.18s, transform 0.15s;
+  white-space: nowrap;
+}
+
+.dm-btn:hover { opacity: 0.85; transform: translateY(-1px); }
+
+.dm-btn-approve { background: #f0fdf4; color: #16a34a; border: 1px solid #bbf7d0; }
+.dm-btn-reject  { background: #fff7ed; color: #ea580c; border: 1px solid #fed7aa; }
+.dm-btn-delete  { background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; }
+.dm-btn-cancel  { background: #f1f5f9; color: #475569; border: 1px solid #e2e8f0; }
+
+/* ── DELETE CONFIRM DIALOG ── */
+.dm-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.45);
+  backdrop-filter: blur(3px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.dm-dialog {
+  background: #fff;
+  border-radius: 16px;
+  padding: 36px 32px;
+  width: 100%;
+  max-width: 380px;
+  text-align: center;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.18);
+}
+
+.dm-dialog-icon { font-size: 44px; margin-bottom: 12px; }
+
+.dm-dialog h3 {
+  font-size: 18px;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0 0 8px;
+}
+
+.dm-dialog p {
+  font-size: 13px;
+  color: #64748b;
+  margin: 0 0 24px;
+  line-height: 1.6;
+}
+
+.dm-dialog-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+.dm-dialog-actions .dm-btn {
+  padding: 9px 24px;
+  font-size: 13px;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 640px) {
+  .dm-table th:nth-child(3),
+  .dm-table td:nth-child(3) { display: none; }
+
+  .dm-actions { flex-direction: column; }
+}

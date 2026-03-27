@@ -1,0 +1,180 @@
+/* ── PAGE ── */
+.ad-page {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* ── STAT CARDS ── */
+.ad-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+.ad-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 22px 20px;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.ad-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.09);
+}
+
+.ad-card-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 14px;
+  font-size: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.ad-card-info { display: flex; flex-direction: column; gap: 4px; }
+.ad-card-value { font-size: 28px; font-weight: 800; line-height: 1; }
+.ad-card-label { font-size: 13px; color: #64748b; font-weight: 500; }
+
+/* ── CHART CARDS ── */
+.ad-chart-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  overflow: hidden;
+}
+
+.ad-chart-full { width: 100%; }
+
+.ad-charts-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+.ad-chart-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 24px 14px;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.ad-chart-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0;
+}
+
+.ad-chart-sub {
+  font-size: 12px;
+  color: #94a3b8;
+  background: #f1f5f9;
+  padding: 3px 10px;
+  border-radius: 20px;
+}
+
+.ad-chart-body {
+  padding: 20px 24px 24px;
+  position: relative;
+}
+
+.ad-chart-pie-body {
+  display: flex;
+  justify-content: center;
+  padding: 20px 40px 24px;
+}
+
+.ad-chart-pie-body canvas {
+  max-width: 260px !important;
+  max-height: 260px !important;
+}
+
+/* ── RECENT APPOINTMENTS ── */
+.ad-section {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  overflow: hidden;
+}
+
+.ad-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 24px;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.ad-section-title { font-size: 16px; font-weight: 700; color: #1e293b; margin: 0; }
+.ad-section-count { font-size: 12px; color: #94a3b8; background: #f1f5f9; padding: 3px 10px; border-radius: 20px; }
+
+.ad-table-wrap { overflow-x: auto; }
+
+.ad-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.ad-table thead tr { background: #f8fafc; }
+
+.ad-table th {
+  padding: 12px 20px;
+  text-align: left;
+  font-size: 12px;
+  font-weight: 700;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+}
+
+.ad-table td {
+  padding: 14px 20px;
+  color: #334155;
+  border-top: 1px solid #f1f5f9;
+  white-space: nowrap;
+}
+
+.ad-table tbody tr:hover { background: #f8fafc; }
+
+/* ── STATUS BADGES ── */
+.ad-badge {
+  display: inline-block;
+  padding: 3px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.ad-badge-pending   { background: #fff7ed; color: #ea580c; }
+.ad-badge-confirmed { background: #eff6ff; color: #2563eb; }
+.ad-badge-completed { background: #f0fdf4; color: #16a34a; }
+.ad-badge-cancelled { background: #fef2f2; color: #dc2626; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 1024px) {
+  .ad-charts-row { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 900px) {
+  .ad-cards-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 480px) {
+  .ad-cards-grid { grid-template-columns: 1fr; }
+  .ad-chart-body { padding: 16px; }
+  .ad-chart-pie-body { padding: 16px; }
+}

@@ -1,0 +1,214 @@
+/* ── PAGE ── */
+.pm-page {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* ── HEADER ── */
+.pm-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0 0 4px;
+}
+
+.pm-subtitle {
+  font-size: 13px;
+  color: #64748b;
+  margin: 0;
+}
+
+/* ── SEARCH ── */
+.pm-search-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 0 14px;
+  max-width: 400px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.pm-search-wrap:focus-within {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37,99,235,0.1);
+}
+
+.pm-search-icon { font-size: 15px; color: #94a3b8; }
+
+.pm-search {
+  flex: 1;
+  border: none;
+  outline: none;
+  padding: 11px 0;
+  font-size: 14px;
+  color: #1e293b;
+  background: transparent;
+  font-family: inherit;
+}
+
+.pm-search::placeholder { color: #94a3b8; }
+
+.pm-search-clear {
+  background: none;
+  border: none;
+  color: #94a3b8;
+  font-size: 13px;
+  cursor: pointer;
+  padding: 2px 4px;
+  border-radius: 4px;
+  transition: color 0.15s;
+}
+.pm-search-clear:hover { color: #475569; }
+
+/* ── TABLE WRAPPER ── */
+.pm-table-wrap {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  overflow: hidden;
+}
+
+.pm-empty {
+  padding: 56px 24px;
+  text-align: center;
+  color: #94a3b8;
+}
+
+.pm-empty span { font-size: 36px; display: block; margin-bottom: 10px; }
+.pm-empty p    { font-size: 14px; }
+
+/* ── TABLE ── */
+.pm-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.pm-table thead tr { background: #f8fafc; }
+
+.pm-table th {
+  padding: 13px 18px;
+  text-align: left;
+  font-size: 12px;
+  font-weight: 700;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+}
+
+.pm-table td {
+  padding: 13px 18px;
+  color: #334155;
+  border-top: 1px solid #f1f5f9;
+  vertical-align: middle;
+}
+
+.pm-table tbody tr:hover { background: #f8fafc; }
+
+/* Name cell with avatar */
+.pm-name {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.pm-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #eff6ff;
+  color: #2563eb;
+  font-size: 13px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* ── BUTTONS ── */
+.pm-btn-delete {
+  padding: 6px 16px;
+  background: #fef2f2;
+  color: #dc2626;
+  border: 1px solid #fecaca;
+  border-radius: 7px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.18s, transform 0.15s;
+}
+.pm-btn-delete:hover { opacity: 0.85; transform: translateY(-1px); }
+
+/* ── DELETE DIALOG ── */
+.pm-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15,23,42,0.45);
+  backdrop-filter: blur(3px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.pm-dialog {
+  background: #fff;
+  border-radius: 16px;
+  padding: 36px 32px;
+  width: 100%;
+  max-width: 360px;
+  text-align: center;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.18);
+}
+
+.pm-dialog-icon { font-size: 44px; margin-bottom: 12px; }
+
+.pm-dialog h3 {
+  font-size: 18px;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0 0 8px;
+}
+
+.pm-dialog p {
+  font-size: 13px;
+  color: #64748b;
+  margin: 0 0 24px;
+}
+
+.pm-dialog-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+.pm-btn-cancel, .pm-btn-confirm {
+  padding: 9px 24px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: opacity 0.18s;
+}
+.pm-btn-cancel  { background: #f1f5f9; color: #475569; border: 1px solid #e2e8f0; }
+.pm-btn-confirm { background: #dc2626; color: #fff; }
+.pm-btn-cancel:hover, .pm-btn-confirm:hover { opacity: 0.85; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 580px) {
+  .pm-search-wrap { max-width: 100%; }
+
+  .pm-table th:nth-child(3),
+  .pm-table td:nth-child(3) { display: none; }
+}
