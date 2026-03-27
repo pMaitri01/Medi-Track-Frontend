@@ -9,14 +9,14 @@ import PatientResetPwd from './patient/pages/PatientResetPwd';
 import PatientRegistration from './patient/pages/PatientRegistration';
 import PatientHome from './patient/pages/PatientHome';
 import DoctorList from './patient/pages/DoctorList';
-import PatientList from './admin/pages/PatientList';
-import DoctorLogin from './admin/pages/DoctorLogin';
-import DoctorProfile from './admin/pages/DoctorProfile';
-import DoctorSignUp from './admin/pages/DoctorSignUp';
-import DoctorDashboard from './admin/pages/DoctorDashboard';
+import PatientList from './doctor/pages/PatientList';
+import DoctorLogin from './doctor/pages/DoctorLogin';
+import DoctorProfile from './doctor/pages/DoctorProfile';
+import DoctorSignUp from './doctor/pages/DoctorSignUp';
+import DoctorDashboard from './doctor/pages/DoctorDashboard';
 import BookAppointment from './patient/pages/BookAppointment';
 import ProtectedRoute from './components/ProtectedRoute';
-import AppointmentView from './admin/pages/AppointmentView';
+import AppointmentView from './doctor/pages/AppointmentView';
 
 function App() {
   return (

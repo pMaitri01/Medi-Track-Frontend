@@ -398,11 +398,10 @@ const DoctorProfile = () => {
                 {form.profilePicPreview
                   ? <img src={form.profilePicPreview} alt="Profile" className="dp-avatar" />
                   : <div className="dp-avatar-placeholder"><span>Photo</span></div>}
-                <label className={"dp-upload-btn" + (errors.profilePic ? " dp-upload-error" : "")}>
+                <label className="dp-upload-btn">
                   Upload Photo
                   <input type="file" accept="image/*" onChange={handleImageChange} hidden />
                 </label>
-                {errors.profilePic && <span className="dp-error-msg">{errors.profilePic}</span>}
               </div>
             </div>
             <div className="dp-grid-2">
