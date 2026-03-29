@@ -55,7 +55,7 @@ export default function DoctorLogin() {
   // if (Object.keys(newErrors).length === 0) {
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_API_URL}/api/Doctor/login`,
+        `${process.env.REACT_APP_API_URL}/api/doctors/login`,
         {
           method: "POST",
           headers: {
@@ -73,22 +73,19 @@ export default function DoctorLogin() {
 
       if (response.ok) {
         alert("Login Successful");
-        setFormData({
-          fullName: "",
-          email: "",
-          password: "",
-          confirmPassword: ""
-        });
-
+        setFormData({ fullName: "", email: "", password: "", confirmPassword: "" });
         setErrors({});
-        navigate("/DoctorDashboard");   // redirect page
-
-      }
-      else{
-        setErrors({
-            ...errors,
-            password: data.message || "password Incorrect"
-        });      
+        navigate("/DoctorDashboard");
+      } else {
+        // Handle status-specific errors
+        const msg = data.message || data.msg || "";
+        if (msg.toLowerCase().includes("pending") || msg.toLowerCase().includes("not approved")) {
+          setErrors({ status: "Your account is not approved yet. Please wait for admin approval." });
+        } else if (msg.toLowerCase().includes("reject")) {
+          setErrors({ status: "Your registration was rejected. Please contact admin for details." });
+        } else {
+          setErrors({ ...errors, password: msg || "Invalid email or password." });
+        }
       }
 
     } catch (error) {
@@ -103,6 +100,21 @@ export default function DoctorLogin() {
         <h2>Doctor's Login</h2>
 
         <form onSubmit={handleSubmit}>
+          {errors.status && (
+            <div style={{
+              background: errors.status.includes("not approved") ? "#fefce8" : "#fef2f2",
+              border: `1px solid ${errors.status.includes("not approved") ? "#fde68a" : "#fecaca"}`,
+              color: errors.status.includes("not approved") ? "#92400e" : "#dc2626",
+              borderRadius: 8,
+              padding: "10px 14px",
+              fontSize: 13,
+              fontWeight: 600,
+              marginBottom: 14,
+              lineHeight: 1.5,
+            }}>
+              {errors.status.includes("not approved") ? "⏳" : "❌"} {errors.status}
+            </div>
+          )}
           <div className="admin-input-group">
             {/* <label>Email</label> */}
             <input
@@ -149,7 +161,7 @@ export default function DoctorLogin() {
                             <input type="checkbox" className="ckb"/> Remember me
                           </small>
                           <small className="admin-text-primary">
-                              <Link to="/forgotpassword" className="admin-text-fpwd">
+                              <Link to="/DoctorForgotPassword" className="admin-text-fpwd">
                                   Forgot Password?
                               </Link>
             

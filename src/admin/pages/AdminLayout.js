@@ -5,7 +5,8 @@ import AdminHeader from "../components/AdminHeader";
 
 const menuItems = [
   { path: "/admin/dashboard",     label: "Dashboard",     icon: "🏠" },
-  { path: "/admin/doctors",       label: "Doctors",       icon: "🧑‍⚕️" },
+  { path: "/admin/doctors",       label: "Doctors", icon: "⚕️" },  
+  { path: "/admin/approvals",     label: "Approvals",     icon: "✅" },
   { path: "/admin/patients",      label: "Patients",      icon: "🧑‍🤝‍🧑" },
   { path: "/admin/appointments",  label: "Appointments",  icon: "📅" },
   { path: "/admin/notifications", label: "Notifications", icon: "🔔" },

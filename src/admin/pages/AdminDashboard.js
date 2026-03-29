@@ -1,4 +1,8 @@
 import "../css/AdminDashboard.css";
+
+// Charts temporarily disabled
+// TODO: Enable charts later by uncommenting the imports below
+/*
 import {
   Chart as ChartJS,
   CategoryScale, LinearScale, PointElement, LineElement,
@@ -6,10 +10,15 @@ import {
 } from "chart.js";
 import { Line, Bar, Pie } from "react-chartjs-2";
 
-ChartJS.register(
-  CategoryScale, LinearScale, PointElement, LineElement,
-  BarElement, ArcElement, Title, Tooltip, Legend, Filler
-);
+try {
+  ChartJS.register(
+    CategoryScale, LinearScale, PointElement, LineElement,
+    BarElement, ArcElement, Title, Tooltip, Legend, Filler
+  );
+} catch (e) {
+  // already registered
+}
+*/
 
 // ── Stat cards data ──
 const stats = [
@@ -35,7 +44,9 @@ const statusClass = {
   Cancelled: "ad-badge ad-badge-cancelled",
 };
 
-// ── Chart data ──
+// Charts temporarily disabled
+// TODO: Enable charts later by uncommenting the data below
+/*
 const lineData = {
   labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
   datasets: [{
@@ -85,6 +96,7 @@ const chartOptions = (title) => ({
     y: { grid: { color: "#f1f5f9" }, ticks: { font: { size: 11 } }, beginAtZero: true },
   },
 });
+*/
 
 const AdminDashboard = () => (
   <div className="ad-page">
@@ -102,26 +114,31 @@ const AdminDashboard = () => (
       ))}
     </div>
 
-    {/* ── CHARTS ROW 1: Line (full width) ── */}
-    <div className="ad-chart-card ad-chart-full">
+    {/* Charts temporarily disabled */}
+    {/* TODO: Enable charts later — replace placeholders below with actual chart components */}
+
+    {/* ── CHART PLACEHOLDER ROW 1: Line Chart ── */}
+    {/* <div className="ad-chart-card ad-chart-full">
       <div className="ad-chart-header">
         <h3 className="ad-chart-title">📈 Appointments per Day</h3>
         <span className="ad-chart-sub">Last 7 days</span>
       </div>
-      <div className="ad-chart-body">
-        <Line data={lineData} options={chartOptions("line")} />
+      <div className="ad-chart-placeholder">
+        <span className="ad-placeholder-icon">📊</span>
+        <p>Charts will be available soon</p>
       </div>
-    </div>
+    </div> */}
 
-    {/* ── CHARTS ROW 2: Bar + Pie ── */}
-    <div className="ad-charts-row">
+    {/* ── CHART PLACEHOLDER ROW 2: Bar + Pie ── */}
+    {/* <div className="ad-charts-row">
       <div className="ad-chart-card">
         <div className="ad-chart-header">
           <h3 className="ad-chart-title">🏆 Top Doctors</h3>
           <span className="ad-chart-sub">By appointments</span>
         </div>
-        <div className="ad-chart-body">
-          <Bar data={barData} options={chartOptions("bar")} />
+        <div className="ad-chart-placeholder">
+          <span className="ad-placeholder-icon">📊</span>
+          <p>Charts will be available soon</p>
         </div>
       </div>
 
@@ -130,11 +147,12 @@ const AdminDashboard = () => (
           <h3 className="ad-chart-title">🧑‍🤝‍🧑 Patient Growth</h3>
           <span className="ad-chart-sub">New vs Returning</span>
         </div>
-        <div className="ad-chart-body ad-chart-pie-body">
-          <Pie data={pieData} options={chartOptions("pie")} />
+        <div className="ad-chart-placeholder">
+          <span className="ad-placeholder-icon">🥧</span>
+          <p>Charts will be available soon</p>
         </div>
       </div>
-    </div>
+    </div> */}
 
     {/* ── RECENT APPOINTMENTS ── */}
     <div className="ad-section">
