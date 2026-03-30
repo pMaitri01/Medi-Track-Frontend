@@ -334,7 +334,7 @@ const BookAppointment = ({ onClose }) => {
   const [doctors, setDoctors] = useState([]);
 
   useEffect(() => {
-  fetch("http://localhost:5000/api/Doctor/book")
+  fetch(`${process.env.REACT_APP_API_URL}/api/Doctor/book`)
     .then(res => res.json())
     .then(data => {
       console.log("Doctors:", data);

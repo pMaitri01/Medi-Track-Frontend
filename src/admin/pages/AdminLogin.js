@@ -4,8 +4,8 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import "../css/AdminLogin.css";
 
 // Dummy credentials — replace with real API call later
-const DUMMY_EMAIL    = "admin@meditrack.com";
-const DUMMY_PASSWORD = "Admin@123";
+// const DUMMY_EMAIL    = "admin@meditrack.com";
+// const DUMMY_PASSWORD = "Admin@123";
 
 const AdminLogin = () => {
   const navigate = useNavigate();
@@ -52,24 +52,59 @@ const AdminLogin = () => {
   };
 
   // ── Submit ──
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const errs = validate();
-    if (Object.keys(errs).length > 0) { setErrors(errs); return; }
+  // const handleSubmit = (e) => {
+  //   e.preventDefault();
+  //   const errs = validate();
+  //   if (Object.keys(errs).length > 0) { setErrors(errs); return; }
 
-    setLoading(true);
-    setAuthError("");
+  //   setLoading(true);
+  //   setAuthError("");
 
-    // Simulate API call
-    setTimeout(() => {
-      setLoading(false);
-      if (form.email === DUMMY_EMAIL && form.password === DUMMY_PASSWORD) {
-        navigate("/admin/dashboard");
-      } else {
-        setAuthError("Invalid email or password. Please try again.");
-      }
-    }, 1200);
-  };
+  //   // Simulate API call
+  //   setTimeout(() => {
+  //     setLoading(false);
+  //     if (form.email === DUMMY_EMAIL && form.password === DUMMY_PASSWORD) {
+  //       navigate("/admin/dashboard");
+  //     } else {
+  //       setAuthError("Invalid email or password. Please try again.");
+  //     }
+  //   }, 1200);
+  // };
+  const handleSubmit = async (e) => {
+  e.preventDefault();
+  const errs = validate();
+  if (Object.keys(errs).length > 0) { setErrors(errs); return; }
+
+  setLoading(true);
+  setAuthError("");
+
+  try {
+    const response = await fetch(`${process.env.REACT_APP_API_URL}/api/admin/login`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email: form.email,
+        password: form.password,
+      }),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.message || "Login failed");
+    }
+
+    localStorage.setItem("adminData", JSON.stringify(data.admin));
+    navigate("/admin/dashboard");
+
+  } catch (err) {
+    setAuthError(err.message);
+  } finally {
+    setLoading(false);
+  }
+};
 
   const isDisabled = !form.email.trim() || !form.password || loading;
 

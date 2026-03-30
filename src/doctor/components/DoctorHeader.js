@@ -29,7 +29,7 @@
 
 //   const handleLogout = async () => {
 //   try {
-//     await fetch("http://localhost:5000/api/Doctor/logout", {
+//     await fetch(`${process.env.REACT_APP_API_URL}/api/Doctor/logout`, {
 //       method: "POST",
 //       credentials: "include",
 //     });
@@ -121,7 +121,7 @@ export default function DoctorHeader({ open }) {
 
 const handleLogout = async () => {
   try {
-    await fetch("http://localhost:5000/api/Doctor/logout", {
+    await fetch(`${process.env.REACT_APP_API_URL}/api/Doctor/logout`, {
       method: "POST",
       credentials: "include"
     });

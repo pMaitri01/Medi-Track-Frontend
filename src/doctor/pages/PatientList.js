@@ -66,7 +66,7 @@ const filteredPatients = patients.filter((p) => {
   // API for Fetcing Patient Data
   const fetchPatients = async () => {
   try {
-    const res = await axios.get("http://localhost:5000/api/patient/"); // adjust URLhttp://localhost:5000/api/patient/count
+    const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/patient/`); // adjust URL
     setPatients(res.data);
   } catch (error) {
     console.error("Error fetching patients:", error);
@@ -78,7 +78,7 @@ const handleDelete = async (id) => {
   if (!window.confirm("Are you sure you want to delete this patient?")) return;
 
   try {
-    await axios.delete(`http://localhost:5000/api/patient/${id}`);
+    await axios.delete(`${process.env.REACT_APP_API_URL}/api/patient/${id}`);
 
     // remove from UI instantly
     setPatients((prev) => prev.filter((p) => p._id !== id));

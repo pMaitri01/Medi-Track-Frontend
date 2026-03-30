@@ -14,7 +14,7 @@ export default function DoctorDashboard() {
   const sidebarWidth = open ? "250px" : "100px";
 
    useEffect(() => {
-    fetch("http://localhost:5000/api/patient/count")
+    fetch(`${process.env.REACT_APP_API_URL}/api/patient/count`)
       .then(res => res.json())
       .then(data => {
         setPatientCount(data.totalPatients);
