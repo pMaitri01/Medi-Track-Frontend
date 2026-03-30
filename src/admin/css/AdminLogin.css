@@ -1,0 +1,218 @@
+/* ── PAGE ── */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+.al-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #eff6ff 0%, #f0fdf4 60%, #faf5ff 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 16px;
+  font-family: 'Segoe UI', Arial, sans-serif;
+}
+
+/* ── CARD ── */
+.al-card {
+  background: #ffffff;
+  border-radius: 20px;
+  box-shadow: 0 10px 40px rgba(37, 99, 235, 0.12), 0 2px 8px rgba(0,0,0,0.06);
+  padding: 40px 36px 32px;
+  width: 100%;
+  max-width: 420px;
+  border: 1px solid #e2e8f0;
+}
+
+/* ── BRAND ── */
+.al-brand {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 28px;
+}
+
+.al-brand-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
+  flex-shrink: 0;
+  box-shadow: 0 4px 12px rgba(37,99,235,0.3);
+}
+
+.al-brand-title {
+  font-size: 22px;
+  font-weight: 800;
+  color: #1e293b;
+  letter-spacing: -0.5px;
+  margin: 0;
+}
+
+.al-brand-sub {
+  font-size: 13px;
+  color: #64748b;
+  margin: 2px 0 0;
+}
+
+/* ── AUTH ERROR ── */
+.al-auth-error {
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #dc2626;
+  border-radius: 10px;
+  padding: 11px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 20px;
+  line-height: 1.5;
+}
+
+/* ── FIELD ── */
+.al-field {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-bottom: 18px;
+}
+
+.al-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #475569;
+}
+
+.al-input {
+  padding: 11px 14px;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 10px;
+  font-size: 14px;
+  color: #1e293b;
+  background: #f8fafc;
+  outline: none;
+  font-family: inherit;
+  transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+  width: 100%;
+}
+
+.al-input:focus {
+  border-color: #2563eb;
+  background: #fff;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+}
+
+.al-input-err { border-color: #ef4444 !important; }
+.al-input-err:focus { box-shadow: 0 0 0 3px rgba(239,68,68,0.12) !important; }
+
+.al-error {
+  font-size: 12px;
+  color: #ef4444;
+  font-weight: 500;
+}
+
+/* ── PASSWORD WRAP ── */
+.al-pwd-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.al-pwd-wrap .al-input { padding-right: 44px; }
+
+.al-eye {
+  position: absolute;
+  right: 13px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  color: #94a3b8;
+  padding: 0;
+  line-height: 1;
+  transition: color 0.18s;
+  display: flex;
+  align-items: center;
+}
+.al-eye:hover { color: #475569; }
+
+/* ── FORGOT ── */
+.al-forgot-row {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: -8px;
+  margin-bottom: 22px;
+}
+
+.al-forgot-link {
+  font-size: 13px;
+  color: #2563eb;
+  font-weight: 600;
+  text-decoration: none;
+  transition: color 0.18s;
+}
+.al-forgot-link:hover { color: #1d4ed8; text-decoration: underline; }
+
+/* ── SUBMIT BUTTON ── */
+.al-submit-btn {
+  width: 100%;
+  padding: 13px;
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  transition: opacity 0.18s, transform 0.15s, box-shadow 0.18s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  box-shadow: 0 4px 14px rgba(37,99,235,0.3);
+}
+
+.al-submit-btn:hover:not(:disabled) {
+  opacity: 0.92;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(37,99,235,0.35);
+}
+
+.al-submit-btn:disabled {
+  background: #cbd5e1;
+  cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
+}
+
+/* ── SPINNER ── */
+.al-spinner {
+  width: 20px;
+  height: 20px;
+  border: 2.5px solid rgba(255,255,255,0.4);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: al-spin 0.7s linear infinite;
+  display: inline-block;
+}
+
+@keyframes al-spin { to { transform: rotate(360deg); } }
+
+/* ── HINT ── */
+.al-hint {
+  text-align: center;
+  font-size: 12px;
+  color: #94a3b8;
+  margin-top: 20px;
+  line-height: 1.6;
+}
+
+.al-hint strong { color: #475569; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 480px) {
+  .al-card { padding: 28px 20px 24px; }
+  .al-brand-title { font-size: 19px; }
+}

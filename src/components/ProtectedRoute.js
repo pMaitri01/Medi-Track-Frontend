@@ -10,7 +10,7 @@ const ProtectedRoute = ({ children, role }) => {
       ? `${process.env.REACT_APP_API_URL}/api/Doctor/profile`
       : `${process.env.REACT_APP_API_URL}/api/Patient/profile`;
 
-  const redirectPath = role === "doctor" ? "/DoctorLogin" : "/";
+  const redirectPath = role === "doctor" ? "/DoctorLogin" : "/patient/login";
 
   useEffect(() => {
     fetch(url, {

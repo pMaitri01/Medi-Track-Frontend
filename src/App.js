@@ -8,13 +8,13 @@ import ProtectedRoute from './components/ProtectedRoute';
 
 // ─────────────────────────────────────────────
 // PATIENT FLOW
-// / → PatientLogin
-//   ├── Register  → /PatientRegistration
-//   ├── Forgot Pwd→ /PatientForgotPwd → /PatientOtp → /PatientResetPwd
-//   └── Login OK
-//         ├── First time → /PatientProfileSetup → /PatientHome
-//         └── Returning  → /PatientHome
+// /                  → Landing Page (public)
+// /patient/login     → Patient Login
+// /patient/register  → Patient Registration
+// /patient/forgot    → Forgot Password flow
+// /PatientHome       → Dashboard (protected)
 // ─────────────────────────────────────────────
+import PatientLanding      from './patient/pages/PatientLanding';
 import PatientLogin        from './patient/pages/PatientLogin';
 import PatientRegistration from './patient/pages/PatientRegistration';
 import PatientForgotPwd    from './patient/pages/PatientForgotPwd';
@@ -27,13 +27,7 @@ import BookAppointment     from './patient/pages/BookAppointment';
 
 // ─────────────────────────────────────────────
 // DOCTOR FLOW
-// /DoctorLogin
-//   ├── Register    → /DoctorSignUp
-//   ├── Forgot Pwd  → /DoctorForgotPassword (OTP + Reset inside)
-//   └── Login OK    → /DoctorDashboard
-//         ├── /PatientList
-//         ├── /AppointmentView
-//         └── /DoctorProfile
+// /DoctorLogin → /DoctorDashboard (protected)
 // ─────────────────────────────────────────────
 import DoctorLogin       from './doctor/pages/DoctorLogin';
 import DoctorSignUp      from './doctor/pages/DoctorSignUp';
@@ -47,15 +41,10 @@ import AppointmentView   from './doctor/pages/AppointmentView';
 
 // ─────────────────────────────────────────────
 // ADMIN FLOW
-// /admin → redirects to /admin/dashboard
-//   ├── /admin/dashboard
-//   ├── /admin/doctors
-//   ├── /admin/patients
-//   ├── /admin/appointments
-//   ├── /admin/notifications
-//   └── /admin/profile
+// /admin → /admin/dashboard (nested layout)
 // ─────────────────────────────────────────────
 import AdminLayout            from './admin/pages/AdminLayout';
+import AdminLogin             from './admin/pages/AdminLogin';
 import AdminDashboard         from './admin/pages/AdminDashboard';
 import DoctorManagement       from './admin/pages/DoctorManagement';
 import DoctorApproval         from './admin/pages/DoctorApproval';
@@ -69,12 +58,17 @@ function App() {
     <BrowserRouter>
       <Routes>
 
-        {/* ── PATIENT ── */}
-        <Route path="/"                    element={<PatientLogin />} />
-        <Route path="/PatientRegistration" element={<PatientRegistration />} />
-        <Route path="/PatientForgotPwd"    element={<PatientForgotPwd />} />
-        <Route path="/PatientOtp"          element={<PatientOtp />} />
-        <Route path="/PatientResetPwd"     element={<PatientResetPwd />} />
+        {/* ── LANDING (default) ── */}
+        <Route path="/"                   element={<PatientLanding />} />
+
+        {/* ── PATIENT AUTH ── */}
+        <Route path="/patient/login"      element={<PatientLogin />} />
+        <Route path="/patient/register"   element={<PatientRegistration />} />
+        <Route path="/patient/forgot"     element={<PatientForgotPwd />} />
+        <Route path="/PatientOtp"         element={<PatientOtp />} />
+        <Route path="/PatientResetPwd"    element={<PatientResetPwd />} />
+
+        {/* ── PATIENT PROTECTED ── */}
         <Route path="/PatientProfileSetup" element={<PatientProfileSetup />} />
         <Route path="/DoctorList"          element={<DoctorList />} />
         <Route path="/PatientHome"
@@ -97,6 +91,7 @@ function App() {
           element={<ProtectedRoute role="doctor"><AppointmentView /></ProtectedRoute>} />
 
         {/* ── ADMIN (nested layout) ── */}
+        <Route path="/admin/login"  element={<AdminLogin />} />
         <Route path="/admin" element={<AdminLayout />}>
           <Route path="dashboard"     element={<AdminDashboard />} />
           <Route path="doctors"       element={<DoctorManagement />} />

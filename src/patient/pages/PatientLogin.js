@@ -174,7 +174,7 @@ export default function PatientLogin() {
                 <input type="checkbox" className="ckb"/> Remember me
               </small>
               <small className="text-primary">
-                  <Link to="/PatientForgotPwd" className="text-primary">
+                  <Link to="/patient/forgot" className="text-primary">
                       Forgot Password?
                   </Link>
 
@@ -188,7 +188,7 @@ export default function PatientLogin() {
             <small className="txtreg">
               Don’t have account?
               {/* <span className="text-primary"> Register</span> */}
-              <Link to="/PatientRegistration" className="text-primary">
+              <Link to="/patient/register" className="text-primary">
                 Register
               </Link>
             </small>
