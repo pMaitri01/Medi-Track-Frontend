@@ -1,104 +1,21 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "../css/PatientManagement.css";
 
-const allPatients = [
-  {
-    id: 1, name: "Ravi Shah",     email: "ravi@mail.com",   mobile: "9876543210",
-    city: "Surat",      age: 34, gender: "Male",
-    appointments: [
-      { doctor: "Dr. Amit Sharma",   specialization: "Cardiologist",  date: "20 Mar 2026", time: "10:00 AM", status: "Completed" },
-      { doctor: "Dr. Priya Patel",   specialization: "Neurologist",   date: "28 Mar 2026", time: "11:00 AM", status: "Upcoming"  },
-    ],
-    medicalHistory: "Hypertension, mild chest pain episodes.",
-    prescriptions: "Amlodipine 5mg, Aspirin 75mg",
-  },
-  {
-    id: 2, name: "Neha Patel",    email: "neha@mail.com",   mobile: "9123456780",
-    city: "Ahmedabad", age: 28, gender: "Female",
-    appointments: [
-      { doctor: "Dr. Sneha Joshi",   specialization: "Dermatologist", date: "15 Mar 2026", time: "02:00 PM", status: "Completed" },
-    ],
-    medicalHistory: "Skin allergy, eczema.",
-    prescriptions: "Cetirizine 10mg, Hydrocortisone cream",
-  },
-  {
-    id: 3, name: "Karan Mehta",   email: "karan@mail.com",  mobile: "9988776655",
-    city: "Vadodara",  age: 42, gender: "Male",
-    appointments: [
-      { doctor: "Dr. Rahul Mehta",   specialization: "Orthopedic",    date: "10 Mar 2026", time: "09:00 AM", status: "Completed" },
-      { doctor: "Dr. Rahul Mehta",   specialization: "Orthopedic",    date: "01 Apr 2026", time: "09:00 AM", status: "Upcoming"  },
-    ],
-    medicalHistory: "Knee pain, mild arthritis.",
-    prescriptions: "Diclofenac 50mg, Calcium supplements",
-  },
-  {
-    id: 4, name: "Sonal Desai",   email: "sonal@mail.com",  mobile: "9871234560",
-    city: "Surat",     age: 31, gender: "Female",
-    appointments: [
-      { doctor: "Dr. Meera Shah",    specialization: "Gynecologist",  date: "22 Mar 2026", time: "03:00 PM", status: "Completed" },
-    ],
-    medicalHistory: "No significant history.",
-    prescriptions: "Folic acid, Iron supplements",
-  },
-  {
-    id: 5, name: "Amit Trivedi",  email: "amit@mail.com",   mobile: "9765432100",
-    city: "Rajkot",    age: 55, gender: "Male",
-    appointments: [
-      { doctor: "Dr. Amit Sharma",   specialization: "Cardiologist",  date: "05 Mar 2026", time: "10:00 AM", status: "Completed" },
-      { doctor: "Dr. Amit Sharma",   specialization: "Cardiologist",  date: "05 Apr 2026", time: "10:00 AM", status: "Upcoming"  },
-    ],
-    medicalHistory: "Diabetes Type 2, high cholesterol.",
-    prescriptions: "Metformin 500mg, Atorvastatin 10mg",
-  },
-  {
-    id: 6, name: "Pooja Sharma",  email: "pooja@mail.com",  mobile: "9654321098",
-    city: "Ahmedabad", age: 26, gender: "Female",
-    appointments: [
-      { doctor: "Dr. Karan Desai",   specialization: "Pediatrician",  date: "18 Mar 2026", time: "11:00 AM", status: "Completed" },
-    ],
-    medicalHistory: "No significant history.",
-    prescriptions: "Vitamin D3, Multivitamin",
-  },
-  {
-    id: 7, name: "Deepak Joshi",  email: "deepak@mail.com", mobile: "9543210987",
-    city: "Gandhinagar", age: 38, gender: "Male",
-    appointments: [
-      { doctor: "Dr. Rohan Trivedi", specialization: "Psychiatrist",  date: "12 Mar 2026", time: "04:00 PM", status: "Completed" },
-    ],
-    medicalHistory: "Anxiety disorder, mild depression.",
-    prescriptions: "Escitalopram 10mg, Clonazepam 0.5mg",
-  },
-  {
-    id: 8, name: "Rina Verma",    email: "rina@mail.com",   mobile: "9432109876",
-    city: "Surat",     age: 45, gender: "Female",
-    appointments: [
-      { doctor: "Dr. Anita Verma",   specialization: "Neurologist",   date: "08 Mar 2026", time: "10:00 AM", status: "Completed" },
-      { doctor: "Dr. Anita Verma",   specialization: "Neurologist",   date: "08 Apr 2026", time: "10:00 AM", status: "Upcoming"  },
-    ],
-    medicalHistory: "Migraine, occasional vertigo.",
-    prescriptions: "Sumatriptan 50mg, Betahistine 16mg",
-  },
-  {
-    id: 9, name: "Suresh Nair",   email: "suresh@mail.com", mobile: "9321098765",
-    city: "Vadodara",  age: 60, gender: "Male",
-    appointments: [
-      { doctor: "Dr. Amit Sharma",   specialization: "Cardiologist",  date: "01 Mar 2026", time: "09:00 AM", status: "Completed" },
-    ],
-    medicalHistory: "Coronary artery disease, post-bypass.",
-    prescriptions: "Clopidogrel 75mg, Bisoprolol 5mg",
-  },
-  {
-    id: 10, name: "Kavita Mishra", email: "kavita@mail.com", mobile: "9210987654",
-    city: "Rajkot",   age: 33, gender: "Female",
-    appointments: [
-      { doctor: "Dr. Sneha Joshi",   specialization: "Dermatologist", date: "25 Mar 2026", time: "01:00 PM", status: "Upcoming"  },
-    ],
-    medicalHistory: "Psoriasis.",
-    prescriptions: "Methotrexate 7.5mg, Moisturizer",
-  },
-];
-
-const CITIES = ["All", ...Array.from(new Set(allPatients.map(p => p.city))).sort()];
+// ── Backend field mapping helper ──
+// API returns: { _id, name, age, gender, phone, email, address, createdAt }
+// UI expects:  { id, name, age, gender, mobile, email, city, appointments, medicalHistory, prescriptions }
+const mapPatient = (p) => ({
+  id:             p._id,
+  name:           p.name           || "—",
+  email:          p.email          || "—",
+  mobile:         p.phone          || "—",   // phone → mobile
+  age:            p.age            || "—",
+  gender:         p.gender         || "—",
+  city:           p.address        || "—",   // address used as city (adjust if backend sends separate city)
+  appointments:   p.appointments   || [],
+  medicalHistory: p.medicalHistory || "Not available",
+  prescriptions:  p.prescriptions  || "Not available",
+});
 
 const apptStatusClass = {
   Completed: "pm-appt-completed",
@@ -106,11 +23,49 @@ const apptStatusClass = {
 };
 
 const PatientManagement = () => {
-  // View-only page — no delete functionality
-  const [patients]                    = useState(allPatients);
+  const [patients, setPatients]       = useState([]);
+  const [loading, setLoading]         = useState(true);
+  const [fetchError, setFetchError]   = useState("");
   const [search, setSearch]           = useState("");
   const [cityFilter, setCityFilter]   = useState("All");
   const [viewPatient, setViewPatient] = useState(null);
+
+  // ── Fetch patients from backend on mount ──
+  useEffect(() => {
+    const fetchPatients = async () => {
+      try {
+        const token = localStorage.getItem("adminToken");
+        const res = await fetch(
+          `${process.env.REACT_APP_API_URL}/api/admin/patients`,
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        if (!res.ok) {
+          const err = await res.json();
+          throw new Error(err.message || "Failed to fetch patients.");
+        }
+
+        const data = await res.json();
+        // Map backend fields to UI-expected fields
+        setPatients(data.map(mapPatient));
+      } catch (err) {
+        console.error("Error fetching patients:", err);
+        setFetchError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPatients();
+  }, []);
+
+  // ── Build city list dynamically from fetched data ──
+  const cities = ["All", ...Array.from(new Set(patients.map(p => p.city).filter(Boolean))).sort()];
 
   const filtered = patients.filter(p => {
     const q = search.toLowerCase();
@@ -123,6 +78,29 @@ const PatientManagement = () => {
   });
 
   const handleReset = () => { setCityFilter("All"); setSearch(""); };
+
+  // ── Loading state ──
+  if (loading) {
+    return (
+      <div className="pm-page">
+        <div className="pm-loading">
+          <div className="pm-spinner" />
+          <p>Loading patients...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // ── Fetch error state ──
+  if (fetchError) {
+    return (
+      <div className="pm-page">
+        <div className="pm-fetch-error">
+          ❌ {fetchError}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="pm-page">
@@ -158,7 +136,7 @@ const PatientManagement = () => {
             value={cityFilter}
             onChange={e => setCityFilter(e.target.value)}
           >
-            {CITIES.map(c => (
+            {cities.map(c => (
               <option key={c} value={c}>{c === "All" ? "All Cities" : c}</option>
             ))}
           </select>

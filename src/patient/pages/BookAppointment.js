@@ -32,7 +32,7 @@ const BookAppointment = ({ onClose }) => {
   };
 
   // ── Send appointment to backend API ──
-  // POST /api/appointments → { doctor, patientName, date, time }
+  // POST /api/appointments → { doctor, patientId, patientName, date, time }
   const handleBooking = async () => {
     if (!selectedDoctor || !selectedDate || !selectedTime) return;
 
@@ -40,20 +40,23 @@ const BookAppointment = ({ onClose }) => {
     setError("");
 
     try {
-      // Get logged-in patient's name from localStorage
-      const user = JSON.parse(localStorage.getItem("user") || "{}");
-      const patientName = user.name || user.fullName || "Unknown Patient";
+      // Get logged-in patient from localStorage
+      const user        = JSON.parse(localStorage.getItem("user") || "{}");
+      const patientName = user.name || user.fullName || "Patient";
+      const patientId   = user._id  || user.id       || null;
 
-      // Format date as YYYY-MM-DD
-      const formattedDate = selectedDate.toISOString().split("T")[0];
+      // ✅ Fix timezone bug: toISOString() shifts to UTC and can roll back one day
+      // toLocaleDateString("en-CA") returns YYYY-MM-DD in the user's local timezone
+      const formattedDate = selectedDate.toLocaleDateString("en-CA");
 
-      const res = await fetch(`${process.env.REACT_APP_API_URL}/api/appointment`, {
+      const res = await fetch(`${process.env.REACT_APP_API_URL}/api/appointments`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           doctor:      selectedDoctor,  // doctor _id
+          patientId:   patientId,       // ✅ patient _id for DB reference
           patientName: patientName,
-          date:        formattedDate,
+          date:        formattedDate,   // ✅ correct local date YYYY-MM-DD
           time:        selectedTime,
         }),
       });

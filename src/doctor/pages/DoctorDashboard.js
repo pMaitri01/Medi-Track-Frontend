@@ -8,18 +8,30 @@ import { FaUserFriends, FaHospitalUser, FaClock } from "react-icons/fa";
 
 export default function DoctorDashboard() {
   const [open, setOpen] = useState(true);
-  const [patientCount, setPatientCount] = useState(0);
+  const [patientCount, setPatientCount] = useState(null); // null = loading
+  const [todayCount, setTodayCount]     = useState(null); // null = loading
 
   // Layout Constants
   const sidebarWidth = open ? "250px" : "100px";
 
-   useEffect(() => {
-    fetch(`${process.env.REACT_APP_API_URL}/api/patient/count`)
+  // ── Fetch total patient count ──
+  useEffect(() => {
+    fetch(`${process.env.REACT_APP_API_URL}/api/patient/count`, {
+      credentials: "include",
+    })
       .then(res => res.json())
-      .then(data => {
-        setPatientCount(data.totalPatients);
-      })
-      .catch(err => console.log("ERROR:", err));
+      .then(data => setPatientCount(data?.totalPatients ?? 0))
+      .catch(() => setPatientCount(0));
+  }, []);
+
+  // ── Fetch today's patient count ──
+  useEffect(() => {
+    fetch(`${process.env.REACT_APP_API_URL}/api/patient/today`, {
+      credentials: "include",
+    })
+      .then(res => res.json())
+      .then(data => setTodayCount(data?.todayPatients ?? data?.count ?? 0))
+      .catch(() => setTodayCount(0));
   }, []);
 
   return (
@@ -43,16 +55,20 @@ export default function DoctorDashboard() {
           {/* --- TOP ROW: STAT CARDS --- */}
           <div style={gridStyle(3)}>
             {[
-              { label: "Total Patient", icon: <FaUserFriends />, value: patientCount},
-              { label: "Today Patient", icon: <FaHospitalUser /> },
-              { label: "Today Appointments", icon: <FaClock /> }
+              { label: "Total Patient",      icon: <FaUserFriends />, value: patientCount },
+              { label: "Today Patient",      icon: <FaHospitalUser />, value: todayCount  },
+              { label: "Today Appointments", icon: <FaClock />,        value: null        }
             ].map((card, i) => (
-              <div key={i} style={cardStyle}>
+              <div key={i} style={{ ...cardStyle, flexDirection: "row", alignItems: "center" }}>
                 <div style={iconCircleStyle}>{card.icon}</div>
                 <div>
                   <p style={labelStyle}>{card.label}</p>
-                  <h3 style={valueStyle}>{card.value}</h3> {/* Backend Data Point */}
-                  <p style={subLabelStyle}>Live Data</p>
+                  <h3 style={valueStyle}>
+                    {card.value === null ? "—" : card.value}
+                  </h3>
+                  <p style={subLabelStyle}>
+                    {card.value === null ? "Loading..." : "Live Data"}
+                  </p>
                 </div>
               </div>
             ))}
