@@ -168,10 +168,12 @@ const Field = ({ label, name, type = "text", options, textarea, required, value,
 );
 
 const DoctorProfile = () => {
-  const [step, setStep]         = useState(0);
-  const [form, setForm]         = useState(initialState);
-  const [errors, setErrors]     = useState({});
+  const [step, setStep]           = useState(0);
+  const [form, setForm]           = useState(initialState);
+  const [errors, setErrors]       = useState({});
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading]     = useState(false);   // API call in progress
+  const [apiError, setApiError]   = useState("");       // server-side error message
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -260,7 +262,7 @@ const DoctorProfile = () => {
 
       if (!t("licenseNumber"))
         e.licenseNumber = "License / registration number is required.";
-      else if (!/^[a-zA-Z0-9/\-]{5,}$/.test(t("licenseNumber")))
+      else if (!/^[a-zA-Z0-9/\\-]{5,}$/.test(t("licenseNumber")))
         e.licenseNumber = "Enter a valid license number (min 5 alphanumeric characters).";
 
       if (!t("workingDays"))
@@ -334,17 +336,93 @@ const DoctorProfile = () => {
 
   const handleBack = () => { setErrors({}); setStep((s) => s - 1); };
 
-  const handleSubmit = () => {
+  // ── Submit — sends profile data to backend API ──
+  const handleSubmit = async () => {
+    // Step 3 validation
     const errs = validate(2);
     if (Object.keys(errs).length > 0) {
       setErrors(errs);
       scrollToFirstError(errs);
       return;
     }
-    console.log("Doctor Profile Submitted:", form);
-    setSubmitted(true);
-  };
 
+    // Get JWT token stored during doctor login
+    const token = localStorage.getItem("doctorToken");
+    if (!token) {
+      // Token missing — redirect to login
+      alert("Session expired. Please login again.");
+      window.location.href = "/DoctorLogin";
+      return;
+    }
+
+    setLoading(true);
+    setApiError("");
+
+    try {
+      // Build FormData (required for profile image upload)
+      const formData = new FormData();
+
+      // Personal details
+      formData.append("gender",           form.gender);
+      formData.append("dob",              form.dob);
+
+      // Professional details
+      formData.append("specialization",   form.specialization);
+      formData.append("qualification",    form.qualification);
+      formData.append("experience",       form.experience);
+      formData.append("licenseNumber",    form.licenseNumber);
+      formData.append("workingDays",      form.workingDays);
+      formData.append("workingHours",     form.workingHours);
+      formData.append("about",            form.about);
+
+      // Contact & location — field name mapping
+      formData.append("mobile",           form.mobile);
+      formData.append("emergencyContact", form.emergencyContact);
+      formData.append("clinicName",       form.hospitalName);   // hospitalName → clinicName
+      formData.append("clinicAddress",    form.address);        // address → clinicAddress
+      formData.append("city",             form.city);
+      formData.append("state",            form.state);
+      formData.append("mapLink",          form.mapLink);
+
+      // Profile picture (file object)
+      if (form.profilePic) {
+        formData.append("profilePic", form.profilePic);
+      }
+
+      const response = await fetch(
+        `${process.env.REACT_APP_API_URL}/api/doctor/complete-profile`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,   // JWT — required by protect middleware
+          },
+          body: formData,
+          // Note: Do NOT set Content-Type header — browser sets it automatically for FormData
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        // Handle token expiry
+        if (response.status === 401) {
+          localStorage.removeItem("doctorToken");
+          alert("Session expired. Please login again.");
+          window.location.href = "/DoctorLogin";
+          return;
+        }
+        throw new Error(data.message || "Profile update failed. Please try again.");
+      }
+
+      // Success
+      setSubmitted(true);
+
+    } catch (err) {
+      setApiError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
   // shorthand to pass common props to Field
   const f = (name) => ({ value: form[name], onChange: handleChange, error: errors[name] });
 
@@ -441,14 +519,23 @@ const DoctorProfile = () => {
         )}
       </div>
 
+      {/* API error banner */}
+      {apiError && (
+        <div className="dp-api-error">
+          ❌ {apiError}
+        </div>
+      )}
+
       {/* NAVIGATION */}
       <div className="dp-actions">
         {step > 0 && (
-          <button className="dp-btn dp-btn-back" onClick={handleBack}>← Back</button>
+          <button className="dp-btn dp-btn-back" onClick={handleBack} disabled={loading}>← Back</button>
         )}
         {step < STEPS.length - 1
           ? <button className="dp-btn dp-btn-save" onClick={handleNext}>Next →</button>
-          : <button className="dp-btn dp-btn-save" onClick={handleSubmit}>Save Profile</button>
+          : <button className="dp-btn dp-btn-save" onClick={handleSubmit} disabled={loading}>
+              {loading ? "Saving..." : "Save Profile"}
+            </button>
         }
       </div>
     </div>

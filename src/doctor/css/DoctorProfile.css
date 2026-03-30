@@ -431,6 +431,19 @@ input[type="number"].dp-input {
 
 .dp-btn-back:hover { background: #e2e8f0; }
 
+/* ── API ERROR BANNER ── */
+.dp-api-error {
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #dc2626;
+  border-radius: 10px;
+  padding: 12px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 4px;
+  line-height: 1.5;
+}
+
 /* ===== SUCCESS ===== */
 .dp-success {
   background: #fff;
