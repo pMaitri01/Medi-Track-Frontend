@@ -14,7 +14,7 @@ const BookAppointment = ({ onClose }) => {
 
   // ── Fetch available doctors on mount ──
   useEffect(() => {
-    fetch(`${process.env.REACT_APP_API_URL}/api/Doctor/book`)
+    fetch(`${process.env.REACT_APP_API_URL}/api/doctor/book`)
       .then(res => res.json())
       .then(data => setDoctors(data))
       .catch(err => console.error("Failed to load doctors:", err));
@@ -42,12 +42,12 @@ const BookAppointment = ({ onClose }) => {
     try {
       // Get logged-in patient's name from localStorage
       const user = JSON.parse(localStorage.getItem("user") || "{}");
-      const patientName = user.name || user.fullName || "Patient";
+      const patientName = user.name || user.fullName || "Unknown Patient";
 
       // Format date as YYYY-MM-DD
       const formattedDate = selectedDate.toISOString().split("T")[0];
 
-      const res = await fetch(`${process.env.REACT_APP_API_URL}/api/appointments`, {
+      const res = await fetch(`${process.env.REACT_APP_API_URL}/api/appointment`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
