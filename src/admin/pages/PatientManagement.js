@@ -106,11 +106,11 @@ const apptStatusClass = {
 };
 
 const PatientManagement = () => {
-  const [patients, setPatients] = useState(allPatients);
-  const [search, setSearch]         = useState("");
-  const [cityFilter, setCityFilter] = useState("All");
+  // View-only page — no delete functionality
+  const [patients]                    = useState(allPatients);
+  const [search, setSearch]           = useState("");
+  const [cityFilter, setCityFilter]   = useState("All");
   const [viewPatient, setViewPatient] = useState(null);
-  const [deleteId, setDeleteId]     = useState(null);
 
   const filtered = patients.filter(p => {
     const q = search.toLowerCase();
@@ -121,11 +121,6 @@ const PatientManagement = () => {
     const matchCity = cityFilter === "All" || p.city === cityFilter;
     return matchSearch && matchCity;
   });
-
-  const handleDelete = () => {
-    setPatients(prev => prev.filter(p => p.id !== deleteId));
-    setDeleteId(null);
-  };
 
   const handleReset = () => { setCityFilter("All"); setSearch(""); };
 
@@ -197,7 +192,7 @@ const PatientManagement = () => {
                   <th>Mobile</th>
                   <th>City</th>
                   <th>Age / Gender</th>
-                  <th>Actions</th>
+                  <th>Action</th>
                 </tr>
               </thead>
               <tbody>
@@ -217,16 +212,10 @@ const PatientManagement = () => {
                     <td>{p.city}</td>
                     <td>{p.age} yrs / {p.gender}</td>
                     <td>
-                      <div className="pm-actions">
-                        <button className="pm-btn pm-btn-view"
-                          onClick={() => setViewPatient(p)}>
-                          View
-                        </button>
-                        <button className="pm-btn pm-btn-delete"
-                          onClick={() => setDeleteId(p.id)}>
-                          Delete
-                        </button>
-                      </div>
+                      <button className="pm-btn pm-btn-view"
+                        onClick={() => setViewPatient(p)}>
+                        View
+                      </button>
                     </td>
                   </tr>
                 ))}
@@ -318,21 +307,6 @@ const PatientManagement = () => {
 
             <div className="pm-modal-footer">
               <button className="pm-btn pm-btn-cancel" onClick={() => setViewPatient(null)}>Close</button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* ── DELETE CONFIRM ── */}
-      {deleteId && (
-        <div className="pm-overlay">
-          <div className="pm-dialog">
-            <div className="pm-dialog-icon">🗑️</div>
-            <h3>Delete Patient?</h3>
-            <p>This action cannot be undone. Are you sure?</p>
-            <div className="pm-dialog-actions">
-              <button className="pm-btn pm-btn-cancel" onClick={() => setDeleteId(null)}>Cancel</button>
-              <button className="pm-btn pm-btn-confirm" onClick={handleDelete}>Yes, Delete</button>
             </div>
           </div>
         </div>

@@ -311,9 +311,7 @@
 .pm-btn:hover { opacity: 0.85; transform: translateY(-1px); }
 
 .pm-btn-view   { background: #eff6ff; color: #2563eb; border: 1px solid #bfdbfe; }
-.pm-btn-delete { background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; }
 .pm-btn-cancel { background: #f1f5f9; color: #475569; border: 1px solid #e2e8f0; }
-.pm-btn-confirm { background: #dc2626; color: #fff; }
 
 /* ── VIEW MODAL ── */
 .pm-modal {
