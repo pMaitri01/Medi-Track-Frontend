@@ -9,8 +9,9 @@ import { FaUserFriends, FaHospitalUser, FaClock } from "react-icons/fa";
 export default function DoctorDashboard() {
   const [open, setOpen] = useState(true);
   const [patientCount, setPatientCount] = useState(null); // null = loading
-  const [todayCount, setTodayCount]     = useState(null); // null = loading
-
+  const [todayPatients, setTodayPatients] = useState(0);
+  const [loading, setLoading] = useState(true);
+  
   // Layout Constants
   const sidebarWidth = open ? "250px" : "100px";
 
@@ -26,13 +27,30 @@ export default function DoctorDashboard() {
 
   // ── Fetch today's patient count ──
   useEffect(() => {
-    fetch(`${process.env.REACT_APP_API_URL}/api/patient/today`, {
-      credentials: "include",
-    })
-      .then(res => res.json())
-      .then(data => setTodayCount(data?.todayPatients ?? data?.count ?? 0))
-      .catch(() => setTodayCount(0));
-  }, []);
+  const fetchTodayPatients = async () => {
+    try {
+      const res = await fetch(
+        `${process.env.REACT_APP_API_URL}/api/patient/today`,
+        {
+          method: "GET",
+          credentials: "include"
+        }
+      );
+
+      const data = await res.json();
+
+      setTodayPatients(data.totalTodayPatients || 0);
+
+    } catch (error) {
+      console.log("ERROR:", error);
+      setTodayPatients(0);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  fetchTodayPatients();
+}, []);
 
   return (
     <div style={{ minHeight: "100vh", background: "#F8F9FD" }}>
@@ -56,7 +74,7 @@ export default function DoctorDashboard() {
           <div style={gridStyle(3)}>
             {[
               { label: "Total Patient",      icon: <FaUserFriends />, value: patientCount },
-              { label: "Today Patient",      icon: <FaHospitalUser />, value: todayCount  },
+              { label: "Today Patient",      icon: <FaHospitalUser />, value: loading ? "..." : todayPatients },
               { label: "Today Appointments", icon: <FaClock />,        value: null        }
             ].map((card, i) => (
               <div key={i} style={{ ...cardStyle, flexDirection: "row", alignItems: "center" }}>
