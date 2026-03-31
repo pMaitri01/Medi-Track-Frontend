@@ -1,18 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "../css/AppointmentManagement.css";
-
-const appointments = [
-  { id: 1,  patient: "Ravi Shah",      doctor: "Dr. Amit Sharma",   date: "27 Mar 2026", time: "10:00 AM", status: "Pending"  },
-  { id: 2,  patient: "Neha Patel",     doctor: "Dr. Priya Patel",   date: "27 Mar 2026", time: "11:00 AM", status: "Accepted" },
-  { id: 3,  patient: "Karan Mehta",    doctor: "Dr. Rahul Mehta",   date: "26 Mar 2026", time: "12:00 PM", status: "Rejected" },
-  { id: 4,  patient: "Sonal Desai",    doctor: "Dr. Amit Sharma",   date: "26 Mar 2026", time: "04:00 PM", status: "Pending"  },
-  { id: 5,  patient: "Amit Trivedi",   doctor: "Dr. Sneha Joshi",   date: "25 Mar 2026", time: "10:00 AM", status: "Accepted" },
-  { id: 6,  patient: "Pooja Sharma",   doctor: "Dr. Meera Shah",    date: "25 Mar 2026", time: "11:00 AM", status: "Pending"  },
-  { id: 7,  patient: "Deepak Joshi",   doctor: "Dr. Priya Patel",   date: "24 Mar 2026", time: "02:00 PM", status: "Accepted" },
-  { id: 8,  patient: "Rina Verma",     doctor: "Dr. Rahul Mehta",   date: "24 Mar 2026", time: "03:00 PM", status: "Rejected" },
-  { id: 9,  patient: "Suresh Nair",    doctor: "Dr. Rohan Trivedi", date: "23 Mar 2026", time: "10:00 AM", status: "Pending"  },
-  { id: 10, patient: "Kavita Mishra",  doctor: "Dr. Amit Sharma",   date: "23 Mar 2026", time: "04:00 PM", status: "Accepted" },
-];
 
 const FILTERS = ["All", "Pending", "Accepted", "Rejected"];
 
@@ -22,17 +9,86 @@ const statusClass = {
   Rejected: "am-badge am-badge-rejected",
 };
 
+// ── Map backend fields to UI fields ──
+const mapAppointment = (a, i) => ({
+  id:      a._id || i,
+  patient: a.patientName || "—",
+  doctor:  typeof a.doctor === "object" ? (a.doctor?.fullName || "—") : (a.doctor || "—"),
+  date:    a.date  || "—",
+  time:    a.time  || "—",
+  status:  a.status || "Pending",   // default to Pending if not set
+});
+
 const AppointmentManagement = () => {
-  const [filter, setFilter] = useState("All");
+  const [appointments, setAppointments] = useState([]);
+  const [loading, setLoading]           = useState(true);
+  const [error, setError]               = useState("");
+  const [filter, setFilter]             = useState("All");
+
+  // ── Fetch appointments from backend on mount ──
+  useEffect(() => {
+    const fetchAppointments = async () => {
+      try {
+        const token = localStorage.getItem("adminToken");
+        const res = await fetch(
+          `${process.env.REACT_APP_API_URL}/api/appointment`,
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+            credentials: "include",
+          }
+        );
+
+        if (!res.ok) {
+          const err = await res.json();
+          throw new Error(err.message || "Failed to fetch appointments.");
+        }
+
+        const data = await res.json();
+        setAppointments(data.map(mapAppointment));
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchAppointments();
+  }, []);
 
   const filtered = filter === "All"
     ? appointments
     : appointments.filter(a => a.status === filter);
 
   const counts = FILTERS.reduce((acc, f) => {
-    acc[f] = f === "All" ? appointments.length : appointments.filter(a => a.status === f).length;
+    acc[f] = f === "All"
+      ? appointments.length
+      : appointments.filter(a => a.status === f).length;
     return acc;
   }, {});
+
+  // ── Loading state ──
+  if (loading) {
+    return (
+      <div className="am-page">
+        <div className="am-loading">
+          <div className="am-spinner" />
+          <p>Loading appointments...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // ── Error state ──
+  if (error) {
+    return (
+      <div className="am-page">
+        <div className="am-error">❌ {error}</div>
+      </div>
+    );
+  }
 
   return (
     <div className="am-page">
