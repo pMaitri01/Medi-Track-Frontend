@@ -238,7 +238,7 @@ export default function AppointmentView() {
       const token = localStorage.getItem("token");
 
       // Verify the URL and endpoint match your backend routes
-      const res = await fetch(`${process.env.REACT_APP_API_URL}/api/appointment/doctor`, {
+      const res = await fetch(`${process.env.REACT_APP_API_URL}/api/doctor/appointment`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
