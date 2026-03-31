@@ -359,6 +359,7 @@ const DoctorProfile = () => {
         `${process.env.REACT_APP_API_URL}/api/doctor/complete-profile`,
         {
           method: "POST",
+          credentials: "include",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(payload),
         }
