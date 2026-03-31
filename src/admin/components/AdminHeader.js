@@ -102,9 +102,24 @@ const AdminHeader = ({ pageTitle, onHamburger }) => {
                 <li onClick={() => goTo("/admin/profile")}>
                   <span>👤</span> My Profile
                 </li>
-                <li className="ah-profile-logout" onClick={() => goTo("/")}>
-                  <span>🚪</span> Logout
-                </li>
+                <li
+  className="ah-profile-logout"
+  onClick={async () => {
+    try {
+      await fetch(`${process.env.REACT_APP_API_URL}/api/admin/logout`, {
+        method: "POST",
+        credentials: "include",
+      });
+
+      localStorage.removeItem("adminData");
+      navigate("/");
+    } catch (err) {
+      console.error("Logout failed", err);
+    }
+  }}
+>
+  <span>🚪</span> Logout
+</li>
               </ul>
             </div>
           )}
