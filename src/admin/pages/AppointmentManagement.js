@@ -152,6 +152,7 @@ const AppointmentManagement = () => {
           </table>
         )}
       </div>
+
     </div>
   );
 };
