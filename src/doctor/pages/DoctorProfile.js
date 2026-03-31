@@ -3,7 +3,6 @@ import "../css/DoctorProfile.css";
 
 const initialState = {
   fullName: "", dob: "", gender: "", profilePic: null, profilePicPreview: "",
-  specialization: "", qualification: "", experience: "", licenseNumber: "",
   workingDays: "", workingHours: "", about: "",
   mobile: "", emergencyContact: "", hospitalName: "", address: "", city: "", state: "", mapLink: "",
 };
@@ -181,19 +180,19 @@ const DoctorProfile = () => {
     if (errors[name]) setErrors((prev) => ({ ...prev, [name]: "" }));
   };
 
-  // const handleImageChange = (e) => {
-  //   const file = e.target.files[0];
-  //   if (!file) return;
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
 
-    // clear previous pic error
-  //   setErrors((prev) => ({ ...prev, profilePic: "" }));
+    //clear previous pic error
+    setErrors((prev) => ({ ...prev, profilePic: "" }));
 
-  //   if (!file.type.startsWith("image/")) {
-  //     setErrors((prev) => ({ ...prev, profilePic: "Only image files are allowed (jpg, png, etc.)." }));
-  //     return;
-  //   }
-  //   setForm((prev) => ({ ...prev, profilePic: file, profilePicPreview: URL.createObjectURL(file) }));
-  // };
+    if (!file.type.startsWith("image/")) {
+      setErrors((prev) => ({ ...prev, profilePic: "Only image files are allowed (jpg, png, etc.)." }));
+      return;
+    }
+    setForm((prev) => ({ ...prev, profilePic: file, profilePicPreview: URL.createObjectURL(file) }));
+  };
 
   // ── scroll to first field that has an error ──
   const scrollToFirstError = (errs) => {
@@ -347,13 +346,13 @@ const DoctorProfile = () => {
     }
 
     // Get JWT token stored during doctor login
-    const token = localStorage.getItem("doctorToken");
-    if (!token) {
-      // Token missing — redirect to login
-      alert("Session expired. Please login again.");
-      window.location.href = "/DoctorLogin";
-      return;
-    }
+     const token = localStorage.getItem("doctorToken");
+    // if (!token) {
+    //   // Token missing — redirect to login
+    //   alert("Session expired. Please login again.");
+    //   window.location.href = "/DoctorLogin";
+    //   return;
+    // }
 
     setLoading(true);
     setApiError("");

@@ -75,7 +75,7 @@ export default function DoctorLogin() {
         alert("Login Successful");
         setFormData({ fullName: "", email: "", password: "", confirmPassword: "" });
         setErrors({});
-        navigate("/DoctorDashboard");
+        navigate("/DoctorProfile");
       } else {
         // Handle status-specific errors
         const msg = data.message || data.msg || "";
