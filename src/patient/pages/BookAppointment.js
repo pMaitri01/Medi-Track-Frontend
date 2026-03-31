@@ -49,7 +49,7 @@ const BookAppointment = ({ onClose }) => {
       // toLocaleDateString("en-CA") returns YYYY-MM-DD in the user's local timezone
       const formattedDate = selectedDate.toLocaleDateString("en-CA");
 
-      const res = await fetch(`${process.env.REACT_APP_API_URL}/api/appointments`, {
+      const res = await fetch(`${process.env.REACT_APP_API_URL}/api/appointment`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
