@@ -210,8 +210,8 @@ const DoctorProfile = () => {
 
     if (stepIndex === 0) {
       // Profile picture
-      if (!form.profilePic)
-        e.profilePic = "Profile picture is required.";
+      // if (!form.profilePic)
+      //   e.profilePic = "Profile picture is required.";
 
       // Full name
       if (!t("fullName"))
