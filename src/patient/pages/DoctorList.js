@@ -29,7 +29,7 @@ const DoctorList = () => {
     const fetchDoctors = async () => {
       try {
         const res = await fetch(
-          `${process.env.REACT_APP_API_URL}/api/patient/book`
+          `${process.env.REACT_APP_API_URL}/api/doctor/book`
         );
         if (!res.ok) throw new Error("Failed to fetch doctors.");
         const data = await res.json();
