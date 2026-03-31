@@ -42,7 +42,6 @@ const BookAppointment = ({ onClose }) => {
     try {
       // Get logged-in patient from localStorage
       const user        = JSON.parse(localStorage.getItem("user") || "{}");
-      const patientName = user.name || user.fullName || "Patient";
       const patientId   = user._id  || user.id       || null;
 
       // ✅ Fix timezone bug: toISOString() shifts to UTC and can roll back one day
@@ -54,8 +53,7 @@ const BookAppointment = ({ onClose }) => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           doctor:      selectedDoctor,  // doctor _id
-          patientId:   patientId,       // ✅ patient _id for DB reference
-          patientName: patientName,
+          patient:   patientId,       // ✅ patient _id for DB reference
           date:        formattedDate,   // ✅ correct local date YYYY-MM-DD
           time:        selectedTime,
         }),
