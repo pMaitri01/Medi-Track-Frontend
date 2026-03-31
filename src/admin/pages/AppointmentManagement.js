@@ -12,7 +12,7 @@ const statusClass = {
 // ── Map backend fields to UI fields ──
 const mapAppointment = (a, i) => ({
   id:      a._id || i,
-  patient: a.patientName || "—",
+  patient: a.patient || "—",
   doctor:  typeof a.doctor === "object" ? (a.doctor?.fullName || "—") : (a.doctor || "—"),
   date:    a.date  || "—",
   time:    a.time  || "—",
@@ -29,13 +29,13 @@ const AppointmentManagement = () => {
   useEffect(() => {
     const fetchAppointments = async () => {
       try {
-        const token = localStorage.getItem("adminToken");
+        // const token = localStorage.getItem("adminToken");
         const res = await fetch(
-          `${process.env.REACT_APP_API_URL}/api/appointment`,
+          `${process.env.REACT_APP_API_URL}/api/appointment/all`,
           {
             method: "GET",
             headers: {
-              Authorization: `Bearer ${token}`,
+              // Authorization: `Bearer ${token}`,
             },
             credentials: "include",
           }
@@ -139,9 +139,9 @@ const AppointmentManagement = () => {
             </thead>
             <tbody>
               {filtered.map((a, i) => (
-                <tr key={a.id}>
+                <tr key={a._id}>
                   <td>{i + 1}</td>
-                  <td className="am-patient">{a.patient}</td>
+                  <td className="am-patient">{a.patient?.firstName} {a.patient?.lastName}</td>
                   <td className="am-doctor">{a.doctor}</td>
                   <td>{a.date}</td>
                   <td>{a.time}</td>
