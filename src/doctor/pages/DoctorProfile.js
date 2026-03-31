@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import "../css/DoctorProfile.css";
 
 const initialState = {
-  fullName: "", dob: "", gender: "", profilePic: null, profilePicPreview: "",
+  fullName: "", dob: "", gender: "",
   workingDays: "", workingHours: "", about: "",
   mobile: "", emergencyContact: "", hospitalName: "", address: "", city: "", state: "", mapLink: "",
 };
@@ -180,20 +180,6 @@ const DoctorProfile = () => {
     if (errors[name]) setErrors((prev) => ({ ...prev, [name]: "" }));
   };
 
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-
-    //clear previous pic error
-    setErrors((prev) => ({ ...prev, profilePic: "" }));
-
-    if (!file.type.startsWith("image/")) {
-      setErrors((prev) => ({ ...prev, profilePic: "Only image files are allowed (jpg, png, etc.)." }));
-      return;
-    }
-    setForm((prev) => ({ ...prev, profilePic: file, profilePicPreview: URL.createObjectURL(file) }));
-  };
-
   // ── scroll to first field that has an error ──
   const scrollToFirstError = (errs) => {
     const firstKey = Object.keys(errs)[0];
@@ -208,10 +194,6 @@ const DoctorProfile = () => {
     const t = (field) => form[field].toString().trim();
 
     if (stepIndex === 0) {
-      // Profile picture
-      if (!form.profilePic)
-        e.profilePic = "Profile picture is required.";
-
       // Full name
       if (!t("fullName"))
         e.fullName = "Full name is required.";
@@ -358,45 +340,27 @@ const DoctorProfile = () => {
     setApiError("");
 
     try {
-      // Build FormData (required for profile image upload)
-      const formData = new FormData();
-
-      // Personal details
-      formData.append("gender",           form.gender);
-      formData.append("dob",              form.dob);
-
-      // Professional details
-      // formData.append("specialization",   form.specialization);
-      // formData.append("qualification",    form.qualification);
-      // formData.append("experience",       form.experience);
-      // formData.append("licenseNumber",    form.licenseNumber);
-      formData.append("workingDays",      form.workingDays);
-      formData.append("workingHours",     form.workingHours);
-      formData.append("about",            form.about);
-
-      // Contact & location — field name mapping
-      formData.append("mobile",           form.mobile);
-      formData.append("emergencyContact", form.emergencyContact);
-      formData.append("clinicName",       form.hospitalName);   // hospitalName → clinicName
-      formData.append("clinicAddress",    form.address);        // address → clinicAddress
-      formData.append("city",             form.city);
-      formData.append("state",            form.state);
-      formData.append("mapLink",          form.mapLink);
-
-      // Profile picture (file object)
-      if (form.profilePic) {
-        formData.append("profilePic", form.profilePic);
-      }
+      const payload = {
+        gender:           form.gender,
+        dob:              form.dob,
+        workingDays:      form.workingDays,
+        workingHours:     form.workingHours,
+        about:            form.about,
+        mobile:           form.mobile,
+        emergencyContact: form.emergencyContact,
+        clinicName:       form.hospitalName,
+        clinicAddress:    form.address,
+        city:             form.city,
+        state:            form.state,
+        mapLink:          form.mapLink,
+      };
 
       const response = await fetch(
         `${process.env.REACT_APP_API_URL}/api/doctor/complete-profile`,
         {
           method: "POST",
-          headers: {
-               // JWT — required by protect middleware
-          },
-          body: formData,
-          // Note: Do NOT set Content-Type header — browser sets it automatically for FormData
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
         }
       );
 
@@ -464,24 +428,11 @@ const DoctorProfile = () => {
         </div>
 
         {step === 0 && (
-          <>
-            <div className="dp-profile-pic-row">
-              <div className="dp-avatar-wrap">
-                {form.profilePicPreview
-                  ? <img src={form.profilePicPreview} alt="Profile" className="dp-avatar" />
-                  : <div className="dp-avatar-placeholder"><span>Photo</span></div>}
-                <label className="dp-upload-btn">
-                  Upload Photo
-                  <input type="file" accept="image/*" onChange={handleImageChange} hidden />
-                </label>
-              </div>
-            </div>
-            <div className="dp-grid-2">
-              <Field label="Full Name"     name="fullName" required {...f("fullName")} />
-              <Field label="Date of Birth" name="dob" type="date" required {...f("dob")} />
-              <Field label="Gender" name="gender" options={["Male", "Female", "Other"]} required {...f("gender")} />
-            </div>
-          </>
+          <div className="dp-grid-2">
+            <Field label="Full Name"     name="fullName" required {...f("fullName")} />
+            <Field label="Date of Birth" name="dob" type="date" required {...f("dob")} />
+            <Field label="Gender" name="gender" options={["Male", "Female", "Other"]} required {...f("gender")} />
+          </div>
         )}
 
         {step === 1 && (
