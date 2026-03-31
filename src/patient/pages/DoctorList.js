@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import '../css/DoctorList.css';
 import Navbar from '../components/Navbar';
+import defaultDoctorImg from '../images/user.png';
 
 // ── Map backend doctor object to UI format ──
 const mapDoctor = (doc) => ({
@@ -10,7 +11,6 @@ const mapDoctor = (doc) => ({
   exp:    doc.experience       || 0,
   city:   doc.city             || "Surat",
   gender: doc.gender           || "Male",
-  img:    `https://i.pravatar.cc/150?u=${doc._id}`,
   about:  doc.about            || "Experienced doctor with excellent patient care.",
   rank:   doc.designation      || "Consultant",
 });
@@ -194,7 +194,7 @@ const DoctorList = () => {
           ) : filteredDoctors.length > 0 ? filteredDoctors.map(doc => (
             <div key={doc.id} className="doc-card">
               <div className="doc-info">
-                <img src={doc.img} alt="doctor" className="doc-img" />
+                <img src={defaultDoctorImg} alt="doctor" className="doc-img" />
                 <div className="doc-text">
                   <h3>{doc.name}</h3>
                   <span className="spec-tag">{doc.spec}</span>
@@ -222,7 +222,7 @@ const DoctorList = () => {
             </div>
             
             <div className="booking-summary">
-              <img src={selectedDoctor.img} alt="doc" />
+              <img src={defaultDoctorImg} alt="doc" />
               <div>
                 <h4>{selectedDoctor.name}</h4>
                 <p>{selectedDoctor.spec} • {selectedDoctor.city}</p>
