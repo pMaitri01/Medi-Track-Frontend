@@ -346,7 +346,7 @@ const DoctorProfile = () => {
     }
 
     // Get JWT token stored during doctor login
-     const token = localStorage.getItem("doctorToken"); // token generated
+    //  const token = localStorage.getItem("doctorToken"); // token generated
     // if (!token) {
     //   // Token missing — redirect to login
     //   alert("Session expired. Please login again.");
@@ -393,7 +393,7 @@ const DoctorProfile = () => {
         {
           method: "POST",
           headers: {
-            Authorization: `Bearer ${token}`,   // JWT — required by protect middleware
+               // JWT — required by protect middleware
           },
           body: formData,
           // Note: Do NOT set Content-Type header — browser sets it automatically for FormData
@@ -404,12 +404,7 @@ const DoctorProfile = () => {
 
       if (!response.ok) {
         // Handle token expiry
-        if (response.status === 401) {
-          localStorage.removeItem("doctorToken");
-          alert("Session expired. Please login again.");
-          window.location.href = "/DoctorLogin";
-          return;
-        }
+        
         throw new Error(data.message || "Profile update failed. Please try again.");
       }
 
