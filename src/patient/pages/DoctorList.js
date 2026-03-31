@@ -1,20 +1,48 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import '../css/DoctorList.css';
 import Navbar from '../components/Navbar';
 
-const doctorsData = [
-  { id: 1, name: "Dr. Amit Sharma", spec: "Cardiologist", exp: 12, city: "Surat", gender: "Male", img: "https://i.pravatar.cc/150?u=amit", about: "Highly experienced doctor with excellent patient care.", rank: "Senior Consultant" },
-  { id: 2, name: "Dr. Priya Patel", spec: "Neurologist", exp: 8, city: "Ahmedabad", gender: "Female", img: "https://i.pravatar.cc/150?u=priya", about: "Specialist in neurological disorders and brain health.", rank: "Consultant" },
-  { id: 3, name: "Dr. Rahul Mehta", spec: "Orthopedic", exp: 5, city: "Vadodara", gender: "Male", img: "https://i.pravatar.cc/150?u=rahul", about: "Expert in bone and joint surgeries.", rank: "Junior Doctor" },
-  { id: 3, name: "Dr. Rahul Mehta", spec: "Orthopedic", exp: 5, city: "Vadodara", gender: "Male", img: "https://i.pravatar.cc/150?u=rahul", about: "Expert in bone and joint surgeries.", rank: "Junior Doctor" }
-
-];
+// ── Map backend doctor object to UI format ──
+const mapDoctor = (doc) => ({
+  id:     doc._id,
+  name:   doc.fullName,
+  spec:   doc.specialization  || "General Physician",
+  exp:    doc.experience       || 0,
+  city:   doc.city             || "Surat",
+  gender: doc.gender           || "Male",
+  // img:    `https://i.pravatar.cc/150?u=${doc._id}`,
+  about:  doc.about            || "Experienced doctor with excellent patient care.",
+  rank:   doc.designation      || "Consultant",
+});
 
 const DoctorList = () => {
   // --- States ---
+  const [doctors, setDoctors]       = useState([]);
+  const [loading, setLoading]       = useState(true);
+  const [fetchError, setFetchError] = useState("");
   const [selectedDoctor, setSelectedDoctor] = useState(null);
   const [showBooking, setShowBooking] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
+
+  // ── Fetch doctors from backend on mount ──
+  useEffect(() => {
+    const fetchDoctors = async () => {
+      try {
+        const res = await fetch(
+          `${process.env.REACT_APP_API_URL}/api/patient/book`
+        );
+        if (!res.ok) throw new Error("Failed to fetch doctors.");
+        const data = await res.json();
+        setDoctors(data.map(mapDoctor));
+      } catch (err) {
+        console.error("DoctorList fetch error:", err);
+        setFetchError("Unable to load doctors. Please try again later.");
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchDoctors();
+  }, []);
 
   // Filtering States
   const [searchTerm, setSearchTerm] = useState(""); 
@@ -46,8 +74,8 @@ const DoctorList = () => {
     setSearchTerm("");     
   };
 
-  // --- LIVE FILTER LOGIC ---
-  const filteredDoctors = doctorsData.filter((doc) => {
+  // --- LIVE FILTER LOGIC (uses fetched doctors) ---
+  const filteredDoctors = doctors.filter((doc) => {
     // 1. Live Match (Checks Name, Spec, or City as you type)
     const matchesSearch = 
       doc.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -159,7 +187,11 @@ const DoctorList = () => {
         </div>
 
         <div className="doctor-list-grid">
-          {filteredDoctors.length > 0 ? filteredDoctors.map(doc => (
+          {loading ? (
+            <p style={{ padding: "20px", color: "#64748b" }}>Loading doctors...</p>
+          ) : fetchError ? (
+            <p style={{ padding: "20px", color: "#dc2626" }}>❌ {fetchError}</p>
+          ) : filteredDoctors.length > 0 ? filteredDoctors.map(doc => (
             <div key={doc.id} className="doc-card">
               <div className="doc-info">
                 <img src={doc.img} alt="doctor" className="doc-img" />
@@ -176,7 +208,7 @@ const DoctorList = () => {
                 <button className="btn-primary" onClick={() => { setSelectedDoctor(doc); setShowBooking(true); }}>📅 Book</button>
               </div>
             </div>
-          )) : <p>No doctors found.</p>}
+          )) : <p style={{ padding: "20px" }}>No doctors found.</p>}
         </div>
       </main>
 
