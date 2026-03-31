@@ -66,7 +66,7 @@ const filteredPatients = patients.filter((p) => {
   // API for Fetcing Patient Data
   const fetchPatients = async () => {
   try {
-    const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/patient/`); // adjust URL
+    const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/patient/list`); // adjust URL
     setPatients(res.data);
   } catch (error) {
     console.error("Error fetching patients:", error);
