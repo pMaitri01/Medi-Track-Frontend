@@ -210,8 +210,8 @@ const DoctorProfile = () => {
 
     if (stepIndex === 0) {
       // Profile picture
-      // if (!form.profilePic)
-      //   e.profilePic = "Profile picture is required.";
+      if (!form.profilePic)
+        e.profilePic = "Profile picture is required.";
 
       // Full name
       if (!t("fullName"))
@@ -232,7 +232,7 @@ const DoctorProfile = () => {
           e.dob = "Date of birth cannot be today or a future date.";
         else {
           const age = today.getFullYear() - dob.getFullYear();
-          if (age < 23) e.dob = "Doctor must be at least 25 years old.";
+          if (age < 25) e.dob = "Doctor must be at least 25 years old.";
           else if (age > 80) e.dob = "Age cannot exceed 80 years.";
         }
       }
@@ -243,7 +243,28 @@ const DoctorProfile = () => {
     }
 
     if (stepIndex === 1) {
-     
+      if (!t("specialization"))
+        e.specialization = "Specialization is required.";
+      else if (t("specialization").length < 3)
+        e.specialization = "Specialization must be at least 3 characters.";
+
+      if (!t("qualification"))
+        e.qualification = "Qualification is required.";
+      else if (t("qualification").length < 2)
+        e.qualification = "Enter a valid qualification (e.g. MBBS, MD).";
+
+      if (!t("experience"))
+        e.experience = "Experience is required.";
+      else if (isNaN(form.experience) || Number(form.experience) <= 0)
+        e.experience = "Experience must be a positive number greater than 0.";
+      else if (Number(form.experience) > 60)
+        e.experience = "Experience cannot exceed 60 years.";
+
+      if (!t("licenseNumber"))
+        e.licenseNumber = "License / registration number is required.";
+      else if (!/^[a-zA-Z0-9/\\-]{5,}$/.test(t("licenseNumber")))
+        e.licenseNumber = "Enter a valid license number (min 5 alphanumeric characters).";
+
       if (!t("workingDays"))
         e.workingDays = "Working days are required (e.g. Mon–Fri).";
       else if (t("workingDays").length < 3)
@@ -256,7 +277,7 @@ const DoctorProfile = () => {
 
       if (!t("about"))
         e.about = "About Doctor is required.";
-      else if (t("about").length < 5)
+      else if (t("about").length < 20)
         e.about = "About Doctor must be at least 20 characters.";
     }
 
@@ -280,7 +301,7 @@ const DoctorProfile = () => {
 
       if (!t("address"))
         e.address = "Address is required.";
-      else if (t("address").length < 5)
+      else if (t("address").length < 10)
         e.address = "Address must be at least 10 characters.";
 
       if (!t("city"))
@@ -326,13 +347,13 @@ const DoctorProfile = () => {
     }
 
     // Get JWT token stored during doctor login
-    // const token = localStorage.getItem("doctorToken");
-    // if (!token) {
-    //   // Token missing — redirect to login
-    //   alert("Session expired. Please login again.");
-    //   window.location.href = "/DoctorLogin";
-    //   return;
-    // }
+    const token = localStorage.getItem("doctorToken");
+    if (!token) {
+      // Token missing — redirect to login
+      alert("Session expired. Please login again.");
+      window.location.href = "/DoctorLogin";
+      return;
+    }
 
     setLoading(true);
     setApiError("");
@@ -346,10 +367,10 @@ const DoctorProfile = () => {
       formData.append("dob",              form.dob);
 
       // Professional details
-      // formData.append("specialization",   form.specialization);
-      // formData.append("qualification",    form.qualification);
-      // formData.append("experience",       form.experience);
-      // formData.append("licenseNumber",    form.licenseNumber);
+      formData.append("specialization",   form.specialization);
+      formData.append("qualification",    form.qualification);
+      formData.append("experience",       form.experience);
+      formData.append("licenseNumber",    form.licenseNumber);
       formData.append("workingDays",      form.workingDays);
       formData.append("workingHours",     form.workingHours);
       formData.append("about",            form.about);
@@ -472,10 +493,10 @@ const DoctorProfile = () => {
         {step === 1 && (
           <>
             <div className="dp-grid-2">
-              {/* <Field label="Specialization"        name="specialization" required {...f("specialization")} />
+              <Field label="Specialization"        name="specialization" required {...f("specialization")} />
               <Field label="Qualification"         name="qualification"  required {...f("qualification")} />
               <Field label="Experience (years)"    name="experience" type="number" min="0" required {...f("experience")} />
-              <Field label="License / Reg. Number" name="licenseNumber"  required {...f("licenseNumber")} /> */}
+              <Field label="License / Reg. Number" name="licenseNumber"  required {...f("licenseNumber")} />
               <Field label="Working Days"          name="workingDays" {...f("workingDays")} />
               <Field label="Working Hours"         name="workingHours" {...f("workingHours")} />
             </div>
