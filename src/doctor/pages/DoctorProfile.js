@@ -181,9 +181,9 @@ const DoctorProfile = () => {
     if (errors[name]) setErrors((prev) => ({ ...prev, [name]: "" }));
   };
 
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
+  // const handleImageChange = (e) => {
+  //   const file = e.target.files[0];
+  //   if (!file) return;
 
     // clear previous pic error
   //   setErrors((prev) => ({ ...prev, profilePic: "" }));
