@@ -493,10 +493,10 @@ const DoctorProfile = () => {
         {step === 1 && (
           <>
             <div className="dp-grid-2">
-              <Field label="Specialization"        name="specialization" required {...f("specialization")} />
+              {/* <Field label="Specialization"        name="specialization" required {...f("specialization")} />
               <Field label="Qualification"         name="qualification"  required {...f("qualification")} />
               <Field label="Experience (years)"    name="experience" type="number" min="0" required {...f("experience")} />
-              <Field label="License / Reg. Number" name="licenseNumber"  required {...f("licenseNumber")} />
+              <Field label="License / Reg. Number" name="licenseNumber"  required {...f("licenseNumber")} /> */}
               <Field label="Working Days"          name="workingDays" {...f("workingDays")} />
               <Field label="Working Hours"         name="workingHours" {...f("workingHours")} />
             </div>
