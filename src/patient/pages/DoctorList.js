@@ -10,7 +10,7 @@ const mapDoctor = (doc) => ({
   exp:    doc.experience       || 0,
   city:   doc.city             || "Surat",
   gender: doc.gender           || "Male",
-  // img:    `https://i.pravatar.cc/150?u=${doc._id}`,
+  img:    `https://i.pravatar.cc/150?u=${doc._id}`,
   about:  doc.about            || "Experienced doctor with excellent patient care.",
   rank:   doc.designation      || "Consultant",
 });
