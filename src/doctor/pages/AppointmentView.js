@@ -15,7 +15,7 @@ export default function AppointmentView() {
     try {
       const token = localStorage.getItem("token");
 
-      const res = await fetch("http://localhost:5000/api/appointment/doctor", {
+      const res = await fetch(`${process.env.REACT_APP_API_URL}/api/appointment/doctor`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -46,7 +46,7 @@ export default function AppointmentView() {
   try {
     const token = localStorage.getItem("token");
 
-    await fetch(`http://localhost:5000/api/appointments/${id}`, {
+    await fetch(`${process.env.REACT_APP_API_URL}/api/appointments/${id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
