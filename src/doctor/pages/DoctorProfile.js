@@ -186,14 +186,14 @@ const DoctorProfile = () => {
     if (!file) return;
 
     // clear previous pic error
-    setErrors((prev) => ({ ...prev, profilePic: "" }));
+  //   setErrors((prev) => ({ ...prev, profilePic: "" }));
 
-    if (!file.type.startsWith("image/")) {
-      setErrors((prev) => ({ ...prev, profilePic: "Only image files are allowed (jpg, png, etc.)." }));
-      return;
-    }
-    setForm((prev) => ({ ...prev, profilePic: file, profilePicPreview: URL.createObjectURL(file) }));
-  };
+  //   if (!file.type.startsWith("image/")) {
+  //     setErrors((prev) => ({ ...prev, profilePic: "Only image files are allowed (jpg, png, etc.)." }));
+  //     return;
+  //   }
+  //   setForm((prev) => ({ ...prev, profilePic: file, profilePicPreview: URL.createObjectURL(file) }));
+  // };
 
   // ── scroll to first field that has an error ──
   const scrollToFirstError = (errs) => {
@@ -243,27 +243,27 @@ const DoctorProfile = () => {
     }
 
     if (stepIndex === 1) {
-      if (!t("specialization"))
-        e.specialization = "Specialization is required.";
-      else if (t("specialization").length < 3)
-        e.specialization = "Specialization must be at least 3 characters.";
+      // if (!t("specialization"))
+      //   e.specialization = "Specialization is required.";
+      // else if (t("specialization").length < 3)
+      //   e.specialization = "Specialization must be at least 3 characters.";
 
-      if (!t("qualification"))
-        e.qualification = "Qualification is required.";
-      else if (t("qualification").length < 2)
-        e.qualification = "Enter a valid qualification (e.g. MBBS, MD).";
+      // if (!t("qualification"))
+      //   e.qualification = "Qualification is required.";
+      // else if (t("qualification").length < 2)
+      //   e.qualification = "Enter a valid qualification (e.g. MBBS, MD).";
 
-      if (!t("experience"))
-        e.experience = "Experience is required.";
-      else if (isNaN(form.experience) || Number(form.experience) <= 0)
-        e.experience = "Experience must be a positive number greater than 0.";
-      else if (Number(form.experience) > 60)
-        e.experience = "Experience cannot exceed 60 years.";
+      // if (!t("experience"))
+      //   e.experience = "Experience is required.";
+      // else if (isNaN(form.experience) || Number(form.experience) <= 0)
+      //   e.experience = "Experience must be a positive number greater than 0.";
+      // else if (Number(form.experience) > 60)
+      //   e.experience = "Experience cannot exceed 60 years.";
 
-      if (!t("licenseNumber"))
-        e.licenseNumber = "License / registration number is required.";
-      else if (!/^[a-zA-Z0-9/\\-]{5,}$/.test(t("licenseNumber")))
-        e.licenseNumber = "Enter a valid license number (min 5 alphanumeric characters).";
+      // if (!t("licenseNumber"))
+      //   e.licenseNumber = "License / registration number is required.";
+      // else if (!/^[a-zA-Z0-9/\\-]{5,}$/.test(t("licenseNumber")))
+      //   e.licenseNumber = "Enter a valid license number (min 5 alphanumeric characters).";
 
       if (!t("workingDays"))
         e.workingDays = "Working days are required (e.g. Mon–Fri).";
@@ -367,10 +367,10 @@ const DoctorProfile = () => {
       formData.append("dob",              form.dob);
 
       // Professional details
-      formData.append("specialization",   form.specialization);
-      formData.append("qualification",    form.qualification);
-      formData.append("experience",       form.experience);
-      formData.append("licenseNumber",    form.licenseNumber);
+      // formData.append("specialization",   form.specialization);
+      // formData.append("qualification",    form.qualification);
+      // formData.append("experience",       form.experience);
+      // formData.append("licenseNumber",    form.licenseNumber);
       formData.append("workingDays",      form.workingDays);
       formData.append("workingHours",     form.workingHours);
       formData.append("about",            form.about);
