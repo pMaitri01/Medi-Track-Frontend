@@ -346,7 +346,7 @@ const DoctorProfile = () => {
     }
 
     // Get JWT token stored during doctor login
-     const token = localStorage.getItem("doctorToken");
+     const token = localStorage.getItem("doctorToken"); // token generated
     // if (!token) {
     //   // Token missing — redirect to login
     //   alert("Session expired. Please login again.");
