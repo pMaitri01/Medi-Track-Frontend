@@ -19,6 +19,8 @@ const Navbar = () => {
         <div className="pl-nav-actions">
           <button className="pl-btn-outline" onClick={() => navigate("/patient/login")}>Login</button>
           <button className="pl-btn-primary" onClick={() => navigate("/patient/register")}>Sign Up</button>
+          <div className="pl-nav-divider" />
+          <button className="pl-btn-doctor-outline" onClick={() => navigate("/DoctorLogin")}>Doctor Login</button>
         </div>
       </div>
     </nav>
@@ -46,6 +48,17 @@ const Hero = () => {
           </button>
           <button className="pl-btn-outline pl-btn-lg" onClick={() => navigate("/patient/register")}>
             Register as Patient
+          </button>
+        </div>
+
+        {/* Doctor portal links */}
+        <div className="pl-doctor-portal">
+          <span className="pl-doctor-portal-label">Are you a doctor?</span>
+          <button className="pl-btn-doctor-outline" onClick={() => navigate("/DoctorLogin")}>
+            Doctor Login
+          </button>
+          <button className="pl-btn-doctor-ghost" onClick={() => navigate("/DoctorRegister")}>
+            Join as Doctor →
           </button>
         </div>
         <div className="pl-hero-stats">
