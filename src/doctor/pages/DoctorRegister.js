@@ -142,19 +142,19 @@ const DoctorRegister = () => {
 
     setLoading(true);
     try {
-      const res = await fetch(`${process.env.REACT_APP_API_URL}/api/doctors/register`, {
+      const res = await fetch(`${process.env.REACT_APP_API_URL}/api/doctor/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          name:           form.fullName,
-          email:          form.email,
-          mobile:         form.mobile,
-          password:       form.password,
-          specialization: form.specialization,
-          qualification:  form.qualification,
-          experience:     Number(form.experience),
-          licenseNumber:  form.licenseNumber,
-        }),
+        fullName:       form.fullName,   // ✅ FIXED
+        email:          form.email,
+        mobile:         form.mobile,
+        password:       form.password,
+        specialization: form.specialization,
+        qualification:  form.qualification,
+        experience:     Number(form.experience),
+        licenseNumber:  form.licenseNumber,
+      }),
       });
 
       const data = await res.json();
