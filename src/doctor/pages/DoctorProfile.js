@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import "../css/DoctorProfile.css";
-
+import { useNavigate } from "react-router-dom";
 const initialState = {
   fullName: "", dob: "", gender: "",
   workingDays: "", workingHours: "", about: "",
@@ -167,6 +167,7 @@ const Field = ({ label, name, type = "text", options, textarea, required, value,
 );
 
 const DoctorProfile = () => {
+  const navigate = useNavigate();
   const [step, setStep]           = useState(0);
   const [form, setForm]           = useState(initialState);
   const [errors, setErrors]       = useState({});
@@ -393,8 +394,8 @@ const DoctorProfile = () => {
           <h2>Profile Saved!</h2>
           <p>Your doctor profile has been submitted successfully.</p>
           <button className="dp-btn dp-btn-save"
-            onClick={() => { setSubmitted(false); setStep(0); setForm(initialState); }}>
-            Start Over
+            onClick={() => { setSubmitted(false); setStep(0); setForm(initialState); navigate("/DoctorDashboard"); }}>
+            Go to Dashboard
           </button>
         </div>
       </div>
