@@ -36,7 +36,7 @@ const PatientManagement = () => {
       try {
         const token = localStorage.getItem("adminToken");
         const res = await fetch(
-          `${process.env.REACT_APP_API_URL}/api/patient/`,
+          `${process.env.REACT_APP_API_URL}/api/patient/list`,
           {
             method: "GET",
             headers: {
@@ -45,12 +45,11 @@ const PatientManagement = () => {
           }
         );
 
-        if (!res.ok) {
-          const err = await res.json();
-          throw new Error(err.message || "Failed to fetch patients.");
-        }
-
         const data = await res.json();
+
+        if (!res.ok) {
+        throw new Error(data.message || "Failed to fetch patients");
+      }
         // Map backend fields to UI-expected fields
         setPatients(data.map(mapPatient));
       } catch (err) {
