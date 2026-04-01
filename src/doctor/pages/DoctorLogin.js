@@ -71,12 +71,21 @@ export default function DoctorLogin() {
 
       const data = await response.json();
 
-      if (response.ok) {
-        alert("Login Successful");
-        setFormData({ fullName: "", email: "", password: "", confirmPassword: "" });
-        setErrors({});
-        navigate("/DoctorProfile"); // redirected to doctor profile
-      } else {
+     if (response.ok) {
+  alert("Login Successful");
+
+  const doctor = data.doctor; // 👈 get doctor from response
+
+  setFormData({ fullName: "", email: "", password: "", confirmPassword: "" });
+  setErrors({});
+
+  // 🚦 MAIN LOGIC
+  if (doctor.isProfileComplete) {
+    navigate("/DoctorDashboard");
+  } else {
+    navigate("/DoctorProfile"); // your profile page
+  }
+} else {
         // Handle status-specific errors
         const msg = data.message || data.msg || "";
         if (msg.toLowerCase().includes("pending") || msg.toLowerCase().includes("not approved")) {
