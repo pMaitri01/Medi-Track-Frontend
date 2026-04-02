@@ -10,7 +10,6 @@ html, body {
   font-family: sans-serif;
   color: #334155;
   height: 100vh;   /* full screen height */
-  overflow-y: auto;
 }
 
 .main-header {
@@ -126,7 +125,7 @@ html, body {
 }
 
 .btn-blue {
-  background: #2563eb;
+  background: #0AA5A5;
   color: white;
   border: none;
   padding: 8px;
@@ -221,10 +220,11 @@ html, body {
 }
 
 .reviewbtn {
-  background: #2563EB;
+  background: #0AA5A5;
+  border-radius: 8px !important;
   color: white;
   border: none;
-  padding: 5px 10px;
+  padding: 12px;
   border-radius: 1px;
   font-weight: 700;
   cursor: pointer;
@@ -233,14 +233,18 @@ html, body {
 }
 
 .reviewbtn:hover{
-  background-color: #2563EB;
+  background-color: #0AA5A5;
 }
 .reviewbtn1{
-  background: #2563EB;
+  background: #0AA5A5;
+  padding: 12px;
   color: white;
+  border-radius: 8px !important;
+  width: 200px ;
+
 }
 .reviewbtn1:hover{
-  background-color: #2563EB;
+  background-color: #0AA5A5;
 }
 .review-item {
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
@@ -358,7 +362,7 @@ html, body {
 }
 
 .btn-search-apply {
-  background: #2563eb;
+  background: #0AA5A5;
   color: white;
   border: none;
   padding: 12px;
@@ -373,7 +377,7 @@ html, body {
 }
 
 .btn-search-apply:hover {
-  background: #1d4ed8;
+  background: #0AA5A5;
 }
 
 /* Extended Results Area */
@@ -437,7 +441,7 @@ html, body {
   right: 5px;
   top: 5px;
   bottom: 5px;
-  background: #2563eb;
+  background: #0AA5A5;
   color: white;
   border: none;
   border-radius: 8px;
@@ -611,7 +615,7 @@ html, body {
 }
 
 .chat-submit-btn {
-  background: #2563eb;
+  background: #0AA5A5;
   color: white;
   border: none;
   width: 40px;

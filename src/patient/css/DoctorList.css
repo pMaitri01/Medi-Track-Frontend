@@ -62,16 +62,6 @@ button {
     font-weight: 600;
     width: 150px;  
 }
-.btn-details {
-  /* background: var(--details-bg);
-  color: var(--details-text);
-  padding: 10px 18px;
-  border-radius: 8px;
-  font-weight: 600;
-  width:130px; */
-  
-}
-
 .btn-reset {
   background: var(--primary);
     color: white;
@@ -163,18 +153,61 @@ button {
   grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
   gap: 20px;
 }
+.doctor-list-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 20px;
+}
 
+/* CARD */
 .doc-card {
   background: white;
   border: 1px solid var(--border);
   padding: 20px;
   border-radius: 12px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
 }
 
+/* TOP */
 .doc-info {
   display: flex;
   gap: 15px;
-  margin-bottom: 15px;
+}
+
+.doc-img {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+}
+
+/* TEXT */
+.doc-text h3 {
+  margin: 0;
+}
+
+.spec-tag {
+  background: #e0f2fe;
+  color: #0369a1;
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-size: 12px;
+}
+
+/* FOOTER */
+.doc-footer {
+  display: flex;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.doc-footer button {
+  flex: 1;
 }
 
 .doc-img {
@@ -208,7 +241,9 @@ button {
   width: 90%;
   max-width: 600px;
 }
-
+.close-btn{
+  margin-left: 400px;
+}
 .booking-content {
   display: grid;
   grid-template-columns: 1fr 1fr;

@@ -17,10 +17,9 @@ const Navbar = () => {
           <a href="#contact" className="pl-nav-link">Contact</a>
         </div>
         <div className="pl-nav-actions">
-          <button className="pl-btn-outline" onClick={() => navigate("/patient/login")}>Login</button>
-          <button className="pl-btn-primary" onClick={() => navigate("/patient/register")}>Sign Up</button>
+          <button className="pl-btn-outline" onClick={() => navigate("/patient/login")}>Patient Login</button>
+          <button className="pl-btn-primary" onClick={() => navigate("/patient/register")}>Patient Sign Up</button>
           <div className="pl-nav-divider" />
-          <button className="pl-btn-doctor-outline" onClick={() => navigate("/DoctorLogin")}>Doctor Login</button>
         </div>
       </div>
     </nav>
@@ -43,16 +42,12 @@ const Hero = () => {
           your health records — all in one secure platform.
         </p>
         <div className="pl-hero-btns">
-          <button className="pl-btn-primary pl-btn-lg" onClick={() => navigate("/patient/login")}>
+          {/* <button className="pl-btn-primary pl-btn-lg" onClick={() => navigate("/patient/login")}>
             Login to Account
           </button>
           <button className="pl-btn-outline pl-btn-lg" onClick={() => navigate("/patient/register")}>
             Register as Patient
-          </button>
-        </div>
-
-        {/* Doctor portal links */}
-        <div className="pl-doctor-portal">
+          </button> */}
           <span className="pl-doctor-portal-label">Are you a doctor?</span>
           <button className="pl-btn-doctor-outline" onClick={() => navigate("/DoctorLogin")}>
             Doctor Login
@@ -61,35 +56,19 @@ const Hero = () => {
             Join as Doctor →
           </button>
         </div>
-        <div className="pl-hero-stats">
-          <div className="pl-stat"><span className="pl-stat-num">500+</span><span className="pl-stat-label">Doctors</span></div>
-          <div className="pl-stat-divider" />
-          <div className="pl-stat"><span className="pl-stat-num">10K+</span><span className="pl-stat-label">Patients</span></div>
-          <div className="pl-stat-divider" />
-          <div className="pl-stat"><span className="pl-stat-num">98%</span><span className="pl-stat-label">Satisfaction</span></div>
-        </div>
+
+        {/* Doctor portal links */}
+        {/* <div className="pl-doctor-portal">
+          
+        </div> */}
       </div>
       <div className="pl-hero-visual">
-        <div className="pl-hero-card pl-hero-card-1">
-          <span>📅</span>
-          <div>
-            <p className="pl-hc-title">Appointment Booked</p>
-            <p className="pl-hc-sub">Dr. Amit Sharma · Today 10 AM</p>
-          </div>
-        </div>
         <div className="pl-hero-illustration">
           <div className="pl-illustration-circle">
             <span className="pl-illustration-icon">🩺</span>
           </div>
           <div className="pl-illustration-ring pl-ring-1" />
           <div className="pl-illustration-ring pl-ring-2" />
-        </div>
-        <div className="pl-hero-card pl-hero-card-2">
-          <span>✅</span>
-          <div>
-            <p className="pl-hc-title">Verified Doctors</p>
-            <p className="pl-hc-sub">All specialists certified</p>
-          </div>
         </div>
       </div>
     </section>
@@ -101,7 +80,7 @@ const features = [
   { icon: "📅", title: "Book Appointments Easily",    desc: "Schedule appointments with top doctors in just a few clicks, anytime and anywhere." },
   { icon: "🧑‍⚕️", title: "Find Verified Doctors",      desc: "Browse through a curated list of certified specialists across all medical fields." },
   { icon: "🔒", title: "Secure Medical Records",      desc: "Your health data is encrypted and stored securely, accessible only by you." },
-  { icon: "🔔", title: "Real-time Notifications",     desc: "Get instant reminders for upcoming appointments and important health updates." },
+  { icon: "🔔", title: "Notifications",     desc: "Get reminders for upcoming appointments" },
 ];
 
 const Features = () => (
@@ -130,7 +109,7 @@ const steps = [
   { num: "01", icon: "👤", title: "Sign Up / Login",      desc: "Create your free account or log in to access the platform." },
   { num: "02", icon: "📋", title: "Complete Your Profile", desc: "Add your medical history and personal details for better care." },
   { num: "03", icon: "🔍", title: "Search a Doctor",       desc: "Filter by specialization, location, and availability." },
-  { num: "04", icon: "📅", title: "Book Appointment",      desc: "Pick a time slot and confirm your appointment instantly." },
+  { num: "04", icon: "📅", title: "Book Appointment",      desc: "Pick a time slot and confirm your appointment." },
 ];
 
 const HowItWorks = () => (
