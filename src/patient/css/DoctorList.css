@@ -280,7 +280,7 @@ button {
   height:35px;
   width: 35px;
 }
-.close-btn : hover{
+.close-btn:hover{
   color: white !important;
 }
 /* BODY */
