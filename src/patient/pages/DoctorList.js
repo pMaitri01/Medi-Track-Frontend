@@ -23,13 +23,14 @@ const DoctorList = () => {
   const [selectedDoctor, setSelectedDoctor] = useState(null);
   const [showBooking, setShowBooking] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
+  const [errors, setErrors] = useState({});
 
   // ── Fetch doctors from backend on mount ──
   useEffect(() => {
     const fetchDoctors = async () => {
       try {
         const res = await fetch(
-          `${process.env.REACT_APP_API_URL}/api/doctor/book`
+          `${process.env.REACT_APP_API_URL}/api/doctor/names`
         );
         if (!res.ok) throw new Error("Failed to fetch doctors.");
         const data = await res.json();
@@ -93,15 +94,40 @@ const DoctorList = () => {
         (appliedFilters.experience === '10+' && doc.exp >= 10))
     );
   });
+  const validateBooking = () => {
+  let newErrors = {};
 
+  if (!bookingDate) {
+    newErrors.date = "Please select a date";
+  } else {
+    const selected = new Date(bookingDate);
+    const todayDate = new Date();
+    todayDate.setHours(0,0,0,0);
+
+    if (selected < todayDate) {
+      newErrors.date = "Past dates not allowed";
+    }
+  }
+
+  if (!selectedSlot) {
+    newErrors.slot = "Please select a time slot";
+  }
+
+  setErrors(newErrors);
+  return Object.keys(newErrors).length === 0;
+};
   const handleConfirmBooking = () => {
-    setShowBooking(false);
-    setShowSuccess(true);
-    setTimeout(() => {
-      setShowSuccess(false);
-      setBookingDate("");
-      setSelectedSlot("");
-    }, 3000);
+  if (!validateBooking()) return;
+
+  setShowBooking(false);
+  setShowSuccess(true);
+
+  setTimeout(() => {
+    setShowSuccess(false);
+    setBookingDate("");
+    setSelectedSlot("");
+    setErrors({});
+  }, 3000);
   };
 
   return (
@@ -236,10 +262,11 @@ const DoctorList = () => {
 
           <button
             className="btn-primary"
-            onClick={() => {
-              setSelectedDoctor(doc);
-              setShowBooking(true);
-            }}
+           onClick={() => {
+            // console.log("Book clicked", doc);
+            setSelectedDoctor(doc);
+            setShowBooking(true);
+          }}
           >
             📅 Book
           </button>
@@ -255,66 +282,90 @@ const DoctorList = () => {
 
       {/* Booking Modal */}
       {showBooking && selectedDoctor && (
-        <div className="modal-overlay">
-          <div className="modal-box wide">
-            <div className="modal-header">
-              <h2>Book Your Visit</h2>
-              <button className="close-btn" onClick={() => setShowBooking(false)}>&times;</button>
-            </div>
-            
-            <div className="booking-summary">
-              <img src={defaultDoctorImg} alt="doc" />
-              <div>
-                <h4>{selectedDoctor.name}</h4>
-                <p>{selectedDoctor.spec} • {selectedDoctor.city}</p>
-              </div>
-            </div>
+  <div className="modal-overlay">
+    <div className="booking-modal">
 
-            <div className="booking-content">
-              <div className="step">
-                <h4><span className="step-num">1</span> Select Date</h4>
-                <input 
-                  type="date" 
-                  className="date-input" 
-                  min={today} 
-                  value={bookingDate}
-                  onChange={(e) => {setBookingDate(e.target.value); setSelectedSlot("");}}
-                />
-              </div>
-
-              <div className="step">
-                <h4><span className="step-num">2</span> Select Time</h4>
-                {bookingDate ? (
-                  <div className="slots-grid">
-                    {timeSlots.map(slot => (
-                      <button 
-                        key={slot} 
-                        className={`slot-btn ${selectedSlot === slot ? 'active' : ''}`}
-                        onClick={() => setSelectedSlot(slot)}
-                      >
-                        {slot}
-                      </button>
-                    ))}
-                  </div>
-                ) : (
-                  <div className="time-placeholder">Please select a date first</div>
-                )}
-              </div>
-            </div>
-
-            <div className="modal-footer">
-              <button className="btn-secondary" onClick={() => setShowBooking(false)}>Cancel</button>
-              <button 
-                className={`btn-primary ${(!bookingDate || !selectedSlot) ? 'disabled' : ''}`}
-                disabled={!bookingDate || !selectedSlot}
-                onClick={handleConfirmBooking}
-              >
-                Confirm Appointment
-              </button>
-            </div>
+      {/* HEADER */}
+      <div className="booking-header">
+        <div className="doctor-summary">
+          <img src={defaultDoctorImg} alt="doc" />
+          <div className="doctor-name">
+            <h3>{selectedDoctor.name}</h3>
+            <p>{selectedDoctor.spec} • {selectedDoctor.city}</p>
           </div>
         </div>
-      )}
+        <button className="close-btn" onClick={() => setShowBooking(false)}>✖</button>
+      </div>
+
+      {/* BODY */}
+      <div className="booking-body">
+
+        {/* STEP 1 - DATE */}
+        <div className="booking-step">
+          <h4>📅 Select Date</h4>
+          <input
+            type="date"
+            min={today}
+            value={bookingDate}
+            onChange={(e) => {
+              setBookingDate(e.target.value);
+              setSelectedSlot("");
+              setErrors({ ...errors, date: "" }); // clear error
+            }}
+          />
+
+        {errors.date && <p className="error-text">{errors.date}</p>}
+        </div>
+
+        {/* STEP 2 - TIME */}
+        <div className="booking-step">
+          <h4>⏰ Select Time</h4>
+
+          {bookingDate ? (
+          <>
+            <div className="slots-grid">
+              {timeSlots.map((slot) => (
+                <button
+                  key={slot}
+                  className={`slot-btn ${selectedSlot === slot ? "active" : ""}`}
+                  onClick={() => {
+                    setSelectedSlot(slot);
+                    setErrors({ ...errors, slot: "" }); // clear error
+                  }}
+                >
+                  {slot}
+                </button>
+              ))}
+            </div>
+
+            {errors.slot && <p className="error-text">{errors.slot}</p>}
+          </>
+        ) : (
+          <p className="placeholder">Select date first</p>
+        )}
+        </div>
+
+      </div>
+
+      {/* FOOTER */}
+      <div className="booking-footer">
+        <button
+          className={`confirm-btn ${
+            (!bookingDate || !selectedSlot) ? "disabled" : ""
+          }`}
+          disabled={!bookingDate || !selectedSlot}
+          onClick={handleConfirmBooking}
+        >
+          Confirm Appointment
+        </button>
+        <button className="cancel-btn" onClick={() => setShowBooking(false)}>
+          Cancel
+        </button>
+      </div>
+
+    </div>
+  </div>
+)}
 
       {showSuccess && (
         <div className="modal-overlay">
