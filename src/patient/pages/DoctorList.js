@@ -114,13 +114,6 @@ const DoctorList = () => {
 
         <div className="filter-card">
           <div className="filter-header">
-            <div className="filter-title-group">
-              {/* <div>
-                <h3>Filter Doctors</h3>
-                <p>Find the right doctor for you</p>
-              </div>  */}
-            </div>
-
             <input 
               type="text" 
               placeholder="Search by name, city, or specialty..." 
@@ -186,7 +179,7 @@ const DoctorList = () => {
           )}
         </div>
 
-        <div className="doctor-list-grid">
+        {/* <div className="doctor-list-grid">
           {loading ? (
             <p style={{ padding: "20px", color: "#64748b" }}>Loading doctors...</p>
           ) : fetchError ? (
@@ -209,7 +202,55 @@ const DoctorList = () => {
               </div>
             </div>
           )) : <p style={{ padding: "20px" }}>No doctors found.</p>}
+        </div> */}
+        <div className="doctor-list-grid">
+  {loading ? (
+    <p>Loading doctors...</p>
+  ) : fetchError ? (
+    <p style={{ color: "red" }}>{fetchError}</p>
+  ) : filteredDoctors.length > 0 ? (
+    filteredDoctors.map((doc) => (
+      <div key={doc.id} className="doc-card">
+
+        {/* Top Section */}
+        <div className="doc-info">
+          <img src={defaultDoctorImg} alt="doctor" className="doc-img" />
+
+          <div className="doc-text">
+            <h3>{doc.name}</h3>
+            <span className="spec-tag">{doc.spec}</span>
+            <p>💼 {doc.rank}</p>
+            <p>🕒 {doc.exp} years experience</p>
+            <p>📍 {doc.city}</p>
+          </div>
         </div>
+
+        {/* Bottom Buttons */}
+        <div className="doc-footer">
+          <button
+            className="DL-btn-secondary"
+            onClick={() => setSelectedDoctor(doc)}
+          >
+            👁 Details
+          </button>
+
+          <button
+            className="btn-primary"
+            onClick={() => {
+              setSelectedDoctor(doc);
+              setShowBooking(true);
+            }}
+          >
+            📅 Book
+          </button>
+        </div>
+
+      </div>
+    ))
+  ) : (
+    <p>No doctors found.</p>
+  )}
+</div>
       </main>
 
       {/* Booking Modal */}
