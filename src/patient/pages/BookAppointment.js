@@ -14,7 +14,7 @@ const BookAppointment = ({ onClose }) => {
 
   // ── Fetch available doctors on mount ──
   useEffect(() => {
-    fetch(`${process.env.REACT_APP_API_URL}/api/doctor/book`)
+    fetch(`${process.env.REACT_APP_API_URL}/api/doctor/names`)
       .then(res => res.json())
       .then(data => setDoctors(data))
       .catch(err => console.error("Failed to load doctors:", err));
