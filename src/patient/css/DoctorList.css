@@ -280,7 +280,9 @@ button {
   height:35px;
   width: 35px;
 }
-
+.close-btn : hover{
+  color: white !important;
+}
 /* BODY */
 .booking-body {
   padding: 20px;
