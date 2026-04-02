@@ -277,6 +277,8 @@ button {
   font-size: 18px;
   margin-top: -50px;
   margin-left: 100px;
+  height:35px;
+  width: 35px;
 }
 
 /* BODY */
@@ -339,13 +341,16 @@ button {
   border-radius: 8px;
   width: 30px !important;
   flex: 0.5;
+  height:50px;
 }
 
 .confirm-btn {
   background: var(--primary);
   color: white;
-  padding: 10px 15px;
+  padding: 8px;
   border-radius: 8px;
+  height: 50px;
+  margin-top: 30px;
 }
 
 .confirm-btn.disabled {
