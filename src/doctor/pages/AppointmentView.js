@@ -226,63 +226,29 @@ export default function AppointmentView() {
   const [appointments, setAppointments] = useState([]);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [selectedAppointment, setSelectedAppointment] = useState(null);
+  const [selectedPatient, setSelectedPatient] = useState(null);
+
   // Fetch data on component mount
   useEffect(() => {
     fetchAppointments();
   }, []);
 
-  // const fetchAppointments = async () => {
-  //   try {
-  //     setLoading(true);
-  //     const token = localStorage.getItem("token");
-
-  //     // Verify the URL and endpoint match your backend routes
-  //     const res = await fetch(`${process.env.REACT_APP_API_URL}/api/doctor/appointment`, {
-  //       method: "GET",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //         Authorization: `Bearer ${token}`,
-  //       },
-  //     });
-
-  //     if (!res.ok) throw new Error("Failed to fetch appointments");
-
-  //     const data = await res.json();
-
-  //     // Mapping backend data to frontend state
-  //     const formatted = data.map((item) => ({
-  //       id: item._id,
-  //       name: item.patient?.name || "Unknown Patient",
-  //       time: item.time,
-  //       date: new Date(item.date).toLocaleDateString(),
-  //       doctor: "You",
-  //       status: item.status || "Pending",
-  //       reason: item.reason || "-",
-  //       // Generates a clean avatar based on name if no image exists
-  //       img: `https://ui-avatars.com/api/?name=${item.patient?.name || 'U'}&background=random&color=fff`,
-  //     }));
-
-  //     setAppointments(formatted);
-  //   } catch (error) {
-  //     console.error("Fetch Error:", error);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
-const fetchAppointments = async () => {
+  const fetchAppointments = async () => {
   try {
     setLoading(true);
 
     const token = localStorage.getItem("token");
 
     const res = await fetch(
-      `${process.env.REACT_APP_API_URL}/api/appointment/all`,
+      `${process.env.REACT_APP_API_URL}/api/appointment/doctor`,
       {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
+          credentials:"include",
       }
     );
 
@@ -291,16 +257,19 @@ const fetchAppointments = async () => {
     console.log("API DATA 👉", data); // 🔥 DEBUG
 
     // ✅ Convert backend data → frontend format
-    const formatted = data.map((item) => ({
-      id: item._id,
-      name: `${item.patient?.firstName || ""} ${item.patient?.lastName || ""}`.trim() || "Unknown",
-      time: item.time,
-      date: new Date(item.date).toLocaleDateString(),
-      doctor: "You",
-      status: item.status || "Pending",
-      reason: item.reason || "-",
-      img: `https://ui-avatars.com/api/?name=${item.patient?.firstName || 'U'}&background=random&color=fff`,
-    }));
+      const appointmentArray = Array.isArray(data)
+  ? data
+  : data.appointments || [];
+
+const formatted = appointmentArray.map((item) => ({
+  id: item._id,
+  name: `${item.patient?.firstName || ""} ${item.patient?.lastName || ""}`.trim() || "Unknown",
+  time: item.time,
+  date: new Date(item.date).toLocaleDateString(),
+  status: (item.status),
+  reason: item.reason || "-",
+  img: `https://ui-avatars.com/api/?name=${item.patient?.firstName || 'U'}&background=random&color=fff`,
+}));
 
     setAppointments(formatted);
 
@@ -318,7 +287,7 @@ const fetchAppointments = async () => {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+          "Authorization": `Bearer ${token}`,
         },
         body: JSON.stringify({ status: newStatus }),
       });
@@ -382,41 +351,29 @@ const fetchAppointments = async () => {
             <table>
               <thead>
                 <tr>
-                  <th><input type="checkbox" /></th>
                   <th>Patient</th>
                   <th>Time</th>
                   <th>Date</th>
-                  <th>Doctor</th>
                   <th>Status</th>
-                  <th>Reason</th>
-                  <th>Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {appointments.length > 0 ? (
                   appointments.map((item) => (
-                    <tr key={item.id}>
-                      <td><input type="checkbox" /></td>
+                    <tr key={item.id}
+                      style={{ cursor: "pointer" }}
+                      onClick={() => setSelectedAppointment(item)}
+                    >
                       <td className="name-cell">
                         <img src={item.img} alt="" style={{ width: "30px", borderRadius: "50%", marginRight: "10px" }} />
                         {item.name}
                       </td>
                       <td>{item.time}</td>
                       <td>{item.date}</td>
-                      <td>{item.doctor}</td>
                       <td>
                         <span className={`status ${item.status.toLowerCase()}`}>
                           {item.status}
                         </span>
-                      </td>
-                      <td>{item.reason}</td>
-                      <td className="action-cell">
-                        {item.status === "Pending" && (
-                          <div className="btn-group">
-                            <button className="accept-btn" onClick={() => handleStatus(item.id, "Accepted")}>✔</button>
-                            <button className="reject-btn" onClick={() => handleStatus(item.id, "Rejected")}>✖</button>
-                          </div>
-                        )}
                       </td>
                     </tr>
                   ))
@@ -428,6 +385,38 @@ const fetchAppointments = async () => {
               </tbody>
             </table>
           )}
+          {selectedAppointment && (
+  <div className="modal-overlay" onClick={() => setSelectedAppointment(null)}>
+    <div className="modal" onClick={(e) => e.stopPropagation()}>
+
+      <div className="modal-header">
+        <h3>Appointment Details</h3>
+        <button onClick={() => setSelectedAppointment(null)}>✕</button>
+      </div>
+
+      <div className="modal-body">
+
+        <div className="modal-user">
+          <img src={selectedAppointment.img} alt="" />
+          <h4>{selectedAppointment.name}</h4>
+        </div>
+
+        <div className="modal-info">
+          <p><b>Date:</b> {selectedAppointment.date}</p>
+          <p><b>Time:</b> {selectedAppointment.time}</p>
+          <p><b>Status:</b> {selectedAppointment.status}</p>
+          <p><b>Reason:</b> {selectedAppointment.reason}</p>
+        </div>
+
+      </div>
+
+      <div className="modal-footer">
+        <button onClick={() => setSelectedAppointment(null)}>Close</button>
+      </div>
+
+    </div>
+  </div>
+)}
         </div>
       </div>
     </>
