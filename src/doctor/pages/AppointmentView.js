@@ -226,51 +226,90 @@ export default function AppointmentView() {
   const [appointments, setAppointments] = useState([]);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [loading, setLoading] = useState(true);
-
   // Fetch data on component mount
   useEffect(() => {
     fetchAppointments();
   }, []);
 
-  const fetchAppointments = async () => {
-    try {
-      setLoading(true);
-      const token = localStorage.getItem("token");
+  // const fetchAppointments = async () => {
+  //   try {
+  //     setLoading(true);
+  //     const token = localStorage.getItem("token");
 
-      // Verify the URL and endpoint match your backend routes
-      const res = await fetch(`${process.env.REACT_APP_API_URL}/api/doctor/appointment`, {
+  //     // Verify the URL and endpoint match your backend routes
+  //     const res = await fetch(`${process.env.REACT_APP_API_URL}/api/doctor/appointment`, {
+  //       method: "GET",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //         Authorization: `Bearer ${token}`,
+  //       },
+  //     });
+
+  //     if (!res.ok) throw new Error("Failed to fetch appointments");
+
+  //     const data = await res.json();
+
+  //     // Mapping backend data to frontend state
+  //     const formatted = data.map((item) => ({
+  //       id: item._id,
+  //       name: item.patient?.name || "Unknown Patient",
+  //       time: item.time,
+  //       date: new Date(item.date).toLocaleDateString(),
+  //       doctor: "You",
+  //       status: item.status || "Pending",
+  //       reason: item.reason || "-",
+  //       // Generates a clean avatar based on name if no image exists
+  //       img: `https://ui-avatars.com/api/?name=${item.patient?.name || 'U'}&background=random&color=fff`,
+  //     }));
+
+  //     setAppointments(formatted);
+  //   } catch (error) {
+  //     console.error("Fetch Error:", error);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+const fetchAppointments = async () => {
+  try {
+    setLoading(true);
+
+    const token = localStorage.getItem("token");
+
+    const res = await fetch(
+      `${process.env.REACT_APP_API_URL}/api/appointment/all`,
+      {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-      });
+      }
+    );
 
-      if (!res.ok) throw new Error("Failed to fetch appointments");
+    const data = await res.json();
 
-      const data = await res.json();
+    console.log("API DATA 👉", data); // 🔥 DEBUG
 
-      // Mapping backend data to frontend state
-      const formatted = data.map((item) => ({
-        id: item._id,
-        name: item.patient?.name || "Unknown Patient",
-        time: item.time,
-        date: new Date(item.date).toLocaleDateString(),
-        doctor: "You",
-        status: item.status || "Pending",
-        reason: item.reason || "-",
-        // Generates a clean avatar based on name if no image exists
-        img: `https://ui-avatars.com/api/?name=${item.patient?.name || 'U'}&background=random&color=fff`,
-      }));
+    // ✅ Convert backend data → frontend format
+    const formatted = data.map((item) => ({
+      id: item._id,
+      name: `${item.patient?.firstName || ""} ${item.patient?.lastName || ""}`.trim() || "Unknown",
+      time: item.time,
+      date: new Date(item.date).toLocaleDateString(),
+      doctor: "You",
+      status: item.status || "Pending",
+      reason: item.reason || "-",
+      img: `https://ui-avatars.com/api/?name=${item.patient?.firstName || 'U'}&background=random&color=fff`,
+    }));
 
-      setAppointments(formatted);
-    } catch (error) {
-      console.error("Fetch Error:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
+    setAppointments(formatted);
 
+  } catch (error) {
+    console.error("Fetch Error:", error);
+  } finally {
+    setLoading(false);
+  }
+};
   const handleStatus = async (id, newStatus) => {
     try {
       const token = localStorage.getItem("token");

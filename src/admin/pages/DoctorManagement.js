@@ -102,15 +102,25 @@ const handleSuspend = async (id) => {
   const handleReset = () => { setSearch(""); setSpecFilter("All"); setExpFilter("all"); };
 
   const filtered = doctors.filter(d => {
-    const q = search.toLowerCase();
-    const matchSearch = !q ||
-      d.fullname.toLowerCase().includes(q) ||
-      d.email.toLowerCase().includes(q) ||
-      d.phone.includes(q);
-    const matchSpec = specFilter === "All" || d.specialization === specFilter;
-    const matchExpRange = matchExp(d.experience, expFilter);
-    return matchSearch && matchSpec && matchExpRange;
-  });
+  const q = search.toLowerCase();
+
+  const matchSearch =
+    !q ||
+    d.fullname.toLowerCase().includes(q) ||
+    d.email.toLowerCase().includes(q) ||
+    d.phone.includes(q);
+
+  const matchSpec =
+    specFilter === "All" || d.specialization === specFilter;
+
+  const matchExpRange =
+    matchExp(d.experience, expFilter);
+
+  // ✅ ADD THIS LINE (important)
+  const matchStatus = d.status.toLowerCase() === "approved";
+
+  return matchSearch && matchSpec && matchExpRange && matchStatus;
+});
 
   const handleDelete = () => {
     setDoctors(prev => prev.filter(d => d.id !== deleteId));

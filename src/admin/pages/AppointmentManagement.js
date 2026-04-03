@@ -143,7 +143,11 @@ const AppointmentManagement = () => {
                   <td>{i + 1}</td>
                   <td className="am-patient">{a.patient?.firstName} {a.patient?.lastName}</td>
                   <td className="am-doctor">{a.doctor}</td>
-                  <td>{a.date}</td>
+                  <td>{new Date(a.date).toLocaleDateString("en-IN",{
+                    day : "2-digit",
+                    month:"short",
+                    year:"numeric",
+                  })}</td>
                   <td>{a.time}</td>
                   <td><span className={statusClass[a.status]}>{a.status}</span></td>
                 </tr>

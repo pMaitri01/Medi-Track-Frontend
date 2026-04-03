@@ -169,12 +169,14 @@ const PatientManagement = () => {
                   <th>Mobile</th>
                   <th>City</th>
                   <th>Age / Gender</th>
-                  <th>Action</th>
                 </tr>
               </thead>
               <tbody>
                 {filtered.map((p, i) => (
-                  <tr key={p.id}>
+                  <tr key={p.id}
+                    className="pm-row-clickable"
+                    onClick={() => setViewPatient(p)}
+                  >
                     <td>{i + 1}</td>
                     <td>
                       <div className="pm-patient-cell">
@@ -188,12 +190,6 @@ const PatientManagement = () => {
                     <td>{p.mobile}</td>
                     <td>{p.city}</td>
                     <td>{p.age} yrs / {p.gender}</td>
-                    <td>
-                      <button className="pm-btn pm-btn-view"
-                        onClick={() => setViewPatient(p)}>
-                        View
-                      </button>
-                    </td>
                   </tr>
                 ))}
               </tbody>

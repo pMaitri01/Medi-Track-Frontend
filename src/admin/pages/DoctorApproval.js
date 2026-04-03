@@ -1,19 +1,9 @@
 import { useState, useEffect } from "react";
 import "../css/DoctorApproval.css";
+import userpic from "../../doctor/images/user.png"
 
 const PER_PAGE    = 5;
 const STATUS_TABS = ["All", "Pending", "Approved", "Rejected"];
-
-const dummyDoctors = [
-  { id: 1, name: "Dr. Amit Sharma",   email: "amit@mail.com",   mobile: "9876543210", specialization: "Cardiologist",   experience: 12, qualification: "MBBS, MD",  regNo: "MCI-2345", gender: "Male",   dob: "15 Mar 1980", hospital: "City Heart Clinic",   city: "Surat",       state: "Gujarat", status: "Pending",  about: "Experienced cardiologist with 12 years in interventional cardiology.", photo: "https://randomuser.me/api/portraits/men/45.jpg"   },
-  { id: 2, name: "Dr. Priya Patel",   email: "priya@mail.com",  mobile: "9123456780", specialization: "Neurologist",    experience: 8,  qualification: "MBBS, DM",  regNo: "MCI-3456", gender: "Female", dob: "22 Jul 1985", hospital: "NeuroLife Hospital",   city: "Ahmedabad",   state: "Gujarat", status: "Pending",  about: "Specialist in neurological disorders and stroke management.", photo: "https://randomuser.me/api/portraits/women/65.jpg" },
-  { id: 3, name: "Dr. Rahul Mehta",   email: "rahul@mail.com",  mobile: "9988776655", specialization: "Orthopedic",     experience: 5,  qualification: "MBBS, MS",  regNo: "MCI-4567", gender: "Male",   dob: "10 Jan 1990", hospital: "BoneCare Center",      city: "Vadodara",    state: "Gujarat", status: "Approved", about: "Orthopedic surgeon specializing in joint replacement.", photo: "https://randomuser.me/api/portraits/men/32.jpg"   },
-  { id: 4, name: "Dr. Sneha Joshi",   email: "sneha@mail.com",  mobile: "9871234560", specialization: "Dermatologist",  experience: 10, qualification: "MBBS, DVD", regNo: "MCI-5678", gender: "Female", dob: "05 Sep 1983", hospital: "SkinCare Clinic",      city: "Surat",       state: "Gujarat", status: "Pending",  about: "Dermatologist with expertise in cosmetic and clinical dermatology.", photo: "https://randomuser.me/api/portraits/women/44.jpg" },
-  { id: 5, name: "Dr. Karan Desai",   email: "karan@mail.com",  mobile: "9765432100", specialization: "Pediatrician",   experience: 7,  qualification: "MBBS, DCH", regNo: "MCI-6789", gender: "Male",   dob: "18 Apr 1987", hospital: "KidsCare Hospital",    city: "Rajkot",      state: "Gujarat", status: "Rejected", about: "Pediatrician focused on child health and immunization.", photo: "https://randomuser.me/api/portraits/men/55.jpg"   },
-  { id: 6, name: "Dr. Meera Shah",    email: "meera@mail.com",  mobile: "9654321098", specialization: "Gynecologist",   experience: 15, qualification: "MBBS, MS",  regNo: "MCI-7890", gender: "Female", dob: "30 Nov 1978", hospital: "WomenCare Hospital",   city: "Ahmedabad",   state: "Gujarat", status: "Pending",  about: "Senior gynecologist with 15 years in maternal and fetal medicine.", photo: "https://randomuser.me/api/portraits/women/33.jpg" },
-  { id: 7, name: "Dr. Rohan Trivedi", email: "rohan@mail.com",  mobile: "9543210987", specialization: "Cardiologist",   experience: 6,  qualification: "MBBS, MD",  regNo: "MCI-8901", gender: "Male",   dob: "12 Jun 1989", hospital: "HeartCare Clinic",     city: "Gandhinagar", state: "Gujarat", status: "Pending",  about: "Cardiologist specializing in preventive cardiology.", photo: "https://randomuser.me/api/portraits/men/22.jpg"   },
-  { id: 8, name: "Dr. Anita Verma",   email: "anita@mail.com",  mobile: "9432109876", specialization: "Neurologist",    experience: 9,  qualification: "MBBS, DM",  regNo: "MCI-9012", gender: "Female", dob: "25 Feb 1984", hospital: "BrainCare Institute",  city: "Surat",       state: "Gujarat", status: "Approved", about: "Neurologist with expertise in epilepsy and movement disorders.", photo: "https://randomuser.me/api/portraits/women/55.jpg" },
-];
 
 const statusClass = {
   Pending:  "da-badge da-badge-pending",
@@ -22,7 +12,7 @@ const statusClass = {
 };
 
 const DoctorApproval = () => {
-  const [doctors, setDoctors]           = useState(dummyDoctors);
+  const [doctors, setDoctors] = useState([]);
   const [statusFilter, setStatusFilter] = useState("All");
   const [page, setPage]                 = useState(1);
   const [selectedDoc, setSelectedDoc]   = useState(null); // right panel
@@ -70,7 +60,7 @@ const DoctorApproval = () => {
   };
 
   // ── Filter + paginate ──
-  const filtered   = doctors.filter(d => statusFilter === "All" || d.status === statusFilter);
+  const filtered = doctors.filter(d => d.status === "pending");
   const totalPages = Math.ceil(filtered.length / PER_PAGE);
   const paginated  = filtered.slice((page - 1) * PER_PAGE, page * PER_PAGE);
 
@@ -81,7 +71,45 @@ const DoctorApproval = () => {
     pending:  doctors.filter(d => d.status === "Pending").length,
     approved: doctors.filter(d => d.status === "Approved").length,
   };
+  useEffect(() => {
+  const fetchDoctors = async () => {
+    try {
+      const res = await fetch("http://localhost:5000/api/doctor/all", {
+        method: "GET",
+        credentials: "include",
+      });
 
+      const data = await res.json();
+
+      if (data.success) {
+        const formatted = data.doctors.map(doc => ({
+          id: doc._id,
+          name: doc.fullName,
+          email: doc.email,
+          mobile: doc.mobile,
+          specialization: doc.specialization,
+          experience: doc.experience,
+          qualification: doc.qualification,
+          regNo: doc.licenseNumber,
+          gender: doc.gender,
+          dob: doc.dob,
+          hospital: doc.clinicName,
+          city: doc.city,
+          state: doc.state,
+          about: doc.about,
+          status: (doc.status || "pending").toLowerCase(),
+          photo: `${userpic}` // optional
+        }));
+
+        setDoctors(formatted);
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  fetchDoctors();
+}, []);
   return (
     <div className="da-page">
 
