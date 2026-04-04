@@ -5,14 +5,37 @@ import defaultDoctorImg from '../images/user.png';
 
 // ── Map backend doctor object to UI format ──
 const mapDoctor = (doc) => ({
-  id:     doc._id,
-  name:   doc.fullName,
-  spec:   doc.specialization  || "General Physician",
-  exp:    doc.experience       || 0,
-  city:   doc.city             || "Surat",
-  gender: doc.gender           || "Male",
-  about:  doc.about            || "Experienced doctor with excellent patient care.",
-  rank:   doc.designation      || "Consultant",
+  // id: doc._id,
+  // name: doc.fullName,
+  // spec: doc.specialization,
+  // city: doc.city,
+  // gender: doc.gender,
+  // about: doc.about,
+  // rank: doc.designation,
+  // exp: doc.experience, // ✅ ADD THIS
+
+   id: doc._id,
+  name: doc.fullName,
+  spec: doc.specialization,
+  city: doc.city,
+  state: doc.state,
+  gender: doc.gender,
+  about: doc.about,
+  rank: doc.designation,
+
+  exp: doc.experience,
+  qualification: doc.qualification,
+  email: doc.email,
+  mobile: doc.mobile,
+
+  clinicName: doc.clinicName,
+  clinicAddress: doc.clinicAddress,
+
+  workingDays: doc.workingDays,
+  workingHours: doc.workingHours,
+
+  licenseNumber: doc.licenseNumber,
+  emergencyContact: doc.emergencyContact,
 });
 
 const DoctorList = () => {
@@ -24,17 +47,20 @@ const DoctorList = () => {
   const [showBooking, setShowBooking] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
   const [errors, setErrors] = useState({});
+  const [error, setError] = useState("");
+  const [isBooked, setIsBooked] = useState(false);
+  const [showDetails, setShowDetails] = useState(false);
 
   // ── Fetch doctors from backend on mount ──
   useEffect(() => {
     const fetchDoctors = async () => {
       try {
         const res = await fetch(
-          `${process.env.REACT_APP_API_URL}/api/doctor/names`
+          `${process.env.REACT_APP_API_URL}/api/doctor/all`
         );
         if (!res.ok) throw new Error("Failed to fetch doctors.");
         const data = await res.json();
-        setDoctors(data.map(mapDoctor));
+        setDoctors(data.doctors.map(mapDoctor));      
       } catch (err) {
         console.error("DoctorList fetch error:", err);
         setFetchError("Unable to load doctors. Please try again later.");
@@ -116,19 +142,42 @@ const DoctorList = () => {
   setErrors(newErrors);
   return Object.keys(newErrors).length === 0;
 };
-  const handleConfirmBooking = () => {
+const handleConfirmBooking = async () => {
   if (!validateBooking()) return;
 
-  setShowBooking(false);
-  setShowSuccess(true);
+  try {
+    const user = JSON.parse(localStorage.getItem("user") || "{}");
 
-  setTimeout(() => {
-    setShowSuccess(false);
-    setBookingDate("");
-    setSelectedSlot("");
-    setErrors({});
-  }, 3000);
-  };
+    const response = await fetch(
+      `${process.env.REACT_APP_API_URL}/api/appointment`, // ✅ fixed URL
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },credentials:"include",
+        body: JSON.stringify({
+          doctor: selectedDoctor.id,
+          patient: user._id, // ✅ required
+          date: bookingDate,
+          time: selectedSlot,
+        }),
+      }
+    );
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.message);
+    }
+
+    setShowBooking(false);
+    setShowSuccess(true);
+
+  } catch (err) {
+    console.error(err);
+    setError(err.message);
+  }
+};
 
   return (
     <div className="app-container">
@@ -255,7 +304,10 @@ const DoctorList = () => {
         <div className="doc-footer">
           <button
             className="DL-btn-secondary"
-            onClick={() => setSelectedDoctor(doc)}
+            onClick={() => {
+              setSelectedDoctor(doc);
+              setShowDetails(true);
+            }}
           >
             👁 Details
           </button>
@@ -367,15 +419,125 @@ const DoctorList = () => {
   </div>
 )}
 
-      {showSuccess && (
-        <div className="modal-overlay">
-          <div className="success-card">
-            <div className="success-icon">✅</div>
-            <h2>Appointment Confirmed</h2>
-            <p>Your visit has been successfully scheduled.</p>
-          </div>
-        </div>
-      )}
+  {showSuccess && (
+  <div className="modal-overlay">
+    <div className="success-card">
+      {/* Cancel/Close button at top right */}
+      <button 
+        className="close-btn-success" 
+        onClick={() => setShowSuccess(false)}
+      >
+        ✖
+      </button>
+
+      <div className="success-icon">✅</div>
+      <h2>Appointment Confirmed</h2>
+      <p>Your visit has been successfully scheduled.</p>
+      
+      {/* Optional: Add an 'OK' button to make it user-friendly */}
+      <button 
+        className="DL-main-search-btn" 
+        style={{ marginTop: '20px' }} 
+        onClick={() => setShowSuccess(false)}
+      >
+        Done
+      </button>
+    </div>
+  </div>
+)}
+
+{showDetails && selectedDoctor && (
+  <div className="modal-overlay">
+    <div className="details-modal">
+
+      {/* HEADER */}
+      <div className="booking-header">
+        <h3>Doctor Details</h3>
+        <button onClick={() => setShowDetails(false)}>✖</button>
+      </div>
+
+      {/* BODY */}
+      {/* <div className="details-body">
+
+        <img 
+          src={defaultDoctorImg} 
+          alt="doctor" 
+          style={{ width: "120px", borderRadius: "50%" }}
+        />
+
+        <h2>{selectedDoctor.name}</h2>
+        <p><strong>Specialization:</strong> {selectedDoctor.spec}</p>
+        <p><strong>Experience:</strong> {selectedDoctor.exp} years</p>
+        <p><strong>City:</strong> {selectedDoctor.city}</p>
+        <p><strong>Gender:</strong> {selectedDoctor.gender}</p>
+        <p><strong>Designation:</strong> {selectedDoctor.rank}</p>
+        <p><strong>About:</strong> {selectedDoctor.about}</p>
+
+      </div> */}
+
+      <div className="details-body">
+  <img 
+    src={defaultDoctorImg} 
+    alt="doctor" 
+    style={{ width: "100px", borderRadius: "50%", marginBottom: '10px' }}
+  />
+  <h2>{selectedDoctor.name}</h2>
+  <span className="spec-tag">{selectedDoctor.spec}</span>
+
+  <div className="info-sections" style={{ textAlign: 'left', marginTop: '20px' }}>
+    
+    {/* Section 1: Professional Details */}
+    <div className="info-group">
+      <h4 style={{ color: '#0d9488', borderBottom: '1px solid #eee' }}>Professional Info</h4>
+      <p><strong>Designation:</strong> {selectedDoctor.rank}</p>
+      <p><strong>Experience:</strong> {selectedDoctor.exp} years</p>
+      <p><strong>Qualification:</strong> {selectedDoctor.qualification}</p>
+      <p><strong>License No:</strong> {selectedDoctor.licenseNumber}</p>
+    </div>
+
+    {/* Section 2: Contact Details */}
+    <div className="info-group" style={{ marginTop: '15px' }}>
+      <h4 style={{ color: '#0d9488', borderBottom: '1px solid #eee' }}>Contact & Location</h4>
+      <p><strong>Email:</strong> {selectedDoctor.email}</p>
+      <p><strong>Mobile:</strong> {selectedDoctor.mobile}</p>
+      <p><strong>Location:</strong> {selectedDoctor.city}, {selectedDoctor.state}</p>
+      <p><strong>Emergency:</strong> {selectedDoctor.emergencyContact}</p>
+    </div>
+
+    {/* Section 3: Clinic & Availability */}
+    <div className="info-group" style={{ marginTop: '15px' }}>
+      <h4 style={{ color: '#0d9488', borderBottom: '1px solid #eee' }}>Clinic Details</h4>
+      <p><strong>Clinic:</strong> {selectedDoctor.clinicName}</p>
+      <p><strong>Address:</strong> {selectedDoctor.clinicAddress}</p>
+      <p><strong>Working Days:</strong> {selectedDoctor.workingDays}</p>
+      <p><strong>Hours:</strong> {selectedDoctor.workingHours}</p>
+    </div>
+
+    {/* Section 4: About */}
+    <div className="info-group" style={{ marginTop: '15px' }}>
+      <h4 style={{ color: '#0d9488', borderBottom: '1px solid #eee' }}>About</h4>
+      <p style={{ fontStyle: 'italic', color: '#64748b' }}>{selectedDoctor.about}</p>
+    </div>
+
+  </div>
+</div>
+
+      {/* FOOTER */}
+      <div className="booking-footer">
+        <button 
+          className="btn-primary"
+          onClick={() => {
+            setShowDetails(false);
+            setShowBooking(true);
+          }}
+        >
+          📅 Book Appointment
+        </button>
+      </div>
+
+    </div>
+  </div>
+)}
     </div>
   );
 };

@@ -424,3 +424,68 @@ button {
 .universal-search-input:focus {
   border-color: #008080; /* Match your theme color */
 }
+/* Ensure the success card can contain absolute elements */
+.success-card {
+  position: relative; 
+  padding: 40px 30px;
+  background: white;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+  min-width: 350px;
+  animation: fadeInScale 0.3s ease-out;
+}
+
+/* The Top-Right Cancel Button */
+.close-btn-success {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  color: #64748b; /* Subtle grey */
+  cursor: pointer;
+  transition: color 0.2s, transform 0.2s;
+  padding: 5px;
+  line-height: 1;
+}
+
+.close-btn-success:hover {
+  color: #ef4444; /* Turns red on hover */
+  transform: scale(1.1);
+}
+
+/* Smooth entry animation */
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.details-modal{
+  background-color: white !important;
+  width: 500px;
+  border-radius: 8px;
+}
+.details-body {
+  padding: 2rem;
+  max-height: 70vh; /* Limits height to 70% of screen */
+  overflow-y: auto;  /* Adds a scrollbar if content is too long */
+}
+
+.info-group h4 {
+  margin-bottom: 8px;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.info-group p {
+  margin: 4px 0 !important;
+}
