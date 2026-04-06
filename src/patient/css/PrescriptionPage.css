@@ -1,0 +1,499 @@
+/* ── Variables ───────────────────────────────────────────────────────────── */
+:root {
+  --rx-primary: #2ea88c;
+  --rx-bg:      #f8fafc;
+  --rx-border:  #e2e8f0;
+  --rx-shadow:  0 4px 10px rgba(0, 0, 0, 0.06);
+}
+
+/* ── Page shell ─────────────────────────────────────────────────────────── */
+.rx-page {
+  min-height: 100vh;
+  background: var(--rx-bg);
+  font-family: sans-serif;
+}
+
+.rx-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px 60px;
+}
+
+/* ── Page heading bar ───────────────────────────────────────────────────── */
+.rx-page-nav {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: white;
+  border-radius: 12px;
+  border: 1px solid var(--rx-border);
+  padding: 20px 24px;
+  margin-top: 20px;
+  margin-bottom: 24px;
+  min-height: 80px;
+}
+
+.rx-page-icon { font-size: 34px; }
+
+.rx-heading {
+  font-size: 30px;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0;
+}
+
+/* ── Filter card ────────────────────────────────────────────────────────── */
+.rx-filter-card {
+  background: white;
+  border-radius: 12px;
+  border: 1px solid var(--rx-border);
+  padding: 16px 20px;
+  margin-bottom: 20px;
+  box-shadow: var(--rx-shadow);
+}
+
+.rx-filter-row {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.rx-search {
+  flex: 1;
+  min-width: 200px;
+  padding: 10px 14px;
+  border: 1px solid var(--rx-border);
+  border-radius: 8px;
+  font-size: 14px;
+  background: #f8fafc;
+  outline: none;
+}
+.rx-search:focus { border-color: var(--rx-primary); }
+
+.rx-select {
+  padding: 10px 14px;
+  border: 1px solid var(--rx-border);
+  border-radius: 8px;
+  font-size: 14px;
+  background: #f8fafc;
+  cursor: pointer;
+  outline: none;
+}
+
+/* ── Tabs ───────────────────────────────────────────────────────────────── */
+.rx-tabs {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 22px;
+  flex-wrap: wrap;
+}
+
+.rx-tab {
+  padding: 9px 22px;
+  border: 1px solid var(--rx-border);
+  border-radius: 20px;
+  background: white;
+  font-size: 13px;
+  font-weight: 500;
+  color: #64748b;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.rx-tab:hover { border-color: var(--rx-primary); color: var(--rx-primary); }
+.rx-tab--active {
+  background: var(--rx-primary);
+  color: white;
+  border-color: var(--rx-primary);
+}
+
+/* ── Card grid ──────────────────────────────────────────────────────────── */
+.rx-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+/* ── Prescription Card ──────────────────────────────────────────────────── */
+.rx-card {
+  background: white;
+  border: 1px solid var(--rx-border);
+  border-radius: 12px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  box-shadow: var(--rx-shadow);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.rx-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.09);
+}
+
+.rx-card-top {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
+
+.rx-doc-img {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.rx-card-info { flex: 1; }
+
+.rx-doctor-name {
+  font-size: 15px;
+  font-weight: 600;
+  color: #1e293b;
+  margin: 0 0 5px;
+}
+
+/* spec tag — same as DoctorList */
+.rx-spec-tag {
+  display: inline-block;
+  background: #e0f2fe;
+  color: #0369a1;
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-size: 12px;
+}
+
+/* ── Status badge ───────────────────────────────────────────────────────── */
+.rx-badge {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 20px;
+  white-space: nowrap;
+  align-self: flex-start;
+}
+.rx-badge--active { background: #d1fae5; color: #065f46; }
+.rx-badge--past   { background: #f1f5f9; color: #64748b; }
+
+/* ── Card meta ──────────────────────────────────────────────────────────── */
+.rx-card-meta {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  font-size: 13px;
+  color: #64748b;
+}
+
+.rx-medicine-summary {
+  font-size: 13px;
+  color: #475569;
+  background: #f8fafc;
+  border-radius: 8px;
+  padding: 8px 12px;
+  margin: 0;
+}
+
+/* ── Card buttons ───────────────────────────────────────────────────────── */
+.rx-card-actions {
+  display: flex;
+  gap: 10px;
+  padding-top: 10px;
+  border-top: 1px solid var(--rx-border);
+}
+
+.rx-btn {
+  flex: 1;
+  padding: 9px 0;
+  border: none;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+.rx-btn:hover { opacity: 0.85; }
+.rx-btn--view     { background: var(--rx-primary); color: white; }
+.rx-btn--download { background: #e0f2fe; color: #0369a1; }
+.rx-btn--close    { background: #f1f5f9; color: #475569; }
+
+/* ── Empty state ────────────────────────────────────────────────────────── */
+.rx-empty {
+  text-align: center;
+  padding: 60px 20px;
+  color: #94a3b8;
+  font-size: 15px;
+}
+
+/* ── Modal overlay ──────────────────────────────────────────────────────── */
+.rx-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  padding: 20px;
+}
+
+.rx-modal {
+  background: white;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 580px;
+  max-height: 90vh;
+  overflow-y: auto;
+  animation: rx-fadeIn 0.25s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+@keyframes rx-fadeIn {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Modal header ───────────────────────────────────────────────────────── */
+.rx-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 24px 16px;
+  border-bottom: 1px solid var(--rx-border);
+}
+
+.rx-modal-header-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.rx-modal-img {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.rx-modal-header h2 {
+  font-size: 17px;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0 0 3px;
+}
+
+.rx-modal-spec {
+  font-size: 13px;
+  color: #64748b;
+  margin: 0;
+}
+
+.rx-modal-close {
+  background: none;
+  border: none;
+  font-size: 18px;
+  color: #94a3b8;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: color 0.2s;
+  align-self: flex-start;
+}
+.rx-modal-close:hover { color: #ef4444; }
+
+/* ── Modal meta strip ───────────────────────────────────────────────────── */
+.rx-modal-meta {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  background: #f8fafc;
+  padding: 14px 24px;
+  border-bottom: 1px solid var(--rx-border);
+}
+
+.rx-modal-meta-item {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.rx-modal-meta-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* ── Modal body ─────────────────────────────────────────────────────────── */
+.rx-modal-body {
+  padding: 20px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.rx-modal-section-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin: 0 0 12px;
+}
+
+/* ── Medicine table ─────────────────────────────────────────────────────── */
+.rx-table-wrap {
+  overflow-x: auto;
+  border-radius: 10px;
+  border: 1px solid var(--rx-border);
+}
+
+.rx-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.rx-table th {
+  background: #f8fafc;
+  padding: 10px 14px;
+  text-align: left;
+  font-weight: 600;
+  color: #64748b;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.rx-table td {
+  padding: 10px 14px;
+  border-top: 1px solid var(--rx-border);
+  color: #374151;
+}
+
+.rx-table tr:hover td { background: #f8fafc; }
+
+/* ── Timing groups ──────────────────────────────────────────────────────── */
+.rx-timing-groups {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.rx-timing-group {
+  flex: 1;
+  min-width: 130px;
+  background: #f8fafc;
+  border-radius: 10px;
+  padding: 12px 14px;
+  border: 1px solid var(--rx-border);
+}
+
+.rx-timing-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #374151;
+  margin: 0 0 8px;
+}
+
+.rx-timing-pills {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.rx-timing-pill {
+  background: white;
+  border: 1px solid var(--rx-border);
+  border-radius: 6px;
+  padding: 5px 10px;
+  font-size: 12px;
+  color: #475569;
+}
+
+/* ── Doctor notes ───────────────────────────────────────────────────────── */
+.rx-notes-box {
+  background: #fffbeb;
+  border: 1px solid #fde68a;
+  border-radius: 10px;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.rx-note-item {
+  font-size: 13px;
+  color: #92400e;
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* ── Reminder toggle ────────────────────────────────────────────────────── */
+.rx-reminder-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  border-radius: 10px;
+  padding: 12px 16px;
+}
+
+.rx-reminder-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #065f46;
+}
+
+.rx-toggle {
+  width: 46px;
+  height: 26px;
+  border-radius: 13px;
+  background: #cbd5e1;
+  border: none;
+  cursor: pointer;
+  position: relative;
+  transition: background 0.25s;
+  padding: 0;
+  flex-shrink: 0;
+}
+
+.rx-toggle--on { background: var(--rx-primary); }
+
+.rx-toggle-knob {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: white;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+  transition: left 0.25s;
+}
+
+.rx-toggle--on .rx-toggle-knob { left: 23px; }
+
+/* ── Modal footer ───────────────────────────────────────────────────────── */
+.rx-modal-footer {
+  display: flex;
+  gap: 10px;
+  padding: 16px 24px;
+  border-top: 1px solid var(--rx-border);
+}
+
+/* ── Responsive ─────────────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .rx-content  { padding: 0 16px 40px; }
+  .rx-heading  { font-size: 22px; }
+  .rx-grid     { grid-template-columns: 1fr; }
+  .rx-filter-row { flex-direction: column; }
+  .rx-search, .rx-select { width: 100%; }
+  .rx-card-actions { flex-direction: column; }
+  .rx-timing-groups { flex-direction: column; }
+  .rx-modal-footer  { flex-direction: column; }
+  .rx-modal-meta    { gap: 12px; }
+}

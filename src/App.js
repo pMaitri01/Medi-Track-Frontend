@@ -25,6 +25,8 @@ import PatientHome         from './patient/pages/PatientHome';
 import DoctorList          from './patient/pages/DoctorList';
 import BookAppointment     from './patient/pages/BookAppointment';
 import PatientAppointment from './patient/pages/PatientAppointment';
+import MedicalRecords     from './patient/pages/MedicalRecords';
+import PrescriptionPage   from './patient/pages/PrescriptionPage';
 
 // ─────────────────────────────────────────────
 // DOCTOR FLOW
@@ -73,6 +75,8 @@ function App() {
         <Route path="/PatientProfileSetup" element={<PatientProfileSetup />} />
         <Route path="/DoctorList"          element={<DoctorList />} />
         <Route path="/PatientAppointment" element={<PatientAppointment />} />
+        <Route path="/records"            element={<MedicalRecords />} />
+        <Route path="/prescriptions"      element={<PrescriptionPage />} />
         <Route path="/PatientHome"
           element={<ProtectedRoute role="patient"><PatientHome /></ProtectedRoute>} />
         <Route path="/BookAppointment"
