@@ -24,6 +24,7 @@ import PatientProfileSetup from './patient/pages/PatientProfileSetup';
 import PatientHome         from './patient/pages/PatientHome';
 import DoctorList          from './patient/pages/DoctorList';
 import BookAppointment     from './patient/pages/BookAppointment';
+import PatientAppointment from './patient/pages/PatientAppointment';
 
 // ─────────────────────────────────────────────
 // DOCTOR FLOW
@@ -38,7 +39,7 @@ import DoctorDashboard   from './doctor/pages/DoctorDashboard';
 import DoctorProfile     from './doctor/pages/DoctorProfile';
 import PatientList       from './doctor/pages/PatientList';
 import AppointmentView   from './doctor/pages/AppointmentView';
-
+import DoctorAppointmentHistory from './doctor/pages/DoctorAppointmentHistory';
 // ─────────────────────────────────────────────
 // ADMIN FLOW
 // /admin → /admin/dashboard (nested layout)
@@ -71,11 +72,11 @@ function App() {
         {/* ── PATIENT PROTECTED ── */}
         <Route path="/PatientProfileSetup" element={<PatientProfileSetup />} />
         <Route path="/DoctorList"          element={<DoctorList />} />
+        <Route path="/PatientAppointment" element={<PatientAppointment />} />
         <Route path="/PatientHome"
           element={<ProtectedRoute role="patient"><PatientHome /></ProtectedRoute>} />
         <Route path="/BookAppointment"
           element={<ProtectedRoute role="patient"><BookAppointment /></ProtectedRoute>} />
-
         {/* ── DOCTOR ── */}
         <Route path="/DoctorLogin"          element={<DoctorLogin />} />
         <Route path="/DoctorSignUp"         element={<DoctorSignUp />} />
@@ -89,6 +90,8 @@ function App() {
           element={<ProtectedRoute role="doctor"><DoctorDashboard /></ProtectedRoute>} />
         <Route path="/AppointmentView"
           element={<ProtectedRoute role="doctor"><AppointmentView /></ProtectedRoute>} />
+        <Route path="/DoctorAppointmentHistory"  element={<DoctorAppointmentHistory/>} />
+
 
         {/* ── ADMIN (nested layout) ── */}
         <Route path="/admin/login"  element={<AdminLogin />} />
