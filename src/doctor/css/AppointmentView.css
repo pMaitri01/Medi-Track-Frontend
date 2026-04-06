@@ -255,7 +255,7 @@ td {
   background: white !important; 
   padding: 25px;
   border-radius: 12px;
-  width: 500px !important;
+  width: 600px !important;
   max-width: 90%;
   box-shadow: 0 10px 25px rgba(0,0,0,0.2);
 }
@@ -287,5 +287,6 @@ td {
 .btn-reject { background: #dc3545; color: white; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer; }
 .btn-cancel { background: #6c757d; color: white; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer; }
 
-.btn-approve:hover { background: #218838; }
-.btn-reject:hover { background: #c82333; }
+.btn-complete{
+  background: #6c757d; color: white; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer; 
+}

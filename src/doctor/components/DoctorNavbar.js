@@ -117,7 +117,12 @@ export default function DoctorNavbar({ open, setOpen }) {
           <FaCalendarCheck style={styles.icon}/>
           {open && "Appointments"}
         </div>
-        <div style={styles.menuItem}>
+        <div style={{
+          ...styles.menuItem,
+          ...(location.pathname === "/AppointmentHistory" && styles.active)}
+        }
+            onClick={() => navigate("/AppointmentHistory")}
+        >
           <FaHistory style={styles.icon}/>
           {open && "History"}
         </div>
