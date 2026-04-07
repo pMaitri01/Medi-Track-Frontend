@@ -1,0 +1,530 @@
+/* ── Page shell ─────────────────────────────────────────────────────────── */
+/* .dp-page {
+  padding: 80px 40px 40px;
+  background: #f4f2ee;
+  min-height: 100vh;
+  font-family: sans-serif;
+}
+
+/* ── Page heading ───────────────────────────────────────────────────────── */
+/* .dp-page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+} */
+
+/* .dp-page-header h2 {
+  font-size: 22px;
+  font-weight: 700;
+  color: #374151;
+  margin: 0;
+} */
+ /* ── Page shell ─────────────────────────────────────────────────────────── */
+.dp-page {
+  padding: 80px 40px 40px;
+  background: #f4f2ee;
+  min-height: 100vh;
+  font-family: sans-serif;
+  /* Ensure the container takes up full available width */
+  max-width: 1600px; 
+  margin: 0 auto;
+}
+
+/* ── Page heading ───────────────────────────────────────────────────────── */
+.dp-page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* This pushes content to opposite ends */
+  margin-bottom: 30px;
+  width: 100%;
+}
+
+/* New wrapper to keep icon and text together */
+.dp-header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px; /* Space between pill and text */
+}
+
+.dp-page-icon {
+  font-size: 28px; /* Slightly larger for better presence */
+}
+
+.dp-page-header h2 {
+  font-size: 24px;
+  font-weight: 700;
+  color: #374151;
+  margin: 0;
+}
+
+/* ── Adjusting the Button for the corner ────────────────────────────────── */
+.dp-page-header .dp-btn--save {
+  padding: 10px 24px;
+  font-size: 14px;
+  box-shadow: 0 2px 4px rgba(10, 165, 165, 0.2);
+}
+
+/* ── Shared input ───────────────────────────────────────────────────────── */
+.dp-input {
+  width: 100%;
+  padding: 9px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 13px;
+  background: #fff;
+  outline: none;
+  box-sizing: border-box;
+  transition: border-color 0.2s;
+}
+.dp-input:focus { border-color: #0aa5a5; }
+
+.dp-textarea { resize: vertical; }
+
+/* ── Shared buttons ─────────────────────────────────────────────────────── */
+.dp-btn {
+  padding: 9px 20px;
+  border: none;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+.dp-btn:hover { opacity: 0.85; }
+.dp-btn--save     { background: #0aa5a5; color: #fff; }
+.dp-btn--cancel   { background: #e5e7eb; color: #374151; }
+.dp-btn--download { background: #dbeafe; color: #1d4ed8; }
+
+/* ── Form card ──────────────────────────────────────────────────────────── */
+.dp-form-card {
+  background: #fff;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  padding: 24px;
+  margin-bottom: 24px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+}
+
+.dp-form-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.dp-form-header h3 {
+  font-size: 16px;
+  font-weight: 700;
+  color: #1f2937;
+  margin: 0;
+}
+
+.dp-appt-btn {
+  background: #f0fdf4;
+  color: #065f46;
+  border: 1px solid #bbf7d0;
+  padding: 7px 14px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* ── Form grid ──────────────────────────────────────────────────────────── */
+.dp-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+.dp-field-group { display: flex; flex-direction: column; gap: 5px; }
+.dp-field-group label { font-size: 12px; font-weight: 600; color: #6b7280; text-transform: uppercase; letter-spacing: 0.4px; }
+.dp-field-group--full { grid-column: 1 / -1; }
+
+/* ── Medicine section label ─────────────────────────────────────────────── */
+.dp-section-label {
+  font-size: 13px;
+  font-weight: 700;
+  color: #374151;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.dp-med-count {
+  background: #e0f2fe;
+  color: #0369a1;
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-weight: 600;
+}
+
+/* ── Medicine table header ──────────────────────────────────────────────── */
+.dp-med-table-head {
+  display: grid;
+  grid-template-columns: 28px 1fr 120px 220px 130px 32px;
+  gap: 8px;
+  padding: 6px 10px;
+  background: #f9fafb;
+  border-radius: 8px 8px 0 0;
+  border: 1px solid #e5e7eb;
+  font-size: 11px;
+  font-weight: 700;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+/* ── Medicine list ──────────────────────────────────────────────────────── */
+.dp-med-list {
+  border: 1px solid #e5e7eb;
+  border-top: none;
+  border-radius: 0 0 8px 8px;
+  overflow: hidden;
+  margin-bottom: 12px;
+}
+
+/* ── Medicine row ───────────────────────────────────────────────────────── */
+.dp-med-row {
+  display: grid;
+  grid-template-columns: 28px 1fr 120px 220px 130px 32px;
+  gap: 8px;
+  align-items: center;
+  padding: 10px;
+  background: #fff;
+  border-top: 1px solid #f3f4f6;
+}
+.dp-med-row:first-child { border-top: none; }
+.dp-med-row:hover { background: #fafafa; }
+
+.dp-med-index {
+  width: 22px;
+  height: 22px;
+  background: #e0f2fe;
+  color: #0369a1;
+  border-radius: 50%;
+  font-size: 11px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ── Timing chips ───────────────────────────────────────────────────────── */
+.dp-timing-checks {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.dp-timing-chip {
+  padding: 4px 10px;
+  border-radius: 20px;
+  border: 1px solid #d1d5db;
+  font-size: 11px;
+  font-weight: 500;
+  color: #6b7280;
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+.dp-timing-chip--on {
+  background: #0aa5a5;
+  color: #fff;
+  border-color: #0aa5a5;
+}
+
+/* ── Remove button ──────────────────────────────────────────────────────── */
+.dp-med-remove {
+  background: none;
+  border: none;
+  color: #ef4444;
+  font-size: 14px;
+  cursor: pointer;
+  padding: 2px 4px;
+  border-radius: 4px;
+  line-height: 1;
+}
+.dp-med-remove:hover { background: #fee2e2; }
+
+/* ── Add medicine button ────────────────────────────────────────────────── */
+.dp-add-med-btn {
+  background: #f0fdf4;
+  color: #065f46;
+  border: 1px dashed #86efac;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  width: 100%;
+  transition: background 0.2s;
+}
+.dp-add-med-btn:hover { background: #dcfce7; }
+
+/* ── Form actions ───────────────────────────────────────────────────────── */
+.dp-form-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+  justify-content: flex-end;
+}
+
+/* ── Filter bar ─────────────────────────────────────────────────────────── */
+.dp-filter-bar {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.dp-search {
+  flex: 1;
+  min-width: 200px;
+  padding: 9px 14px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 13px;
+  background: #fff;
+  outline: none;
+}
+.dp-search:focus { border-color: #0aa5a5; }
+
+.dp-select {
+  padding: 9px 14px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 13px;
+  background: #fff;
+  cursor: pointer;
+  outline: none;
+}
+
+/* ── Prescription list ──────────────────────────────────────────────────── */
+.dp-list { display: flex; flex-direction: column; gap: 12px; }
+
+.dp-empty {
+  text-align: center;
+  padding: 50px;
+  color: #9ca3af;
+  font-size: 14px;
+  background: #fff;
+  border-radius: 12px;
+}
+
+/* ── Prescription card ──────────────────────────────────────────────────── */
+.dp-rx-card {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+.dp-rx-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+}
+
+.dp-rx-card-left { display: flex; align-items: center; gap: 14px; }
+
+.dp-rx-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: #0aa5a5;
+  color: #fff;
+  font-size: 18px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.dp-rx-info h4 { margin: 0 0 4px; font-size: 15px; color: #1f2937; }
+.dp-rx-diagnosis { font-size: 13px; color: #374151; margin: 0 0 3px; }
+.dp-rx-meta { font-size: 12px; color: #9ca3af; margin: 0; }
+
+.dp-rx-card-right {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-shrink: 0;
+}
+
+/* ── Status badge ───────────────────────────────────────────────────────── */
+.dp-badge {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 4px 12px;
+  border-radius: 20px;
+  white-space: nowrap;
+}
+.dp-badge--active { background: #d1fae5; color: #065f46; }
+.dp-badge--done   { background: #f1f5f9; color: #64748b; }
+
+/* ── Icon action buttons ────────────────────────────────────────────────── */
+.dp-rx-actions { display: flex; gap: 6px; }
+
+.dp-icon-btn {
+  width: 34px;
+  height: 34px;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.2s;
+}
+.dp-icon-btn:hover { opacity: 0.75; }
+.dp-icon-btn--view   { background: #e0f2fe; }
+.dp-icon-btn--edit   { background: #fef3c7; }
+.dp-icon-btn--toggle { background: #f0fdf4; }
+.dp-icon-btn--delete { background: #fee2e2; }
+
+/* ── Modal overlay ──────────────────────────────────────────────────────── */
+.dp-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  padding: 20px;
+}
+
+.dp-modal {
+  background: #fff;
+  border-radius: 14px;
+  width: 100%;
+  max-width: 580px;
+  max-height: 90vh;
+  overflow-y: auto;
+  animation: dp-fadeIn 0.22s ease;
+}
+
+@keyframes dp-fadeIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.dp-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 22px 14px;
+  border-bottom: 1px solid #e5e7eb;
+}
+.dp-modal-header h3 { margin: 0; font-size: 16px; color: #1f2937; }
+
+.dp-modal-close {
+  background: none;
+  border: none;
+  font-size: 16px;
+  color: #9ca3af;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 6px;
+}
+.dp-modal-close:hover { color: #ef4444; background: #fee2e2; }
+
+.dp-modal-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  padding: 14px 22px;
+  background: #f9fafb;
+  border-bottom: 1px solid #e5e7eb;
+}
+.dp-modal-meta-item { display: flex; flex-direction: column; gap: 3px; }
+.dp-modal-meta-item span { font-size: 11px; color: #9ca3af; text-transform: uppercase; letter-spacing: 0.4px; }
+.dp-modal-meta-item strong { font-size: 14px; color: #1f2937; }
+
+.dp-modal-body { padding: 18px 22px; }
+
+.dp-modal-section-title {
+  font-size: 12px;
+  font-weight: 700;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin: 0 0 10px;
+}
+
+/* ── View table ─────────────────────────────────────────────────────────── */
+.dp-view-table-wrap {
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+  overflow: hidden;
+}
+.dp-view-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.dp-view-table th {
+  background: #f9fafb;
+  padding: 9px 12px;
+  text-align: left;
+  font-size: 11px;
+  font-weight: 700;
+  color: #6b7280;
+  text-transform: uppercase;
+}
+.dp-view-table td { padding: 9px 12px; border-top: 1px solid #f3f4f6; color: #374151; }
+.dp-view-table tr:hover td { background: #fafafa; }
+
+/* ── Notes box ──────────────────────────────────────────────────────────── */
+.dp-notes-box {
+  background: #fffbeb;
+  border: 1px solid #fde68a;
+  border-radius: 8px;
+  padding: 12px 14px;
+  font-size: 13px;
+  color: #92400e;
+  line-height: 1.6;
+}
+
+.dp-modal-footer {
+  display: flex;
+  gap: 10px;
+  padding: 14px 22px;
+  border-top: 1px solid #e5e7eb;
+}
+
+/* ── Responsive ─────────────────────────────────────────────────────────── */
+@media (max-width: 900px) {
+  .dp-med-table-head,
+  .dp-med-row {
+    grid-template-columns: 28px 1fr 90px 1fr 100px 28px;
+  }
+}
+
+@media (max-width: 768px) {
+  .dp-page { padding: 80px 16px 30px; }
+
+  .dp-form-grid { grid-template-columns: 1fr; }
+
+  .dp-med-table-head { display: none; }
+  .dp-med-row {
+    grid-template-columns: 1fr;
+    gap: 8px;
+    padding: 12px;
+    border-top: 2px solid #f3f4f6;
+  }
+  .dp-med-index { display: none; }
+
+  .dp-rx-card { flex-direction: column; align-items: flex-start; }
+  .dp-rx-card-right { width: 100%; justify-content: space-between; }
+
+  .dp-filter-bar { flex-direction: column; }
+}

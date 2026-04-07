@@ -1,0 +1,436 @@
+import { useState } from "react";
+import DoctorNavbar from "../components/DoctorNavbar";
+import DoctorHeader from "../components/DoctorHeader";
+import "../css/DoctorPrescription.css";
+
+// ── Dummy Data ───────────────────────────────────────────────────────────────
+const DUMMY_PATIENTS = [
+  { id: "p1", name: "Jay Mali" },
+  { id: "p2", name: "Maitri Patel" },
+  { id: "p3", name: "Ravi Shah" },
+  { id: "p4", name: "Sneha Joshi" },
+];
+
+const DUMMY_PRESCRIPTIONS = [
+  {
+    id: "rx1", patientId: "p1", patientName: "Jay Mali",
+    date: "2026-04-05", diagnosis: "Hypertension", status: "Active",
+    notes: "Avoid salty food. Drink plenty of water.",
+    medicines: [
+      { name: "Amlodipine",  dosage: "5mg",   timing: ["Morning"],          duration: "30 days" },
+      { name: "Telmisartan", dosage: "40mg",  timing: ["Night"],            duration: "30 days" },
+    ],
+  },
+  {
+    id: "rx2", patientId: "p2", patientName: "Maitri Patel",
+    date: "2026-03-20", diagnosis: "Migraine", status: "Active",
+    notes: "Rest in dark room during attacks.",
+    medicines: [
+      { name: "Sumatriptan", dosage: "50mg",  timing: ["Morning"],          duration: "7 days"  },
+      { name: "Propranolol", dosage: "20mg",  timing: ["Morning", "Night"], duration: "21 days" },
+    ],
+  },
+  {
+    id: "rx3", patientId: "p3", patientName: "Ravi Shah",
+    date: "2026-02-10", diagnosis: "Lower Back Pain", status: "Completed",
+    notes: "Physiotherapy exercises daily.",
+    medicines: [
+      { name: "Ibuprofen",   dosage: "400mg", timing: ["Morning", "Afternoon", "Night"], duration: "5 days" },
+    ],
+  },
+];
+
+const BLANK_MEDICINE = () => ({ name: "", dosage: "", timing: [], duration: "" });
+const BLANK_FORM     = () => ({
+  patientId: "", patientName: "", date: new Date().toISOString().split("T")[0],
+  diagnosis: "", notes: "", medicines: [BLANK_MEDICINE()],
+});
+
+const TIMINGS = ["Morning", "Afternoon", "Night"];
+const TIMING_ICON = { Morning: "🌅", Afternoon: "🌇", Night: "🌙" };
+
+const formatDate = (d) =>
+  new Date(d).toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric" });
+
+// ── MedicineRow ──────────────────────────────────────────────────────────────
+function MedicineRow({ med, index, onChange, onRemove, canRemove }) {
+  const toggle = (slot) => {
+    const next = med.timing.includes(slot)
+      ? med.timing.filter((t) => t !== slot)
+      : [...med.timing, slot];
+    onChange(index, "timing", next);
+  };
+
+  return (
+    <div className="dp-med-row">
+      <div className="dp-med-index">{index + 1}</div>
+
+      <input
+        className="dp-input dp-med-name"
+        placeholder="Medicine name"
+        value={med.name}
+        onChange={(e) => onChange(index, "name", e.target.value)}
+      />
+      <input
+        className="dp-input dp-med-dosage"
+        placeholder="Dosage (e.g. 500mg)"
+        value={med.dosage}
+        onChange={(e) => onChange(index, "dosage", e.target.value)}
+      />
+
+      <div className="dp-timing-checks">
+        {TIMINGS.map((slot) => (
+          <label key={slot} className={`dp-timing-chip ${med.timing.includes(slot) ? "dp-timing-chip--on" : ""}`}>
+            <input
+              type="checkbox"
+              checked={med.timing.includes(slot)}
+              onChange={() => toggle(slot)}
+              hidden
+            />
+            {TIMING_ICON[slot]} {slot}
+          </label>
+        ))}
+      </div>
+
+      <input
+        className="dp-input dp-med-duration"
+        placeholder="Duration (e.g. 7 days)"
+        value={med.duration}
+        onChange={(e) => onChange(index, "duration", e.target.value)}
+      />
+
+      {canRemove && (
+        <button className="dp-med-remove" onClick={() => onRemove(index)} title="Remove">✕</button>
+      )}
+    </div>
+  );
+}
+
+// ── PrescriptionForm ─────────────────────────────────────────────────────────
+function PrescriptionForm({ form, setForm, onSave, onCancel, isEdit }) {
+  const updateMed = (i, field, val) => {
+    const meds = form.medicines.map((m, idx) => idx === i ? { ...m, [field]: val } : m);
+    setForm({ ...form, medicines: meds });
+  };
+  const addMed    = () => setForm({ ...form, medicines: [...form.medicines, BLANK_MEDICINE()] });
+  const removeMed = (i) => setForm({ ...form, medicines: form.medicines.filter((_, idx) => idx !== i) });
+
+  const handlePatient = (e) => {
+    const p = DUMMY_PATIENTS.find((p) => p.id === e.target.value);
+    setForm({ ...form, patientId: p?.id || "", patientName: p?.name || "" });
+  };
+
+  return (
+    <div className="dp-form-card">
+      <div className="dp-form-header">
+        <h3>{isEdit ? "✏️ Edit Prescription" : "🧾 New Prescription"}</h3>
+        <button className="dp-appt-btn" title="Create from appointment">
+          📋 From Appointment
+        </button>
+      </div>
+
+      {/* Basic fields */}
+      <div className="dp-form-grid">
+        <div className="dp-field-group">
+          <label>Patient</label>
+          <select className="dp-input" value={form.patientId} onChange={handlePatient}>
+            <option value="">Select patient</option>
+            {DUMMY_PATIENTS.map((p) => (
+              <option key={p.id} value={p.id}>{p.name}</option>
+            ))}
+          </select>
+        </div>
+        <div className="dp-field-group">
+          <label>Date</label>
+          <input
+            type="date" className="dp-input"
+            value={form.date}
+            onChange={(e) => setForm({ ...form, date: e.target.value })}
+          />
+        </div>
+        <div className="dp-field-group dp-field-group--full">
+          <label>Diagnosis</label>
+          <input
+            className="dp-input" placeholder="e.g. Hypertension"
+            value={form.diagnosis}
+            onChange={(e) => setForm({ ...form, diagnosis: e.target.value })}
+          />
+        </div>
+      </div>
+
+      {/* Medicines */}
+      <div className="dp-section-label">
+        💊 Medicines
+        <span className="dp-med-count">{form.medicines.length} added</span>
+      </div>
+
+      <div className="dp-med-table-head">
+        <span>#</span>
+        <span>Medicine Name</span>
+        <span>Dosage</span>
+        <span>Timing</span>
+        <span>Duration</span>
+        <span></span>
+      </div>
+
+      <div className="dp-med-list">
+        {form.medicines.map((med, i) => (
+          <MedicineRow
+            key={i} med={med} index={i}
+            onChange={updateMed}
+            onRemove={removeMed}
+            canRemove={form.medicines.length > 1}
+          />
+        ))}
+      </div>
+
+      <button className="dp-add-med-btn" onClick={addMed}>➕ Add Medicine</button>
+
+      {/* Notes */}
+      <div className="dp-field-group" style={{ marginTop: "16px" }}>
+        <label>Doctor Notes (optional)</label>
+        <textarea
+          className="dp-input dp-textarea"
+          placeholder="e.g. Drink plenty of water. Avoid cold food."
+          value={form.notes}
+          onChange={(e) => setForm({ ...form, notes: e.target.value })}
+          rows={3}
+        />
+      </div>
+
+      {/* Actions */}
+      <div className="dp-form-actions">
+        <button className="dp-btn dp-btn--save" onClick={onSave}>
+          💾 {isEdit ? "Update Prescription" : "Save Prescription"}
+        </button>
+        <button className="dp-btn dp-btn--cancel" onClick={onCancel}>Cancel</button>
+      </div>
+    </div>
+  );
+}
+
+// ── View Modal ───────────────────────────────────────────────────────────────
+function ViewModal({ rx, onClose }) {
+  if (!rx) return null;
+  return (
+    <div className="dp-overlay" onClick={onClose}>
+      <div className="dp-modal" onClick={(e) => e.stopPropagation()}>
+        <div className="dp-modal-header">
+          <h3>📄 Prescription Details</h3>
+          <button className="dp-modal-close" onClick={onClose}>✕</button>
+        </div>
+
+        <div className="dp-modal-meta">
+          <div className="dp-modal-meta-item"><span>Patient</span><strong>{rx.patientName}</strong></div>
+          <div className="dp-modal-meta-item"><span>Date</span><strong>{formatDate(rx.date)}</strong></div>
+          <div className="dp-modal-meta-item"><span>Diagnosis</span><strong>{rx.diagnosis}</strong></div>
+          <div className="dp-modal-meta-item">
+            <span>Status</span>
+            <span className={`dp-badge ${rx.status === "Active" ? "dp-badge--active" : "dp-badge--done"}`}>
+              {rx.status}
+            </span>
+          </div>
+        </div>
+
+        <div className="dp-modal-body">
+          <p className="dp-modal-section-title">💊 Medicines</p>
+          <div className="dp-view-table-wrap">
+            <table className="dp-view-table">
+              <thead>
+                <tr><th>Medicine</th><th>Dosage</th><th>Timing</th><th>Duration</th></tr>
+              </thead>
+              <tbody>
+                {rx.medicines.map((m, i) => (
+                  <tr key={i}>
+                    <td>{m.name}</td>
+                    <td>{m.dosage}</td>
+                    <td>{m.timing.map((t) => `${TIMING_ICON[t]} ${t}`).join("  ")}</td>
+                    <td>{m.duration}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          {rx.notes && (
+            <>
+              <p className="dp-modal-section-title" style={{ marginTop: "16px" }}>📝 Doctor Notes</p>
+              <div className="dp-notes-box">{rx.notes}</div>
+            </>
+          )}
+        </div>
+
+        <div className="dp-modal-footer">
+          <button className="dp-btn dp-btn--download">⬇ Download</button>
+          <button className="dp-btn dp-btn--cancel" onClick={onClose}>Close</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── Main Page ────────────────────────────────────────────────────────────────
+export default function DoctorPrescription() {
+  const [open, setOpen]               = useState(true);
+  const [prescriptions, setPrescriptions] = useState(
+    [...DUMMY_PRESCRIPTIONS].sort((a, b) => new Date(b.date) - new Date(a.date))
+  );
+  const [showForm, setShowForm]       = useState(false);
+  const [form, setForm]               = useState(BLANK_FORM());
+  const [editId, setEditId]           = useState(null);
+  const [viewRx, setViewRx]           = useState(null);
+  const [search, setSearch]           = useState("");
+  const [filterStatus, setFilterStatus] = useState("All");
+
+  // ── Save / Update ──
+  const handleSave = () => {
+    if (!form.patientId || !form.diagnosis || form.medicines.some((m) => !m.name)) {
+      alert("Please fill in patient, diagnosis, and all medicine names.");
+      return;
+    }
+    if (editId) {
+      setPrescriptions((prev) =>
+        prev.map((rx) => rx.id === editId ? { ...rx, ...form } : rx)
+      );
+    } else {
+      const newRx = { ...form, id: `rx${Date.now()}`, status: "Active" };
+      setPrescriptions((prev) => [newRx, ...prev]);
+    }
+    setShowForm(false);
+    setEditId(null);
+    setForm(BLANK_FORM());
+  };
+
+  const handleEdit = (rx) => {
+    setForm({ ...rx });
+    setEditId(rx.id);
+    setShowForm(true);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const handleDelete = (id) => {
+    if (!window.confirm("Delete this prescription?")) return;
+    setPrescriptions((prev) => prev.filter((rx) => rx.id !== id));
+  };
+
+  const handleToggleStatus = (id) => {
+    setPrescriptions((prev) =>
+      prev.map((rx) =>
+        rx.id === id ? { ...rx, status: rx.status === "Active" ? "Completed" : "Active" } : rx
+      )
+    );
+  };
+
+  const handleCancel = () => {
+    setShowForm(false);
+    setEditId(null);
+    setForm(BLANK_FORM());
+  };
+
+  // ── Filter ──
+  const filtered = prescriptions.filter((rx) => {
+    const q = search.toLowerCase();
+    const matchSearch = !q || rx.patientName.toLowerCase().includes(q) || rx.diagnosis.toLowerCase().includes(q);
+    const matchStatus = filterStatus === "All" || rx.status === filterStatus;
+    return matchSearch && matchStatus;
+  });
+
+  return (
+    <>
+      <DoctorNavbar open={open} setOpen={setOpen} />
+      <DoctorHeader open={open} />
+
+      <div
+        className="dp-page"
+        style={{ marginLeft: open ? "250px" : "100px", transition: "0.3s" }}
+      >
+        {/* Page heading */}
+        {/* Page heading */}
+        <div className="dp-page-header">
+          <div className="dp-header-left">
+            <span className="dp-page-icon">💊</span>
+            <h2>Prescription Management</h2>
+          </div>
+          
+          {!showForm && (
+            <button className="dp-btn dp-btn--save" onClick={() => setShowForm(true)}>
+              ➕ New Prescription
+            </button>
+          )}
+        </div>
+
+        {/* Form */}
+        {showForm && (
+          <PrescriptionForm
+            form={form}
+            setForm={setForm}
+            onSave={handleSave}
+            onCancel={handleCancel}
+            isEdit={!!editId}
+          />
+        )}
+
+        {/* Search + filter */}
+        <div className="dp-filter-bar">
+          <input
+            className="dp-search"
+            type="text"
+            placeholder="Search by patient or diagnosis..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+          <select
+            className="dp-select"
+            value={filterStatus}
+            onChange={(e) => setFilterStatus(e.target.value)}
+          >
+            <option>All</option>
+            <option>Active</option>
+            <option>Completed</option>
+          </select>
+        </div>
+
+        {/* List */}
+        <div className="dp-list">
+          {filtered.length === 0 ? (
+            <p className="dp-empty">No prescriptions found.</p>
+          ) : (
+            filtered.map((rx) => (
+              <div key={rx.id} className="dp-rx-card">
+                <div className="dp-rx-card-left">
+                  <div className="dp-rx-avatar">
+                    {rx.patientName.charAt(0).toUpperCase()}
+                  </div>
+                  <div className="dp-rx-info">
+                    <h4>{rx.patientName}</h4>
+                    <p className="dp-rx-diagnosis">🩺 {rx.diagnosis}</p>
+                    <p className="dp-rx-meta">
+                      📅 {formatDate(rx.date)} &nbsp;·&nbsp;
+                      💊 {rx.medicines.length} medicine{rx.medicines.length !== 1 ? "s" : ""}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="dp-rx-card-right">
+                  <span className={`dp-badge ${rx.status === "Active" ? "dp-badge--active" : "dp-badge--done"}`}>
+                    {rx.status}
+                  </span>
+                  <div className="dp-rx-actions">
+                    <button className="dp-icon-btn dp-icon-btn--view"   onClick={() => setViewRx(rx)}    title="View">👁</button>
+                    <button className="dp-icon-btn dp-icon-btn--edit"   onClick={() => handleEdit(rx)}   title="Edit">✏️</button>
+                    <button className="dp-icon-btn dp-icon-btn--toggle" onClick={() => handleToggleStatus(rx.id)} title="Toggle status">
+                      {rx.status === "Active" ? "✅" : "🔄"}
+                    </button>
+                    <button className="dp-icon-btn dp-icon-btn--delete" onClick={() => handleDelete(rx.id)} title="Delete">🗑</button>
+                  </div>
+                </div>
+              </div>
+            ))
+          )}
+        </div>
+      </div>
+
+      <ViewModal rx={viewRx} onClose={() => setViewRx(null)} />
+    </>
+  );
+}

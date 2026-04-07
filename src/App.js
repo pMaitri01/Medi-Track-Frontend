@@ -42,6 +42,7 @@ import DoctorProfile     from './doctor/pages/DoctorProfile';
 import PatientList       from './doctor/pages/PatientList';
 import AppointmentView   from './doctor/pages/AppointmentView';
 import DoctorAppointmentHistory from './doctor/pages/DoctorAppointmentHistory';
+import DoctorPrescription       from './doctor/pages/DoctorPrescription';
 // ─────────────────────────────────────────────
 // ADMIN FLOW
 // /admin → /admin/dashboard (nested layout)
@@ -94,7 +95,10 @@ function App() {
           element={<ProtectedRoute role="doctor"><DoctorDashboard /></ProtectedRoute>} />
         <Route path="/AppointmentView"
           element={<ProtectedRoute role="doctor"><AppointmentView /></ProtectedRoute>} />
-        <Route path="/DoctorAppointmentHistory"  element={<DoctorAppointmentHistory/>} />
+        <Route path="/AppointmentHistory"
+          element={<ProtectedRoute role="doctor"><DoctorAppointmentHistory /></ProtectedRoute>} />
+        <Route path="/DoctorPrescription"
+          element={<ProtectedRoute role="doctor"><DoctorPrescription /></ProtectedRoute>} />
 
 
         {/* ── ADMIN (nested layout) ── */}

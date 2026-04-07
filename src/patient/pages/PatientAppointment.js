@@ -6,7 +6,12 @@ import defaultDoctorImg from "../images/user.png";
 const TODAY = new Date();
 TODAY.setHours(0, 0, 0, 0);
 
-const isUpcoming = (dateStr) => new Date(dateStr) >= TODAY;
+// strictly AFTER today — today's appointments go to Past
+const isUpcoming = (dateStr) => {
+  const d = new Date(dateStr);
+  d.setHours(0, 0, 0, 0);
+  return d > TODAY;
+};
 
 const formatDate = (dateStr) =>
   new Date(dateStr).toLocaleDateString("en-IN", {
@@ -15,6 +20,9 @@ const formatDate = (dateStr) =>
     year: "numeric",
   });
 
+// upcoming → nearest first (ascending)
+const byDateAsc  = (a, b) => new Date(a.date) - new Date(b.date);
+// past     → most recent first (descending)
 const byDateDesc = (a, b) => new Date(b.date) - new Date(a.date);
 
 const STATUS_META = {
@@ -31,12 +39,14 @@ const getBadge = (status = "") => {
 };
 
 // ── Appointment Card ────────────────────────────────────────────────────────
-function AppointmentCard({ appt, onCancel }) {
+function AppointmentCard({ appt, onCancel, isNext }) {
   const upcoming = isUpcoming(appt.date);
   const badge = getBadge(appt.status);
 
   return (
-    <div className="pa-doc-card">
+    <div className={`pa-doc-card${isNext ? " pa-doc-card--next" : ""}`}>
+      {isNext && <span className="pa-next-badge">📌 Next Appointment</span>}
+
       {/* Top info row — mirrors doc-card layout */}
       <div className="pa-doc-info">
         <img src={defaultDoctorImg} alt="doctor" className="pa-doc-img" />
@@ -74,7 +84,7 @@ function AppointmentCard({ appt, onCancel }) {
 }
 
 // ── Section block ───────────────────────────────────────────────────────────
-function Section({ title, appointments, onCancel }) {
+function Section({ title, appointments, onCancel, highlightFirst }) {
   return (
     <section className="pa-section">
       <h2 className="pa-section-title">{title}</h2>
@@ -82,8 +92,13 @@ function Section({ title, appointments, onCancel }) {
         <p className="pa-empty">No appointments found.</p>
       ) : (
         <div className="pa-grid">
-          {appointments.map((appt) => (
-            <AppointmentCard key={appt.id} appt={appt} onCancel={onCancel} />
+          {appointments.map((appt, idx) => (
+            <AppointmentCard
+              key={appt.id}
+              appt={appt}
+              onCancel={onCancel}
+              isNext={highlightFirst && idx === 0}
+            />
           ))}
         </div>
       )}
@@ -137,7 +152,7 @@ export default function PatientAppointment() {
     );
   };
 
-  const upcoming = appointments.filter((a) => isUpcoming(a.date)).sort(byDateDesc);
+  const upcoming = appointments.filter((a) => isUpcoming(a.date)).sort(byDateAsc);
   const past     = appointments.filter((a) => !isUpcoming(a.date)).sort(byDateDesc);
 
   return (
@@ -169,6 +184,7 @@ export default function PatientAppointment() {
               title="Upcoming Appointments"
               appointments={upcoming}
               onCancel={handleCancel}
+              highlightFirst
             />
             <Section
               title="Past Appointments"

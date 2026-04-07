@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import "../css/AppointmentView.css";
 import DoctorHeader from "../components/DoctorHeader";
 import DoctorNavbar from "../components/DoctorNavbar";
@@ -6,7 +6,6 @@ import DoctorNavbar from "../components/DoctorNavbar";
 export default function AppointmentHistory() {
   const [open, setOpen] = useState(true);
   const [appointments, setAppointments] = useState([]);
-  const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [selectedAppointment, setSelectedAppointment] = useState(null);
 
