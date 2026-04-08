@@ -29,7 +29,7 @@ const DoctorManagement = () => {
     try {
       setLoading(true);
 
-      const res = await fetch("http://localhost:5000/api/doctor/all", {
+      const res = await fetch(`${process.env.REACT_APP_API_URL}/api/doctor/all`, {
         method: "GET",
         credentials: "include", // IMPORTANT (for cookies/auth)
       });
