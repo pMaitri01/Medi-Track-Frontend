@@ -71,19 +71,41 @@ export default function DoctorLogin() {
 
       const data = await response.json();
 
-     if (response.ok) {
+   if (response.ok) {
   alert("Login Successful");
 
-  const doctor = data.doctor; // 👈 get doctor from response
+  console.log("LOGIN RESPONSE:", data);
 
-  setFormData({ fullName: "", email: "", password: "", confirmPassword: "" });
+  const doctor = data.doctor || data.data?.doctor;
+
+  // 🔥 HANDLE ALL CASES
+  const token =
+    data.token ||
+    data.accessToken ||
+    data.data?.token ||
+    data.data?.accessToken;
+
+  if (!token) {
+    console.error("❌ TOKEN NOT FOUND IN RESPONSE");
+    alert("Login failed: Token not received");
+    return;
+  }
+
+  // ✅ SAVE TOKEN
+  localStorage.setItem("token", token);
+
+  // (optional)
+  localStorage.setItem("doctor", JSON.stringify(doctor));
+
+  console.log("✅ TOKEN SAVED:", token);
+
+  setFormData({ email: "", password: "" });
   setErrors({});
 
-  // 🚦 MAIN LOGIC
-  if (doctor.isProfileComplete) {
+  if (doctor?.isProfileComplete) {
     navigate("/DoctorDashboard");
   } else {
-    navigate("/DoctorProfile"); // your profile page
+    navigate("/DoctorProfile");
   }
 } else {
         // Handle status-specific errors

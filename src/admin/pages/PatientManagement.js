@@ -36,7 +36,7 @@ const PatientManagement = () => {
       try {
         const token = localStorage.getItem("adminToken");
         const res = await fetch(
-          `${process.env.REACT_APP_API_URL}/api/patient/list`,
+          `${process.env.REACT_APP_API_URL}/api/admin/list`,
           {
             method: "GET",
             headers: {
