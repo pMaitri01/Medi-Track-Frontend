@@ -597,7 +597,7 @@
                 <div className="modal-footer">
                   {/* Only show Approve/Reject if status is Pending */}
   {selectedAppointment.status?.toLowerCase() === "pending" && (                  <>
-                      <button className="btn-approve" onClick={() => handleStatusUpdate(selectedAppointment.id, "accepted")}>
+                      <button className="btn-approve" onClick={() => handleStatusUpdate(selectedAppointment.id, "approved")}>
                         Approve Appointment
                       </button>
                       <button className="btn-reject" onClick={() => handleStatusUpdate(selectedAppointment.id, "rejected")}>
