@@ -8,7 +8,8 @@ body {
 /* Background */
 .doctor-login-container {
   height: 100vh;
-  background:#5e78e9;
+  /* background:#0aa5a5; */
+background-color: #beeae9;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -22,7 +23,7 @@ body {
   padding: 40px;
   border-radius: 16px;
   width: 400px;
-  color: #5e78e9;
+  color: #0aa5a5;
   box-shadow: 0 10px 25px rgba(0,0,0,0.3);
 }
 
@@ -47,7 +48,7 @@ body {
 }
 .admin-text-fpwd{
   text-decoration: none;
-  color: #5e78e9;
+  color: #0aa5a5;
 }
 .admin-text-rmbr{
   color: black;
@@ -70,12 +71,12 @@ body {
   cursor: pointer;
   transition: 0.3s;
   margin-bottom:5px !important;
-  background: #5E78E9; 
+  background: #0aa5a5; 
   margin-top: 10px !important;
 }
 
 .admin-login-btn:hover {
-  background: #4a63d8; 
+  background: #0aa5a5; 
   color: white;
 }
 
@@ -115,7 +116,7 @@ body {
   color: black;
 }
 .admin-text-primary{
-  color: #7087EB !important;
+  color: #0aa5a5 !important;
   margin-left: 5px;
   text-decoration: none;
 }
