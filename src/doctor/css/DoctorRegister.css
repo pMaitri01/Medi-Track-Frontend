@@ -2,7 +2,8 @@
 
 .dr-page {
   min-height: 100vh;
-  background: linear-gradient(135deg, #eff6ff 0%, #f0fdf4 100%);
+  /* background: linear-gradient(135deg, #eff6ff 0%, #f0fdf4 100%); */
+  background-color: #A3DED8;
   display: flex;
   align-items: flex-start;
   justify-content: center;
@@ -22,7 +23,8 @@
 
 /* ── HEADER ── */
 .dr-header {
-  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  /* background: linear-gradient(135deg, #2563eb, #1d4ed8); */
+  background-color: #0aa5a5;
   padding: 28px 32px;
   color: #fff;
 }
@@ -223,7 +225,7 @@
 .dr-submit-btn {
   flex: 1;
   padding: 13px;
-  background: #2563eb;
+  background:#0aa5a5 !important;
   color: #fff;
   border: none;
   border-radius: 10px;
@@ -258,7 +260,7 @@
 }
 
 .dr-login-link a {
-  color: #2563eb;
+  color: #0aa5a5;
   font-weight: 600;
   text-decoration: none;
 }

@@ -163,7 +163,7 @@ const DoctorRegister = () => {
         sessionStorage.setItem("pendingDoctor", JSON.stringify({
           name: form.fullName, email: form.email, specialization: form.specialization,
         }));
-        navigate("/DoctorWaiting");
+        navigate("/DoctorLogin");
       } else {
         setErrors(p => ({ ...p, submit: data.message || "Registration failed. Please try again." }));
       }
@@ -193,7 +193,7 @@ const DoctorRegister = () => {
         {/* Header */}
         <div className="dr-header">
           <div className="dr-header-top">
-            <div className="dr-header-icon">🧑‍⚕️</div>
+            <div className="dr-header-icon">⚕️</div>            
             <div>
               <h1>Doctor Registration</h1>
               <p>Submit your details. Your account will be reviewed by admin before login.</p>
