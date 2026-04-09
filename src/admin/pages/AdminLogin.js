@@ -92,6 +92,7 @@ const AdminLogin = () => {
     });
 
     const data = await response.json();
+    console.log("API RESPONSE:", data);   // 👈 ADD THIS
 
     if (!response.ok) {
       throw new Error(data.message || "Login failed");
