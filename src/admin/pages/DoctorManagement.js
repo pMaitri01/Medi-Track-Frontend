@@ -79,26 +79,26 @@ const DoctorManagement = () => {
 
   fetchDoctors();
 }, []);
-const handleSuspend = async (id) => {
-  try {
-    const res = await fetch(`http://localhost:5000/api/doctor/${id}/suspend`, {
-      method: "PUT",
-      credentials: "include",
-    });
+// const handleSuspend = async (id) => {
+//   try {
+//     const res = await fetch(`${process.env.REACT_APP_API_URL}/api/doctor/${id}/suspend`, {
+//       method: "PUT",
+//       credentials: "include",
+//     });
 
-    if (res.ok) {
-      setDoctors((prev) =>
-        prev.map((doc) =>
-          doc.id === id ? { ...doc, status: "Suspended" } : doc
-        )
-      );
+//     if (res.ok) {
+//       setDoctors((prev) =>
+//         prev.map((doc) =>
+//           doc.id === id ? { ...doc, status: "Suspended" } : doc
+//         )
+//       );
 
-      setViewDoc(null); // close modal
-    }
-  } catch (err) {
-    console.error(err);
-  }
-};
+//       setViewDoc(null); // close modal
+//     }
+//   } catch (err) {
+//     console.error(err);
+//   }
+// };
   const handleReset = () => { setSearch(""); setSpecFilter("All"); setExpFilter("all"); };
 
   const filtered = doctors.filter(d => {

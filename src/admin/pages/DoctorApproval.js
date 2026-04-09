@@ -6,9 +6,9 @@ const PER_PAGE    = 5;
 const STATUS_TABS = ["All", "Pending", "Approved", "Rejected"];
 
 const statusClass = {
-  Pending:  "da-badge da-badge-pending",
-  Approved: "da-badge da-badge-approved",
-  Rejected: "da-badge da-badge-rejected",
+  pending:  "da-badge da-badge-pending",
+  approved: "da-badge da-badge-approved",
+  rejected: "da-badge da-badge-rejected",
 };
 
 const DoctorApproval = () => {
@@ -33,17 +33,43 @@ const DoctorApproval = () => {
   };
 
   // ── Approve ──
-  const handleApprove = () => {
+  const handleApprove = async () => {
+  try {
     setLoading("approve");
-    setTimeout(() => {
-      setDoctors(prev => prev.map(d =>
-        d.id === selectedDoc.id ? { ...d, status: "Approved" } : d
-      ));
-      setLoading(null);
+
+    const res = await fetch(
+      `${process.env.REACT_APP_API_URL}/api/doctor/${selectedDoc.id}/status`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({ status: "approved" }),
+      }
+    );
+
+    const data = await res.json();
+
+    if (res.ok) {
+      setDoctors(prev =>
+        prev.map(d =>
+          d.id === selectedDoc.id ? { ...d, status: "Approved" } : d
+        )
+      );
+
       showToast(`${selectedDoc.name} approved successfully!`, "success");
       closePanel();
-    }, 1000);
-  };
+    } else {
+      showToast(data.message || "Failed to approve doctor", "error");
+    }
+  } catch (err) {
+    console.error(err);
+    showToast("Something went wrong", "error");
+  } finally {
+    setLoading(null);
+  }
+};
 
   // ── Reject ──
   const handleReject = () => {
@@ -74,7 +100,7 @@ const DoctorApproval = () => {
   useEffect(() => {
   const fetchDoctors = async () => {
     try {
-      const res = await fetch("http://localhost:5000/api/doctor/all", {
+      const res = await fetch(`${process.env.REACT_APP_API_URL}/api/doctor/all`, {
         method: "GET",
         credentials: "include",
       });
