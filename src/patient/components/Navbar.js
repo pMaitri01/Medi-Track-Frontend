@@ -8,6 +8,7 @@ import Img from "../images/LogoP.png"
 function Navbar() {
   const [showDropdown, setShowDropdown] = useState(false);
   const dropdownRef = useRef(null);
+  const [username, setUsername] = useState("");
 
   const handleLogout = async () => {
     try{
@@ -16,7 +17,7 @@ function Navbar() {
         credentials: "include",
       })
        
-      localStorage.removeItem("doc");
+      localStorage.removeItem("user");
       alert("logged out");
 
       window.location.href = "/";
@@ -26,17 +27,27 @@ function Navbar() {
   };
   // Close dropdown when clicking outside
   useEffect(() => {
-    function handleClickOutside(event) {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        setShowDropdown(false);
-      }
-    }
+  const user = JSON.parse(localStorage.getItem("user") || "{}");
 
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
+  console.log("USER:", user); // ✅ DEBUG
+
+setUsername(
+  user?.fullName || 
+  user?.name || 
+  `${user?.firstName || ""} ${user?.lastName || ""}`.trim() || 
+  "User"
+);
+  function handleClickOutside(event) {
+    if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+      setShowDropdown(false);
+    }
+  }
+
+  document.addEventListener("mousedown", handleClickOutside);
+  return () => {
+    document.removeEventListener("mousedown", handleClickOutside);
+  };
+}, []);
 
   // const handleLogout = () => {
   //   localStorage.removeItem("token"); // if using auth
@@ -63,14 +74,32 @@ function Navbar() {
       <div className="nav-right">
         <FaBell className="icon" />
         <div className="profile-container" ref={dropdownRef}>
-  <div 
+  {/* <div 
     className="profile-trigger"
     onClick={() => setShowDropdown(!showDropdown)}
   >
     <FaUserCircle className="profile-icon" />
     <FaChevronDown className={`arrow-icon ${showDropdown ? "rotate" : ""}`} />
-  </div>
+  </div> */}
+{/* <div 
+  className="profile-trigger"
+  onClick={() => setShowDropdown(!showDropdown)}
+>
+  <FaUserCircle className="profile-icon" />
+  
+  <span className="username-text">{username}</span>
 
+  <FaChevronDown className={`arrow-icon ${showDropdown ? "rotate" : ""}`} />
+</div> */}
+
+<div 
+  className="profile-pill"
+  onClick={() => setShowDropdown(!showDropdown)}
+>
+    <FaUserCircle className="profile-icon" />
+
+  <span className="profile-name">{username}</span>
+</div>
   {showDropdown && (
     <div className="profile-dropdown">
       <div className="dropdown-item">

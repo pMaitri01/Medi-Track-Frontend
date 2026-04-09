@@ -5,16 +5,7 @@ import defaultDoctorImg from '../images/user.png';
 
 // ── Map backend doctor object to UI format ──
 const mapDoctor = (doc) => ({
-  // id: doc._id,
-  // name: doc.fullName,
-  // spec: doc.specialization,
-  // city: doc.city,
-  // gender: doc.gender,
-  // about: doc.about,
-  // rank: doc.designation,
-  // exp: doc.experience, // ✅ ADD THIS
-
-   id: doc._id,
+  id: doc._id,
   name: doc.fullName,
   spec: doc.specialization,
   city: doc.city,
@@ -22,20 +13,18 @@ const mapDoctor = (doc) => ({
   gender: doc.gender,
   about: doc.about,
   rank: doc.designation,
-
   exp: doc.experience,
   qualification: doc.qualification,
   email: doc.email,
   mobile: doc.mobile,
-
   clinicName: doc.clinicName,
   clinicAddress: doc.clinicAddress,
-
   workingDays: doc.workingDays,
   workingHours: doc.workingHours,
-
   licenseNumber: doc.licenseNumber,
   emergencyContact: doc.emergencyContact,
+
+  status: doc.status, // ✅ ADD THIS
 });
 
 const DoctorList = () => {
@@ -60,8 +49,12 @@ const DoctorList = () => {
         );
         if (!res.ok) throw new Error("Failed to fetch doctors.");
         const data = await res.json();
-        setDoctors(data.doctors.map(mapDoctor));      
-      } catch (err) {
+        const approvedDoctors = data.doctors
+          .filter(doc => doc.status === "approved") // ✅ FILTER HERE
+          .map(mapDoctor);
+
+        setDoctors(approvedDoctors);     
+       } catch (err) {
         console.error("DoctorList fetch error:", err);
         setFetchError("Unable to load doctors. Please try again later.");
       } finally {

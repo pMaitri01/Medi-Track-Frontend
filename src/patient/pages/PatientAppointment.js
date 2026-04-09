@@ -62,7 +62,23 @@ function AppointmentCard({ appt, onCancel, isNext }) {
       <div className="pa-card-footer">
         <span className={`pa-badge ${badge.cls}`}>{badge.label}</span>
 
-        {upcoming && (
+        {/* {upcoming && (
+          <div className="pa-doc-actions">
+            <button
+              className="pa-btn-reschedule"
+              onClick={() => alert(`Reschedule: ${appt.id}`)}
+            >
+              📆 Reschedule
+            </button>
+            <button
+              className="pa-btn-cancel"
+              onClick={() => onCancel(appt.id)}            >
+              ✖ Cancel
+            </button>
+          </div>
+        )} */}
+
+        {upcoming && appt.status !== "cancelled" && appt.status !== "completed" && (
           <div className="pa-doc-actions">
             <button
               className="pa-btn-reschedule"
@@ -116,44 +132,112 @@ export default function PatientAppointment() {
     loadAppointments();
   }, []);
 
-  const loadAppointments = async () => {
+  const user = JSON.parse(localStorage.getItem("user"));
+  const userId = user?._id;
+
+ const loadAppointments = async () => {
     setLoading(true);
     setError("");
+
     try {
       const res = await fetch(
         `${process.env.REACT_APP_API_URL}/api/appointment/all`,
         { credentials: "include" }
       );
+
       if (!res.ok) throw new Error("Failed to fetch appointments.");
       const data = await res.json();
 
-      // Normalise backend shape → UI shape
-      const mapped = data.map((item) => ({
-        id:             item._id,
-        doctorName:     item.doctor?.fullName  || item.doctorName  || "Unknown Doctor",
-        specialization: item.doctor?.specialization || item.specialization || "—",
-        date:           item.date,
-        time:           item.time || "—",
-        status:         item.status || "Pending",
-      }));
+      const mapped = data
+        .filter((item) => {
+          if (!item.patient) return false;
+
+          if (typeof item.patient === "object") {
+            return item.patient._id === userId;
+          }
+
+          return item.patient === userId;
+        })
+        .map((item) => ({
+          id: item._id,
+          doctorName:
+            item.doctor?.fullName || item.doctorName || "Unknown Doctor",
+          specialization:
+            item.doctor?.specialization || item.specialization || "—",
+          date: item.date,
+          time: item.time || "—",
+          status: item.status || "Pending",
+        }));
 
       setAppointments(mapped);
     } catch (err) {
-      setError(err.message || "Something went wrong. Please try again.");
+      setError(err.message || "Something went wrong.");
     } finally {
       setLoading(false);
     }
   };
 
-  const handleCancel = (id) => {
-    if (!window.confirm("Cancel this appointment?")) return;
-    setAppointments((prev) =>
-      prev.map((a) => (a.id === id ? { ...a, status: "Cancelled" } : a))
+  const handleCancelAppointment = async (appointmentId) => {
+  try {
+    const res = await fetch(
+      `${process.env.REACT_APP_API_URL}/api/appointment/${appointmentId}/cancel`,
+      {
+        method: "PUT",
+        credentials: "include",
+      }
     );
-  };
 
-  const upcoming = appointments.filter((a) => isUpcoming(a.date)).sort(byDateAsc);
-  const past     = appointments.filter((a) => !isUpcoming(a.date)).sort(byDateDesc);
+    const data = await res.json();
+
+    if (!res.ok) {
+      throw new Error(data.message || "Failed to cancel appointment");
+    }
+
+    // ✅ Update UI instantly (without reload)
+    setAppointments((prev) =>
+      prev.map((appt) =>
+        appt.id === appointmentId
+          ? { ...appt, status: "cancelled" }
+          : appt
+      )
+    );
+
+    alert("Appointment cancelled successfully");
+
+  } catch (error) {
+    alert(error.message);
+  }
+};
+
+const upcoming = appointments
+  .filter((a) => {
+    const upcomingDate = isUpcoming(a.date);
+
+    // ❌ Cancelled should NOT be in upcoming
+    if (a.status === "cancelled") return false;
+
+    // ✅ Rejected stays in upcoming UNTIL date passes
+    if (a.status === "rejected") return upcomingDate;
+
+    // ✅ Normal upcoming logic
+    return upcomingDate;
+  })
+  .sort(byDateAsc);
+
+const past = appointments
+  .filter((a) => {
+    const upcomingDate = isUpcoming(a.date);
+
+    // ✅ Cancelled ALWAYS goes to past immediately
+    if (a.status === "cancelled") return true;
+
+    // ✅ Rejected goes to past AFTER date passes
+    if (a.status === "rejected") return !upcomingDate;
+
+    // ✅ Normal past logic
+    return !upcomingDate;
+  })
+  .sort(byDateDesc);
 
   return (
     <div className="pa-page">
@@ -183,13 +267,13 @@ export default function PatientAppointment() {
             <Section
               title="Upcoming Appointments"
               appointments={upcoming}
-              onCancel={handleCancel}
+              onCancel={handleCancelAppointment}   
               highlightFirst
             />
             <Section
               title="Past Appointments"
               appointments={past}
-              onCancel={handleCancel}
+              onCancel={handleCancelAppointment}   // ✅ correct
             />
           </>
         )}

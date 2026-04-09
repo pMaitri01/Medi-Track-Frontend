@@ -7,7 +7,7 @@
 
 // const PatientHome = () => {
 //   const [showDropdown, setShowDropdown] = useState(false);
-  
+
 //   // State for reviews list
 //   const [reviews, setReviews] = useState([
 //     { name: "Amy T", date: "May 01", text: "Sarah Williams was very patient and thorough during visit my visit.", stars: 4 },
@@ -90,7 +90,7 @@
 //           {/* INTERACTIVE REVIEW SECTION */}
 //           <section className="card card-blue-solid">
 //             <h2 className="card-heading white-text">Patient Reviews</h2>
-            
+
 //             <form className="review-form" onSubmit={handlePostReview}>
 //               <textarea 
 //                 className="review-input" 
@@ -265,7 +265,7 @@
 
 // const PatientHome = () => {
 //   const [showDropdown, setShowDropdown] = useState(false);
-  
+
 //   const [reviews, setReviews] = useState([
 //     { name: "Amy T", date: "May 01", text: "Sarah Williams was very patient and thorough during visit my visit.", stars: 4 },
 //     { name: "Robert L", date: "April 26", text: "Dr. Choi was great! Explained everything clearly.", stars: 4 }
@@ -275,7 +275,7 @@
 //   const [rating, setRating] = useState(5);
 //   // State For Appointment Booking 
 //   const [isBookingOpen, setIsBookingOpen] = useState(false);
-  
+
 //   const handlePostReview = (e) => {
 //     e.preventDefault();
 //     if (!newReviewText.trim()) return;
@@ -385,7 +385,7 @@
 // export default PatientHome;
 
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import '../css/PatientHome.css';
 import doctorProfile from '../images/profile.png';
 import '@fortawesome/fontawesome-free/css/all.min.css';
@@ -397,11 +397,106 @@ const PatientHome = () => {
     { name: "Amy T", date: "May 01", text: "Sarah Williams was very patient and thorough during visit my visit.", stars: 4 },
     { name: "Robert L", date: "April 26", text: "Dr. Choi was great! Explained everything clearly.", stars: 4 }
   ]);
-
+  const [upcomingAppointment, setUpcomingAppointment] = useState(null);
+  const [loadingAppt, setLoadingAppt] = useState(true);
   const [newReviewText, setNewReviewText] = useState("");
   const [rating, setRating] = useState(5);
   const [isBookingOpen, setIsBookingOpen] = useState(false);
+  useEffect(() => {
+    const fetchAppointments = async () => {
+      try {
+        const res = await fetch(
+          `${process.env.REACT_APP_API_URL}/api/appointment/all`,
+          { credentials: "include" }
+        );
 
+        const data = await res.json();
+
+        if (!res.ok) throw new Error("Failed to fetch appointments");
+
+        const user = JSON.parse(localStorage.getItem("user") || "{}");
+
+        // ✅ Filter logged-in patient's upcoming appointments
+        const now = new Date();
+
+        const upcoming = data
+          .filter((appt) => {
+            const patientId =
+              typeof appt.patient === "object"
+                ? appt.patient._id
+                : appt.patient;
+
+            const appointmentDateTime = parseDateTime(appt.date, appt.time);
+            return (
+              patientId === user._id &&
+              appt.status !== "cancelled" &&
+              appointmentDateTime > now
+            );
+          })
+          .sort(
+            (a, b) =>
+              new Date(`${a.date}T${a.time}`) -
+              new Date(`${b.date}T${b.time}`)
+          )[0];
+
+        setUpcomingAppointment(upcoming);
+
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setLoadingAppt(false);
+      }
+    };
+
+    fetchAppointments();
+  }, []);
+
+  const parseDateTime = (date, time) => {
+    const d = new Date(date);
+
+    if (!time) return d;
+
+    const [timePart, modifier] = time.split(" ");
+    let [hours, minutes] = timePart.split(":");
+
+    hours = parseInt(hours);
+    minutes = parseInt(minutes);
+
+    if (modifier === "PM" && hours !== 12) hours += 12;
+    if (modifier === "AM" && hours === 12) hours = 0;
+
+    d.setHours(hours);
+    d.setMinutes(minutes);
+    d.setSeconds(0);
+
+    return d;
+  };
+  const handleCancelAppointment = async () => {
+  if (!upcomingAppointment) return;
+
+  try {
+    const res = await fetch(
+      `${process.env.REACT_APP_API_URL}/api/appointment/${upcomingAppointment._id}/cancel/`,
+      {
+        method: "PUT",
+        credentials: "include"
+      }
+    );
+
+    const data = await res.json();
+
+    if (!res.ok) throw new Error(data.message || "Cancel failed");
+
+    // ✅ Remove appointment from UI
+    setUpcomingAppointment(null);
+
+    alert("Appointment cancelled successfully");
+
+  } catch (err) {
+    console.error(err);
+    alert("Failed to cancel appointment");
+  }
+};
   const handlePostReview = (e) => {
     e.preventDefault();
     if (!newReviewText.trim()) return;
@@ -419,6 +514,7 @@ const PatientHome = () => {
     <>
       <Navbar />
 
+
       {/* MODAL OVERLAY - This is what opens when you click Book Appointment */}
       {isBookingOpen && (
         <div className="booking-modal-overlay">
@@ -430,10 +526,10 @@ const PatientHome = () => {
 
       <div className={`patient-home-wrapper ${isBookingOpen ? 'prevent-scroll' : ''}`}>
         <div className="dashboard-grid">
-          
+
           {/* LEFT COLUMN */}
           <div className="left-column">
-            <section className="card card-white">
+            {/* <section className="card card-white">
               <h2 className="card-heading">Upcoming Appointment</h2>
               <div className="appointment-body">
                 <div className="profile-image-wrapper">
@@ -442,17 +538,98 @@ const PatientHome = () => {
                 <div className="appointment-details">
                   <div className="dr-header-row">
                     <div>
-                      <h3 className="dr-name">Dr. Sarah Williams</h3>
-                      <p className="appt-time">May 10, 2024 at 10:00 AM</p>
-                      <p className="dr-specialty">Dr. General Practice</p>
+                      {loadingAppt ? (
+                        <p>Loading appointment...</p>
+                      ) : upcomingAppointment ? (
+                        <>
+                          <h3 className="dr-name">
+                            {upcomingAppointment.doctor?.fullName || "Doctor"}
+                          </h3>
+
+                          <p className="appt-time">
+                            {new Date(upcomingAppointment.date).toDateString()} at{" "}
+                            {upcomingAppointment.time}
+                          </p>
+
+                          <p className="dr-specialty">
+                            {upcomingAppointment.doctor?.specialization}
+                          </p>
+
+                          <p className={`status ${upcomingAppointment.status.toLowerCase()}`}>
+                            {upcomingAppointment.status}
+                          </p>
+                        </>
+                      ) : (
+                        <p>No upcoming appointments</p>
+                      )}
                     </div>
-                    <span className="medical-data-tag">MedicalData</span>
                   </div>
-                  <div className="action-buttons">
-                    <button className="reviewbtn">Orphastics</button>
-                    <button className="reviewbtn">Reschedule</button>
-                    <button className="reviewbtn">Cancel</button>
-                  </div>
+                  {upcomingAppointment && (
+                    <div className="action-buttons">
+                      <button className="reviewbtn">Reschedule</button>
+                      <button className="reviewbtn">Cancel</button>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </section> */}
+            <section className="card card-white upcoming-appt-section">
+              <div className="card-header-flex">
+                <h2 className="card-heading">Upcoming Appointment</h2>
+                {upcomingAppointment && (
+                  <span className={`status-pill ${upcomingAppointment.status.toLowerCase()}`}>
+                    {upcomingAppointment.status}
+                  </span>
+                )}
+              </div>
+
+              <div className="appointment-body">
+                <div className="dr-profile-aside">
+                  <img src={doctorProfile} className="dr-image" alt="Doctor" />
+                </div>
+
+                <div className="appointment-main-info">
+                  {loadingAppt ? (
+                    <div className="loading-state">Loading appointment...</div>
+                  ) : upcomingAppointment ? (
+                    <>
+                      <div className="info-group">
+                        <h3 className="dr-name">
+                          {upcomingAppointment.doctor?.fullName}
+                        </h3>
+                        <p className="dr-specialty">
+                          {upcomingAppointment.doctor?.specialization}
+                        </p>
+                      </div>
+
+                      <div className="datetime-row">
+                        <div className="info-item">
+                          <i className="fa-regular fa-calendar"></i>
+                          <span>{new Date(upcomingAppointment.date).toDateString()}</span>
+                        </div>
+                        <div className="info-item">
+                          <i className="fa-regular fa-clock"></i>
+                          <span>{upcomingAppointment.time}</span>
+                        </div>
+                      </div>
+
+                      <div className="action-buttons">
+                        <button className="btn-outline">Reschedule</button>
+<button 
+  className="btn-danger-outline"
+  onClick={handleCancelAppointment}
+>
+  Cancel
+</button>                      </div>
+                    </>
+                  ) : (
+                    <div className="no-appt-state">
+                      <p>You have no upcoming appointments.</p>
+                      <button className="book-now-link" onClick={() => setIsBookingOpen(true)}>
+                        Book one now
+                      </button>
+                    </div>
+                  )}
                 </div>
               </div>
             </section>
@@ -470,8 +647,8 @@ const PatientHome = () => {
             <section className="card card-blue-solid">
               <h2 className="card-heading white-text">Patient Reviews</h2>
               <form className="review-form" onSubmit={handlePostReview}>
-                <textarea 
-                  className="review-input" 
+                <textarea
+                  className="review-input"
                   placeholder="Share your experience..."
                   value={newReviewText}
                   onChange={(e) => setNewReviewText(e.target.value)}
@@ -572,7 +749,7 @@ const PatientHome = () => {
               </div>
             </section>
           </div>
-          
+
         </div>
       </div>
     </>
