@@ -230,10 +230,17 @@ const PatientHome = () => {
                         <button className="btn-outline">Reschedule</button>
 <button 
   className="btn-danger-outline"
-  onClick={handleCancelAppointment}
+  onClick={() => {
+    const confirmCancel = window.confirm(
+      "Are you sure you want to cancel this appointment?"
+    );
+    if (confirmCancel) {
+      handleCancelAppointment();
+    }
+  }}
 >
   Cancel
-</button>                      </div>
+</button>                   </div>
                     </>
                   ) : (
                     <div className="no-appt-state">

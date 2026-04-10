@@ -17,8 +17,8 @@ const DUMMY_PRESCRIPTIONS = [
     date: "2026-04-05", diagnosis: "Hypertension", status: "Active",
     notes: "Avoid salty food. Drink plenty of water.",
     medicines: [
-      { name: "Amlodipine",  dosage: "5mg",   timing: ["Morning"],          duration: "30 days" },
-      { name: "Telmisartan", dosage: "40mg",  timing: ["Night"],            duration: "30 days" },
+      { name: "Amlodipine",  dosage: "5mg",  timing: ["Morning"],          foodPref: { Morning: "After Food" },                          duration: "30 days" },
+      { name: "Telmisartan", dosage: "40mg", timing: ["Night"],            foodPref: { Night: "Before Food" },                           duration: "30 days" },
     ],
   },
   {
@@ -26,8 +26,8 @@ const DUMMY_PRESCRIPTIONS = [
     date: "2026-03-20", diagnosis: "Migraine", status: "Active",
     notes: "Rest in dark room during attacks.",
     medicines: [
-      { name: "Sumatriptan", dosage: "50mg",  timing: ["Morning"],          duration: "7 days"  },
-      { name: "Propranolol", dosage: "20mg",  timing: ["Morning", "Night"], duration: "21 days" },
+      { name: "Sumatriptan", dosage: "50mg", timing: ["Morning"],          foodPref: { Morning: "After Food" },                          duration: "7 days"  },
+      { name: "Propranolol", dosage: "20mg", timing: ["Morning", "Night"], foodPref: { Morning: "After Food", Night: "After Food" },     duration: "21 days" },
     ],
   },
   {
@@ -35,73 +35,134 @@ const DUMMY_PRESCRIPTIONS = [
     date: "2026-02-10", diagnosis: "Lower Back Pain", status: "Completed",
     notes: "Physiotherapy exercises daily.",
     medicines: [
-      { name: "Ibuprofen",   dosage: "400mg", timing: ["Morning", "Afternoon", "Night"], duration: "5 days" },
+      { name: "Ibuprofen", dosage: "400mg", timing: ["Morning", "Afternoon", "Night"],
+        foodPref: { Morning: "After Food", Afternoon: "After Food", Night: "After Food" }, duration: "5 days" },
     ],
   },
 ];
 
-const BLANK_MEDICINE = () => ({ name: "", dosage: "", timing: [], duration: "" });
+const BLANK_MEDICINE = () => ({ name: "", dosage: "", timing: [], foodPref: {}, duration: "" });
 const BLANK_FORM     = () => ({
   patientId: "", patientName: "", date: new Date().toISOString().split("T")[0],
   diagnosis: "", notes: "", medicines: [BLANK_MEDICINE()],
 });
 
-const TIMINGS = ["Morning", "Afternoon", "Night"];
+const TIMINGS     = ["Morning", "Afternoon", "Night"];
 const TIMING_ICON = { Morning: "🌅", Afternoon: "🌇", Night: "🌙" };
+const FOOD_OPTS   = ["Before Food", "After Food"];
 
 const formatDate = (d) =>
   new Date(d).toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric" });
 
 // ── MedicineRow ──────────────────────────────────────────────────────────────
 function MedicineRow({ med, index, onChange, onRemove, canRemove }) {
-  const toggle = (slot) => {
-    const next = med.timing.includes(slot)
+
+  // Toggle a timing slot on/off; auto-set "After Food" as default when turning on
+  function handleTimingClick(slot) {
+    const active = med.timing.includes(slot);
+    const nextTiming   = active
       ? med.timing.filter((t) => t !== slot)
       : [...med.timing, slot];
-    onChange(index, "timing", next);
-  };
+    const nextFoodPref = { ...med.foodPref };
+    if (active) {
+      delete nextFoodPref[slot];
+    } else {
+      nextFoodPref[slot] = "After Food";
+    }
+    // Update both fields in one go so state stays in sync
+    onChange(index, "timing",   nextTiming);
+    onChange(index, "foodPref", nextFoodPref);
+  }
+
+  function handleFoodClick(slot, opt) {
+    onChange(index, "foodPref", { ...med.foodPref, [slot]: opt });
+  }
+
+  // Only show food rows for slots that are currently selected, in TIMINGS order
+  const activeSlotsInOrder = TIMINGS.filter((s) => med.timing.includes(s));
 
   return (
-    <div className="dp-med-row">
-      <div className="dp-med-index">{index + 1}</div>
+    <div className="dp-med-entry">
 
-      <input
-        className="dp-input dp-med-name"
-        placeholder="Medicine name"
-        value={med.name}
-        onChange={(e) => onChange(index, "name", e.target.value)}
-      />
-      <input
-        className="dp-input dp-med-dosage"
-        placeholder="Dosage (e.g. 500mg)"
-        value={med.dosage}
-        onChange={(e) => onChange(index, "dosage", e.target.value)}
-      />
+      {/* ── Input row ─────────────────────────────────────────────────── */}
+      <div className="dp-med-inputs">
 
-      <div className="dp-timing-checks">
-        {TIMINGS.map((slot) => (
-          <label key={slot} className={`dp-timing-chip ${med.timing.includes(slot) ? "dp-timing-chip--on" : ""}`}>
-            <input
-              type="checkbox"
-              checked={med.timing.includes(slot)}
-              onChange={() => toggle(slot)}
-              hidden
-            />
-            {TIMING_ICON[slot]} {slot}
-          </label>
-        ))}
+        <div className="dp-med-index">{index + 1}</div>
+
+        <input
+          className="dp-input"
+          placeholder="Medicine name"
+          value={med.name}
+          onChange={(e) => onChange(index, "name", e.target.value)}
+        />
+
+        <input
+          className="dp-input"
+          placeholder="Dosage (e.g. 500mg)"
+          value={med.dosage}
+          onChange={(e) => onChange(index, "dosage", e.target.value)}
+        />
+
+        {/* Timing chips — plain divs with onClick, no hidden inputs */}
+        <div className="dp-timing-checks">
+          {TIMINGS.map((slot) => {
+            const isOn = med.timing.includes(slot);
+            return (
+              <div
+                key={slot}
+                role="button"
+                tabIndex={0}
+                className={`dp-timing-chip${isOn ? " dp-timing-chip--on" : ""}`}
+                onClick={() => handleTimingClick(slot)}
+                onKeyDown={(e) => e.key === "Enter" && handleTimingClick(slot)}
+              >
+                {TIMING_ICON[slot]} {slot}
+              </div>
+            );
+          })}
+        </div>
+
+        <input
+          className="dp-input"
+          placeholder="Duration (e.g. 7 days)"
+          value={med.duration}
+          onChange={(e) => onChange(index, "duration", e.target.value)}
+        />
+
+        {canRemove
+          ? <button className="dp-med-remove" onClick={() => onRemove(index)} title="Remove">✕</button>
+          : <span />
+        }
       </div>
 
-      <input
-        className="dp-input dp-med-duration"
-        placeholder="Duration (e.g. 7 days)"
-        value={med.duration}
-        onChange={(e) => onChange(index, "duration", e.target.value)}
-      />
-
-      {canRemove && (
-        <button className="dp-med-remove" onClick={() => onRemove(index)} title="Remove">✕</button>
+      {/* ── Food preference panel — appears only when ≥1 timing selected ── */}
+      {activeSlotsInOrder.length > 0 && (
+        <div className="dp-food-panel">
+          <span className="dp-food-panel-label">🍽️ Food Preference</span>
+          <div className="dp-food-rows">
+            {activeSlotsInOrder.map((slot) => (
+              <div key={slot} className="dp-food-row">
+                <span className="dp-food-slot-label">
+                  {TIMING_ICON[slot]} {slot}
+                </span>
+                <div className="dp-food-toggle">
+                  {FOOD_OPTS.map((opt) => (
+                    <button
+                      key={opt}
+                      type="button"
+                      className={`dp-food-btn${med.foodPref[slot] === opt ? " dp-food-btn--on" : ""}`}
+                      onClick={() => handleFoodClick(slot, opt)}
+                    >
+                      {opt === "Before Food" ? "⬆️" : "⬇️"} {opt}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
       )}
+
     </div>
   );
 }
@@ -111,8 +172,7 @@ function PrescriptionForm({ form, setForm, onSave, onCancel, isEdit }) {
   const updateMed = (i, field, val) => {
     const meds = form.medicines.map((m, idx) => idx === i ? { ...m, [field]: val } : m);
     setForm({ ...form, medicines: meds });
-  };
-  const addMed    = () => setForm({ ...form, medicines: [...form.medicines, BLANK_MEDICINE()] });
+  };  const addMed    = () => setForm({ ...form, medicines: [...form.medicines, BLANK_MEDICINE()] });
   const removeMed = (i) => setForm({ ...form, medicines: form.medicines.filter((_, idx) => idx !== i) });
 
   const handlePatient = (e) => {
@@ -237,14 +297,27 @@ function ViewModal({ rx, onClose }) {
           <div className="dp-view-table-wrap">
             <table className="dp-view-table">
               <thead>
-                <tr><th>Medicine</th><th>Dosage</th><th>Timing</th><th>Duration</th></tr>
+                <tr><th>Medicine</th><th>Dosage</th><th>Timing & Food</th><th>Duration</th></tr>
               </thead>
               <tbody>
                 {rx.medicines.map((m, i) => (
                   <tr key={i}>
                     <td>{m.name}</td>
                     <td>{m.dosage}</td>
-                    <td>{m.timing.map((t) => `${TIMING_ICON[t]} ${t}`).join("  ")}</td>
+                    <td>
+                      <div className="dp-modal-timing-list">
+                        {(m.timing || []).map((t) => (
+                          <span key={t} className="dp-modal-timing-tag">
+                            {TIMING_ICON[t]} {t}
+                            {m.foodPref?.[t] && (
+                              <span className="dp-modal-food-tag">
+                                🍽️ {m.foodPref[t]}
+                              </span>
+                            )}
+                          </span>
+                        ))}
+                      </div>
+                    </td>
                     <td>{m.duration}</td>
                   </tr>
                 ))}
