@@ -168,11 +168,7 @@ const DoctorRegister = () => {
         setErrors(p => ({ ...p, submit: data.message || "Registration failed. Please try again." }));
       }
     } catch {
-      // UI demo fallback
-      sessionStorage.setItem("pendingDoctor", JSON.stringify({
-        name: form.fullName, email: form.email, specialization: form.specialization,
-      }));
-      navigate("/DoctorWaiting");
+      setErrors(p => ({ ...p, submit: "Network error. Please try again." }));
     } finally {
       setLoading(false);
     }

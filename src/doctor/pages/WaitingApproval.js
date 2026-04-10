@@ -1,25 +1,137 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import "../css/DoctorRegister.css";
-
+import { useNavigate } from "react-router-dom";
 const WaitingApproval = () => {
   const [doctor, setDoctor] = useState(null);
   const [checking, setChecking] = useState(false);
   const [status, setStatus]     = useState("Pending");
+const navigate = useNavigate();
 
-  useEffect(() => {
-    const stored = sessionStorage.getItem("pendingDoctor");
-    if (stored) setDoctor(JSON.parse(stored));
-  }, []);
+  // useEffect(() => {
+  //   const stored = sessionStorage.getItem("pendingDoctor");
+  //   if (stored) setDoctor(JSON.parse(stored));
+  // }, []);
+useEffect(() => {
+  const fetchDoctorData = async () => {
+    try {
+      const storedDoctor = JSON.parse(localStorage.getItem("doctor"));
+      if (!storedDoctor) return;
 
-  const handleRefresh = () => {
-    setChecking(true);
-    // Simulate status check — in real app call API
-    setTimeout(() => {
-      setChecking(false);
-      setStatus("Pending"); // stays pending until admin acts
-    }, 1500);
+      const res = await fetch(`${process.env.REACT_APP_API_URL}/api/doctor/all`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+        credentials: "include",
+      });
+
+      const data = await res.json();
+
+      // ✅ FIX HERE
+      const doctorsArray = data.doctors;
+
+      const currentDoctor = doctorsArray.find(
+        (doc) =>
+          doc._id === storedDoctor._id ||
+          doc.email === storedDoctor.email
+      );
+
+      // if (currentDoctor) {
+      //   setDoctor({
+      //     name: currentDoctor.fullName,
+      //     email: currentDoctor.email,
+      //     specialization: currentDoctor.specialization,
+      //   });
+
+      //   setStatus(currentDoctor.status);
+
+      //   // update latest data
+      //   localStorage.setItem("doctor", JSON.stringify(currentDoctor));
+      // }
+      if (currentDoctor) {
+  const status = currentDoctor.status?.toLowerCase();
+
+  setDoctor({
+    name: currentDoctor.fullName,
+    email: currentDoctor.email,
+    specialization: currentDoctor.specialization,
+  });
+
+  setStatus(status);
+
+  // ✅ update latest data
+  localStorage.setItem("doctor", JSON.stringify(currentDoctor));
+
+  // 🚀 REDIRECTION
+  if (status === "approved") {
+    navigate("/DoctorProfile");   // ✅ changed
+  } else if (status === "rejected") {
+    navigate("/DoctorRejected");  // ✅ same
+  }
+}
+
+    } catch (err) {
+      console.error(err);
+    }
   };
+
+  fetchDoctorData();
+}, []);
+
+  const handleRefresh = async () => {
+  setChecking(true);
+
+  try {
+    const storedDoctor = JSON.parse(localStorage.getItem("doctor"));
+
+    const res = await fetch(`${process.env.REACT_APP_API_URL}/api/doctor/all`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    });
+
+    const data = await res.json();
+
+    if (res.ok) {
+      const currentDoctor = data.find(
+        (doc) =>
+          doc._id === storedDoctor._id || 
+          doc.email === storedDoctor.email
+      );
+
+      // if (currentDoctor) {
+      //   setStatus(currentDoctor.status);
+
+      //   // 🚀 AUTO REDIRECT WHEN APPROVED
+      //   if (currentDoctor.status === "approved") {
+      //     window.location.href = "/DoctorDashboard";
+      //   }
+
+      //   localStorage.setItem("doctor", JSON.stringify(currentDoctor));
+      // }
+      if (currentDoctor) {
+  const status = currentDoctor.status?.toLowerCase();
+
+  setStatus(status);
+
+  localStorage.setItem("doctor", JSON.stringify(currentDoctor));
+
+  // 🚀 REDIRECT
+  if (status === "approved") {
+    navigate("/DoctorProfile");
+  } else if (status === "rejected") {
+    navigate("/DoctorRejected");
+  }
+}
+    }
+  } catch (err) {
+    console.error(err);
+  }
+
+  setChecking(false);
+};
 
   return (
     <div className="dr-page" style={{ alignItems: "center" }}>

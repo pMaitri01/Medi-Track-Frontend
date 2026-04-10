@@ -1,0 +1,226 @@
+/* =============================================================================
+   DoctorStatus.css — Pending & Rejected status pages
+   Tokens: bg #f8fafc · teal #0aa5a5 · border #e2e8f0 · radius 12px
+   ============================================================================= */
+
+/* ── Page shell ─────────────────────────────────────────────────────────── */
+.ds-page {
+  min-height: 100vh;
+  background: #f8fafc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 16px;
+  font-family: sans-serif;
+}
+
+/* ── Card ───────────────────────────────────────────────────────────────── */
+.ds-card {
+  background: white;
+  border-radius: 16px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+  width: 100%;
+  max-width: 480px;
+  overflow: hidden;
+}
+
+/* ── Colored top band ───────────────────────────────────────────────────── */
+.ds-band {
+  padding: 36px 28px 28px;
+  text-align: center;
+  color: white;
+}
+
+.ds-band--pending  { background: linear-gradient(135deg, #f59e0b, #d97706); }
+.ds-band--rejected { background: linear-gradient(135deg, #ef4444, #dc2626); }
+
+.ds-band-icon {
+  font-size: 56px;
+  margin-bottom: 14px;
+  line-height: 1;
+}
+
+.ds-band h1 {
+  margin: 0 0 6px;
+  font-size: 22px;
+  font-weight: 700;
+  color: white;
+}
+
+.ds-band p {
+  margin: 0;
+  font-size: 14px;
+  opacity: 0.9;
+  line-height: 1.5;
+}
+
+/* ── Card body ──────────────────────────────────────────────────────────── */
+.ds-body {
+  padding: 24px 28px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* ── Status badge ───────────────────────────────────────────────────────── */
+.ds-badge-row {
+  display: flex;
+  justify-content: center;
+}
+
+.ds-badge {
+  font-size: 12px;
+  font-weight: 700;
+  padding: 5px 18px;
+  border-radius: 20px;
+}
+
+.ds-badge--pending  { background: #fefce8; color: #ca8a04; border: 1px solid #fde68a; }
+.ds-badge--rejected { background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; }
+
+/* ── Info box ───────────────────────────────────────────────────────────── */
+.ds-info-box {
+  background: #f8fafc;
+  border-radius: 10px;
+  border: 1px solid #e2e8f0;
+  padding: 16px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.ds-info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.ds-info-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.ds-info-value {
+  font-size: 13px;
+  color: #1e293b;
+  font-weight: 500;
+  text-align: right;
+}
+
+/* ── Rejection reason box ───────────────────────────────────────────────── */
+.ds-reason-box {
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 10px;
+  padding: 14px 16px;
+}
+
+.ds-reason-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: #dc2626;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  margin: 0 0 6px;
+}
+
+.ds-reason-text {
+  font-size: 14px;
+  color: #7f1d1d;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* ── Notice box ─────────────────────────────────────────────────────────── */
+.ds-notice {
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  border-radius: 10px;
+  padding: 14px 16px;
+  font-size: 13px;
+  color: #1e40af;
+  line-height: 1.6;
+}
+
+/* ── Inline error ───────────────────────────────────────────────────────── */
+.ds-error-msg {
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #dc2626;
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+/* ── Buttons ────────────────────────────────────────────────────────────── */
+.ds-btn-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.ds-btn {
+  width: 100%;
+  padding: 11px 20px;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s;
+  font-family: inherit;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+.ds-btn:hover:not(:disabled) { opacity: 0.85; }
+.ds-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.ds-btn--primary   { background: #0aa5a5; color: white; }
+.ds-btn--secondary { background: #f1f5f9; color: #475569; }
+.ds-btn--danger    { background: #fee2e2; color: #991b1b; }
+
+/* ── Footer link ────────────────────────────────────────────────────────── */
+.ds-footer-link {
+  text-align: center;
+  font-size: 13px;
+  color: #64748b;
+  margin: 0;
+}
+
+.ds-footer-link a {
+  color: #0aa5a5;
+  font-weight: 600;
+  text-decoration: none;
+}
+.ds-footer-link a:hover { text-decoration: underline; }
+
+/* ── Spinner ────────────────────────────────────────────────────────────── */
+.ds-spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: ds-spin 0.7s linear infinite;
+  flex-shrink: 0;
+}
+
+@keyframes ds-spin { to { transform: rotate(360deg); } }
+
+/* ── Responsive ─────────────────────────────────────────────────────────── */
+@media (max-width: 480px) {
+  .ds-band { padding: 28px 20px 22px; }
+  .ds-body { padding: 20px 20px 28px; }
+  .ds-band h1 { font-size: 20px; }
+}
