@@ -36,6 +36,7 @@ import DoctorLogin       from './doctor/pages/DoctorLogin';
 import DoctorSignUp      from './doctor/pages/DoctorSignUp';
 import DoctorRegister    from './doctor/pages/DoctorRegister';
 import WaitingApproval   from './doctor/pages/WaitingApproval';
+import RejectedPage      from './doctor/pages/RejectedPage';
 import DoctorForgotFlow  from './doctor/pages/DoctorForgotFlow';
 import DoctorDashboard   from './doctor/pages/DoctorDashboard';
 import DoctorProfile     from './doctor/pages/DoctorProfile';
@@ -87,6 +88,7 @@ function App() {
         <Route path="/DoctorSignUp"         element={<DoctorSignUp />} />
         <Route path="/DoctorRegister"       element={<DoctorRegister />} />
         <Route path="/DoctorWaiting"        element={<WaitingApproval />} />
+        <Route path="/DoctorRejected"       element={<RejectedPage />} />
         <Route path="/DoctorForgotPassword" element={<DoctorForgotFlow />} />
         <Route path="/DoctorProfile"        element={<DoctorProfile />} />
         <Route path="/PatientList"
