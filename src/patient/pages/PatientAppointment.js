@@ -132,6 +132,7 @@ export default function PatientAppointment() {
     loadAppointments();
   }, []);
 
+  
   const user = JSON.parse(localStorage.getItem("user"));
   const userId = user?._id;
 
@@ -163,7 +164,7 @@ export default function PatientAppointment() {
           doctorName:
             item.doctor?.fullName || item.doctorName || "Unknown Doctor",
           specialization:
-            item.doctor?.specialization || item.specialization || "—",
+            item.doctor?.specialization || item.specialization,
           date: item.date,
           time: item.time || "—",
           status: item.status || "Pending",

@@ -14,12 +14,27 @@ const BookAppointment = ({ onClose }) => {
 
   // ── Fetch available doctors on mount ──
   useEffect(() => {
-    fetch(`${process.env.REACT_APP_API_URL}/api/doctor/names`)
-      .then(res => res.json())
-      .then(data => setDoctors(data))
-      .catch(err => console.error("Failed to load doctors:", err));
-  }, []);
+  fetch(`${process.env.REACT_APP_API_URL}/api/doctor/names`)
+    .then(res => res.json())
+    .then(data => {
+      console.log("Raw Doctor Data:", data);
 
+      // ✅ SAFER FILTER
+     const approvedDoctors = data.filter(doc => {
+  const status = (doc.status || doc.approvalStatus || "").toLowerCase().trim();
+
+  return (
+    status === "approved" ||
+    doc.isApproved === true
+  );
+});
+
+      console.log("Approved Doctors:", approvedDoctors);
+
+      setDoctors(approvedDoctors);
+    })
+    .catch(err => console.error("Failed to load doctors:", err));
+}, []);
   const timeSlots = ["09:00 AM", "09:30 AM", "10:00 AM", "10:30 AM", "11:00 AM", "11:30 AM"];
 
   const handleDateChange = (date) => {
@@ -106,8 +121,7 @@ const BookAppointment = ({ onClose }) => {
             <option value="">-- Choose Doctor --</option>
             {doctors.map((doc) => (
               <option key={doc._id} value={doc._id}>
-                {doc.fullName}
-              </option>
+{doc.firstName} {doc.lastName}              </option>
             ))}
           </select>
 
