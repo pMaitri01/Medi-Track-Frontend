@@ -35,10 +35,10 @@ const PatientManagement = () => {
     const fetchPatients = async () => {
       try {
         const token = localStorage.getItem("adminToken");
-        const res = await fetch(
-          `${process.env.REACT_APP_API_URL}/api/admin/list`,
+        const res = await fetch(`${process.env.REACT_APP_API_URL}/api/patient/list`,
           {
             method: "GET",
+            credentials: "include",
             headers: {
               Authorization: `Bearer ${token}`,
             },
