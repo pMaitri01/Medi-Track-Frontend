@@ -50,7 +50,7 @@ const DoctorList = () => {
         if (!res.ok) throw new Error("Failed to fetch doctors.");
         const data = await res.json();
         const approvedDoctors = data.doctors
-          .filter(doc => doc.status === "approved") // ✅ FILTER HERE
+          .filter(doc => doc.status === "approved" && doc.isProfileComplete) // ✅ FILTER HERE
           .map(mapDoctor);
 
         setDoctors(approvedDoctors);     
