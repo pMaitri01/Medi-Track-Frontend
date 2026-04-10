@@ -72,18 +72,64 @@ const DoctorApproval = () => {
 };
 
   // ── Reject ──
-  const handleReject = () => {
-    if (!rejectReason.trim()) { setRejectError("Rejection reason is required."); return; }
+  // const handleReject = () => {
+  //   if (!rejectReason.trim()) { setRejectError("Rejection reason is required."); return; }
+  //   setLoading("reject");
+  //   setTimeout(() => {
+  //     setDoctors(prev => prev.map(d =>
+  //       d.id === selectedDoc.id ? { ...d, status: "Rejected" } : d
+  //     ));
+  //     setLoading(null);
+  //     showToast(`${selectedDoc.name} has been rejected.`, "reject");
+  //     closePanel();
+  //   }, 1000);
+  // };
+  const handleReject = async () => {
+  if (!rejectReason.trim()) {
+    setRejectError("Rejection reason is required.");
+    return;
+  }
+
+  try {
     setLoading("reject");
-    setTimeout(() => {
-      setDoctors(prev => prev.map(d =>
-        d.id === selectedDoc.id ? { ...d, status: "Rejected" } : d
-      ));
-      setLoading(null);
-      showToast(`${selectedDoc.name} has been rejected.`, "reject");
+
+    const res = await fetch(
+      `${process.env.REACT_APP_API_URL}/api/doctor/${selectedDoc.id}/status`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({
+          status: "rejected",
+         // rejectionReason: rejectReason, // optional (if backend supports)
+        }),
+      }
+    );
+
+    const data = await res.json();
+
+    if (res.ok) {
+      // ✅ update UI
+      setDoctors((prev) =>
+        prev.map((d) =>
+          d.id === selectedDoc.id ? { ...d, status: "rejected" } : d
+        )
+      );
+
+      showToast(`${selectedDoc.name} has been rejected.`, "error");
       closePanel();
-    }, 1000);
-  };
+    } else {
+      showToast(data.message || "Failed to reject doctor", "error");
+    }
+  } catch (err) {
+    console.error(err);
+    showToast("Something went wrong", "error");
+  } finally {
+    setLoading(null);
+  }
+};
 
   // ── Filter + paginate ──
   const filtered = doctors.filter(d => d.status === "pending");
