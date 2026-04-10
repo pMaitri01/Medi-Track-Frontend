@@ -475,3 +475,138 @@ input[type="number"].dp-input {
   .dp-actions { flex-direction: column-reverse; }
   .dp-btn { width: 100%; text-align: center; }
 }
+
+/* ── Working Day Chips ───────────────────────────────────────────────────── */
+.dp-day-chips {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 2px;
+}
+
+.dp-day-chip {
+  padding: 7px 14px;
+  border-radius: 8px;
+  border: 1.5px solid #e2e8f0;
+  background: #f8fafc;
+  font-size: 13px;
+  font-weight: 600;
+  color: #64748b;
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.15s;
+}
+.dp-day-chip:hover { border-color: #2563eb; color: #2563eb; background: #eff6ff; }
+.dp-day-chip:active { transform: scale(0.96); }
+.dp-day-chip--on {
+  background: #2563eb;
+  border-color: #2563eb;
+  color: #fff;
+}
+
+/* ── Working Hours Sessions ──────────────────────────────────────────────── */
+.dp-sessions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 2px;
+  margin-bottom: 8px;
+}
+
+.dp-session-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.dp-session-num {
+  font-size: 12px;
+  font-weight: 600;
+  color: #64748b;
+  min-width: 68px;
+  white-space: nowrap;
+}
+
+.dp-time-sel {
+  width: auto;
+  min-width: 130px;
+  flex: 1;
+  max-width: 160px;
+}
+
+.dp-session-to {
+  font-size: 13px;
+  color: #94a3b8;
+  font-weight: 500;
+}
+
+.dp-session-remove {
+  background: none;
+  border: none;
+  color: #ef4444;
+  font-size: 14px;
+  cursor: pointer;
+  padding: 3px 6px;
+  border-radius: 4px;
+  line-height: 1;
+  flex-shrink: 0;
+}
+.dp-session-remove:hover { background: #fef2f2; }
+
+.dp-session-err {
+  width: 100%;
+  margin-top: -4px;
+}
+
+.dp-add-session-btn {
+  background: #eff6ff;
+  color: #2563eb;
+  border: 1px dashed #93c5fd;
+  padding: 7px 16px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+  font-family: inherit;
+}
+.dp-add-session-btn:hover { background: #dbeafe; }
+
+/* ── Service Type Chips ──────────────────────────────────────────────────── */
+.dp-service-opts {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 2px;
+}
+
+.dp-service-chip {
+  padding: 9px 18px;
+  border-radius: 8px;
+  border: 1.5px solid #e2e8f0;
+  background: #f8fafc;
+  font-size: 13px;
+  font-weight: 500;
+  color: #475569;
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.15s;
+}
+.dp-service-chip:hover { border-color: #2563eb; color: #2563eb; background: #eff6ff; }
+.dp-service-chip--on {
+  background: #eff6ff;
+  border-color: #2563eb;
+  color: #2563eb;
+  font-weight: 700;
+}
+
+/* ── Responsive ──────────────────────────────────────────────────────────── */
+@media (max-width: 580px) {
+  .dp-day-chips { gap: 6px; }
+  .dp-day-chip  { padding: 6px 10px; font-size: 12px; }
+  .dp-session-row { flex-direction: column; align-items: flex-start; }
+  .dp-time-sel { max-width: 100%; width: 100%; }
+  .dp-service-opts { flex-direction: column; }
+  .dp-service-chip { width: 100%; text-align: center; }
+}

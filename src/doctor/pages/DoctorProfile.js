@@ -3,12 +3,16 @@ import "../css/DoctorProfile.css";
 import { useNavigate } from "react-router-dom";
 const initialState = {
   fullName: "", dob: "", gender: "",
-  workingDays: "", workingHours: "", about: "",
+  workingDays: [],
+  workingHours: [{ start: "09:00", end: "17:00" }],
+  serviceType: [],
+  applyAllDays: false,
+  about: "",
   mobile: "", emergencyContact: "", hospitalName: "", address: "", city: "", state: "", mapLink: "",
 };
 
 const STEPS = [
-  { label: "Personal Details",     icon: "🧑‍⚕️" },
+  { label: "Personal Details",     icon: "⚕️" },
   { label: "Professional Details", icon: "🏥"    },
   { label: "Contact & Location",   icon: "📞"    },
 ];
@@ -127,6 +131,139 @@ const CustomDatePicker = ({ value, onChange, error }) => {
   );
 };
 
+// ── Availability constants ────────────────────────────────────────────────────
+const ALL_DAYS = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"];
+const DAY_SHORT = { Monday:"Mon", Tuesday:"Tue", Wednesday:"Wed", Thursday:"Thu",
+                    Friday:"Fri", Saturday:"Sat", Sunday:"Sun" };
+const SERVICE_OPTS = [
+  { value: "physical", label: "🏥 Physical Consultation" },
+  { value: "videocall",    label: "📹 Video Consultation"    },
+];
+
+const TIME_OPTIONS = (() => {
+  const opts = [];
+  for (let h = 0; h < 24; h++) {
+    for (let m = 0; m < 60; m += 30) {
+      const hh = String(h).padStart(2, "0");
+      const mm = String(m).padStart(2, "0");
+      const val = `${hh}:${mm}`;
+      const ampm = h < 12 ? "AM" : "PM";
+      const h12  = h === 0 ? 12 : h > 12 ? h - 12 : h;
+      opts.push({ value: val, label: `${String(h12).padStart(2,"0")}:${mm} ${ampm}` });
+    }
+  }
+  return opts;
+})();
+
+function WorkingDaysPicker({ selected, onChange, error }) {
+  const toggle = (day) => {
+    const next = selected.includes(day)
+      ? selected.filter((d) => d !== day)
+      : [...selected, day];
+    onChange(next);
+  };
+  return (
+    <div className="dp-field">
+      <label className="dp-label">Working Days <span className="dp-required">*</span></label>
+      <div className="dp-day-chips">
+        {ALL_DAYS.map((day) => (
+          <div
+            key={day}
+            role="button"
+            tabIndex={0}
+            className={"dp-day-chip" + (selected.includes(day) ? " dp-day-chip--on" : "")}
+            onClick={() => toggle(day)}
+            onKeyDown={(e) => e.key === "Enter" && toggle(day)}
+          >
+            {DAY_SHORT[day]}
+          </div>
+        ))}
+      </div>
+      {error && <span className="dp-error-msg">{error}</span>}
+    </div>
+  );
+}
+
+function WorkingHoursSessions({ sessions, onChange, sessionErrors }) {
+  const addSession = () =>
+    onChange([...sessions, { start: "09:00", end: "17:00" }]);
+  const removeSession = (i) =>
+    onChange(sessions.filter((_, idx) => idx !== i));
+  const updateSession = (i, field, val) =>
+    onChange(sessions.map((s, idx) => idx === i ? { ...s, [field]: val } : s));
+
+  return (
+    <div className="dp-field">
+      <label className="dp-label">Working Hours <span className="dp-required">*</span></label>
+      <div className="dp-sessions">
+        {sessions.map((s, i) => (
+          <div key={i} className="dp-session-row">
+            <span className="dp-session-num">Session {i + 1}</span>
+            <select
+              className={"dp-input dp-time-sel" + (sessionErrors?.[i]?.start ? " dp-input-error" : "")}
+              value={s.start}
+              onChange={(e) => updateSession(i, "start", e.target.value)}
+            >
+              {TIME_OPTIONS.map((o) => (
+                <option key={o.value} value={o.value}>{o.label}</option>
+              ))}
+            </select>
+            <span className="dp-session-to">to</span>
+            <select
+              className={"dp-input dp-time-sel" + (sessionErrors?.[i]?.end ? " dp-input-error" : "")}
+              value={s.end}
+              onChange={(e) => updateSession(i, "end", e.target.value)}
+            >
+              {TIME_OPTIONS.map((o) => (
+                <option key={o.value} value={o.value}>{o.label}</option>
+              ))}
+            </select>
+            {sessions.length > 1 && (
+              <button type="button" className="dp-session-remove"
+                onClick={() => removeSession(i)} title="Remove">✕</button>
+            )}
+            {sessionErrors?.[i] && (
+              <span className="dp-error-msg dp-session-err">
+                {sessionErrors[i].end || sessionErrors[i].overlap}
+              </span>
+            )}
+          </div>
+        ))}
+      </div>
+      <button type="button" className="dp-add-session-btn" onClick={addSession}>
+        ＋ Add Session
+      </button>
+    </div>
+  );
+}
+
+function ServiceTypePicker({ selected, onChange, error }) {
+  const toggle = (val) => {
+    const next = selected.includes(val)
+      ? selected.filter((v) => v !== val)
+      : [...selected, val];
+    onChange(next);
+  };
+  return (
+    <div className="dp-field">
+      <label className="dp-label">Type of Service <span className="dp-required">*</span></label>
+      <div className="dp-service-opts">
+        {SERVICE_OPTS.map((opt) => (
+          <label
+            key={opt.value}
+            className={"dp-service-chip" + (selected.includes(opt.value) ? " dp-service-chip--on" : "")}
+          >
+            <input type="checkbox" checked={selected.includes(opt.value)}
+              onChange={() => toggle(opt.value)} style={{ display: "none" }} />
+            {opt.label}
+          </label>
+        ))}
+      </div>
+      {error && <span className="dp-error-msg">{error}</span>}
+    </div>
+  );
+}
+
 // ── Field lives OUTSIDE DoctorProfile so it never gets recreated on re-render ──
 const Field = ({ label, name, type = "text", options, textarea, required, value, onChange, error }) => (
   <div className="dp-field">
@@ -225,41 +362,33 @@ const DoctorProfile = () => {
     }
 
     if (stepIndex === 1) {
-      // if (!t("specialization"))
-      //   e.specialization = "Specialization is required.";
-      // else if (t("specialization").length < 3)
-      //   e.specialization = "Specialization must be at least 3 characters.";
+      // Working days
+      if (!form.workingDays || form.workingDays.length === 0)
+        e.workingDays = "Please select at least one working day.";
 
-      // if (!t("qualification"))
-      //   e.qualification = "Qualification is required.";
-      // else if (t("qualification").length < 2)
-      //   e.qualification = "Enter a valid qualification (e.g. MBBS, MD).";
+      // Working hours sessions
+      const sessionErrs = {};
+      form.workingHours.forEach((s, i) => {
+        if (s.start >= s.end)
+          sessionErrs[i] = { end: "End time must be after start time." };
+      });
+      // Check overlaps
+      for (let i = 0; i < form.workingHours.length; i++) {
+        for (let j = i + 1; j < form.workingHours.length; j++) {
+          const a = form.workingHours[i];
+          const b = form.workingHours[j];
+          if (a.start < b.end && b.start < a.end) {
+            sessionErrs[j] = { overlap: `Session ${j + 1} overlaps with session ${i + 1}.` };
+          }
+        }
+      }
+      if (Object.keys(sessionErrs).length > 0) e.workingHours = sessionErrs;
 
-      // if (!t("experience"))
-      //   e.experience = "Experience is required.";
-      // else if (isNaN(form.experience) || Number(form.experience) <= 0)
-      //   e.experience = "Experience must be a positive number greater than 0.";
-      // else if (Number(form.experience) > 60)
-      //   e.experience = "Experience cannot exceed 60 years.";
+      // Service type
+      if (!form.serviceType || form.serviceType.length === 0)
+        e.serviceType = "Please select at least one service type.";
 
-      // if (!t("licenseNumber"))
-      //   e.licenseNumber = "License / registration number is required.";
-      // else if (!/^[a-zA-Z0-9/\\-]{5,}$/.test(t("licenseNumber")))
-      //   e.licenseNumber = "Enter a valid license number (min 5 alphanumeric characters).";
-
-      if (!t("workingDays"))
-        e.workingDays = "Working days are required (e.g. Mon–Fri).";
-      else if (t("workingDays").length < 3)
-        e.workingDays = "Enter valid working days (e.g. Mon–Fri).";
-
-      if (!t("workingHours"))
-        e.workingHours = "Working hours are required (e.g. 9 AM – 5 PM).";
-      else if (t("workingHours").length < 3)
-        e.workingHours = "Enter valid working hours (e.g. 9 AM – 5 PM).";
-
-      if (!t("about"))
-        e.about = "About Doctor is required.";
-      else if (t("about").length < 20)
+      if (!form.about || form.about.trim().length < 20)
         e.about = "About Doctor must be at least 20 characters.";
     }
 
@@ -346,6 +475,7 @@ const DoctorProfile = () => {
         dob:              form.dob,
         workingDays:      form.workingDays,
         workingHours:     form.workingHours,
+        serviceType:      form.serviceType,
         about:            form.about,
         mobile:           form.mobile,
         emergencyContact: form.emergencyContact,
@@ -439,15 +569,34 @@ const DoctorProfile = () => {
 
         {step === 1 && (
           <>
-            <div className="dp-grid-2">
-              {/* <Field label="Specialization"        name="specialization" required {...f("specialization")} />
-              <Field label="Qualification"         name="qualification"  required {...f("qualification")} />
-              <Field label="Experience (years)"    name="experience" type="number" min="0" required {...f("experience")} />
-              <Field label="License / Reg. Number" name="licenseNumber"  required {...f("licenseNumber")} /> */}
-              <Field label="Working Days"          name="workingDays" {...f("workingDays")} />
-              <Field label="Working Hours"         name="workingHours" {...f("workingHours")} />
-            </div>
-            <Field label="About Doctor" name="about" textarea {...f("about")} />
+            <WorkingDaysPicker
+              selected={form.workingDays}
+              onChange={(days) => {
+                setForm((p) => ({ ...p, workingDays: days }));
+                if (errors.workingDays) setErrors((p) => ({ ...p, workingDays: "" }));
+              }}
+              error={errors.workingDays}
+            />
+
+            <WorkingHoursSessions
+              sessions={form.workingHours}
+              onChange={(sessions) => {
+                setForm((p) => ({ ...p, workingHours: sessions }));
+                if (errors.workingHours) setErrors((p) => ({ ...p, workingHours: "" }));
+              }}
+              sessionErrors={typeof errors.workingHours === "object" ? errors.workingHours : null}
+            />
+
+            <ServiceTypePicker
+              selected={form.serviceType}
+              onChange={(types) => {
+                setForm((p) => ({ ...p, serviceType: types }));
+                if (errors.serviceType) setErrors((p) => ({ ...p, serviceType: "" }));
+              }}
+              error={errors.serviceType}
+            />
+
+            <Field label="About Doctor" name="about" textarea required {...f("about")} />
           </>
         )}
 
