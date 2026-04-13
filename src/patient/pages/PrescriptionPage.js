@@ -1,79 +1,8 @@
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import Navbar from "../components/Navbar";
 import "../css/PrescriptionPage.css";
 import defaultDoctorImg from "../images/user.png";
-
-// ── Dummy Data ──────────────────────────────────────────────────────────────
-const DUMMY_PRESCRIPTIONS = [
-  {
-    id: "1",
-    doctorName: "Dr. Aisha Sharma",
-    specialization: "Cardiologist",
-    date: "2026-04-01",
-    diagnosis: "Hypertension",
-    status: "Active",
-    notes: "Avoid salty food. Drink plenty of water. Take medicines on time.",
-    medicines: [
-      { name: "Amlodipine",   dosage: "5mg",  timing: ["Morning"],           duration: "30 days" },
-      { name: "Telmisartan",  dosage: "40mg", timing: ["Night"],             duration: "30 days" },
-      { name: "Aspirin",      dosage: "75mg", timing: ["Morning"],           duration: "30 days" },
-    ],
-  },
-  {
-    id: "2",
-    doctorName: "Dr. Ravi Mehta",
-    specialization: "Dermatologist",
-    date: "2026-03-18",
-    diagnosis: "Eczema",
-    status: "Active",
-    notes: "Apply cream after bath. Avoid scratching. Keep skin moisturised.",
-    medicines: [
-      { name: "Cetirizine",   dosage: "10mg", timing: ["Night"],             duration: "14 days" },
-      { name: "Betamethasone",dosage: "0.1%", timing: ["Morning", "Night"],  duration: "14 days" },
-    ],
-  },
-  {
-    id: "3",
-    doctorName: "Dr. Priya Nair",
-    specialization: "Neurologist",
-    date: "2026-02-10",
-    diagnosis: "Migraine",
-    status: "Past",
-    notes: "Rest in a dark room during attacks. Avoid screen time.",
-    medicines: [
-      { name: "Sumatriptan",  dosage: "50mg", timing: ["Morning"],           duration: "7 days"  },
-      { name: "Propranolol",  dosage: "20mg", timing: ["Morning", "Night"],  duration: "21 days" },
-    ],
-  },
-  {
-    id: "4",
-    doctorName: "Dr. Suresh Kumar",
-    specialization: "Orthopedic",
-    date: "2026-01-05",
-    diagnosis: "Lower Back Pain",
-    status: "Past",
-    notes: "Avoid heavy lifting. Do prescribed physiotherapy exercises daily.",
-    medicines: [
-      { name: "Ibuprofen",    dosage: "400mg",timing: ["Morning","Afternoon","Night"], duration: "5 days" },
-      { name: "Muscle Relax", dosage: "500mg",timing: ["Night"],             duration: "5 days"  },
-      { name: "Calcium",      dosage: "500mg",timing: ["Morning"],           duration: "60 days" },
-    ],
-  },
-  {
-    id: "5",
-    doctorName: "Dr. Meena Iyer",
-    specialization: "Gynecologist",
-    date: "2025-12-20",
-    diagnosis: "Iron Deficiency Anaemia",
-    status: "Past",
-    notes: "Eat iron-rich food. Avoid tea/coffee with meals.",
-    medicines: [
-      { name: "Ferrous Sulphate", dosage: "200mg", timing: ["Morning","Night"], duration: "45 days" },
-      { name: "Folic Acid",       dosage: "5mg",   timing: ["Morning"],         duration: "45 days" },
-    ],
-  },
-];
-
+ 
 const TIMING_ORDER = ["Morning", "Afternoon", "Night"];
 const TIMING_ICON  = { Morning: "🌅", Afternoon: "🌇", Night: "🌙" };
 
@@ -90,22 +19,22 @@ const medicineSummary = (medicines) =>
 
 // ── PrescriptionCard ─────────────────────────────────────────────────────────
 function PrescriptionCard({ rx, onView }) {
-  const isActive = rx.status === "Active";
-  return (
+const isActive = rx.pStatus === "active";  return (
     <div className="rx-card">
       <div className="rx-card-top">
         <img src={defaultDoctorImg} alt="doctor" className="rx-doc-img" />
         <div className="rx-card-info">
-          <h3 className="rx-doctor-name">{rx.doctorName}</h3>
-          <span className="rx-spec-tag">{rx.specialization}</span>
-        </div>
+<h3 className="rx-doctor-name">{rx.doctor?.fullName}</h3>          
+<span className="rx-spec-tag">{rx.doctor?.specialization}</span>        </div>
+        {/* <span className={`rx-badge ${isActive ? "rx-badge--active" : "rx-badge--past"}`}>
+        </span> */}
         <span className={`rx-badge ${isActive ? "rx-badge--active" : "rx-badge--past"}`}>
-          {rx.status}
-        </span>
+  {rx.pStatus}
+</span>
       </div>
 
       <div className="rx-card-meta">
-        <span>📅 {formatDate(rx.date)}</span>
+        <span>📅{formatDate(rx.createdAt)}</span>
         <span>🩺 {rx.diagnosis}</span>
       </div>
 
@@ -139,8 +68,24 @@ function MedicineTable({ medicines }) {
             <tr key={i}>
               <td>{m.name}</td>
               <td>{m.dosage}</td>
-              <td>{m.timing.map((t) => `${TIMING_ICON[t]} ${t}`).join("  ")}</td>
-              <td>{m.duration}</td>
+<td>
+  {Array.isArray(m.timing) && m.timing.length > 0 ? (
+    m.timing.map((t, i) => {
+      const slot =
+        typeof t === "string"
+          ? t
+          : t.timeOfDay || t.slot;
+
+      return (
+        <div key={i}>
+          {TIMING_ICON[slot] || ""} {slot}
+        </div>
+      );
+    })
+  ) : (
+    "No timing"
+  )}
+</td>  <td>{m.duration}</td>
             </tr>
           ))}
         </tbody>
@@ -152,20 +97,55 @@ function MedicineTable({ medicines }) {
 // ── Timing Groups ─────────────────────────────────────────────────────────────
 function TimingGroups({ medicines }) {
   const groups = TIMING_ORDER.reduce((acc, slot) => {
-    const list = medicines.filter((m) => m.timing.includes(slot));
+    const list = medicines.filter(
+  (m) =>
+    m.timing &&
+    m.timing.some((t) => {
+  const s =
+    typeof t === "string"
+      ? t
+      : t.timeOfDay || t.slot;
+
+  return s === slot;
+})
+);
     if (list.length) acc[slot] = list;
     return acc;
   }, {});
+
+  if (Object.keys(groups).length === 0) {
+    return <p className="rx-empty">No schedule available</p>;
+  }
 
   return (
     <div className="rx-timing-groups">
       {Object.entries(groups).map(([slot, list]) => (
         <div key={slot} className="rx-timing-group">
-          <p className="rx-timing-label">{TIMING_ICON[slot]} {slot}</p>
+          <p className="rx-timing-label">
+            {TIMING_ICON[slot]} {slot}
+          </p>
           <div className="rx-timing-pills">
-            {list.map((m, i) => (
-              <span key={i} className="rx-timing-pill">{m.name} · {m.dosage}</span>
-            ))}
+           {list.map((m, i) => {
+ const timingObj = m.timing.find((t) => {
+  const s =
+    typeof t === "string"
+      ? t
+      : t.timeOfDay || t.slot;
+
+  return s === slot;
+});
+
+const food =
+  timingObj?.intake
+    ? ` (${timingObj.intake.replace("_", " ")})`
+    : "";
+
+  return (
+    <span key={`${m.name}-${i}`} className="rx-timing-pill">
+      {m.name} · {m.dosage} {food}
+    </span>
+  );
+})}
           </div>
         </div>
       ))}
@@ -177,8 +157,7 @@ function TimingGroups({ medicines }) {
 function PrescriptionModal({ rx, onClose }) {
   const [reminder, setReminder] = useState(false);
   if (!rx) return null;
-  const isActive = rx.status === "Active";
-
+const isActive = rx.pStatus === "active";
   return (
     <div className="rx-overlay" onClick={onClose}>
       <div className="rx-modal" onClick={(e) => e.stopPropagation()}>
@@ -188,7 +167,7 @@ function PrescriptionModal({ rx, onClose }) {
           <div className="rx-modal-header-left">
             <img src={defaultDoctorImg} alt="doctor" className="rx-modal-img" />
             <div>
-              <h2>{rx.doctorName}</h2>
+              <h2>{rx.doctor?.fullName}</h2>
               <p className="rx-modal-spec">{rx.specialization}</p>
             </div>
           </div>
@@ -199,7 +178,7 @@ function PrescriptionModal({ rx, onClose }) {
         <div className="rx-modal-meta">
           <div className="rx-modal-meta-item">
             <span className="rx-modal-meta-label">Date</span>
-            <span>{formatDate(rx.date)}</span>
+            <span>{formatDate(rx.createdAt)}</span>
           </div>
           <div className="rx-modal-meta-item">
             <span className="rx-modal-meta-label">Diagnosis</span>
@@ -208,7 +187,7 @@ function PrescriptionModal({ rx, onClose }) {
           <div className="rx-modal-meta-item">
             <span className="rx-modal-meta-label">Status</span>
             <span className={`rx-badge ${isActive ? "rx-badge--active" : "rx-badge--past"}`}>
-              {rx.status}
+              {rx.pStatus}
             </span>
           </div>
         </div>
@@ -230,27 +209,13 @@ function PrescriptionModal({ rx, onClose }) {
           <div className="rx-modal-section">
             <h4 className="rx-modal-section-title">📝 Doctor Notes</h4>
             <div className="rx-notes-box">
-              {rx.notes.split(". ").filter(Boolean).map((note, i) => (
+              {(rx.notes || "").split(". ").filter(Boolean).map((note, i) => (
                 <p key={i} className="rx-note-item">• {note.replace(/\.$/, "")}</p>
               ))}
             </div>
           </div>
 
           {/* Reminder toggle */}
-          {isActive && (
-            <div className="rx-reminder-row">
-              <span className="rx-reminder-label">
-                🔔 {reminder ? "Reminder Active" : "Set Reminder"}
-              </span>
-              <button
-                className={`rx-toggle ${reminder ? "rx-toggle--on" : ""}`}
-                onClick={() => setReminder((r) => !r)}
-                aria-label="Toggle reminder"
-              >
-                <span className="rx-toggle-knob" />
-              </button>
-            </div>
-          )}
         </div>
 
         {/* Footer */}
@@ -269,23 +234,55 @@ export default function PrescriptionPage() {
   const [search,      setSearch]      = useState("");
   const [dateFilter,  setDateFilter]  = useState("All Time");
   const [modalRx,     setModalRx]     = useState(null);
+  const [prescriptions, setPrescriptions] = useState([]);
+const [loading, setLoading] = useState(true);
 
-  const filtered = DUMMY_PRESCRIPTIONS
-    .filter((rx) => {
-      const tabMatch  = rx.status === activeTab;
-      const dateMatch =
+const getData = async () => {
+  try {
+    setLoading(true);
+
+    const token = localStorage.getItem("token");
+
+    const res = await fetch(
+      "http://localhost:5000/api/prescription/patient",
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },credentials:"include",
+      }
+    );
+
+    const data = await res.json();
+
+    setPrescriptions(data.data || []);
+
+  } catch (error) {
+    console.log(error);
+  } finally {
+    setLoading(false);
+  }
+};
+
+   useEffect(() => {
+    getData();
+  }, []);
+
+const filtered = prescriptions    .filter((rx) => {
+const tabMatch = rx.pStatus === activeTab.toLowerCase();      const dateMatch =
         dateFilter === "All Time"    ? true :
-        dateFilter === "Last 7 Days" ? withinDays(rx.date, 7) :
+        dateFilter === "Last 7 Days" ? withinDays(rx.createdAt, 7):
         withinDays(rx.date, 30);
       const q = search.toLowerCase();
       const searchMatch =
         !q ||
-        rx.doctorName.toLowerCase().includes(q) ||
+        rx.doctor?.fullName?.toLowerCase().includes(q) ||
         rx.diagnosis.toLowerCase().includes(q)  ||
         rx.medicines.some((m) => m.name.toLowerCase().includes(q));
       return tabMatch && dateMatch && searchMatch;
     })
-    .sort((a, b) => new Date(b.date) - new Date(a.date));
+    .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));  
 
   return (
     <div className="rx-page">
@@ -338,7 +335,7 @@ export default function PrescriptionPage() {
         ) : (
           <div className="rx-grid">
             {filtered.map((rx) => (
-              <PrescriptionCard key={rx.id} rx={rx} onView={setModalRx} />
+              <PrescriptionCard key={rx._id} rx={rx} onView={setModalRx} />
             ))}
           </div>
         )}
