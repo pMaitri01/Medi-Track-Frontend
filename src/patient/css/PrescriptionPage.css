@@ -555,10 +555,3 @@
   page-break-inside: avoid;
   page-break-after: auto;
 }
-.pdf-hidden {
-  position: absolute;
-  left: -9999px;
-  top: 0;
-  width: 800px; /* important for PDF layout */
-  /* background: white; */
-}

@@ -167,7 +167,7 @@ function PrescriptionModal({ rx, onClose }) {
       html2pdf()
         .set({
           margin: 10,
-          filename: `${rx.patient?.fullName || "patient"}_prescription.pdf`,          image: { type: "jpeg", quality: 1 },
+          filename: `${rx.patient?.fullName || "patient"}_prescription.pdf`, image: { type: "jpeg", quality: 1 },
           html2canvas: { scale: 2, useCORS: true },
           jsPDF: { format: "a4", orientation: "portrait" }
         })
@@ -196,7 +196,7 @@ function PrescriptionModal({ rx, onClose }) {
   return (
     <div className="rx-overlay" onClick={onClose}>
       <div className="rx-modal" onClick={(e) => e.stopPropagation()}>
-        <div id="pdf-content" className="pdf-wrapper pdf-hidden" >
+        <div id="pdf-content" className="pdf-wrapper" >
 
           {/* 🔥 WATERMARK */}
           <div className="watermark">MediTrack</div>
@@ -221,7 +221,12 @@ function PrescriptionModal({ rx, onClose }) {
           {/* PATIENT INFO */}
           <div style={{ marginBottom: "15px" }}>
             <h3>Patient Details</h3>
-            <p><b>Patient Name:</b> {rx.patient?.fullName}</p>    <p><b>Date:</b> {formatDate(rx.createdAt)}</p>
+            <p>
+              <b>Patient Name:</b>{" "}
+              {rx.patient
+                ? `${rx.patient.firstName} ${rx.patient.lastName}`
+                : "N / A"}
+            </p>            
             <p><b>Prescription ID:</b> RX-{rx._id}</p>
           </div>
 
