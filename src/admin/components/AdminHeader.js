@@ -94,7 +94,7 @@ const AdminHeader = ({ pageTitle, onHamburger }) => {
                 <div className="ah-profile-avatar-lg">A</div>
                 <div>
                   <p className="ah-profile-name">Admin User</p>
-                  <p className="ah-profile-email">admin@meditrack.com</p>
+                  <p className="ah-profile-email">admin04@gmail.com</p>
                 </div>
               </div>
               <hr className="ah-profile-divider" />
@@ -112,7 +112,7 @@ const AdminHeader = ({ pageTitle, onHamburger }) => {
       });
 
       localStorage.removeItem("adminData");
-      navigate("/");
+      navigate("/admin/login");
     } catch (err) {
       console.error("Logout failed", err);
     }

@@ -86,12 +86,25 @@ function AppointmentCard({ appt, onCancel, isNext }) {
             >
               📆 Reschedule
             </button>
-            <button
+            {/* <button
               className="pa-btn-cancel"
               onClick={() => onCancel(appt.id)}
             >
               ✖ Cancel
-            </button>
+            </button> */}
+            <button
+  className="pa-btn-cancel"
+  onClick={() => {
+    const confirmCancel = window.confirm(
+      "Are you sure you want to cancel this appointment?"
+    );
+    if (confirmCancel) {
+      onCancel(appt.id);
+    }
+  }}
+>
+  ✖ Cancel
+</button>
           </div>
         )}
       </div>
