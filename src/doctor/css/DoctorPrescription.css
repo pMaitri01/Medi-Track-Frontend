@@ -166,9 +166,9 @@
 /* ── Medicine table header ──────────────────────────────────────────────── */
 .dp-med-table-head {
   display: grid;
-  grid-template-columns: 28px 1fr 120px 220px 130px 32px;
+  grid-template-columns: 28px 1fr 110px 1fr 110px 32px;
   gap: 8px;
-  padding: 6px 10px;
+  padding: 8px 12px;
   background: #f9fafb;
   border-radius: 8px 8px 0 0;
   border: 1px solid #e5e7eb;
@@ -179,7 +179,7 @@
   letter-spacing: 0.4px;
 }
 
-/* ── Medicine list ──────────────────────────────────────────────────────── */
+/* ── Medicine list wrapper ──────────────────────────────────────────────── */
 .dp-med-list {
   border: 1px solid #e5e7eb;
   border-top: none;
@@ -188,18 +188,96 @@
   margin-bottom: 12px;
 }
 
-/* ── Medicine row ───────────────────────────────────────────────────────── */
-.dp-med-row {
-  display: grid;
-  grid-template-columns: 28px 1fr 120px 220px 130px 32px;
-  gap: 8px;
-  align-items: center;
-  padding: 10px;
+/* ── Medicine entry — wraps input row + food panel ──────────────────────── */
+.dp-med-entry {
   background: #fff;
   border-top: 1px solid #f3f4f6;
 }
-.dp-med-row:first-child { border-top: none; }
-.dp-med-row:hover { background: #fafafa; }
+.dp-med-entry:first-child { border-top: none; }
+.dp-med-entry:hover { background: #fafafa; }
+
+/* ── Input row — same grid as table header ──────────────────────────────── */
+.dp-med-inputs {
+  display: grid;
+  grid-template-columns: 28px 1fr 110px 1fr 110px 32px;
+  gap: 8px;
+  align-items: center;
+  padding: 10px 12px;
+}
+
+/* ── Food preference panel — full width below inputs ────────────────────── */
+.dp-food-panel {
+  margin: 0 12px 10px 48px; /* indent to align under name field */
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 10px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  animation: dp-slide-in 0.15s ease;
+}
+
+@keyframes dp-slide-in {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.dp-food-panel-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+/* ── Food rows ──────────────────────────────────────────────────────────── */
+.dp-food-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.dp-food-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.dp-food-slot-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #374151;
+  min-width: 80px;
+  white-space: nowrap;
+}
+
+.dp-food-toggle {
+  display: flex;
+  gap: 6px;
+}
+
+.dp-food-btn {
+  padding: 4px 12px;
+  border-radius: 20px;
+  border: 1px solid #d1d5db;
+  background: white;
+  font-size: 11px;
+  font-weight: 500;
+  color: #6b7280;
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+  line-height: 1.5;
+}
+.dp-food-btn:hover { border-color: #0aa5a5; color: #0aa5a5; }
+.dp-food-btn--on {
+  background: #f0fdfc;
+  border-color: #0aa5a5;
+  color: #0aa5a5;
+  font-weight: 700;
+}
 
 .dp-med-index {
   width: 22px;
@@ -219,6 +297,7 @@
   display: flex;
   gap: 6px;
   flex-wrap: wrap;
+  align-items: center;
 }
 
 .dp-timing-chip {
@@ -483,6 +562,31 @@
 .dp-view-table td { padding: 9px 12px; border-top: 1px solid #f3f4f6; color: #374151; }
 .dp-view-table tr:hover td { background: #fafafa; }
 
+/* ── Modal timing tags ──────────────────────────────────────────────────── */
+.dp-modal-timing-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.dp-modal-timing-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: #374151;
+}
+
+.dp-modal-food-tag {
+  background: #f0fdfc;
+  border: 1px solid #99f6e4;
+  color: #0f766e;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 1px 7px;
+  border-radius: 10px;
+}
+
 /* ── Notes box ──────────────────────────────────────────────────────────── */
 .dp-notes-box {
   background: #fffbeb;
@@ -504,27 +608,29 @@
 /* ── Responsive ─────────────────────────────────────────────────────────── */
 @media (max-width: 900px) {
   .dp-med-table-head,
-  .dp-med-row {
-    grid-template-columns: 28px 1fr 90px 1fr 100px 28px;
+  .dp-med-inputs {
+    grid-template-columns: 28px 1fr 90px 1fr 90px 28px;
   }
 }
 
 @media (max-width: 768px) {
   .dp-page { padding: 80px 16px 30px; }
-
   .dp-form-grid { grid-template-columns: 1fr; }
 
   .dp-med-table-head { display: none; }
-  .dp-med-row {
+
+  .dp-med-inputs {
     grid-template-columns: 1fr;
     gap: 8px;
     padding: 12px;
-    border-top: 2px solid #f3f4f6;
   }
   .dp-med-index { display: none; }
 
+  .dp-food-panel { margin: 0 12px 10px 12px; }
+  .dp-food-row { flex-direction: column; align-items: flex-start; gap: 4px; }
+  .dp-food-slot-label { min-width: unset; }
+
   .dp-rx-card { flex-direction: column; align-items: flex-start; }
   .dp-rx-card-right { width: 100%; justify-content: space-between; }
-
   .dp-filter-bar { flex-direction: column; }
 }

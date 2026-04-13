@@ -497,3 +497,68 @@
   .rx-modal-footer  { flex-direction: column; }
   .rx-modal-meta    { gap: 12px; }
 }
+.pdf-wrapper {
+  padding: 40px;
+  font-family: Arial;
+  background: white;
+  color: black;
+  position: relative;
+}
+
+/* TABLE */
+.pdf-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+.pdf-table th,
+.pdf-table td {
+  border: 1px solid black;
+  padding: 8px;
+  text-align: left;
+}
+
+/* 🔥 WATERMARK */
+.watermark {
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(-30deg);
+  font-size: 80px;
+  color: rgba(0, 0, 0, 0.08);
+  font-weight: bold;
+  pointer-events: none;
+  user-select: none;
+}
+.pdf-wrapper {
+  padding: 40px;
+  font-family: Arial;
+  background: white;
+  color: black;
+}
+
+/* 🔥 KEY FOR MULTI PAGE */
+.page-break {
+  page-break-before: always;
+  break-before: page;
+}
+
+/* Avoid breaking inside table rows */
+.pdf-table {
+  width: 100%;
+  border-collapse: collapse;
+  page-break-inside: auto;
+}
+
+.pdf-table tr {
+  page-break-inside: avoid;
+  page-break-after: auto;
+}
+.pdf-hidden {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  width: 800px; /* important for PDF layout */
+  /* background: white; */
+}
