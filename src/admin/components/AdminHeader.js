@@ -3,27 +3,27 @@ import { useNavigate } from "react-router-dom";
 import "../css/AdminHeader.css";
 
 const dummyNotifications = [
-  { id: 1, message: "Dr. Rahul Mehta submitted a new registration.",  time: "2 min ago"  },
-  { id: 2, message: "Patient Ravi Shah booked an appointment.",        time: "15 min ago" },
-  { id: 3, message: "System maintenance scheduled for 30 Mar 2026.",   time: "1 hr ago"   },
-  { id: 4, message: "Dr. Priya Patel updated her profile.",            time: "3 hr ago"   },
-  { id: 5, message: "New patient registration: Kavita Mishra.",        time: "Yesterday"  },
+  { id: 1, message: "Dr. Rahul Mehta submitted a new registration.", time: "2 min ago" },
+  { id: 2, message: "Patient Ravi Shah booked an appointment.", time: "15 min ago" },
+  { id: 3, message: "System maintenance scheduled for 30 Mar 2026.", time: "1 hr ago" },
+  { id: 4, message: "Dr. Priya Patel updated her profile.", time: "3 hr ago" },
+  { id: 5, message: "New patient registration: Kavita Mishra.", time: "Yesterday" },
 ];
 
 const AdminHeader = ({ pageTitle, onHamburger }) => {
-  const [bellOpen, setBellOpen]       = useState(false);
+  const [bellOpen, setBellOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
   const [notifications, setNotifications] = useState(dummyNotifications);
-  const bellRef    = useRef(null);
+  const bellRef = useRef(null);
   const profileRef = useRef(null);
-  const navigate   = useNavigate();
+  const navigate = useNavigate();
 
   const unread = notifications.length;
 
   // close dropdowns on outside click
   useEffect(() => {
     const handler = (e) => {
-      if (bellRef.current    && !bellRef.current.contains(e.target))    setBellOpen(false);
+      if (bellRef.current && !bellRef.current.contains(e.target)) setBellOpen(false);
       if (profileRef.current && !profileRef.current.contains(e.target)) setProfileOpen(false);
     };
     document.addEventListener("mousedown", handler);
@@ -31,7 +31,7 @@ const AdminHeader = ({ pageTitle, onHamburger }) => {
   }, []);
 
   const clearAll = () => setNotifications([]);
-  const dismiss  = (id) => setNotifications(prev => prev.filter(n => n.id !== id));
+  const dismiss = (id) => setNotifications(prev => prev.filter(n => n.id !== id));
 
   const goTo = (path) => { setProfileOpen(false); navigate(path); };
 
@@ -103,23 +103,22 @@ const AdminHeader = ({ pageTitle, onHamburger }) => {
                   <span>👤</span> My Profile
                 </li>
                 <li
-  className="ah-profile-logout"
-  onClick={async () => {
-    try {
-      await fetch(`${process.env.REACT_APP_API_URL}/api/admin/logout`, {
-        method: "POST",
-        credentials: "include",
-      });
+                  className="ah-profile-logout"
+                  onClick={async () => {
+                    try {
+                      await fetch(`${process.env.REACT_APP_API_URL}/api/admin/logout`, {
+                        method: "POST",
+                        credentials: "include",
+                      });
 
-      localStorage.removeItem("adminData");
-      navigate("/admin/login");
-    } catch (err) {
-      console.error("Logout failed", err);
-    }
-  }}
->
-  <span>🚪</span> Logout
-</li>
+                      localStorage.removeItem("user"); navigate("/admin/login");
+                    } catch (err) {
+                      console.error("Logout failed", err);
+                    }
+                  }}
+                >
+                  <span>🚪</span> Logout
+                </li>
               </ul>
             </div>
           )}
