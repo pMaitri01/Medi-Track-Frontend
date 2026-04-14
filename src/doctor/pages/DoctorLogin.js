@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import "../css/AdminLogin.css";
+import { useDoctor } from "../../context/DoctorContext";
 // Replace this with your actual doctor image path
 import doctorImage from "../images/doclogin.png"; 
 
@@ -13,7 +14,7 @@ export default function DoctorLogin() {
   const [errors, setErrors] = useState({});
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
-
+const { setDoctor } = useDoctor();
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -60,48 +61,52 @@ export default function DoctorLogin() {
         const data = await response.json();
         
         if (response.ok) {
-  console.log("LOGIN RESPONSE:", data);
+const fullDoctor = data.doc || data.doctor || data.data;
 
-  // ✅ Use FULL doctor data from backend
-  const fullDoctor = data.doc;
+if (!fullDoctor) {
+  setErrors({ status: "Invalid server response" });
+  return;
+}
 
-  const doctor = {
-    id: fullDoctor._id,
-    fullName: fullDoctor.fullName,
-    email: fullDoctor.email,
-    specialization: fullDoctor.specialization,
-    status: fullDoctor.status,
-    isProfileComplete: fullDoctor.isProfileComplete,
-  };
+const status = (fullDoctor.status || "").toLowerCase();
 
-  // ✅ Store doctor
-  localStorage.setItem("doctor", JSON.stringify(doctor));
+const doctor = {
+  id: fullDoctor._id,
+  fullName: fullDoctor.fullName,
+  email: fullDoctor.email,
+  specialization: fullDoctor.specialization,
+  status,
+  isProfileComplete: fullDoctor.isProfileComplete,
+};
 
-  const status = doctor.status?.toLowerCase();
+// save doctor
+localStorage.setItem("doctor", JSON.stringify(doctor));
 
-  // ✅ REDIRECTION LOGIC
-  if (status === "rejected") {
-    navigate("/DoctorRejected", {
-      state: {
-        reason: fullDoctor.rejectionReason || "No reason provided",
-        doctor,
-      },
-    });
+// 🔥 STATUS BASED REDIRECTION
+if (status === "pending") {
+  navigate("/DoctorWaiting", { state: { doctor } });
 
-  } else if (status === "pending") {
-    navigate("/DoctorWaiting", {
-      state: { doctor },
-    });
+} 
+else if (status === "rejected") {
+  navigate("/DoctorRejected", {
+    state: {
+      reason: fullDoctor.rejectionReason || "No reason provided",
+      doctor,
+    },
+  });
 
-  } else if (status === "approved") 
-    {
-      if (doctor.isProfileComplete) {
-        navigate("/DoctorDashboard");
-      } else {
-        navigate("/DoctorProfile");
-      }
-    }
-}else {
+} 
+else if (status === "approved") {
+  if (doctor.isProfileComplete) {
+    navigate("/DoctorDashboard");
+  } else {
+    navigate("/DoctorProfile");
+  }
+} 
+else {
+  setErrors({ status: "Unknown doctor status" });
+}}
+else {
           const msg = (data.message || data.msg || "").toLowerCase();
           if (msg.includes("pending") || msg.includes("not approved")) {
             navigate("/DoctorWaiting");

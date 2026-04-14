@@ -209,6 +209,7 @@ import './App.css';
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { DoctorProvider } from "./context/DoctorContext";
 
 // Shared
 import ProtectedRoute from './components/ProtectedRoute';
@@ -261,9 +262,8 @@ function App() {
 
   return (
     <BrowserRouter>
+            <DoctorProvider>
       <Routes>
-
-        {/* Landing */}
         <Route path="/" element={<PatientLanding />} />
 
         {/* Patient Auth */}
@@ -358,17 +358,18 @@ function App() {
           </ProtectedRoute>
         } />
 
-        <Route path="/DoctorWaiting" element={
+        {/* <Route path="/DoctorWaiting" element={
           <DoctorStatusRoute allowedStatus={["waiting"]}>
             <WaitingApproval />
           </DoctorStatusRoute>
-        } />
-
-        <Route path="/DoctorRejected" element={
+        } /> */}
+        <Route path="/DoctorWaiting" element={<WaitingApproval />} />
+          <Route path="/DoctorRejected" element={<RejectedPage />} />
+        {/* <Route path="/DoctorRejected" element={
           <DoctorStatusRoute allowedStatus={["rejected"]}>
             <RejectedPage />
           </DoctorStatusRoute>
-        } />
+        } /> */}
 
         {/* Admin Login */}
         <Route
@@ -396,7 +397,7 @@ function App() {
         </Route>
 
       </Routes>
-
+ </DoctorProvider>
       <ToastContainer
         position="top-center"
         autoClose={1000}
