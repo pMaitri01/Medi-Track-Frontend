@@ -6,7 +6,7 @@ import defaultDoctorImg from '../images/user.png';
 // ── Map backend doctor object to UI format ──
 const mapDoctor = (doc) => ({
   id: doc._id,
-  name: doc.fullName,
+name: `Dr. ${doc.fullName}`,
   spec: doc.specialization,
   city: doc.city,
   state: doc.state,
@@ -502,9 +502,27 @@ const handleConfirmBooking = async () => {
       <h4 style={{ color: '#0d9488', borderBottom: '1px solid #eee' }}>Clinic Details</h4>
       <p><strong>Clinic:</strong> {selectedDoctor.clinicName}</p>
       <p><strong>Address:</strong> {selectedDoctor.clinicAddress}</p>
-      <p><strong>Working Days:</strong> {selectedDoctor.workingDays}</p>
-      <p><strong>Hours:</strong> {selectedDoctor.workingHours}</p>
-    </div>
+<p>
+  <strong>Working Days:</strong>{" "}
+  {Array.isArray(selectedDoctor.workingDays)
+    ? selectedDoctor.workingDays.join(", ")
+    : selectedDoctor.workingDays}
+</p>
+<p>
+  <strong>Hours:</strong>{" "}
+  {Array.isArray(selectedDoctor.workingHours) &&
+  selectedDoctor.workingHours.length > 0 ? (
+    selectedDoctor.workingHours.map((slot, i) => (
+      <span key={i}>
+        {slot.start} - {slot.end}
+        {i !== selectedDoctor.workingHours.length - 1 && ", "}
+      </span>
+    ))
+  ) : (
+    "N/A"
+  )}
+</p>
+ </div>
 
     {/* Section 4: About */}
     <div className="info-group" style={{ marginTop: '15px' }}>
