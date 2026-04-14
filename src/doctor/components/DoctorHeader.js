@@ -127,7 +127,7 @@ const handleLogout = async () => {
     });
 
     localStorage.removeItem("doc");
-    window.location.href = "/DoctorLogin";
+    window.location.href = "/";
 
   } catch (error) {
     console.error(error);

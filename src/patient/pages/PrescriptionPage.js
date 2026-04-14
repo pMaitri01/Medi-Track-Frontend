@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef  } from "react";
 import Navbar from "../components/Navbar";
 import "../css/PrescriptionPage.css";
 import defaultDoctorImg from "../images/user.png";
@@ -156,25 +156,23 @@ function TimingGroups({ medicines }) {
 
 // ── Modal ─────────────────────────────────────────────────────────────────────
 function PrescriptionModal({ rx, onClose }) {
+  const pdfRef = useRef(null);
   const [reminder, setReminder] = useState(false);
   if (!rx) return null;
-  const handleDownload = () => {
-    const element = document.getElementById("pdf-content");
+const handleDownload = () => {
+  if (!pdfRef.current) return;
 
-    if (!element) return;
-
-    setTimeout(() => {
-      html2pdf()
-        .set({
-          margin: 10,
-          filename: `${rx.patient?.fullName || "patient"}_prescription.pdf`, image: { type: "jpeg", quality: 1 },
-          html2canvas: { scale: 2, useCORS: true },
-          jsPDF: { format: "a4", orientation: "portrait" }
-        })
-        .from(element)
-        .save();
-    }, 300);
-  };
+  html2pdf()
+    .set({
+      margin: 10,
+      filename: `${rx.patient?.firstName || "patient"}_prescription.pdf`,
+      image: { type: "jpeg", quality: 1 },
+      html2canvas: { scale: 3, useCORS: true },
+      jsPDF: { format: "a4", orientation: "portrait" },
+    })
+    .from(pdfRef.current)
+    .save();
+};
 
   //   const handlePreview = () => {
   //   const element = document.getElementById("pdf-content");
@@ -191,12 +189,127 @@ function PrescriptionModal({ rx, onClose }) {
   //     .outputPdf("dataurlnewwindow"); // 👈 THIS IS PREVIEW
   // };
 
-
   const isActive = rx.pStatus === "active";
   return (
     <div className="rx-overlay" onClick={onClose}>
       <div className="rx-modal" onClick={(e) => e.stopPropagation()}>
-        <div id="pdf-content" className="pdf-wrapper" >
+       
+        {/* Header */}
+        <div className="rx-modal-header">
+          <div className="rx-modal-header-left">
+            <img src={defaultDoctorImg} alt="doctor" className="rx-modal-img" />
+            <div>
+              <h2>{rx.doctor?.fullName}</h2>
+              <p className="rx-modal-spec">{rx.specialization}</p>
+            </div>
+          </div>
+          <button className="rx-modal-close" onClick={onClose}>✖</button>
+        </div>
+
+        {/* Meta strip */}
+        <div className="rx-modal-meta">
+          <div className="rx-modal-meta-item">
+            <span className="rx-modal-meta-label">Date</span>
+            <span>{formatDate(rx.createdAt)}</span>
+          </div>
+          <div className="rx-modal-meta-item">
+            <span className="rx-modal-meta-label">Diagnosis</span>
+            <span>{rx.diagnosis}</span>
+          </div>
+          <div className="rx-modal-meta-item">
+            <span className="rx-modal-meta-label">Status</span>
+            <span className={`rx-badge ${isActive ? "rx-badge--active" : "rx-badge--past"}`}>
+              {rx.pStatus}
+            </span>
+          </div>
+        </div>
+
+        <div className="rx-modal-body">
+          {/* Medicine table */}
+          <div className="rx-modal-section">
+            <h4 className="rx-modal-section-title">💊 Medicines</h4>
+            <MedicineTable medicines={rx.medicines} />
+          </div>
+
+          {/* Timing groups */}
+          <div className="rx-modal-section">
+            <h4 className="rx-modal-section-title">⏰ Medicine Schedule</h4>
+            <TimingGroups medicines={rx.medicines} />
+          </div>
+
+          {/* Doctor notes */}
+          <div className="rx-modal-section">
+            <h4 className="rx-modal-section-title">📝 Doctor Notes</h4>
+            <div className="rx-notes-box">
+              {(rx.notes || "").split(". ").filter(Boolean).map((note, i) => (
+                <p key={i} className="rx-note-item">• {note.replace(/\.$/, "")}</p>
+              ))}
+            </div>
+          </div>
+
+          {/* Reminder toggle */}
+        </div>
+
+        {/* Footer */}
+        <div className="rx-modal-footer">
+          <button className="rx-btn rx-btn--download"
+            onClick={handleDownload}
+          >⬇ Download</button>
+          <button className="rx-btn rx-btn--close" onClick={onClose}>Close</button>
+        </div>
+      </div>
+      {/* HIDDEN PDF ONLY (NOT VISIBLE) */}
+{/* <div
+  ref={pdfRef}
+  style={{
+    position: "fixed",
+    left: "-10000px",
+    top: 0,
+    width: "800px",
+    background: "white",
+    padding: "20px",
+  }}
+>
+  <h2 style={{ textAlign: "center" }}>MediTrack Prescription</h2>
+
+  <p>
+    <b>Patient:</b> {rx.patient?.firstName} {rx.patient?.lastName}
+  </p>
+
+  <p><b>Doctor:</b> {rx.doctor?.fullName}</p>
+  <p><b>Diagnosis:</b> {rx.diagnosis}</p>
+
+  <hr />
+
+  <table border="1" width="100%" cellPadding="5">
+    <thead>
+      <tr>
+        <th>Medicine</th>
+        <th>Dosage</th>
+        <th>Timing</th>
+        <th>Duration</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      {rx.medicines.map((m, i) => (
+        <tr key={i}>
+          <td>{m.name}</td>
+          <td>{m.dosage}</td>
+          <td>
+            {m.timing
+              ?.map((t) =>
+                typeof t === "string" ? t : t.timeOfDay
+              )
+              .join(", ")}
+          </td>
+          <td>{m.duration}</td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</div> */}
+ <div id="pdf-content" className="pdf-wrapper" ref={pdfRef}>
 
           {/* 🔥 WATERMARK */}
           <div className="watermark">MediTrack</div>
@@ -307,70 +420,6 @@ function PrescriptionModal({ rx, onClose }) {
           </div>
 
         </div>
-        {/* Header */}
-        <div className="rx-modal-header">
-          <div className="rx-modal-header-left">
-            <img src={defaultDoctorImg} alt="doctor" className="rx-modal-img" />
-            <div>
-              <h2>{rx.doctor?.fullName}</h2>
-              <p className="rx-modal-spec">{rx.specialization}</p>
-            </div>
-          </div>
-          <button className="rx-modal-close" onClick={onClose}>✖</button>
-        </div>
-
-        {/* Meta strip */}
-        <div className="rx-modal-meta">
-          <div className="rx-modal-meta-item">
-            <span className="rx-modal-meta-label">Date</span>
-            <span>{formatDate(rx.createdAt)}</span>
-          </div>
-          <div className="rx-modal-meta-item">
-            <span className="rx-modal-meta-label">Diagnosis</span>
-            <span>{rx.diagnosis}</span>
-          </div>
-          <div className="rx-modal-meta-item">
-            <span className="rx-modal-meta-label">Status</span>
-            <span className={`rx-badge ${isActive ? "rx-badge--active" : "rx-badge--past"}`}>
-              {rx.pStatus}
-            </span>
-          </div>
-        </div>
-
-        <div className="rx-modal-body">
-          {/* Medicine table */}
-          <div className="rx-modal-section">
-            <h4 className="rx-modal-section-title">💊 Medicines</h4>
-            <MedicineTable medicines={rx.medicines} />
-          </div>
-
-          {/* Timing groups */}
-          <div className="rx-modal-section">
-            <h4 className="rx-modal-section-title">⏰ Medicine Schedule</h4>
-            <TimingGroups medicines={rx.medicines} />
-          </div>
-
-          {/* Doctor notes */}
-          <div className="rx-modal-section">
-            <h4 className="rx-modal-section-title">📝 Doctor Notes</h4>
-            <div className="rx-notes-box">
-              {(rx.notes || "").split(". ").filter(Boolean).map((note, i) => (
-                <p key={i} className="rx-note-item">• {note.replace(/\.$/, "")}</p>
-              ))}
-            </div>
-          </div>
-
-          {/* Reminder toggle */}
-        </div>
-
-        {/* Footer */}
-        <div className="rx-modal-footer">
-          <button className="rx-btn rx-btn--download"
-            onClick={handleDownload}
-          >⬇ Download</button>
-          <button className="rx-btn rx-btn--close" onClick={onClose}>Close</button>
-        </div>
-      </div>
     </div>
   );
 }
@@ -383,7 +432,7 @@ export default function PrescriptionPage() {
   const [modalRx, setModalRx] = useState(null);
   const [prescriptions, setPrescriptions] = useState([]);
   const [loading, setLoading] = useState(true);
-
+  const pdfRef = useRef(null);
   const getData = async () => {
     try {
       setLoading(true);
@@ -492,3 +541,5 @@ export default function PrescriptionPage() {
     </div>
   );
 }
+
+

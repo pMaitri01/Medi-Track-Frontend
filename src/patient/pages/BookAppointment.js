@@ -13,27 +13,48 @@ const BookAppointment = ({ onClose }) => {
   const [error, setError]                   = useState("");
 
   // ── Fetch available doctors on mount ──
-  useEffect(() => {
-  fetch(`${process.env.REACT_APP_API_URL}/api/doctor/names`)
-    .then(res => res.json())
-    .then(data => {
-      console.log("Raw Doctor Data:", data);
+//   useEffect(() => {
+//   fetch(`${process.env.REACT_APP_API_URL}/api/doctor/names`)
+//     .then(res => res.json())
+//     .then(data => {
+//       console.log("Raw Doctor Data:", data);
 
-      // ✅ SAFER FILTER
-     const approvedDoctors = data.filter(doc => {
-  const status = (doc.status || doc.approvalStatus || "").toLowerCase().trim();
+//       // ✅ SAFER FILTER
+//      const approvedDoctors = data.filter(doc => {
+//   const status = (doc.status || doc.approvalStatus || "").toLowerCase().trim();
 
-  return (
-    status === "approved" ||
-    doc.isApproved === true
-  );
-});
+//   return (
+//     status === "approved" ||
+//     doc.isApproved === true
+//   );
+// });
 
-      console.log("Approved Doctors:", approvedDoctors);
+//       console.log("Approved Doctors:", approvedDoctors);
 
-      setDoctors(approvedDoctors);
-    })
-    .catch(err => console.error("Failed to load doctors:", err));
+//       setDoctors(approvedDoctors);
+//     })
+//     .catch(err => console.error("Failed to load doctors:", err));
+// }, []);
+useEffect(() => {
+  const fetchDoctors = async () => {
+    try {
+      const res = await fetch(
+        `${process.env.REACT_APP_API_URL}/api/doctor/names`
+      );
+
+      const data = await res.json();
+
+      console.log("Approved Doctors:", data);
+
+      // ✅ no need for filtering anymore (backend already filters)
+      setDoctors(data);
+    } catch (err) {
+      console.error("Failed to load doctors:", err);
+      setDoctors([]);
+    }
+  };
+
+  fetchDoctors();
 }, []);
   const timeSlots = ["09:00 AM", "09:30 AM", "10:00 AM", "10:30 AM", "11:00 AM", "11:30 AM"];
 
@@ -114,16 +135,21 @@ const BookAppointment = ({ onClose }) => {
         <div className="calendar-container">
           <label className="label-text">1. Select Doctor</label>
           <select
-            className="doctor-dropdown"
-            value={selectedDoctor}
-            onChange={(e) => setSelectedDoctor(e.target.value)}
-          >
-            <option value="">-- Choose Doctor --</option>
-            {doctors.map((doc) => (
-              <option key={doc._id} value={doc._id}>
-{doc.firstName} {doc.lastName}              </option>
-            ))}
-          </select>
+  className="doctor-dropdown"
+  value={selectedDoctor}
+  onChange={(e) => setSelectedDoctor(e.target.value)}
+>
+  <option value="">-- Choose Doctor --</option>
+
+  {doctors.map((doc) => (
+    // <option key={doc._id} value={doc._id}>
+    //   {doc.fullName} ({doc.specialization})
+    // </option>
+    <option key={doc._id} value={doc._id}>
+  Dr. {doc.fullName} ({doc.specialization})
+</option>
+  ))}
+</select>
 
           <label className="label-date">2. Select Date</label>
           <Calendar
