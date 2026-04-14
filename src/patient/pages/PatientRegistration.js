@@ -154,7 +154,7 @@ const handleBlur = (e) => {
 
     if (response.ok) {
       alert(data.msg);
-      navigate("/");
+      navigate("/patient/login");
 
     } else {
         setErrors({ server: data.msg });
