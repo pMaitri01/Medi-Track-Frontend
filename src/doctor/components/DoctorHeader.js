@@ -76,12 +76,13 @@ import React, { useState } from "react";
 import { FaBell, FaChevronDown, FaChevronUp, FaUser, FaSignOutAlt } from "react-icons/fa";
 import userImg from "../images/user.png";
 import { useNavigate } from "react-router-dom";
+import { useDoctor } from "../../context/DoctorContext";
 
 export default function DoctorHeader({ open }) {
   const [showProfile, setShowProfile] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false); // New state
   const navigate = useNavigate();
-
+  const { doctor } = useDoctor();
   const styles = {
     header: {
       height: "70px",
@@ -136,8 +137,9 @@ const handleLogout = async () => {
 
   return (
     <div style={styles.header}>
-      <span style={{ fontWeight: "500", color: "#374151" }}>Hi, Maitri 👋 Welcome to Medi-Track</span>
-      
+<span style={{ fontWeight: "500", color: "#374151" }}>
+  Hi, Dr. {doctor?.fullName} 👋 Welcome to Medi-Track
+</span>      
       <div style={styles.actionArea}>
         
         {/* --- NOTIFICATION SECTION --- */}
