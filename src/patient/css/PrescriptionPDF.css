@@ -1,0 +1,273 @@
+/* =============================================================================
+   PrescriptionPDF.css
+   Purpose : Styles for the hidden html2pdf render target only.
+   Scope   : .pdf-wrapper and all children.
+   Rules   : No React-specific selectors. No external fonts (html2pdf renders
+             offline). All units in px/pt for predictable A4 output.
+   ============================================================================= */
+
+/* ── Wrapper ─────────────────────────────────────────────────────────────── */
+.pdf-wrapper {
+  position: fixed;
+  top: 0;
+  left: -9999px;       /* hidden off-screen — NOT opacity/display/visibility */
+  z-index: -1;
+  width: 794px;
+  min-height: 1123px;
+  background: #ffffff;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 13px;
+  color: #1a1a1a;
+  padding: 48px 52px;
+  box-sizing: border-box;
+  line-height: 1.55;
+}
+
+/* ── Watermark ───────────────────────────────────────────────────────────── */
+.pdf-watermark {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(-35deg);
+  font-size: 88px;
+  font-weight: 900;
+  color: rgba(10, 165, 165, 0.06);
+  white-space: nowrap;
+  pointer-events: none;
+  user-select: none;
+  letter-spacing: 6px;
+  z-index: 0;
+}
+
+/* All content sits above watermark */
+.pdf-wrapper > *:not(.pdf-watermark) { position: relative; z-index: 1; }
+
+/* ── Header ──────────────────────────────────────────────────────────────── */
+.pdf-header {
+  text-align: center;
+  margin-bottom: 18px;
+}
+
+.pdf-clinic-name {
+  font-size: 26px;
+  font-weight: 700;
+  color: #0a6e6e;
+  letter-spacing: 1px;
+  margin: 0 0 4px;
+}
+
+.pdf-clinic-sub {
+  font-size: 12px;
+  color: #555;
+  margin: 0 0 14px;
+  letter-spacing: 0.3px;
+}
+
+/* ── Divider ─────────────────────────────────────────────────────────────── */
+.pdf-divider {
+  border: none;
+  border-top: 1.5px solid #c8e6e6;
+  margin: 0 0 16px;
+}
+
+.pdf-divider--light {
+  border: none;
+  border-top: 1px solid #e8e8e8;
+  margin: 14px 0;
+}
+
+/* ── Two-column info row (doctor | patient) ──────────────────────────────── */
+.pdf-info-row {
+  display: flex;
+  gap: 0;
+  margin-bottom: 14px;
+}
+
+.pdf-info-col {
+  flex: 1;
+  padding: 12px 16px;
+  background: #f7fafa;
+  border: 1px solid #daeaea;
+  border-radius: 6px;
+}
+
+.pdf-info-col + .pdf-info-col {
+  margin-left: 12px;
+}
+
+.pdf-info-col-title {
+  font-size: 10px;
+  font-weight: 700;
+  color: #0a6e6e;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  margin: 0 0 8px;
+  padding-bottom: 5px;
+  border-bottom: 1px solid #c8e6e6;
+}
+
+.pdf-info-line {
+  margin: 4px 0;
+  font-size: 12.5px;
+  color: #222;
+}
+
+.pdf-info-line b {
+  color: #444;
+  font-weight: 600;
+  min-width: 110px;
+  display: inline-block;
+}
+
+/* ── Diagnosis block ─────────────────────────────────────────────────────── */
+.pdf-diagnosis-block {
+  background: #f0fafa;
+  border-left: 4px solid #0aa5a5;
+  border-radius: 0 6px 6px 0;
+  padding: 10px 16px;
+  margin-bottom: 14px;
+}
+
+.pdf-section-title {
+  font-size: 11px;
+  font-weight: 700;
+  color: #0a6e6e;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  margin: 0 0 5px;
+}
+
+.pdf-diagnosis-text {
+  font-size: 13px;
+  color: #1a1a1a;
+  margin: 0;
+  font-weight: 500;
+}
+
+/* ── Medicines table ─────────────────────────────────────────────────────── */
+.pdf-table-title {
+  font-size: 11px;
+  font-weight: 700;
+  color: #0a6e6e;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  margin: 0 0 8px;
+}
+
+.pdf-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 14px;
+  font-size: 12.5px;
+}
+
+.pdf-table thead tr {
+  background: #0aa5a5;
+  color: #ffffff;
+}
+
+.pdf-table thead th {
+  padding: 8px 12px;
+  text-align: left;
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 0.3px;
+}
+
+.pdf-table tbody tr:nth-child(even) {
+  background: #f5fafa;
+}
+
+.pdf-table tbody tr:nth-child(odd) {
+  background: #ffffff;
+}
+
+.pdf-table tbody td {
+  padding: 7px 12px;
+  border-bottom: 1px solid #e4eeee;
+  color: #222;
+  vertical-align: top;
+}
+
+.pdf-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* ── Medicine schedule ───────────────────────────────────────────────────── */
+.pdf-schedule-grid {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.pdf-schedule-slot {
+  flex: 1;
+  border: 1px solid #daeaea;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.pdf-schedule-slot-header {
+  background: #e8f5f5;
+  padding: 6px 12px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #0a6e6e;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.pdf-schedule-slot-body {
+  padding: 8px 12px;
+  min-height: 36px;
+}
+
+.pdf-schedule-item {
+  font-size: 12px;
+  color: #333;
+  margin: 3px 0;
+  padding-left: 0;
+}
+
+.pdf-schedule-empty {
+  font-size: 11px;
+  color: #aaa;
+  font-style: italic;
+}
+
+/* ── Doctor notes ────────────────────────────────────────────────────────── */
+.pdf-notes-block {
+  background: #fffdf0;
+  border: 1px solid #f0e6a0;
+  border-radius: 6px;
+  padding: 10px 16px;
+  margin-bottom: 14px;
+}
+
+.pdf-note-item {
+  font-size: 12.5px;
+  color: #444;
+  margin: 4px 0;
+  padding-left: 0;
+}
+
+/* ── Footer ──────────────────────────────────────────────────────────────── */
+.pdf-footer {
+  margin-top: 28px;
+  padding-top: 12px;
+  border-top: 1px solid #e0e0e0;
+  text-align: center;
+}
+
+.pdf-footer-disclaimer {
+  font-size: 10.5px;
+  color: #888;
+  margin: 0;
+  letter-spacing: 0.2px;
+}
+
+.pdf-footer-brand {
+  font-size: 10px;
+  color: #bbb;
+  margin: 4px 0 0;
+}

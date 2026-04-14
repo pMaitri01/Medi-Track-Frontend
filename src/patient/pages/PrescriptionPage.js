@@ -1,8 +1,8 @@
-import { useState, useEffect, useRef  } from "react";
+import { useState, useEffect } from "react";
 import Navbar from "../components/Navbar";
 import "../css/PrescriptionPage.css";
 import defaultDoctorImg from "../images/user.png";
-import html2pdf from "html2pdf.js";
+import { generatePrescriptionPDF } from "../utils/generatePrescriptionPDF";
 
 const TIMING_ORDER = ["Morning", "Afternoon", "Night"];
 const TIMING_ICON = { Morning: "🌅", Afternoon: "🌇", Night: "🌙" };
@@ -17,6 +17,8 @@ const withinDays = (dateStr, days) =>
 
 const medicineSummary = (medicines) =>
   `${medicines.length} medicine${medicines.length !== 1 ? "s" : ""} prescribed`;
+
+const shortId = (id = "") => `RX-${String(id).slice(-8).toUpperCase()}`;
 
 // ── PrescriptionCard ─────────────────────────────────────────────────────────
 function PrescriptionCard({ rx, onView }) {
@@ -45,7 +47,10 @@ function PrescriptionCard({ rx, onView }) {
         <button className="rx-btn rx-btn--view" onClick={() => onView(rx)}>
           👁 View Full Prescription
         </button>
-        <button className="rx-btn rx-btn--download">⬇ Download</button>
+        {/* <button className="rx-btn rx-btn--download">⬇ Download</button> */}
+          <button className="rx-btn rx-btn--download" onClick={() => generatePrescriptionPDF(rx)}>
+  Download
+</button>
       </div>
     </div>
   );
@@ -156,38 +161,11 @@ function TimingGroups({ medicines }) {
 
 // ── Modal ─────────────────────────────────────────────────────────────────────
 function PrescriptionModal({ rx, onClose }) {
-  const pdfRef = useRef(null);
-  const [reminder, setReminder] = useState(false);
   if (!rx) return null;
-const handleDownload = () => {
-  if (!pdfRef.current) return;
 
-  html2pdf()
-    .set({
-      margin: 10,
-      filename: `${rx.patient?.firstName || "patient"}_prescription.pdf`,
-      image: { type: "jpeg", quality: 1 },
-      html2canvas: { scale: 3, useCORS: true },
-      jsPDF: { format: "a4", orientation: "portrait" },
-    })
-    .from(pdfRef.current)
-    .save();
-};
-
-  //   const handlePreview = () => {
-  //   const element = document.getElementById("pdf-content");
-
-  //   html2pdf()
-  //     .set({
-  //       margin: 10,
-  //       filename: `preview.pdf`,
-  //       image: { type: "jpeg", quality: 1 },
-  //       html2canvas: { scale: 2 },
-  //       jsPDF: { format: "a4", orientation: "portrait" }
-  //     })
-  //     .from(element)
-  //     .outputPdf("dataurlnewwindow"); // 👈 THIS IS PREVIEW
-  // };
+  const handleDownload = () => {
+    generatePrescriptionPDF(rx);
+  };
 
   const isActive = rx.pStatus === "active";
   return (
@@ -258,168 +236,6 @@ const handleDownload = () => {
           <button className="rx-btn rx-btn--close" onClick={onClose}>Close</button>
         </div>
       </div>
-      {/* HIDDEN PDF ONLY (NOT VISIBLE) */}
-{/* <div
-  ref={pdfRef}
-  style={{
-    position: "fixed",
-    left: "-10000px",
-    top: 0,
-    width: "800px",
-    background: "white",
-    padding: "20px",
-  }}
->
-  <h2 style={{ textAlign: "center" }}>MediTrack Prescription</h2>
-
-  <p>
-    <b>Patient:</b> {rx.patient?.firstName} {rx.patient?.lastName}
-  </p>
-
-  <p><b>Doctor:</b> {rx.doctor?.fullName}</p>
-  <p><b>Diagnosis:</b> {rx.diagnosis}</p>
-
-  <hr />
-
-  <table border="1" width="100%" cellPadding="5">
-    <thead>
-      <tr>
-        <th>Medicine</th>
-        <th>Dosage</th>
-        <th>Timing</th>
-        <th>Duration</th>
-      </tr>
-    </thead>
-
-    <tbody>
-      {rx.medicines.map((m, i) => (
-        <tr key={i}>
-          <td>{m.name}</td>
-          <td>{m.dosage}</td>
-          <td>
-            {m.timing
-              ?.map((t) =>
-                typeof t === "string" ? t : t.timeOfDay
-              )
-              .join(", ")}
-          </td>
-          <td>{m.duration}</td>
-        </tr>
-      ))}
-    </tbody>
-  </table>
-</div> */}
- <div id="pdf-content" className="pdf-wrapper" ref={pdfRef}>
-
-          {/* 🔥 WATERMARK */}
-          <div className="watermark">MediTrack</div>
-
-          {/* HEADER */}
-          <div style={{ textAlign: "center", marginBottom: "20px" }}>
-            <h1 style={{ margin: 0 }}>MediTrack</h1>
-            <p style={{ margin: "5px 0" }}>Digital HealthCare Prescription System</p>
-            <hr />
-          </div>
-
-          {/* DOCTOR INFO */}
-          <div style={{ marginBottom: "15px" }}>
-            <h3>Doctor Details</h3>
-            <p><b>Name:</b> Dr. {rx.doctor?.fullName}</p>
-            <p><b>Specialization:</b> {rx.doctor?.specialization}</p>
-            <p><b>Qualification:</b> MBBS (Add your field if available)</p>
-          </div>
-
-          <hr />
-
-          {/* PATIENT INFO */}
-          <div style={{ marginBottom: "15px" }}>
-            <h3>Patient Details</h3>
-            <p>
-              <b>Patient Name:</b>{" "}
-              {rx.patient
-                ? `${rx.patient.firstName} ${rx.patient.lastName}`
-                : "N / A"}
-            </p>            
-            <p><b>Prescription ID:</b> RX-{rx._id}</p>
-          </div>
-
-          <hr />
-
-          {/* DIAGNOSIS */}
-          <div style={{ marginBottom: "15px" }}>
-            <h3>Diagnosis</h3>
-            <p>{rx.diagnosis}</p>
-          </div>
-
-          <hr />
-
-          {/* MEDICINE TABLE */}
-          <h3>Medicines</h3>
-
-          <table className="pdf-table">
-            <thead>
-              <tr>
-                <th>Medicine</th>
-                <th>Dosage</th>
-                <th>Timing</th>
-                <th>Duration</th>
-              </tr>
-            </thead>
-
-            <tbody>
-              {rx.medicines.map((m, i) => (
-                <tr key={i}>
-                  <td>{m.name}</td>
-                  <td>{m.dosage}</td>
-                  <td>
-                    {m.timing?.map((t) => t.timeOfDay).join(", ")}
-                  </td>
-                  <td>{m.duration}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-
-          <hr />
-
-          {/* TIMING FORMAT (HOSPITAL STYLE) */}
-          <h3>Medicine Schedule</h3>
-
-          {["Morning", "Afternoon", "Night"].map((slot) => (
-            <div key={slot} style={{ marginBottom: "10px" }}>
-              <b>{slot}:</b>
-              <ul>
-                {rx.medicines
-                  .filter((m) =>
-                    m.timing?.some((t) => t.timeOfDay === slot)
-                  )
-                  .map((m, i) => (
-                    <li key={i}>
-                      {m.name} - {m.dosage}
-                    </li>
-                  ))}
-              </ul>
-            </div>
-          ))}
-
-          <hr />
-
-          {/* NOTES */}
-          <h3>Doctor Notes</h3>
-          <ul>
-            {(rx.notes || "").split(". ").map((n, i) => (
-              <li key={i}>{n}</li>
-            ))}
-          </ul>
-
-          {/* DISCLAIMER */}
-          <div style={{ marginTop: "30px", textAlign: "center" }}>
-            <p style={{ fontSize: "12px" }}>
-              ⚠ This is a computer generated prescription and does not require signature.
-            </p>
-          </div>
-
-        </div>
     </div>
   );
 }
@@ -432,7 +248,6 @@ export default function PrescriptionPage() {
   const [modalRx, setModalRx] = useState(null);
   const [prescriptions, setPrescriptions] = useState([]);
   const [loading, setLoading] = useState(true);
-  const pdfRef = useRef(null);
   const getData = async () => {
     try {
       setLoading(true);
