@@ -12,25 +12,25 @@ const initialState = {
 };
 
 const STEPS = [
-  { label: "Personal Details",     icon: "⚕️" },
-  { label: "Professional Details", icon: "🏥"    },
-  { label: "Contact & Location",   icon: "📞"    },
+  { label: "Personal Details", icon: "⚕️" },
+  { label: "Professional Details", icon: "🏥" },
+  { label: "Contact & Location", icon: "📞" },
 ];
 
 // ── Custom Calendar Date Picker ──
 const MONTH_NAMES = [
-  "January","February","March","April","May","June",
-  "July","August","September","October","November","December"
+  "January", "February", "March", "April", "May", "June",
+  "July", "August", "September", "October", "November", "December"
 ];
-const DAY_NAMES = ["Su","Mo","Tu","We","Th","Fr","Sa"];
+const DAY_NAMES = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"];
 
 const CustomDatePicker = ({ value, onChange, error }) => {
-  const today  = new Date();
+  const today = new Date();
   const parsed = value ? new Date(value + "T00:00:00") : null;
 
-  const [open, setOpen]           = useState(false);
-  const [viewYear, setViewYear]   = useState(parsed ? parsed.getFullYear()  : today.getFullYear() - 25);
-  const [viewMonth, setViewMonth] = useState(parsed ? parsed.getMonth()     : today.getMonth());
+  const [open, setOpen] = useState(false);
+  const [viewYear, setViewYear] = useState(parsed ? parsed.getFullYear() : today.getFullYear() - 25);
+  const [viewMonth, setViewMonth] = useState(parsed ? parsed.getMonth() : today.getMonth());
   const ref = useRef(null);
 
   useEffect(() => {
@@ -39,7 +39,7 @@ const CustomDatePicker = ({ value, onChange, error }) => {
     return () => document.removeEventListener("mousedown", handler);
   }, []);
 
-  const firstDay    = new Date(viewYear, viewMonth, 1).getDay();
+  const firstDay = new Date(viewYear, viewMonth, 1).getDay();
   const daysInMonth = new Date(viewYear, viewMonth + 1, 0).getDate();
 
   const prevMonth = () => {
@@ -59,7 +59,7 @@ const CustomDatePicker = ({ value, onChange, error }) => {
   };
 
   const displayValue = parsed
-    ? `${String(parsed.getDate()).padStart(2,"0")} ${MONTH_NAMES[parsed.getMonth()]} ${parsed.getFullYear()}`
+    ? `${String(parsed.getDate()).padStart(2, "0")} ${MONTH_NAMES[parsed.getMonth()]} ${parsed.getFullYear()}`
     : "";
 
   const cells = [];
@@ -132,12 +132,14 @@ const CustomDatePicker = ({ value, onChange, error }) => {
 };
 
 // ── Availability constants ────────────────────────────────────────────────────
-const ALL_DAYS = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"];
-const DAY_SHORT = { Monday:"Mon", Tuesday:"Tue", Wednesday:"Wed", Thursday:"Thu",
-                    Friday:"Fri", Saturday:"Sat", Sunday:"Sun" };
+const ALL_DAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+const DAY_SHORT = {
+  Monday: "Mon", Tuesday: "Tue", Wednesday: "Wed", Thursday: "Thu",
+  Friday: "Fri", Saturday: "Sat", Sunday: "Sun"
+};
 const SERVICE_OPTS = [
   { value: "physical", label: "🏥 Physical Consultation" },
-  { value: "videocall",    label: "📹 Video Consultation"    },
+  { value: "videocall", label: "📹 Video Consultation" },
 ];
 
 const TIME_OPTIONS = (() => {
@@ -148,8 +150,8 @@ const TIME_OPTIONS = (() => {
       const mm = String(m).padStart(2, "0");
       const val = `${hh}:${mm}`;
       const ampm = h < 12 ? "AM" : "PM";
-      const h12  = h === 0 ? 12 : h > 12 ? h - 12 : h;
-      opts.push({ value: val, label: `${String(h12).padStart(2,"0")}:${mm} ${ampm}` });
+      const h12 = h === 0 ? 12 : h > 12 ? h - 12 : h;
+      opts.push({ value: val, label: `${String(h12).padStart(2, "0")}:${mm} ${ampm}` });
     }
   }
   return opts;
@@ -305,12 +307,12 @@ const Field = ({ label, name, type = "text", options, textarea, required, value,
 
 const DoctorProfile = () => {
   const navigate = useNavigate();
-  const [step, setStep]           = useState(0);
-  const [form, setForm]           = useState(initialState);
-  const [errors, setErrors]       = useState({});
+  const [step, setStep] = useState(0);
+  const [form, setForm] = useState(initialState);
+  const [errors, setErrors] = useState({});
   const [submitted, setSubmitted] = useState(false);
-  const [loading, setLoading]     = useState(false);   // API call in progress
-  const [apiError, setApiError]   = useState("");       // server-side error message
+  const [loading, setLoading] = useState(false);   // API call in progress
+  const [apiError, setApiError] = useState("");       // server-side error message
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -471,19 +473,23 @@ const DoctorProfile = () => {
 
     try {
       const payload = {
-        gender:           form.gender,
-        dob:              form.dob,
-        workingDays:      form.workingDays,
-        workingHours:     form.workingHours,
-        serviceType:      form.serviceType,
-        about:            form.about,
-        mobile:           form.mobile,
+        gender: form.gender,
+        dob: form.dob,
+        workingDays: form.workingDays,
+        workingHours: Array.isArray(form.workingHours)
+          ? form.workingHours.map(s => ({
+            start: String(s.start),
+            end: String(s.end)
+          }))
+          : [], serviceType: form.serviceType,
+        about: form.about,
+        mobile: form.mobile,
         emergencyContact: form.emergencyContact,
-        clinicName:       form.hospitalName,
-        clinicAddress:    form.address,
-        city:             form.city,
-        state:            form.state,
-        mapLink:          form.mapLink,
+        clinicName: form.hospitalName,
+        clinicAddress: form.address,
+        city: form.city,
+        state: form.state,
+        mapLink: form.mapLink,
       };
 
       const response = await fetch(
@@ -500,7 +506,7 @@ const DoctorProfile = () => {
 
       if (!response.ok) {
         // Handle token expiry
-        
+
         throw new Error(data.message || "Profile update failed. Please try again.");
       }
 
@@ -561,7 +567,7 @@ const DoctorProfile = () => {
 
         {step === 0 && (
           <div className="dp-grid-2">
-            <Field label="Full Name"     name="fullName" required {...f("fullName")} />
+            <Field label="Full Name" name="fullName" required {...f("fullName")} />
             <Field label="Date of Birth" name="dob" type="date" required {...f("dob")} />
             <Field label="Gender" name="gender" options={["Male", "Female", "Other"]} required {...f("gender")} />
           </div>
@@ -603,12 +609,12 @@ const DoctorProfile = () => {
         {step === 2 && (
           <>
             <div className="dp-grid-2">
-              <Field label="Mobile Number"     name="mobile" type="tel" required {...f("mobile")} />
+              <Field label="Mobile Number" name="mobile" type="tel" required {...f("mobile")} />
               <Field label="Emergency Contact" name="emergencyContact" type="tel" {...f("emergencyContact")} />
               <Field label="Hospital / Clinic" name="hospitalName" required {...f("hospitalName")} />
-              <Field label="City"              name="city"  required {...f("city")} />
-              <Field label="State"             name="state" required {...f("state")} />
-              <Field label="Map Link"          name="mapLink" type="url" {...f("mapLink")} />
+              <Field label="City" name="city" required {...f("city")} />
+              <Field label="State" name="state" required {...f("state")} />
+              <Field label="Map Link" name="mapLink" type="url" {...f("mapLink")} />
             </div>
             <Field label="Address" name="address" {...f("address")} />
           </>
@@ -630,8 +636,8 @@ const DoctorProfile = () => {
         {step < STEPS.length - 1
           ? <button className="dp-btn dp-btn-save" onClick={handleNext}>Next →</button>
           : <button className="dp-btn dp-btn-save" onClick={handleSubmit} disabled={loading}>
-              {loading ? "Saving..." : "Save Profile"}
-            </button>
+            {loading ? "Saving..." : "Save Profile"}
+          </button>
         }
       </div>
     </div>
