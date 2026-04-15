@@ -7,10 +7,43 @@ const TODAY = new Date();
 TODAY.setHours(0, 0, 0, 0);
 
 // strictly AFTER today — today's appointments go to Past
-const isUpcoming = (dateStr) => {
-  const d = new Date(dateStr);
-  d.setHours(0, 0, 0, 0);
-  return d > TODAY;
+// const isUpcoming = (dateStr) => {
+//   const d = new Date(dateStr);
+//   d.setHours(0, 0, 0, 0);
+//   return d > TODAY;
+// };
+
+// code of date when appointment is book date is store as same
+const isUpcoming = (dateStr, timeStr) => {
+  const now = new Date();
+
+  const date = new Date(dateStr); // works for "22 Apr 2026"
+
+  if (isNaN(date)) return false; // safety
+
+  let hours = 0;
+  let minutes = 0;
+
+  if (timeStr) {
+    if (timeStr.includes("AM") || timeStr.includes("PM")) {
+      const [time, modifier] = timeStr.split(" ");
+      let [h, m] = time.split(":");
+
+      hours = parseInt(h, 10);
+      minutes = parseInt(m, 10);
+
+      if (modifier === "PM" && hours !== 12) hours += 12;
+      if (modifier === "AM" && hours === 12) hours = 0;
+    } else {
+      const [h, m] = timeStr.split(":");
+      hours = parseInt(h, 10);
+      minutes = parseInt(m, 10);
+    }
+  }
+
+  date.setHours(hours, minutes, 0, 0);
+
+  return date > now;
 };
 
 const formatDate = (dateStr) =>
@@ -225,7 +258,7 @@ export default function PatientAppointment() {
 
 const upcoming = appointments
   .filter((a) => {
-    const upcomingDate = isUpcoming(a.date);
+    const upcomingDate = isUpcoming(a.date, a.time);
 
     // ❌ Cancelled should NOT be in upcoming
     if (a.status === "cancelled") return false;
@@ -240,7 +273,7 @@ const upcoming = appointments
 
 const past = appointments
   .filter((a) => {
-    const upcomingDate = isUpcoming(a.date);
+    const upcomingDate = isUpcoming(a.date, a.time);
 
     // ✅ Cancelled ALWAYS goes to past immediately
     if (a.status === "cancelled") return true;

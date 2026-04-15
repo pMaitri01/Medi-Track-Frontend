@@ -11,46 +11,80 @@ export default function DoctorDashboard() {
   const [patientCount, setPatientCount] = useState(null); // null = loading
   const [todayPatients, setTodayPatients] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [completed, setCompleted] = useState(0);
   
   // Layout Constants
   const sidebarWidth = open ? "250px" : "100px";
 
-  // ── Fetch total patient count ──
   useEffect(() => {
-    fetch(`${process.env.REACT_APP_API_URL}/api/patient/count`, {
-      credentials: "include",
-    })
-      .then(res => res.json())
-      .then(data => setPatientCount(data?.totalPatients ?? 0))
-      .catch(() => setPatientCount(0));
-  }, []);
+    const fetchDashboard = async () => {
+      try {
+        const res = await fetch(
+          `${process.env.REACT_APP_API_URL}/api/appointment/dashboard`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+            credentials: "include",
+          }
+        );
+
+        const data = await res.json();
+
+        setPatientCount(data.totalPatients || 0);
+        setTodayPatients(data.todayPatients || 0);
+        setCompleted(data.todayCompleted || 0);
+
+      } catch (error) {
+          console.log("Dashboard Error:", error);
+          setPatientCount(0);
+          setTodayPatients(0);
+          setCompleted(0);
+        } finally {
+            setLoading(false);
+          }
+    };
+      fetchDashboard();
+}, []);
+
+  // ── Fetch total patient count ──
+  // useEffect(() => {
+  //   fetch(`${process.env.REACT_APP_API_URL}/api/patient/count`, {
+  //     credentials: "include",
+  //   })
+  //     .then(res => res.json())
+  //     .then(data => setPatientCount(data?.totalPatients ?? 0))
+  //     .catch(() => setPatientCount(0));
+  // }, []);
 
   // ── Fetch today's patient count ──
-  useEffect(() => {
-  const fetchTodayPatients = async () => {
-    try {
-      const res = await fetch(
-        `${process.env.REACT_APP_API_URL}/api/patient/today`,
-        {
-          method: "GET",
-          credentials: "include"
-        }
-      );
+//   useEffect(() => {
+//   const fetchTodayPatients = async () => {
+//     try {
+//       const res = await fetch(
+//         `${process.env.REACT_APP_API_URL}/api/patient/today`,
+//         {
+//           method: "GET",
+//           credentials: "include"
+//         }
+//       );
 
-      const data = await res.json();
+//       const data = await res.json();
 
-      setTodayPatients(data.totalTodayPatients || 0);
+//       setTodayPatients(data.totalTodayPatients || 0);
 
-    } catch (error) {
-      console.log("ERROR:", error);
-      setTodayPatients(0);
-    } finally {
-      setLoading(false);
-    }
-  };
+//     } catch (error) {
+//       console.log("ERROR:", error);
+//       setTodayPatients(0);
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
 
-  fetchTodayPatients();
-}, []);
+//   fetchTodayPatients();
+// }, []);
 
   return (
     <div style={{ minHeight: "100vh", background: "#F8F9FD" }}>
@@ -73,9 +107,9 @@ export default function DoctorDashboard() {
           {/* --- TOP ROW: STAT CARDS --- */}
           <div style={gridStyle(3)}>
             {[
-              { label: "Total Patient",      icon: <FaUserFriends />, value: patientCount },
-              { label: "Today Patient",      icon: <FaHospitalUser />, value: loading ? "..." : todayPatients },
-              { label: "Today Appointments", icon: <FaClock />,        value: null        }
+              { label: "Total Patient",      icon: <FaUserFriends />, value: loading ? "—" : patientCount },
+              { label: "Today Patient",      icon: <FaHospitalUser />, value: loading ? "—" : todayPatients },
+              { label: "Completed Appointments", icon: <FaClock />,        value: loading ? "—" : completed }
             ].map((card, i) => (
               <div key={i} style={{ ...cardStyle, flexDirection: "row", alignItems: "center" }}>
                 <div style={iconCircleStyle}>{card.icon}</div>
@@ -84,9 +118,9 @@ export default function DoctorDashboard() {
                   <h3 style={valueStyle}>
                     {card.value === null ? "—" : card.value}
                   </h3>
-                  <p style={subLabelStyle}>
+                  {/* <p style={subLabelStyle}>
                     {card.value === null ? "Loading..." : "Live Data"}
-                  </p>
+                  </p> */}
                 </div>
               </div>
             ))}
