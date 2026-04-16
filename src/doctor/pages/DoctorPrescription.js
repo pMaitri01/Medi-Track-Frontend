@@ -66,14 +66,14 @@ function MedStatusToggle({ med, index, onChange, prescriptionId }) {
 
     // ❗ IMPORTANT FIX
     if (!prescriptionId) {
-      alert("⚠️ Save prescription first before updating medicine status");
+      // alert("⚠️ Save prescription first before updating medicine status");
       return;
     }
-
-    if (!med.id) {
-      onChange(index, { field: "status", val: newStatus });
-      return;
-    }
+    onChange(index, { field: "status", val: newStatus });
+    // if (!med.id) {
+    //   onChange(index, { field: "status", val: newStatus });
+    //   return;
+    // }
     console.log("Prescription ID:", prescriptionId);
     console.log("Medicine ID:", med.id);
     setBusy(true);
@@ -110,8 +110,7 @@ function MedStatusToggle({ med, index, onChange, prescriptionId }) {
         className={`dp-med-status-sel${isActive ? " dp-med-status--active" : " dp-med-status--done"}`}
         value={med.status || "Active"}
         onChange={handleChange}
-        disabled={busy}
-        title="Medicine status"
+  disabled={busy || !prescriptionId}        title="Medicine status"
       >
         <option value="Active">🟢 Active</option>
         <option value="Completed">⚪ Completed</option>
