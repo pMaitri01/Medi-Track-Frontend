@@ -1,61 +1,132 @@
-import { useState,useEffect } from "react";
+import { useState, useEffect } from "react";
 import DoctorNavbar from "../components/DoctorNavbar";
 import DoctorHeader from "../components/DoctorHeader";
 import "../css/DoctorPrescription.css";
+import { generateDoctorPrescriptionPDF } from "../utils/generateDoctorPrescriptionPDF";
 
 // ── Dummy Data ───────────────────────────────────────────────────────────────
 
 
-const DUMMY_PRESCRIPTIONS = [
-  {
-    id: "rx1", patientId: "p1", patientName: "Jay Mali",
-    date: "2026-04-05", diagnosis: "Hypertension", status: "Active",
-    notes: "Avoid salty food. Drink plenty of water.",
-    medicines: [
-      { name: "Amlodipine",  dosage: "5mg",  timing: ["Morning"],          foodPref: { Morning: "After Food" },                          duration: "30 days" },
-      { name: "Telmisartan", dosage: "40mg", timing: ["Night"],            foodPref: { Night: "Before Food" },                           duration: "30 days" },
-    ],
-  },
-  {
-    id: "rx2", patientId: "p2", patientName: "Maitri Patel",
-    date: "2026-03-20", diagnosis: "Migraine", status: "Active",
-    notes: "Rest in dark room during attacks.",
-    medicines: [
-      { name: "Sumatriptan", dosage: "50mg", timing: ["Morning"],          foodPref: { Morning: "After Food" },                          duration: "7 days"  },
-      { name: "Propranolol", dosage: "20mg", timing: ["Morning", "Night"], foodPref: { Morning: "After Food", Night: "After Food" },     duration: "21 days" },
-    ],
-  },
-  {
-    id: "rx3", patientId: "p3", patientName: "Ravi Shah",
-    date: "2026-02-10", diagnosis: "Lower Back Pain", status: "Completed",
-    notes: "Physiotherapy exercises daily.",
-    medicines: [
-      { name: "Ibuprofen", dosage: "400mg", timing: ["Morning", "Afternoon", "Night"],
-        foodPref: { Morning: "After Food", Afternoon: "After Food", Night: "After Food" }, duration: "5 days" },
-    ],
-  },
-];
 
-const BLANK_MEDICINE = () => ({ name: "", dosage: "", timing: [], foodPref: {}, duration: "" });
-const BLANK_FORM     = () => ({
+
+const BLANK_MEDICINE = () => ({ id: "", name: "", dosage: "", timing: [], foodPref: {}, duration: "", status: "Active" });
+const BLANK_FORM = () => ({
+  id: "",
   patientId: "", patientName: "", date: new Date().toISOString().split("T")[0],
   diagnosis: "", notes: "", medicines: [BLANK_MEDICINE()],
 });
 
-const TIMINGS     = ["Morning", "Afternoon", "Night"];
+const TIMINGS = ["Morning", "Afternoon", "Night"];
 const TIMING_ICON = { Morning: "🌅", Afternoon: "🌇", Night: "🌙" };
-const FOOD_OPTS   = ["Before Food", "After Food"];
+const FOOD_OPTS = ["Before Food", "After Food"];
 
 const formatDate = (d) =>
   new Date(d).toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric" });
 
+// ── MedStatusToggle — immediate API call on change ───────────────────────────
+function MedStatusToggle({ med, index, onChange, prescriptionId  }) {
+  const [busy, setBusy] = useState(false);
+
+  // const handleChange = async (e) => {
+  //   const newStatus = e.target.value;
+  //   if (newStatus === med.status) return;
+
+  //   if (!med.id) {
+  //     // New medicine (not yet saved) — update local state only
+  //     onChange(index, { field: "status", val: newStatus });
+  //     return;
+  //   }
+
+  //   setBusy(true);
+  //   try {
+  //     const res = await fetch(
+  //       `${process.env.REACT_APP_API_URL}/api/prescription/${prescriptionId}/medicine/${med.id}`,        {
+  //         method:      "PUT",
+  //         headers:     { "Content-Type": "application/json" },
+  //         credentials: "include",
+  //         body:        JSON.stringify({ status: newStatus }),
+  //       }
+  //     );
+  //     if (!res.ok) {
+  //       const data = await res.json().catch(() => ({}));
+  //       throw new Error(data.message || "Failed to update medicine status");
+  //     }
+  //     onChange(index, { field: "status", val: newStatus });
+  //   } catch (err) {
+  //     console.error(err);
+  //     alert(`❌ ${err.message}`);
+  //   } finally {
+  //     setBusy(false);
+  //   }
+  // };
+const handleChange = async (e) => {
+  const newStatus = e.target.value;
+
+  if (newStatus === med.status) return;
+
+  // ❗ IMPORTANT FIX
+  if (!prescriptionId) {
+    alert("⚠️ Save prescription first before updating medicine status");
+    return;
+  }
+
+  if (!med.id) {
+    onChange(index, { field: "status", val: newStatus });
+    return;
+  }
+  console.log("Prescription ID:", prescriptionId);
+console.log("Medicine ID:", med.id);
+  setBusy(true);
+  try {
+    const res = await fetch(
+      `${process.env.REACT_APP_API_URL}/api/prescription/${prescriptionId}/medicine/${med.id}`,
+      {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ status: newStatus }),
+      }
+    );
+
+    const data = await res.json();
+
+    if (!res.ok) throw new Error(data.message);
+
+    // ✅ Update UI
+    onChange(index, { field: "status", val: newStatus });
+
+  } catch (err) {
+    console.error(err);
+    alert(`❌ ${err.message}`);
+  } finally {
+    setBusy(false);
+  }
+};
+  const isActive = (med.status || "Active") === "Active";
+
+  return (
+    <div className="dp-med-status-wrap">
+      <select
+        className={`dp-med-status-sel${isActive ? " dp-med-status--active" : " dp-med-status--done"}`}
+        value={med.status || "Active"}
+        onChange={handleChange}
+        disabled={busy}
+        title="Medicine status"
+      >
+        <option value="Active">🟢 Active</option>
+        <option value="Completed">⚪ Completed</option>
+      </select>
+    </div>
+  );
+}
+
 // ── MedicineRow ──────────────────────────────────────────────────────────────
-function MedicineRow({ med, index, onChange, onRemove, canRemove }) {
+function MedicineRow({ med, index, onChange, onRemove, canRemove, prescriptionId }) {
 
   // Toggle a timing slot on/off; auto-set "After Food" as default when turning on
   function handleTimingClick(slot) {
-    const active       = med.timing.includes(slot);
-    const nextTiming   = active
+    const active = med.timing.includes(slot);
+    const nextTiming = active
       ? med.timing.filter((t) => t !== slot)
       : [...med.timing, slot];
     const nextFoodPref = { ...med.foodPref };
@@ -75,7 +146,7 @@ function MedicineRow({ med, index, onChange, onRemove, canRemove }) {
   // Only show food rows for slots that are currently selected, in TIMINGS order
   const activeSlotsInOrder = TIMINGS.filter((s) => med.timing.includes(s));
 
-  
+
 
   return (
     <div className="dp-med-entry">
@@ -124,6 +195,9 @@ function MedicineRow({ med, index, onChange, onRemove, canRemove }) {
           value={med.duration}
           onChange={(e) => onChange(index, { field: "duration", val: e.target.value })}
         />
+
+        {/* Medicine status toggle — calls API immediately when changed */}
+        <MedStatusToggle med={med} index={index} onChange={onChange} prescriptionId={prescriptionId} />
 
         {canRemove
           ? <button className="dp-med-remove" onClick={() => onRemove(index)} title="Remove">✕</button>
@@ -180,7 +254,7 @@ function PrescriptionForm({ form, setForm, onSave, onCancel, isEdit, patients })
     });
     setForm({ ...form, medicines: meds });
   };
-  const addMed    = () => setForm({ ...form, medicines: [...form.medicines, BLANK_MEDICINE()] });
+  const addMed = () => setForm({ ...form, medicines: [...form.medicines, BLANK_MEDICINE()] });
   const removeMed = (i) => setForm({ ...form, medicines: form.medicines.filter((_, idx) => idx !== i) });
 
   const handlePatient = (e) => {
@@ -201,13 +275,13 @@ function PrescriptionForm({ form, setForm, onSave, onCancel, isEdit, patients })
         <div className="dp-field-group">
           <label>Patient</label>
           <select className="dp-input" value={form.patientId} onChange={handlePatient}>
-  <option value="">Select patient</option>
-  {patients.map((p) => (
-    <option key={p.id} value={p.id}>
-      {p.name}
-    </option>
-  ))}
-</select>
+            <option value="">Select patient</option>
+            {patients.map((p) => (
+              <option key={p.id} value={p.id}>
+                {p.name}
+              </option>
+            ))}
+          </select>
         </div>
         <div className="dp-field-group">
           <label>Date</label>
@@ -239,6 +313,7 @@ function PrescriptionForm({ form, setForm, onSave, onCancel, isEdit, patients })
         <span>Dosage</span>
         <span>Timing</span>
         <span>Duration</span>
+        <span>Status</span>
         <span></span>
       </div>
 
@@ -249,6 +324,7 @@ function PrescriptionForm({ form, setForm, onSave, onCancel, isEdit, patients })
             onChange={updateMed}
             onRemove={removeMed}
             canRemove={form.medicines.length > 1}
+            prescriptionId={form.id} 
           />
         ))}
       </div>
@@ -315,8 +391,8 @@ function ViewModal({ rx, onClose }) {
                     <td>{m.dosage}</td>
                     <td>
                       <div className="dp-modal-timing-list">
-                        {(m.timing || []).map((t) => (
-                          <span key={t} className="dp-modal-timing-tag">
+                        {(m.timing || []).map((t, i) => (
+                          <span key={i} className="dp-modal-timing-tag">
                             {TIMING_ICON[t]} {t}
                             {m.foodPref?.[t] && (
                               <span className="dp-modal-food-tag">
@@ -343,7 +419,12 @@ function ViewModal({ rx, onClose }) {
         </div>
 
         <div className="dp-modal-footer">
-          <button className="dp-btn dp-btn--download">⬇ Download</button>
+          <button
+            className="dp-btn dp-btn--download"
+            onClick={() => generateDoctorPrescriptionPDF(rx)}
+          >
+            ⬇ Download PDF
+          </button>
           <button className="dp-btn dp-btn--cancel" onClick={onClose}>Close</button>
         </div>
       </div>
@@ -353,15 +434,14 @@ function ViewModal({ rx, onClose }) {
 
 // ── Main Page ────────────────────────────────────────────────────────────────
 export default function DoctorPrescription() {
-  const [open, setOpen]               = useState(true);
+  const [open, setOpen] = useState(true);
   const [prescriptions, setPrescriptions] = useState([]);
-  const [showForm, setShowForm]       = useState(false);
-  const [form, setForm]               = useState(BLANK_FORM());
-  const [editId, setEditId]           = useState(null);
-  const [viewRx, setViewRx]           = useState(null);
-  const [search, setSearch]           = useState("");
+  const [showForm, setShowForm]   = useState(false);
+  const [form, setForm]           = useState(BLANK_FORM());
+  const [viewRx, setViewRx]       = useState(null);
+  const [search, setSearch] = useState("");
   const [filterStatus, setFilterStatus] = useState("All");
-  const [patients, setPatients]         = useState([]);
+  const [patients, setPatients] = useState([]);
 
   // Fetch patients from appointments on mount
   useEffect(() => {
@@ -378,7 +458,7 @@ export default function DoctorPrescription() {
           if (appt.patient && !map.has(appt.patient._id)) {
             map.set(appt.patient._id, true);
             unique.push({
-              id:   appt.patient._id,
+              id: appt.patient._id,
               name: `${appt.patient.firstName} ${appt.patient.lastName}`.trim(),
             });
           }
@@ -390,68 +470,140 @@ export default function DoctorPrescription() {
     };
     fetchPatients();
   }, []);
-  // ── Save / Update ──
+
+  const fetchPrescriptions = async () => {
+    try {
+      const res = await fetch(
+        `${process.env.REACT_APP_API_URL}/api/prescription/doctor`,
+        { credentials: "include" }
+      );
+
+      const result = await res.json();
+
+      if (!res.ok) throw new Error(result.message);
+
+      // Convert backend data → frontend format
+      const formatted = result.data.map((rx) => ({
+        id: rx._id,
+        patientId: rx.patient?._id,
+        patientName: `${rx.patient?.firstName || ""} ${rx.patient?.lastName || ""}`.trim(),
+date: rx.createdAt.split("T")[0],        diagnosis: rx.diagnosis,
+        medicines: (rx.medicines || []).map((m) => {
+          const timingArray = [];
+          const foodPrefObj = {};
+
+          (m.timing || []).forEach((t) => {
+            timingArray.push(t.timeOfDay);
+
+            foodPrefObj[t.timeOfDay] =
+              t.intake === "before_food" ? "Before Food" : "After Food";
+          });
+
+          return {
+            id:       m._id || "",
+            name:     m.name,
+            dosage:   m.dosage,
+            duration: m.duration,
+            status:   m.status || "Active",
+            timing:   timingArray,
+            foodPref: foodPrefObj,
+          };
+        }), status: rx.status || "Active",
+        notes: rx.notes || "",
+      }));
+
+      setPrescriptions(formatted);
+
+    } catch (err) {
+      console.error("❌ Failed to fetch prescriptions:", err);
+    }
+  };
+
+  useEffect(() => {
+    fetchPrescriptions();
+  }, []);
+
+  // ── Save / Update — uses form.id to decide create vs update ──────────────
   const handleSave = async () => {
-  if (!form.patientId || !form.diagnosis || form.medicines.some((m) => !m.name)) {
-    alert("Please fill all required fields");
-    return;
-  }
+    if (!form.patientId || !form.diagnosis || form.medicines.some((m) => !m.name)) {
+      alert("Please fill all required fields");
+      return;
+    }
 
-  try {
-    // 🔥 Transform medicines to backend format
-    const formattedMedicines = form.medicines.map((m) => ({
-      name: m.name,
-      dosage: m.dosage,
-      duration: m.duration,
-      timing: m.timing.map((t) => ({
-        timeOfDay: t,
-        intake: m.foodPref[t] === "Before Food" ? "before_food" : "after_food",
-      })),
-    }));
+    const isEdit = !!form.id;
+    const url    = isEdit
+      ? `${process.env.REACT_APP_API_URL}/api/prescription/${form.id}`
+      : `${process.env.REACT_APP_API_URL}/api/prescription/createPres`;
+    const method = isEdit ? "PUT" : "POST";
 
-    const res = await fetch(
-      `${process.env.REACT_APP_API_URL}/api/prescription/createPres`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+    try {
+      const formattedMedicines = form.medicines.map((m) => ({
+        name:     m.name,
+        dosage:   m.dosage,
+        duration: m.duration,
+        timing:   m.timing.map((t) => ({
+          timeOfDay: t,
+          intake: m.foodPref[t] === "Before Food" ? "before_food" : "after_food",
+        })),
+      }));
+
+      const res = await fetch(url, {
+        method,
+        headers:     { "Content-Type": "application/json" },
         credentials: "include",
         body: JSON.stringify({
-          patient: form.patientId,
+          patient:   form.patientId,
           diagnosis: form.diagnosis,
           medicines: formattedMedicines,
-          notes: form.notes,
+          notes:     form.notes,
         }),
-      }
-    );
+      });
 
-    const data = await res.json();
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message);
 
-    if (!res.ok) throw new Error(data.message);
+      alert(isEdit ? "✅ Prescription updated successfully" : "✅ Prescription saved successfully");
+      setForm(BLANK_FORM());
+      setShowForm(false);
+      fetchPrescriptions();
 
-    alert("✅ Prescription saved successfully");
+    } catch (err) {
+      console.error(err);
+      alert("❌ Failed to save prescription");
+    }
+  };
 
-    // reset form
-    setForm(BLANK_FORM());
-    setShowForm(false);
-
-  } catch (err) {
-    console.error(err);
-    alert("❌ Failed to save prescription");
-  }
-};
-
+  // Populate form with id so handleSave knows to PUT
   const handleEdit = (rx) => {
-    setForm({ ...rx });
-    setEditId(rx.id);
+    setForm({
+      id:          rx.id,
+      patientId:   rx.patientId,
+      patientName: rx.patientName,
+      date:        rx.date,
+      diagnosis:   rx.diagnosis,
+      medicines:   rx.medicines,
+      notes:       rx.notes,
+    });
     setShowForm(true);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  const handleDelete = (id) => {
+  const handleDelete = async (id) => {
     if (!window.confirm("Delete this prescription?")) return;
-    setPrescriptions((prev) => prev.filter((rx) => rx.id !== id));
+    try {
+      const res = await fetch(
+        `${process.env.REACT_APP_API_URL}/api/prescription/${id}`,
+        { method: "DELETE", credentials: "include" }
+      );
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        throw new Error(data.message || "Failed to delete prescription");
+      }
+      setPrescriptions((prev) => prev.filter((rx) => rx.id !== id));
+    } catch (err) {
+      console.error(err);
+      alert(`❌ ${err.message}`);
+    }
   };
 
   const handleToggleStatus = (id) => {
@@ -464,7 +616,6 @@ export default function DoctorPrescription() {
 
   const handleCancel = () => {
     setShowForm(false);
-    setEditId(null);
     setForm(BLANK_FORM());
   };
 
@@ -492,7 +643,7 @@ export default function DoctorPrescription() {
             <span className="dp-page-icon">💊</span>
             <h2>Prescription Management</h2>
           </div>
-          
+
           {!showForm && (
             <button className="dp-btn dp-btn--save" onClick={() => setShowForm(true)}>
               ➕ New Prescription
@@ -507,8 +658,8 @@ export default function DoctorPrescription() {
             setForm={setForm}
             onSave={handleSave}
             onCancel={handleCancel}
-            isEdit={!!editId}
-            patients={patients} 
+            isEdit={!!form.id}
+            patients={patients}
           />
         )}
 
@@ -558,8 +709,8 @@ export default function DoctorPrescription() {
                     {rx.status}
                   </span>
                   <div className="dp-rx-actions">
-                    <button className="dp-icon-btn dp-icon-btn--view"   onClick={() => setViewRx(rx)}    title="View">👁</button>
-                    <button className="dp-icon-btn dp-icon-btn--edit"   onClick={() => handleEdit(rx)}   title="Edit">✏️</button>
+                    <button className="dp-icon-btn dp-icon-btn--view" onClick={() => setViewRx(rx)} title="View">👁</button>
+                    <button className="dp-icon-btn dp-icon-btn--edit" onClick={() => handleEdit(rx)} title="Edit">✏️</button>
                     <button className="dp-icon-btn dp-icon-btn--toggle" onClick={() => handleToggleStatus(rx.id)} title="Toggle status">
                       {rx.status === "Active" ? "✅" : "🔄"}
                     </button>

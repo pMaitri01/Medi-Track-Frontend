@@ -166,9 +166,7 @@
 /* ── Medicine table header ──────────────────────────────────────────────── */
 .dp-med-table-head {
   display: grid;
-  grid-template-columns: 28px 1fr 110px 1fr 110px 32px;
-  gap: 8px;
-  padding: 8px 12px;
+  grid-template-columns: 28px 1fr 110px 1fr 110px 90px 32px;
   background: #f9fafb;
   border-radius: 8px 8px 0 0;
   border: 1px solid #e5e7eb;
@@ -199,7 +197,7 @@
 /* ── Input row — same grid as table header ──────────────────────────────── */
 .dp-med-inputs {
   display: grid;
-  grid-template-columns: 28px 1fr 110px 1fr 110px 32px;
+  grid-template-columns: 28px 1fr 110px 1fr 110px 90px 32px;
   gap: 8px;
   align-items: center;
   padding: 10px 12px;
@@ -609,7 +607,7 @@
 @media (max-width: 900px) {
   .dp-med-table-head,
   .dp-med-inputs {
-    grid-template-columns: 28px 1fr 90px 1fr 90px 28px;
+    grid-template-columns: 28px 1fr 90px 1fr 90px 80px 28px;
   }
 }
 
@@ -633,4 +631,33 @@
   .dp-rx-card { flex-direction: column; align-items: flex-start; }
   .dp-rx-card-right { width: 100%; justify-content: space-between; }
   .dp-filter-bar { flex-direction: column; }
+}
+
+/* ── Medicine status toggle ─────────────────────────────────────────────── */
+.dp-med-status-wrap { display: flex; align-items: center; }
+
+.dp-med-status-sel {
+  width: 100%;
+  padding: 5px 8px;
+  border-radius: 20px;
+  border: 1.5px solid #d1d5db;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  outline: none;
+  appearance: none;
+  text-align: center;
+  transition: all 0.15s;
+}
+.dp-med-status-sel:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.dp-med-status--active {
+  background: #d1fae5;
+  color: #065f46;
+  border-color: #6ee7b7;
+}
+.dp-med-status--done {
+  background: #f1f5f9;
+  color: #64748b;
+  border-color: #cbd5e1;
 }
