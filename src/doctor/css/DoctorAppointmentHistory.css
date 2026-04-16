@@ -1,0 +1,256 @@
+/* ── Page container ─────────────────────────────────────────────────────── */
+.dhist-container {
+  padding: 0 24px 60px;
+  background: #f8fafc;
+  min-height: 100vh;
+  font-family: sans-serif;
+}
+
+/* ── Page heading bar ───────────────────────────────────────────────────── */
+.dhist-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: white;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  padding: 20px 24px;
+  margin-top: 20px;
+  margin-bottom: 24px;
+  min-height: 80px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
+}
+
+.dhist-header h2 {
+  font-size: 28px;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0;
+}
+
+/* ── Table wrapper ──────────────────────────────────────────────────────── */
+.dhist-table-wrapper {
+  background: white;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  overflow: hidden;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
+}
+
+.dhist-table-wrapper table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.dhist-table-wrapper th {
+  background: #f8fafc;
+  padding: 12px 16px;
+  text-align: left;
+  font-size: 11px;
+  font-weight: 700;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.dhist-table-wrapper td {
+  padding: 12px 16px;
+  border-top: 1px solid #e2e8f0;
+  font-size: 13px;
+  color: #374151;
+}
+
+.dhist-table-wrapper tr:hover td {
+  background: #f8fafc;
+}
+
+/* ── Name cell ──────────────────────────────────────────────────────────── */
+.dhist-name-cell {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.dhist-name-cell img {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+/* ── Status badge ───────────────────────────────────────────────────────── */
+.dhist-status {
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.dhist-status.pending   { background: #fef3c7; color: #92400e; }
+.dhist-status.accepted  { background: #d1fae5; color: #065f46; }
+.dhist-status.rejected  { background: #fee2e2; color: #991b1b; }
+.dhist-status.completed { background: #dbeafe; color: #1e40af; }
+
+/* ── Loading state ──────────────────────────────────────────────────────── */
+.dhist-loading {
+  text-align: center;
+  padding: 48px 20px;
+  color: #64748b;
+  font-size: 14px;
+}
+
+/* ── Modal overlay ──────────────────────────────────────────────────────── */
+.dhist-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  padding: 20px;
+}
+
+/* ── Modal box ──────────────────────────────────────────────────────────── */
+.dhist-modal {
+  background: white;
+  padding: 0;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 580px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+  animation: dhist-fadeIn 0.22s ease;
+}
+
+@keyframes dhist-fadeIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Modal header ───────────────────────────────────────────────────────── */
+.dhist-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 24px 16px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.dhist-modal-header h3 {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.dhist-close-btn {
+  background: none;
+  border: none;
+  font-size: 20px;
+  color: #94a3b8;
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 6px;
+  line-height: 1;
+  transition: color 0.2s;
+}
+.dhist-close-btn:hover { color: #ef4444; }
+
+/* ── Modal body ─────────────────────────────────────────────────────────── */
+.dhist-modal-body {
+  padding: 20px 24px;
+}
+
+.dhist-detail-section {
+  margin-bottom: 16px;
+}
+
+.dhist-detail-section h4 {
+  font-size: 12px;
+  font-weight: 700;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin: 0 0 10px;
+}
+
+.dhist-detail-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  background: #f8fafc;
+  border-radius: 10px;
+  padding: 14px 16px;
+}
+
+.dhist-detail-grid p {
+  margin: 0;
+  font-size: 13px;
+  color: #374151;
+}
+
+/* ── Modal footer ───────────────────────────────────────────────────────── */
+.dhist-modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 16px 24px;
+  border-top: 1px solid #e2e8f0;
+}
+
+/* ── Modal action buttons ───────────────────────────────────────────────── */
+.dhist-btn-approve {
+  background: #0aa5a5;
+  color: white;
+  border: none;
+  padding: 9px 18px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+.dhist-btn-approve:hover { opacity: 0.85; }
+
+.dhist-btn-reject {
+  background: #fee2e2;
+  color: #991b1b;
+  border: none;
+  padding: 9px 18px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+.dhist-btn-reject:hover { opacity: 0.85; }
+
+.dhist-btn-complete {
+  background: #d1fae5;
+  color: #065f46;
+  border: none;
+  padding: 9px 18px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+.dhist-btn-complete:hover { opacity: 0.85; }
+
+.dhist-btn-close {
+  background: #f1f5f9;
+  color: #475569;
+  border: none;
+  padding: 9px 18px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+.dhist-btn-close:hover { opacity: 0.85; }
