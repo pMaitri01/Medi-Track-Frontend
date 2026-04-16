@@ -1,0 +1,186 @@
+/* ── Layout and background split ────────────────────────────────────────── */
+.dlogin-page-wrapper {
+  height: 100vh;
+  width: 100vw;
+  background: linear-gradient(to right, #0aa5a5 50%, #f4f4f4 50%);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+  font-family: "Segoe UI", sans-serif;
+}
+
+/* ── Floating heading ───────────────────────────────────────────────────── */
+.dlogin-main-title-box {
+  position: absolute;
+  top: 60px;
+  text-align: center;
+  width: 100%;
+}
+
+.dlogin-main-title-box h1 {
+  color: white;
+  font-size: 40px;
+  font-weight: 450;
+  letter-spacing: 1px;
+  margin: 0;
+}
+
+.dlogin-main-title-box span {
+  color: #0aa5a5;
+  margin-left: -15px;
+}
+
+.dlogin-head-subtext {
+  font-size: 30px;
+  font-weight: 500;
+  letter-spacing: 1px;
+  margin-right: -190px;
+  color: #0aa5a5;
+  margin-top: -10px;
+}
+
+/* ── Main split card ────────────────────────────────────────────────────── */
+.dlogin-split-card {
+  width: 750px;
+  height: 400px;
+  background: white;
+  display: flex;
+  border-radius: 10px;
+  box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  margin-top: 80px;
+}
+
+/* ── Form section (left) ────────────────────────────────────────────────── */
+.dlogin-form-container {
+  width: 50%;
+  padding: 40px 30px;
+  background: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.dlogin-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: #0aa5a5;
+  margin-bottom: 25px;
+  text-align: center;
+}
+
+/* ── Input ──────────────────────────────────────────────────────────────── */
+.dlogin-input-field {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 12px;
+  border: 1px solid #dee2e6;
+  border-radius: 5px;
+  box-sizing: border-box;
+}
+
+.dlogin-input-field.is-invalid {
+  border-color: #dc3545;
+}
+
+/* ── Password group ─────────────────────────────────────────────────────── */
+.dlogin-password-group {
+  position: relative;
+  width: 100%;
+}
+
+.dlogin-toggle-eye-icon {
+  position: absolute;
+  right: 15px;
+  top: 40%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  font-size: 18px;
+  color: #666;
+  transition: 0.3s;
+}
+
+.dlogin-toggle-eye-icon:hover {
+  color: #0aa5a5;
+}
+
+/* ── Utility row (remember me + forgot) ─────────────────────────────────── */
+.dlogin-utility-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px;
+}
+
+.dlogin-checkbox-style {
+  width: 16px;
+  height: 16px;
+  margin-right: 5px;
+  vertical-align: middle;
+}
+
+.dlogin-link-teal {
+  color: #0aa5a5;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+/* ── Submit button ──────────────────────────────────────────────────────── */
+.dlogin-submit-btn {
+  width: 100%;
+  padding: 12px;
+  background: #0aa5a5;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-bottom: 10px;
+  transition: 0.3s;
+}
+
+.dlogin-submit-btn:hover {
+  background: #088a8a;
+}
+
+.dlogin-submit-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ── Image section (right) ──────────────────────────────────────────────── */
+.dlogin-image-container {
+  width: 50%;
+  height: 100%;
+  background: #bfeaea;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.dlogin-image-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: inherit;
+}
+
+/* ── Error messages ─────────────────────────────────────────────────────── */
+.dlogin-error-msg {
+  color: #dc3545;
+  font-size: 12px;
+  margin-top: -10px;
+  margin-bottom: 10px;
+  display: block;
+}
+
+.dlogin-status-alert {
+  background: #fef2f2;
+  color: #dc2626;
+  padding: 8px;
+  border-radius: 5px;
+  font-size: 12px;
+  margin-bottom: 10px;
+  border: 1px solid #fecaca;
+}
