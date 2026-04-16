@@ -24,7 +24,7 @@ const formatDate = (d) =>
   new Date(d).toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric" });
 
 // ── MedStatusToggle — immediate API call on change ───────────────────────────
-function MedStatusToggle({ med, index, onChange, prescriptionId  }) {
+function MedStatusToggle({ med, index, onChange, prescriptionId }) {
   const [busy, setBusy] = useState(false);
 
   // const handleChange = async (e) => {
@@ -59,49 +59,49 @@ function MedStatusToggle({ med, index, onChange, prescriptionId  }) {
   //     setBusy(false);
   //   }
   // };
-const handleChange = async (e) => {
-  const newStatus = e.target.value;
+  const handleChange = async (e) => {
+    const newStatus = e.target.value;
 
-  if (newStatus === med.status) return;
+    if (newStatus === med.status) return;
 
-  // ❗ IMPORTANT FIX
-  if (!prescriptionId) {
-    alert("⚠️ Save prescription first before updating medicine status");
-    return;
-  }
+    // ❗ IMPORTANT FIX
+    if (!prescriptionId) {
+      alert("⚠️ Save prescription first before updating medicine status");
+      return;
+    }
 
-  if (!med.id) {
-    onChange(index, { field: "status", val: newStatus });
-    return;
-  }
-  console.log("Prescription ID:", prescriptionId);
-console.log("Medicine ID:", med.id);
-  setBusy(true);
-  try {
-    const res = await fetch(
-      `${process.env.REACT_APP_API_URL}/api/prescription/${prescriptionId}/medicine/${med.id}`,
-      {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify({ status: newStatus }),
-      }
-    );
+    if (!med.id) {
+      onChange(index, { field: "status", val: newStatus });
+      return;
+    }
+    console.log("Prescription ID:", prescriptionId);
+    console.log("Medicine ID:", med.id);
+    setBusy(true);
+    try {
+      const res = await fetch(
+        `${process.env.REACT_APP_API_URL}/api/prescription/${prescriptionId}/medicine/${med.id}`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+          body: JSON.stringify({ status: newStatus }),
+        }
+      );
 
-    const data = await res.json();
+      const data = await res.json();
 
-    if (!res.ok) throw new Error(data.message);
+      if (!res.ok) throw new Error(data.message);
 
-    // ✅ Update UI
-    onChange(index, { field: "status", val: newStatus });
+      // ✅ Update UI
+      onChange(index, { field: "status", val: newStatus });
 
-  } catch (err) {
-    console.error(err);
-    alert(`❌ ${err.message}`);
-  } finally {
-    setBusy(false);
-  }
-};
+    } catch (err) {
+      console.error(err);
+      alert(`❌ ${err.message}`);
+    } finally {
+      setBusy(false);
+    }
+  };
   const isActive = (med.status || "Active") === "Active";
 
   return (
@@ -324,7 +324,7 @@ function PrescriptionForm({ form, setForm, onSave, onCancel, isEdit, patients })
             onChange={updateMed}
             onRemove={removeMed}
             canRemove={form.medicines.length > 1}
-            prescriptionId={form.id} 
+            prescriptionId={form.id}
           />
         ))}
       </div>
@@ -382,7 +382,7 @@ function ViewModal({ rx, onClose }) {
           <div className="dp-view-table-wrap">
             <table className="dp-view-table">
               <thead>
-                <tr><th>Medicine</th><th>Dosage</th><th>Timing & Food</th><th>Duration</th></tr>
+                <tr><th>Medicine</th><th>Dosage</th><th>Timing & Food</th><th>Duration</th><th>Status</th></tr>
               </thead>
               <tbody>
                 {rx.medicines.map((m, i) => (
@@ -404,6 +404,11 @@ function ViewModal({ rx, onClose }) {
                       </div>
                     </td>
                     <td>{m.duration}</td>
+                    <td>
+                      <span className={`dp-badge ${(m.status || "Active") === "Active" ? "dp-badge--active" : "dp-badge--done"}`}>
+                        {(m.status || "Active") === "Active" ? "🟢" : "⚪"} {m.status || "Active"}
+                      </span>
+                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -436,9 +441,9 @@ function ViewModal({ rx, onClose }) {
 export default function DoctorPrescription() {
   const [open, setOpen] = useState(true);
   const [prescriptions, setPrescriptions] = useState([]);
-  const [showForm, setShowForm]   = useState(false);
-  const [form, setForm]           = useState(BLANK_FORM());
-  const [viewRx, setViewRx]       = useState(null);
+  const [showForm, setShowForm] = useState(false);
+  const [form, setForm] = useState(BLANK_FORM());
+  const [viewRx, setViewRx] = useState(null);
   const [search, setSearch] = useState("");
   const [filterStatus, setFilterStatus] = useState("All");
   const [patients, setPatients] = useState([]);
@@ -455,8 +460,12 @@ export default function DoctorPrescription() {
         const map = new Map();
         const unique = [];
         (Array.isArray(data) ? data : []).forEach((appt) => {
+          // ✅ Only include completed appointments
+          if (appt.status !== "completed") return;
+
           if (appt.patient && !map.has(appt.patient._id)) {
             map.set(appt.patient._id, true);
+
             unique.push({
               id: appt.patient._id,
               name: `${appt.patient.firstName} ${appt.patient.lastName}`.trim(),
@@ -487,7 +496,7 @@ export default function DoctorPrescription() {
         id: rx._id,
         patientId: rx.patient?._id,
         patientName: `${rx.patient?.firstName || ""} ${rx.patient?.lastName || ""}`.trim(),
-date: rx.createdAt.split("T")[0],        diagnosis: rx.diagnosis,
+        date: rx.createdAt.split("T")[0], diagnosis: rx.diagnosis,
         medicines: (rx.medicines || []).map((m) => {
           const timingArray = [];
           const foodPrefObj = {};
@@ -500,12 +509,12 @@ date: rx.createdAt.split("T")[0],        diagnosis: rx.diagnosis,
           });
 
           return {
-            id:       m._id || "",
-            name:     m.name,
-            dosage:   m.dosage,
+            id: m._id || "",
+            name: m.name,
+            dosage: m.dosage,
             duration: m.duration,
-            status:   m.status || "Active",
-            timing:   timingArray,
+            status: m.status || "Active",
+            timing: timingArray,
             foodPref: foodPrefObj,
           };
         }), status: rx.status || "Active",
@@ -531,17 +540,19 @@ date: rx.createdAt.split("T")[0],        diagnosis: rx.diagnosis,
     }
 
     const isEdit = !!form.id;
-    const url    = isEdit
+    const url = isEdit
       ? `${process.env.REACT_APP_API_URL}/api/prescription/${form.id}`
       : `${process.env.REACT_APP_API_URL}/api/prescription/createPres`;
     const method = isEdit ? "PUT" : "POST";
 
     try {
       const formattedMedicines = form.medicines.map((m) => ({
-        name:     m.name,
-        dosage:   m.dosage,
+        _id: m.id,
+        name: m.name,
+        dosage: m.dosage,
         duration: m.duration,
-        timing:   m.timing.map((t) => ({
+        status: m.status || "Active",
+        timing: m.timing.map((t) => ({
           timeOfDay: t,
           intake: m.foodPref[t] === "Before Food" ? "before_food" : "after_food",
         })),
@@ -549,13 +560,13 @@ date: rx.createdAt.split("T")[0],        diagnosis: rx.diagnosis,
 
       const res = await fetch(url, {
         method,
-        headers:     { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json" },
         credentials: "include",
         body: JSON.stringify({
-          patient:   form.patientId,
+          patient: form.patientId,
           diagnosis: form.diagnosis,
           medicines: formattedMedicines,
-          notes:     form.notes,
+          notes: form.notes,
         }),
       });
 
@@ -576,13 +587,13 @@ date: rx.createdAt.split("T")[0],        diagnosis: rx.diagnosis,
   // Populate form with id so handleSave knows to PUT
   const handleEdit = (rx) => {
     setForm({
-      id:          rx.id,
-      patientId:   rx.patientId,
+      id: rx.id,
+      patientId: rx.patientId,
       patientName: rx.patientName,
-      date:        rx.date,
-      diagnosis:   rx.diagnosis,
-      medicines:   rx.medicines,
-      notes:       rx.notes,
+      date: rx.date,
+      diagnosis: rx.diagnosis,
+      medicines: rx.medicines,
+      notes: rx.notes,
     });
     setShowForm(true);
     window.scrollTo({ top: 0, behavior: "smooth" });
