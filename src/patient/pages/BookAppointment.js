@@ -7,6 +7,7 @@ const BookAppointment = ({ onClose }) => {
   const [selectedDoctor, setSelectedDoctor] = useState("");
   const [selectedDate, setSelectedDate]     = useState(null);
   const [selectedTime, setSelectedTime]     = useState(null);
+  const [appointmentType, setAppointmentType] = useState("physical");
   const [isBooked, setIsBooked]             = useState(false);
   const [doctors, setDoctors]               = useState([]);
   const [loading, setLoading]               = useState(false);
@@ -92,6 +93,7 @@ useEffect(() => {
           patient:   patientId,       // ✅ patient _id for DB reference
           date:        formattedDate,   // ✅ correct local date YYYY-MM-DD
           time:        selectedTime,
+          type:        appointmentType,
         }),
       });
 
@@ -164,7 +166,22 @@ useEffect(() => {
 
         {/* Right: Time Slots */}
         <div className="slots-container">
-          <label className="label-text">3. Select Time Slot</label>
+          <label className="label-text">3. Appointment Type</label>
+          <select
+            className="appointment-type-select"
+            value={appointmentType}
+            onChange={(e) => setAppointmentType(e.target.value)}
+          >
+            <option value="physical">Physical (In Person - Clinic / Hospital Visit)</option>
+            <option value="video">Video Call</option>
+          </select>
+          <p className="appointment-type-helper">
+            {appointmentType === "physical"
+              ? "📍 Visit doctor at clinic/hospital"
+              : "🎥 Consult doctor via video call"}
+          </p>
+
+          <label className="label-text">4. Select Time Slot</label>
 
           {selectedDate ? (
             <div className="slots-grid">
