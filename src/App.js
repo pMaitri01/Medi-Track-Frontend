@@ -7,6 +7,7 @@ import { DoctorProvider } from "./context/DoctorContext";
 // Shared
 import ProtectedRoute from './components/ProtectedRoute';
 import DoctorStatusRoute from "./components/DoctorStatusRoute";
+import VideoCall from "./pages/VideoCall";
 
 // Patient Pages
 import PatientLanding from './patient/pages/PatientLanding';
@@ -36,6 +37,7 @@ import PatientList from './doctor/pages/PatientList';
 import AppointmentView from './doctor/pages/AppointmentView';
 import DoctorAppointmentHistory from './doctor/pages/DoctorAppointmentHistory';
 import DoctorPrescription from './doctor/pages/DoctorPrescription';
+import UpdateDoctorProfile from './doctor/pages/UpdateDoctorProfile';
 
 // Admin Pages
 import AdminLayout from './admin/pages/AdminLayout';
@@ -58,7 +60,10 @@ function App() {
             <DoctorProvider>
       <Routes>
         <Route path="/" element={<PatientLanding />} />
-
+        <Route
+  path="/video-call/:roomId"
+  element={<VideoCall roomId="appointment123" isDoctor={true} />}
+/>
         {/* Patient Auth */}
         <Route path="/patient/login" element={<PatientLogin />} />
         <Route path="/patient/register" element={<PatientRegistration />} />
@@ -158,6 +163,11 @@ function App() {
         } /> */}
         <Route path="/DoctorWaiting" element={<WaitingApproval />} />
           <Route path="/DoctorRejected" element={<RejectedPage />} />
+          <Route path='/UpdateDoctorProfile' element={
+            <ProtectedRoute role="doctor">
+              <DoctorProfile />
+            </ProtectedRoute>
+          } />
         {/* <Route path="/DoctorRejected" element={
           <DoctorStatusRoute allowedStatus={["rejected"]}>
             <RejectedPage />
