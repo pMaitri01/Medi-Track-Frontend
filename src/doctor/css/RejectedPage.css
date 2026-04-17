@@ -1,0 +1,182 @@
+.drej-page {
+  min-height: 100vh;
+  background: #f8fafc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 16px;
+  font-family: sans-serif;
+}
+
+.drej-card {
+  background: white;
+  border-radius: 16px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+  width: 100%;
+  max-width: 480px;
+  overflow: hidden;
+}
+
+.drej-band {
+  padding: 36px 28px 28px;
+  text-align: center;
+  color: white;
+}
+
+.drej-band--rejected {
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+}
+
+.drej-band-icon {
+  font-size: 56px;
+  margin-bottom: 14px;
+  line-height: 1;
+}
+
+.drej-band h1 {
+  margin: 0 0 6px;
+  font-size: 22px;
+  font-weight: 700;
+  color: white;
+}
+
+.drej-band p {
+  margin: 0;
+  font-size: 14px;
+  opacity: 0.9;
+  line-height: 1.5;
+}
+
+.drej-body {
+  padding: 24px 28px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.drej-badge-row {
+  display: flex;
+  justify-content: center;
+}
+
+.drej-badge {
+  font-size: 12px;
+  font-weight: 700;
+  padding: 5px 18px;
+  border-radius: 20px;
+}
+
+.drej-badge--rejected {
+  background: #fef2f2;
+  color: #dc2626;
+  border: 1px solid #fecaca;
+}
+
+.drej-info-box {
+  background: #f8fafc;
+  border-radius: 10px;
+  border: 1px solid #e2e8f0;
+  padding: 16px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.drej-info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.drej-info-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.drej-info-value {
+  font-size: 13px;
+  color: #1e293b;
+  font-weight: 500;
+  text-align: right;
+}
+
+.drej-reason-box {
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 10px;
+  padding: 14px 16px;
+}
+
+.drej-reason-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: #dc2626;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  margin: 0 0 6px;
+}
+
+.drej-reason-text {
+  font-size: 14px;
+  color: #7f1d1d;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.drej-btn-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.drej-btn {
+  width: 100%;
+  padding: 11px 20px;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s;
+  font-family: inherit;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.drej-btn:hover:not(:disabled) {
+  opacity: 0.85;
+}
+
+.drej-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.drej-btn--primary {
+  background: #0aa5a5;
+  color: white;
+}
+
+@media (max-width: 480px) {
+  .drej-band {
+    padding: 28px 20px 22px;
+  }
+
+  .drej-body {
+    padding: 20px 20px 28px;
+  }
+
+  .drej-band h1 {
+    font-size: 20px;
+  }
+}

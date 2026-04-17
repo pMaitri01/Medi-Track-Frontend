@@ -1,292 +1,383 @@
-.appointment-container {
-  padding: 80px 40px 20px;
-  background: #f4f2ee;
+/* ── Page container ─────────────────────────────────────────────────────── */
+.dappv-container {
+  padding: 0 24px 60px;
+  background: #f8fafc;
   min-height: 100vh;
+  font-family: sans-serif;
 }
 
-.list-header h2 {
-  margin-bottom: 20px;
-  color: #4b5563;
+/* ── Page heading bar ───────────────────────────────────────────────────── */
+.dappv-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: white;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  padding: 20px 24px;
+  margin-top: 20px;
+  margin-bottom: 24px;
+  min-height: 80px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
 }
 
-.filter-bar {
+.dappv-header h2 {
+  font-size: 28px;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0;
+}
+
+/* ── Filter bar ─────────────────────────────────────────────────────────── */
+.dappv-filter-bar {
   display: flex;
   gap: 10px;
-  margin-bottom: 15px;
+  margin-bottom: 20px;
+  background: white;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  padding: 16px 20px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
 }
 
-.search-input {
+.dappv-search-input {
   flex: 1;
-  padding: 10px;
-  border: 1px solid #4db6ac;
+  padding: 10px 14px;
+  border: 1px solid #e2e8f0;
   border-radius: 8px;
+  font-size: 13px;
+  background: #f8fafc;
+  outline: none;
 }
+.dappv-search-input:focus { border-color: #0aa5a5; }
 
-.filter-btn,
-.export-btn {
-  padding: 2px;
+.dappv-filter-btn,
+.dappv-export-btn {
+  padding: 0 18px;
   border: none;
-  background: #4db6ac;
+  background: #0aa5a5;
   color: white;
   border-radius: 8px;
   cursor: pointer;
-  width: 90px;
-  height: 42px !important;
+  height: 42px;
+  font-size: 13px;
+  font-weight: 600;
+  transition: opacity 0.2s;
 }
+.dappv-filter-btn:hover,
+.dappv-export-btn:hover { opacity: 0.85; }
 
-.filter-drawer {
+/* ── Filter drawer ──────────────────────────────────────────────────────── */
+.dappv-filter-drawer {
   background: white;
-  padding: 15px;
-  border-radius: 10px;
+  padding: 16px 20px;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
   margin-bottom: 20px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
 }
 
-.filter-grid {
+.dappv-filter-grid {
   display: flex;
   gap: 20px;
+  flex-wrap: wrap;
 }
 
-.filter-group {
+.dappv-filter-group {
   display: flex;
   flex-direction: column;
+  gap: 5px;
 }
 
-.filter-group select,
-.filter-group input {
-  padding: 8px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
+.dappv-filter-group label {
+  font-size: 11px;
+  font-weight: 700;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
 }
 
-.filter-footer {
-  margin-top: 15px;
+.dappv-filter-group select,
+.dappv-filter-group input {
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  font-size: 13px;
+  background: #f8fafc;
+  outline: none;
+}
+.dappv-filter-group select:focus,
+.dappv-filter-group input:focus { border-color: #0aa5a5; }
+
+.dappv-filter-footer {
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid #e2e8f0;
   display: flex;
   gap: 10px;
 }
 
-.apply-btn,
-.reset-btn {
-  padding: 8px 20px;
+.dappv-apply-btn,
+.dappv-reset-btn {
+  padding: 9px 20px;
   border: none;
-  background: #4db6ac;
+  background: #0aa5a5;
   color: white;
-  border-radius: 6px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s;
 }
+.dappv-apply-btn:hover,
+.dappv-reset-btn:hover { opacity: 0.85; }
 
-.table-wrapper {
+/* ── Table wrapper ──────────────────────────────────────────────────────── */
+.dappv-table-wrapper {
   background: white;
-  border-radius: 10px;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
   overflow: hidden;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
 }
 
-table {
+.dappv-table-wrapper table {
   width: 100%;
   border-collapse: collapse;
 }
 
-th {
-  background: #f9fafb;
-  padding: 12px;
+.dappv-table-wrapper th {
+  background: #f8fafc;
+  padding: 12px 16px;
   text-align: left;
+  font-size: 11px;
+  font-weight: 700;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  border-bottom: 1px solid #e2e8f0;
 }
 
-td {
-  padding: 12px;
-  border-top: 1px solid #eee;
+.dappv-table-wrapper td {
+  padding: 12px 16px;
+  border-top: 1px solid #e2e8f0;
+  font-size: 13px;
+  color: #374151;
 }
 
-.name-cell {
+.dappv-table-wrapper tr:hover td { background: #f8fafc; }
+
+/* ── Name cell ──────────────────────────────────────────────────────────── */
+.dappv-name-cell {
   display: flex;
   align-items: center;
   gap: 10px;
 }
 
-.name-cell img {
-  width: 35px;
-  height: 35px;
+.dappv-name-cell img {
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
+  object-fit: cover;
 }
 
-/* Status Colors */
-.status {
-  padding: 5px 10px;
-  border-radius: 6px;
-  font-size: 12px;
+/* ── Status badge ───────────────────────────────────────────────────────── */
+.dappv-status {
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
 }
 
-.status.pending {
-  background: #fef3c7;
-}
+.dappv-status.pending   { background: #fef3c7; color: #92400e; }
+.dappv-status.accepted  { background: #d1fae5; color: #065f46; }
+.dappv-status.rejected  { background: #fee2e2; color: #991b1b; }
+.dappv-status.completed { background: #dbeafe; color: #1e40af; }
+.dappv-status.approved  { background: #d1fae5; color: #065f46; }
 
-.status.accepted {
-  background: #d1fae5;
-}
+/* ── Action cell ────────────────────────────────────────────────────────── */
+.dappv-action-cell { display: flex; gap: 8px; }
 
-.status.rejected {
-  background: #fee2e2;
-}
-
-/* Action Buttons */
-.action-cell {
-  display: flex;
-  gap: 8px;
-}
-
-.accept-btn {
-  background-color: #4db6ac;
+.dappv-accept-btn {
+  background-color: #0aa5a5;
   color: white;
   border: none;
-  padding: 6px 12px;
-  border-radius: 6px;
+  padding: 7px 14px;
+  border-radius: 8px;
   cursor: pointer;
   font-size: 12px;
+  font-weight: 600;
+  transition: opacity 0.2s;
 }
+.dappv-accept-btn:hover { opacity: 0.85; }
 
-.reject-btn {
-  background-color: #e57373;
-  color: white;
+.dappv-reject-btn {
+  background-color: #fee2e2;
+  color: #991b1b;
   border: none;
-  padding: 6px 12px;
-  border-radius: 6px;
+  padding: 7px 14px;
+  border-radius: 8px;
   cursor: pointer;
   font-size: 12px;
+  font-weight: 600;
+  transition: opacity 0.2s;
 }
+.dappv-reject-btn:hover { opacity: 0.85; }
 
-/* Loading / Error / Empty states */
-.av-center-state {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 60px 20px;
-  gap: 16px;
-  color: #6b7280;
-  font-size: 15px;
-}
-
-.av-error {
-  color: #dc2626;
-}
-
-.av-empty {
+/* ── Loading state ──────────────────────────────────────────────────────── */
+.dappv-loading {
   text-align: center;
-  padding: 40px;
-  color: #9ca3af;
+  padding: 48px 20px;
+  color: #64748b;
   font-size: 14px;
 }
 
-/* Spinner */
-.av-spinner {
-  width: 40px;
-  height: 40px;
-  border: 4px solid #e5e7eb;
-  border-top-color: #4db6ac;
-  border-radius: 50%;
-  animation: av-spin 0.8s linear infinite;
-}
-
-@keyframes av-spin {
-  to { transform: rotate(360deg); }
-}
-
-/* Status badge variants (BEM-style to avoid conflicts) */
-.status--pending  { background: #fef3c7; color: #92400e; }
-.status--accepted { background: #d1fae5; color: #065f46; }
-.status--rejected { background: #fee2e2; color: #991b1b; }
-.status--completed { background: #dbeafe; color: #1e40af; }
-
-
-.modal-overlay {
+/* ── Modal overlay ──────────────────────────────────────────────────────── */
+.dappv-modal-overlay {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  /* background: rgba(0,0,0,0.4); */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 999;
-}
-
-.modal {
-  background: white;
-  padding: 20px;
-  border-radius: 10px;
-  width: 400px;
-}
-
-.modal-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.modal-user {
-  text-align: center;
-}
-
-.modal-user img {
-  width: 60px;
-  border-radius: 50%;
-}
-
-.modal-info {
-  margin-top: 15px;
-}
-
-/* Modal Overlay */
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  /* background: rgba(0, 0, 0, 0.6); */
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 1000;
-  /* background-color: white;  */
+  padding: 20px;
 }
 
-/* Modal Box */
-.modal-content {
-  background: white !important; 
-  padding: 25px;
-  border-radius: 12px;
-  width: 600px !important;
-  max-width: 90%;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+/* ── Modal box ──────────────────────────────────────────────────────────── */
+.dappv-modal {
+  background: white;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 580px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+  animation: dappv-fadeIn 0.22s ease;
 }
 
-.modal-header {
+@keyframes dappv-fadeIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Modal header ───────────────────────────────────────────────────────── */
+.dappv-modal-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid #eee;
-  padding-bottom: 15px;
+  padding: 20px 24px 16px;
+  border-bottom: 1px solid #e2e8f0;
 }
 
-.detail-grid {
+.dappv-modal-header h3 {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.dappv-close-btn {
+  background: none;
+  border: none;
+  font-size: 20px;
+  color: #94a3b8;
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 6px;
+  line-height: 1;
+  transition: color 0.2s;
+}
+.dappv-close-btn:hover { color: #ef4444; }
+
+/* ── Modal body ─────────────────────────────────────────────────────────── */
+.dappv-modal-body { padding: 20px 24px; }
+
+.dappv-detail-section { margin-bottom: 16px; }
+
+.dappv-detail-section h4 {
+  font-size: 12px;
+  font-weight: 700;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin: 0 0 10px;
+}
+
+.dappv-detail-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 10px;
-  margin-top: 10px;
+  background: #f8fafc;
+  border-radius: 10px;
+  padding: 14px 16px;
 }
 
-.modal-footer {
-  margin-top: 25px;
+.dappv-detail-grid p {
+  margin: 0;
+  font-size: 13px;
+  color: #374151;
+}
+
+/* ── Modal footer ───────────────────────────────────────────────────────── */
+.dappv-modal-footer {
   display: flex;
   justify-content: flex-end;
   gap: 10px;
+  padding: 16px 24px;
+  border-top: 1px solid #e2e8f0;
 }
 
-/* Buttons */
-.btn-approve { background: #28a745; color: white; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer; }
-.btn-reject { background: #dc3545; color: white; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer; }
-.btn-cancel { background: #6c757d; color: white; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer; }
-
-.btn-complete{
-  background: #6c757d; color: white; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer; 
+/* ── Modal action buttons ───────────────────────────────────────────────── */
+.dappv-btn-approve {
+  background: #0aa5a5;
+  color: white;
+  border: none;
+  padding: 9px 18px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s;
 }
+.dappv-btn-approve:hover { opacity: 0.85; }
+
+.dappv-btn-reject {
+  background: #fee2e2;
+  color: #991b1b;
+  border: none;
+  padding: 9px 18px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+.dappv-btn-reject:hover { opacity: 0.85; }
+
+.dappv-btn-complete {
+  background: #d1fae5;
+  color: #065f46;
+  border: none;
+  padding: 9px 18px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+.dappv-btn-complete:hover { opacity: 0.85; }
+
+.dappv-btn-cancel {
+  background: #f1f5f9;
+  color: #475569;
+  border: none;
+  padding: 9px 18px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+.dappv-btn-cancel:hover { opacity: 0.85; }

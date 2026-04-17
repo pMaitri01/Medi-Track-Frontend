@@ -1,5 +1,5 @@
 import { useState } from "react";
-import "../css/ForgotPassword.css";
+import "../css/ResetPassword.css";
 
 const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/;
 
@@ -14,7 +14,7 @@ const getStrength = (pwd) => {
 };
 
 const strengthLabel = ["", "Weak", "Medium", "Medium", "Strong"];
-const strengthClass = ["", "weak", "medium", "medium", "strong"];
+const strengthClass = ["", "drpwd-weak", "drpwd-medium", "drpwd-medium", "drpwd-strong"];
 
 const ResetPassword = ({ onDone }) => {
   const [pwd, setPwd]         = useState("");
@@ -52,75 +52,75 @@ const ResetPassword = ({ onDone }) => {
 
   if (success) {
     return (
-      <div className="fp-page">
-        <div className="fp-card">
-          <div className="fp-success-icon">✅</div>
-          <h2 className="fp-title">Password Reset!</h2>
-          <p className="fp-subtitle">Your password has been reset successfully.</p>
-          <button className="fp-btn" onClick={onDone}>Go to Login</button>
+      <div className="drpwd-page">
+        <div className="drpwd-card">
+          <div className="drpwd-success-icon">✅</div>
+          <h2 className="drpwd-title">Password Reset!</h2>
+          <p className="drpwd-subtitle">Your password has been reset successfully.</p>
+          <button className="drpwd-btn" onClick={onDone}>Go to Login</button>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="fp-page">
-      <div className="fp-card">
-        <div className="fp-icon">🔒</div>
-        <h2 className="fp-title">Reset Password</h2>
-        <p className="fp-subtitle">Create a strong new password for your account</p>
+    <div className="drpwd-page">
+      <div className="drpwd-card">
+        <div className="drpwd-icon">🔒</div>
+        <h2 className="drpwd-title">Reset Password</h2>
+        <p className="drpwd-subtitle">Create a strong new password for your account</p>
 
         {/* New Password */}
-        <div className="fp-field">
-          <label className="fp-label">New Password</label>
-          <div className="fp-input-wrap">
+        <div className="drpwd-field">
+          <label className="drpwd-label">New Password</label>
+          <div className="drpwd-input-wrap">
             <input
-              className={"fp-input" + (errors.pwd ? " error" : "")}
+              className={"drpwd-input" + (errors.pwd ? " drpwd-error" : "")}
               type={showPwd.pwd ? "text" : "password"}
               placeholder="Enter new password"
               value={pwd}
               onChange={(e) => { setPwd(e.target.value); setErrors(p => ({ ...p, pwd: "" })); }}
             />
-            <button className="fp-eye" onClick={() => toggle("pwd")}>
+            <button className="drpwd-eye" onClick={() => toggle("pwd")}>
               {showPwd.pwd ? "🙈" : "👁️"}
             </button>
           </div>
           {/* strength bars */}
           {pwd && (
             <>
-              <div className="fp-strength">
+              <div className="drpwd-strength">
                 {[1,2,3,4].map(i => (
-                  <div key={i} className={"fp-strength-bar" + (i <= strength ? " " + strengthClass[strength] : "")} />
+                  <div key={i} className={"drpwd-strength-bar" + (i <= strength ? " " + strengthClass[strength] : "")} />
                 ))}
               </div>
-              <span className={"fp-strength-label " + strengthClass[strength]}>
+              <span className={"drpwd-strength-label " + strengthClass[strength]}>
                 {strengthLabel[strength]}
               </span>
             </>
           )}
-          {errors.pwd && <span className="fp-error">{errors.pwd}</span>}
+          {errors.pwd && <span className="drpwd-error-text">{errors.pwd}</span>}
         </div>
 
         {/* Confirm Password */}
-        <div className="fp-field">
-          <label className="fp-label">Confirm Password</label>
-          <div className="fp-input-wrap">
+        <div className="drpwd-field">
+          <label className="drpwd-label">Confirm Password</label>
+          <div className="drpwd-input-wrap">
             <input
-              className={"fp-input" + (errors.confirm ? " error" : "")}
+              className={"drpwd-input" + (errors.confirm ? " drpwd-error" : "")}
               type={showPwd.confirm ? "text" : "password"}
               placeholder="Re-enter new password"
               value={confirm}
               onChange={(e) => { setConfirm(e.target.value); setErrors(p => ({ ...p, confirm: "" })); }}
             />
-            <button className="fp-eye" onClick={() => toggle("confirm")}>
+            <button className="drpwd-eye" onClick={() => toggle("confirm")}>
               {showPwd.confirm ? "🙈" : "👁️"}
             </button>
           </div>
-          {errors.confirm && <span className="fp-error">{errors.confirm}</span>}
+          {errors.confirm && <span className="drpwd-error-text">{errors.confirm}</span>}
         </div>
 
         <button
-          className="fp-btn"
+          className="drpwd-btn"
           onClick={handleSubmit}
           disabled={!pwd || !confirm || loading}
         >

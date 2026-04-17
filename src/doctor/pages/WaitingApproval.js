@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import "../css/DoctorRegister.css";
+import "../css/WaitingApproval.css";
 import { useNavigate } from "react-router-dom";
 const WaitingApproval = () => {
   const [doctor, setDoctor] = useState(null);
@@ -134,91 +134,49 @@ useEffect(() => {
 };
 
   return (
-    <div className="dr-page" style={{ alignItems: "center" }}>
-      <div style={{
-        background: "#fff",
-        borderRadius: 18,
-        boxShadow: "0 8px 32px rgba(0,0,0,0.10)",
-        width: "100%",
-        maxWidth: 480,
-        overflow: "hidden",
-        fontFamily: "'Segoe UI', Arial, sans-serif",
-      }}>
+    <div className="dwait-page">
+      <div className="dwait-card">
 
         {/* Top colored band */}
-        <div style={{
-          background: "linear-gradient(135deg, #f59e0b, #d97706)",
-          padding: "32px 28px",
-          textAlign: "center",
-          color: "#fff",
-        }}>
-          <div style={{ fontSize: 56, marginBottom: 12 }}>⏳</div>
-          <h2 style={{ margin: "0 0 6px", fontSize: 22, fontWeight: 700 }}>Account Under Review</h2>
-          <p style={{ margin: 0, fontSize: 14, opacity: 0.9 }}>
+        <div className="dwait-band">
+          <div className="dwait-band-icon">⏳</div>
+          <h2 className="dwait-band-title">Account Under Review</h2>
+          <p className="dwait-band-subtitle">
             Your registration has been submitted successfully
           </p>
         </div>
 
-        <div style={{ padding: "28px 28px 32px" }}>
+        <div className="dwait-body">
 
           {/* Status badge */}
-          <div style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            gap: 8,
-            marginBottom: 24,
-          }}>
-            <span style={{
-              background: "#fefce8",
-              color: "#ca8a04",
-              border: "1px solid #fde68a",
-              padding: "5px 18px",
-              borderRadius: 20,
-              fontSize: 13,
-              fontWeight: 700,
-            }}>
+          <div className="dwait-badge-row">
+            <span className="dwait-badge">
               ● {status}
             </span>
           </div>
 
           {/* Doctor info */}
           {doctor && (
-            <div style={{
-              background: "#f8fafc",
-              borderRadius: 10,
-              padding: "16px 18px",
-              marginBottom: 20,
-              border: "1px solid #e2e8f0",
-            }}>
-              <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-                <div style={{ display: "flex", justifyContent: "space-between" }}>
-                  <span style={{ fontSize: 12, color: "#64748b", fontWeight: 600, textTransform: "uppercase" }}>Name</span>
-                  <span style={{ fontSize: 14, color: "#1e293b", fontWeight: 600 }}>{doctor.name}</span>
+            <div className="dwait-info-box">
+              <div className="dwait-info-list">
+                <div className="dwait-info-row">
+                  <span className="dwait-info-label">Name</span>
+                  <span className="dwait-info-value dwait-info-value--strong">{doctor.name}</span>
                 </div>
-                <div style={{ display: "flex", justifyContent: "space-between" }}>
-                  <span style={{ fontSize: 12, color: "#64748b", fontWeight: 600, textTransform: "uppercase" }}>Email</span>
-                  <span style={{ fontSize: 14, color: "#1e293b" }}>{doctor.email}</span>
+                <div className="dwait-info-row">
+                  <span className="dwait-info-label">Email</span>
+                  <span className="dwait-info-value">{doctor.email}</span>
                 </div>
-                <div style={{ display: "flex", justifyContent: "space-between" }}>
-                  <span style={{ fontSize: 12, color: "#64748b", fontWeight: 600, textTransform: "uppercase" }}>Specialization</span>
-                  <span style={{ fontSize: 14, color: "#1e293b" }}>{doctor.specialization}</span>
+                <div className="dwait-info-row">
+                  <span className="dwait-info-label">Specialization</span>
+                  <span className="dwait-info-value">{doctor.specialization}</span>
                 </div>
               </div>
             </div>
           )}
 
           {/* Info message */}
-          <div style={{
-            background: "#eff6ff",
-            border: "1px solid #bfdbfe",
-            borderRadius: 10,
-            padding: "14px 16px",
-            marginBottom: 22,
-            fontSize: 13,
-            color: "#1e40af",
-            lineHeight: 1.6,
-          }}>
+          <div className="dwait-notice">
             <strong>What happens next?</strong><br />
             Our admin team will review your registration and uploaded documents.
             You will be able to login once your account is approved.
@@ -229,26 +187,13 @@ useEffect(() => {
           <button
             onClick={handleRefresh}
             disabled={checking}
-            style={{
-              width: "100%",
-              padding: "11px",
-              background: checking ? "#cbd5e1" : "#2563eb",
-              color: "#fff",
-              border: "none",
-              borderRadius: 10,
-              fontSize: 14,
-              fontWeight: 700,
-              cursor: checking ? "not-allowed" : "pointer",
-              marginBottom: 14,
-              fontFamily: "inherit",
-              transition: "background 0.18s",
-            }}
+            className="dwait-refresh-btn"
           >
             {checking ? "Checking status..." : "🔄 Refresh Status"}
           </button>
 
-          <p style={{ textAlign: "center", fontSize: 13, color: "#64748b" }}>
-            Already approved? <Link to="/DoctorLogin" style={{ color: "#2563eb", fontWeight: 600 }}>Login here</Link>
+          <p className="dwait-login-text">
+            Already approved? <Link to="/DoctorLogin" className="dwait-login-link">Login here</Link>
           </p>
         </div>
       </div>

@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import "../css/DoctorProfile.css";
 import { useNavigate } from "react-router-dom";
+
 const initialState = {
   fullName: "", dob: "", gender: "",
   workingDays: [],
@@ -12,25 +13,25 @@ const initialState = {
 };
 
 const STEPS = [
-  { label: "Personal Details", icon: "⚕️" },
+  { label: "Personal Details",     icon: "⚕️" },
   { label: "Professional Details", icon: "🏥" },
-  { label: "Contact & Location", icon: "📞" },
+  { label: "Contact & Location",   icon: "📞" },
 ];
 
-// ── Custom Calendar Date Picker ──
+// ── Custom Calendar Date Picker ──────────────────────────────────────────────
 const MONTH_NAMES = [
-  "January", "February", "March", "April", "May", "June",
-  "July", "August", "September", "October", "November", "December"
+  "January","February","March","April","May","June",
+  "July","August","September","October","November","December",
 ];
-const DAY_NAMES = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"];
+const DAY_NAMES = ["Su","Mo","Tu","We","Th","Fr","Sa"];
 
 const CustomDatePicker = ({ value, onChange, error }) => {
-  const today = new Date();
+  const today  = new Date();
   const parsed = value ? new Date(value + "T00:00:00") : null;
 
-  const [open, setOpen] = useState(false);
-  const [viewYear, setViewYear] = useState(parsed ? parsed.getFullYear() : today.getFullYear() - 25);
-  const [viewMonth, setViewMonth] = useState(parsed ? parsed.getMonth() : today.getMonth());
+  const [open, setOpen]           = useState(false);
+  const [viewYear, setViewYear]   = useState(parsed ? parsed.getFullYear()  : today.getFullYear() - 25);
+  const [viewMonth, setViewMonth] = useState(parsed ? parsed.getMonth()     : today.getMonth());
   const ref = useRef(null);
 
   useEffect(() => {
@@ -39,7 +40,7 @@ const CustomDatePicker = ({ value, onChange, error }) => {
     return () => document.removeEventListener("mousedown", handler);
   }, []);
 
-  const firstDay = new Date(viewYear, viewMonth, 1).getDay();
+  const firstDay    = new Date(viewYear, viewMonth, 1).getDay();
   const daysInMonth = new Date(viewYear, viewMonth + 1, 0).getDate();
 
   const prevMonth = () => {
@@ -59,56 +60,65 @@ const CustomDatePicker = ({ value, onChange, error }) => {
   };
 
   const displayValue = parsed
-    ? `${String(parsed.getDate()).padStart(2, "0")} ${MONTH_NAMES[parsed.getMonth()]} ${parsed.getFullYear()}`
+    ? `${String(parsed.getDate()).padStart(2,"0")} ${MONTH_NAMES[parsed.getMonth()]} ${parsed.getFullYear()}`
     : "";
 
   const cells = [];
   for (let i = 0; i < firstDay; i++) cells.push(null);
   for (let d = 1; d <= daysInMonth; d++) cells.push(d);
 
-  const isSelected = (d) => parsed && d &&
+  const isSelected  = (d) => parsed && d &&
     parsed.getFullYear() === viewYear && parsed.getMonth() === viewMonth && parsed.getDate() === d;
-
   const isTodayCell = (d) => d &&
     today.getFullYear() === viewYear && today.getMonth() === viewMonth && today.getDate() === d;
 
   return (
-    <div className="cdp-wrap" ref={ref}>
-      <div className={"cdp-trigger" + (error ? " dp-input-error" : "")} onClick={() => setOpen(o => !o)}>
-        <span className={displayValue ? "cdp-value" : "cdp-placeholder"}>
+    <div className="dprof-cdp-wrap" ref={ref}>
+      <div
+        className={"dprof-cdp-trigger" + (error ? " dprof-input-error" : "")}
+        onClick={() => setOpen(o => !o)}
+      >
+        <span className={displayValue ? "dprof-cdp-value" : "dprof-cdp-placeholder"}>
           {displayValue || "Select date"}
         </span>
-        <span className="cdp-icon">📅</span>
+        <span className="dprof-cdp-icon">📅</span>
       </div>
 
       {open && (
-        <div className="cdp-popup">
-          <div className="cdp-header">
-            <button className="cdp-nav" onClick={prevMonth}>&#8249;</button>
-            <div className="cdp-month-year">
-              <select className="cdp-month-sel" value={viewMonth}
-                onChange={(e) => setViewMonth(Number(e.target.value))}>
+        <div className="dprof-cdp-popup">
+          <div className="dprof-cdp-header">
+            <button className="dprof-cdp-nav" onClick={prevMonth}>&#8249;</button>
+            <div className="dprof-cdp-month-year">
+              <select
+                className="dprof-cdp-month-sel"
+                value={viewMonth}
+                onChange={(e) => setViewMonth(Number(e.target.value))}
+              >
                 {MONTH_NAMES.map((m, i) => <option key={m} value={i}>{m}</option>)}
               </select>
-              <select className="cdp-year-sel" value={viewYear}
-                onChange={(e) => setViewYear(Number(e.target.value))}>
+              <select
+                className="dprof-cdp-year-sel"
+                value={viewYear}
+                onChange={(e) => setViewYear(Number(e.target.value))}
+              >
                 {Array.from({ length: 80 }, (_, i) => today.getFullYear() - i).map(y => (
                   <option key={y} value={y}>{y}</option>
                 ))}
               </select>
             </div>
-            <button className="cdp-nav" onClick={nextMonth}>&#8250;</button>
+            <button className="dprof-cdp-nav" onClick={nextMonth}>&#8250;</button>
           </div>
 
-          <div className="cdp-grid">
-            {DAY_NAMES.map(d => <div key={d} className="cdp-day-name">{d}</div>)}
+          <div className="dprof-cdp-grid">
+            {DAY_NAMES.map(d => <div key={d} className="dprof-cdp-day-name">{d}</div>)}
             {cells.map((d, i) => (
-              <div key={i}
+              <div
+                key={i}
                 className={
-                  "cdp-cell" +
-                  (!d ? " cdp-empty" : "") +
-                  (isSelected(d) ? " cdp-selected" : "") +
-                  (isTodayCell(d) && !isSelected(d) ? " cdp-today" : "")
+                  "dprof-cdp-cell" +
+                  (!d ? " dprof-cdp-empty" : "") +
+                  (isSelected(d)  ? " dprof-cdp-selected" : "") +
+                  (isTodayCell(d) && !isSelected(d) ? " dprof-cdp-today" : "")
                 }
                 onClick={() => d && selectDay(d)}
               >
@@ -117,11 +127,17 @@ const CustomDatePicker = ({ value, onChange, error }) => {
             ))}
           </div>
 
-          <div className="cdp-footer">
-            <button className="cdp-clear" onClick={() => { onChange({ target: { name: "dob", value: "" } }); setOpen(false); }}>
+          <div className="dprof-cdp-footer">
+            <button
+              className="dprof-cdp-clear"
+              onClick={() => { onChange({ target: { name: "dob", value: "" } }); setOpen(false); }}
+            >
               Clear
             </button>
-            <button className="cdp-today-btn" onClick={() => { setViewYear(today.getFullYear()); setViewMonth(today.getMonth()); }}>
+            <button
+              className="dprof-cdp-today-btn"
+              onClick={() => { setViewYear(today.getFullYear()); setViewMonth(today.getMonth()); }}
+            >
               Today
             </button>
           </div>
@@ -132,26 +148,26 @@ const CustomDatePicker = ({ value, onChange, error }) => {
 };
 
 // ── Availability constants ────────────────────────────────────────────────────
-const ALL_DAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+const ALL_DAYS = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"];
 const DAY_SHORT = {
-  Monday: "Mon", Tuesday: "Tue", Wednesday: "Wed", Thursday: "Thu",
-  Friday: "Fri", Saturday: "Sat", Sunday: "Sun"
+  Monday:"Mon", Tuesday:"Tue", Wednesday:"Wed", Thursday:"Thu",
+  Friday:"Fri", Saturday:"Sat", Sunday:"Sun",
 };
 const SERVICE_OPTS = [
-  { value: "physical", label: "🏥 Physical Consultation" },
-  { value: "videocall", label: "📹 Video Consultation" },
+  { value: "physical",  label: "🏥 Physical Consultation" },
+  { value: "videocall", label: "📹 Video Consultation"    },
 ];
 
 const TIME_OPTIONS = (() => {
   const opts = [];
   for (let h = 0; h < 24; h++) {
     for (let m = 0; m < 60; m += 30) {
-      const hh = String(h).padStart(2, "0");
-      const mm = String(m).padStart(2, "0");
-      const val = `${hh}:${mm}`;
+      const hh   = String(h).padStart(2, "0");
+      const mm   = String(m).padStart(2, "0");
+      const val  = `${hh}:${mm}`;
       const ampm = h < 12 ? "AM" : "PM";
-      const h12 = h === 0 ? 12 : h > 12 ? h - 12 : h;
-      opts.push({ value: val, label: `${String(h12).padStart(2, "0")}:${mm} ${ampm}` });
+      const h12  = h === 0 ? 12 : h > 12 ? h - 12 : h;
+      opts.push({ value: val, label: `${String(h12).padStart(2,"0")}:${mm} ${ampm}` });
     }
   }
   return opts;
@@ -165,15 +181,15 @@ function WorkingDaysPicker({ selected, onChange, error }) {
     onChange(next);
   };
   return (
-    <div className="dp-field">
-      <label className="dp-label">Working Days <span className="dp-required">*</span></label>
-      <div className="dp-day-chips">
+    <div className="dprof-field">
+      <label className="dprof-label">Working Days <span className="dprof-required">*</span></label>
+      <div className="dprof-day-chips">
         {ALL_DAYS.map((day) => (
           <div
             key={day}
             role="button"
             tabIndex={0}
-            className={"dp-day-chip" + (selected.includes(day) ? " dp-day-chip--on" : "")}
+            className={"dprof-day-chip" + (selected.includes(day) ? " dprof-day-chip--on" : "")}
             onClick={() => toggle(day)}
             onKeyDown={(e) => e.key === "Enter" && toggle(day)}
           >
@@ -181,58 +197,56 @@ function WorkingDaysPicker({ selected, onChange, error }) {
           </div>
         ))}
       </div>
-      {error && <span className="dp-error-msg">{error}</span>}
+      {error && <span className="dprof-error-msg">{error}</span>}
     </div>
   );
 }
 
 function WorkingHoursSessions({ sessions, onChange, sessionErrors }) {
-  const addSession = () =>
-    onChange([...sessions, { start: "09:00", end: "17:00" }]);
-  const removeSession = (i) =>
-    onChange(sessions.filter((_, idx) => idx !== i));
+  const addSession    = () => onChange([...sessions, { start: "09:00", end: "17:00" }]);
+  const removeSession = (i) => onChange(sessions.filter((_, idx) => idx !== i));
   const updateSession = (i, field, val) =>
     onChange(sessions.map((s, idx) => idx === i ? { ...s, [field]: val } : s));
 
   return (
-    <div className="dp-field">
-      <label className="dp-label">Working Hours <span className="dp-required">*</span></label>
-      <div className="dp-sessions">
+    <div className="dprof-field">
+      <label className="dprof-label">Working Hours <span className="dprof-required">*</span></label>
+      <div className="dprof-sessions">
         {sessions.map((s, i) => (
-          <div key={i} className="dp-session-row">
-            <span className="dp-session-num">Session {i + 1}</span>
+          <div key={i} className="dprof-session-row">
+            <span className="dprof-session-num">Session {i + 1}</span>
             <select
-              className={"dp-input dp-time-sel" + (sessionErrors?.[i]?.start ? " dp-input-error" : "")}
+              className={"dprof-input dprof-time-sel" + (sessionErrors?.[i]?.start ? " dprof-input-error" : "")}
               value={s.start}
               onChange={(e) => updateSession(i, "start", e.target.value)}
             >
-              {TIME_OPTIONS.map((o) => (
-                <option key={o.value} value={o.value}>{o.label}</option>
-              ))}
+              {TIME_OPTIONS.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
             </select>
-            <span className="dp-session-to">to</span>
+            <span className="dprof-session-to">to</span>
             <select
-              className={"dp-input dp-time-sel" + (sessionErrors?.[i]?.end ? " dp-input-error" : "")}
+              className={"dprof-input dprof-time-sel" + (sessionErrors?.[i]?.end ? " dprof-input-error" : "")}
               value={s.end}
               onChange={(e) => updateSession(i, "end", e.target.value)}
             >
-              {TIME_OPTIONS.map((o) => (
-                <option key={o.value} value={o.value}>{o.label}</option>
-              ))}
+              {TIME_OPTIONS.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
             </select>
             {sessions.length > 1 && (
-              <button type="button" className="dp-session-remove"
-                onClick={() => removeSession(i)} title="Remove">✕</button>
+              <button
+                type="button"
+                className="dprof-session-remove"
+                onClick={() => removeSession(i)}
+                title="Remove"
+              >✕</button>
             )}
             {sessionErrors?.[i] && (
-              <span className="dp-error-msg dp-session-err">
+              <span className="dprof-error-msg dprof-session-err">
                 {sessionErrors[i].end || sessionErrors[i].overlap}
               </span>
             )}
           </div>
         ))}
       </div>
-      <button type="button" className="dp-add-session-btn" onClick={addSession}>
+      <button type="button" className="dprof-add-session-btn" onClick={addSession}>
         ＋ Add Session
       </button>
     </div>
@@ -247,30 +261,34 @@ function ServiceTypePicker({ selected, onChange, error }) {
     onChange(next);
   };
   return (
-    <div className="dp-field">
-      <label className="dp-label">Type of Service <span className="dp-required">*</span></label>
-      <div className="dp-service-opts">
+    <div className="dprof-field">
+      <label className="dprof-label">Type of Service <span className="dprof-required">*</span></label>
+      <div className="dprof-service-opts">
         {SERVICE_OPTS.map((opt) => (
           <label
             key={opt.value}
-            className={"dp-service-chip" + (selected.includes(opt.value) ? " dp-service-chip--on" : "")}
+            className={"dprof-service-chip" + (selected.includes(opt.value) ? " dprof-service-chip--on" : "")}
           >
-            <input type="checkbox" checked={selected.includes(opt.value)}
-              onChange={() => toggle(opt.value)} style={{ display: "none" }} />
+            <input
+              type="checkbox"
+              checked={selected.includes(opt.value)}
+              onChange={() => toggle(opt.value)}
+              style={{ display: "none" }}
+            />
             {opt.label}
           </label>
         ))}
       </div>
-      {error && <span className="dp-error-msg">{error}</span>}
+      {error && <span className="dprof-error-msg">{error}</span>}
     </div>
   );
 }
 
-// ── Field lives OUTSIDE DoctorProfile so it never gets recreated on re-render ──
+// ── Field — lives outside DoctorProfile so it never gets recreated ───────────
 const Field = ({ label, name, type = "text", options, textarea, required, value, onChange, error }) => (
-  <div className="dp-field">
-    <label className="dp-label">
-      {label} {required && <span className="dp-required">*</span>}
+  <div className="dprof-field">
+    <label className="dprof-label">
+      {label} {required && <span className="dprof-required">*</span>}
     </label>
     {textarea ? (
       <textarea
@@ -278,16 +296,16 @@ const Field = ({ label, name, type = "text", options, textarea, required, value,
         value={value}
         onChange={onChange}
         rows={4}
-        className={"dp-input" + (error ? " dp-input-error" : "")}
+        className={"dprof-input" + (error ? " dprof-input-error" : "")}
       />
-    ) : (type === "date") ? (
+    ) : type === "date" ? (
       <CustomDatePicker value={value} onChange={onChange} error={error} />
     ) : options ? (
       <select
         name={name}
         value={value}
         onChange={onChange}
-        className={"dp-input dp-select" + (error ? " dp-input-error" : "")}
+        className={"dprof-input dprof-select" + (error ? " dprof-input-error" : "")}
       >
         <option value="">Select {label}</option>
         {options.map((o) => <option key={o} value={o}>{o}</option>)}
@@ -298,21 +316,22 @@ const Field = ({ label, name, type = "text", options, textarea, required, value,
         name={name}
         value={value}
         onChange={onChange}
-        className={"dp-input" + (error ? " dp-input-error" : "")}
+        className={"dprof-input" + (error ? " dprof-input-error" : "")}
       />
     )}
-    {error && <span className="dp-error-msg">{error}</span>}
+    {error && <span className="dprof-error-msg">{error}</span>}
   </div>
 );
 
+// ── Main component ────────────────────────────────────────────────────────────
 const DoctorProfile = () => {
   const navigate = useNavigate();
-  const [step, setStep] = useState(0);
-  const [form, setForm] = useState(initialState);
-  const [errors, setErrors] = useState({});
+  const [step, setStep]           = useState(0);
+  const [form, setForm]           = useState(initialState);
+  const [errors, setErrors]       = useState({});
   const [submitted, setSubmitted] = useState(false);
-  const [loading, setLoading] = useState(false);   // API call in progress
-  const [apiError, setApiError] = useState("");       // server-side error message
+  const [loading, setLoading]     = useState(false);
+  const [apiError, setApiError]   = useState("");
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -320,21 +339,18 @@ const DoctorProfile = () => {
     if (errors[name]) setErrors((prev) => ({ ...prev, [name]: "" }));
   };
 
-  // ── scroll to first field that has an error ──
   const scrollToFirstError = (errs) => {
     const firstKey = Object.keys(errs)[0];
     if (!firstKey) return;
-    const el = document.querySelector(`[name="${firstKey}"], .cdp-trigger`);
+    const el = document.querySelector(`[name="${firstKey}"], .dprof-cdp-trigger`);
     if (el) el.scrollIntoView({ behavior: "smooth", block: "center" });
   };
 
-  // ── per-step validation ──
   const validate = (stepIndex) => {
     const e = {};
     const t = (field) => form[field].toString().trim();
 
     if (stepIndex === 0) {
-      // Full name
       if (!t("fullName"))
         e.fullName = "Full name is required.";
       else if (t("fullName").length < 3)
@@ -342,11 +358,10 @@ const DoctorProfile = () => {
       else if (!/^[a-zA-Z\s.'-]+$/.test(t("fullName")))
         e.fullName = "Full name can only contain letters, spaces, dots, or hyphens.";
 
-      // Date of birth
       if (!t("dob")) {
         e.dob = "Date of birth is required.";
       } else {
-        const dob = new Date(form.dob + "T00:00:00");
+        const dob   = new Date(form.dob + "T00:00:00");
         const today = new Date();
         today.setHours(0, 0, 0, 0);
         if (dob >= today)
@@ -358,35 +373,27 @@ const DoctorProfile = () => {
         }
       }
 
-      // Gender
-      if (!t("gender"))
-        e.gender = "Please select a gender.";
+      if (!t("gender")) e.gender = "Please select a gender.";
     }
 
     if (stepIndex === 1) {
-      // Working days
       if (!form.workingDays || form.workingDays.length === 0)
         e.workingDays = "Please select at least one working day.";
 
-      // Working hours sessions
       const sessionErrs = {};
       form.workingHours.forEach((s, i) => {
-        if (s.start >= s.end)
-          sessionErrs[i] = { end: "End time must be after start time." };
+        if (s.start >= s.end) sessionErrs[i] = { end: "End time must be after start time." };
       });
-      // Check overlaps
       for (let i = 0; i < form.workingHours.length; i++) {
         for (let j = i + 1; j < form.workingHours.length; j++) {
           const a = form.workingHours[i];
           const b = form.workingHours[j];
-          if (a.start < b.end && b.start < a.end) {
+          if (a.start < b.end && b.start < a.end)
             sessionErrs[j] = { overlap: `Session ${j + 1} overlaps with session ${i + 1}.` };
-          }
         }
       }
       if (Object.keys(sessionErrs).length > 0) e.workingHours = sessionErrs;
 
-      // Service type
       if (!form.serviceType || form.serviceType.length === 0)
         e.serviceType = "Please select at least one service type.";
 
@@ -438,99 +445,74 @@ const DoctorProfile = () => {
 
   const handleNext = () => {
     const errs = validate(step);
-    if (Object.keys(errs).length > 0) {
-      setErrors(errs);
-      scrollToFirstError(errs);
-      return;
-    }
+    if (Object.keys(errs).length > 0) { setErrors(errs); scrollToFirstError(errs); return; }
     setErrors({});
     setStep((s) => s + 1);
   };
 
   const handleBack = () => { setErrors({}); setStep((s) => s - 1); };
 
-  // ── Submit — sends profile data to backend API ──
   const handleSubmit = async () => {
-    // Step 3 validation
     const errs = validate(2);
-    if (Object.keys(errs).length > 0) {
-      setErrors(errs);
-      scrollToFirstError(errs);
-      return;
-    }
-
-    // Get JWT token stored during doctor login
-    //  const token = localStorage.getItem("doctorToken"); // token generated
-    // if (!token) {
-    //   // Token missing — redirect to login
-    //   alert("Session expired. Please login again.");
-    //   window.location.href = "/DoctorLogin";
-    //   return;
-    // }
+    if (Object.keys(errs).length > 0) { setErrors(errs); scrollToFirstError(errs); return; }
 
     setLoading(true);
     setApiError("");
 
     try {
       const payload = {
-        gender: form.gender,
-        dob: form.dob,
-        workingDays: form.workingDays,
-        workingHours: Array.isArray(form.workingHours)
-          ? form.workingHours.map(s => ({
-            start: String(s.start),
-            end: String(s.end)
-          }))
-          : [], serviceType: form.serviceType,
-        about: form.about,
-        mobile: form.mobile,
+        gender:           form.gender,
+        dob:              form.dob,
+        workingDays:      form.workingDays,
+        workingHours:     Array.isArray(form.workingHours)
+          ? form.workingHours.map(s => ({ start: String(s.start), end: String(s.end) }))
+          : [],
+        serviceType:      form.serviceType,
+        about:            form.about,
+        mobile:           form.mobile,
         emergencyContact: form.emergencyContact,
-        clinicName: form.hospitalName,
-        clinicAddress: form.address,
-        city: form.city,
-        state: form.state,
-        mapLink: form.mapLink,
+        clinicName:       form.hospitalName,
+        clinicAddress:    form.address,
+        city:             form.city,
+        state:            form.state,
+        mapLink:          form.mapLink,
       };
 
       const response = await fetch(
         `${process.env.REACT_APP_API_URL}/api/doctor/complete-profile`,
         {
-          method: "POST",
+          method:      "POST",
           credentials: "include",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload),
+          headers:     { "Content-Type": "application/json" },
+          body:        JSON.stringify(payload),
         }
       );
 
       const data = await response.json();
+      if (!response.ok) throw new Error(data.message || "Profile update failed. Please try again.");
 
-      if (!response.ok) {
-        // Handle token expiry
-
-        throw new Error(data.message || "Profile update failed. Please try again.");
-      }
-
-      // Success
       setSubmitted(true);
-
     } catch (err) {
       setApiError(err.message);
     } finally {
       setLoading(false);
     }
   };
-  // shorthand to pass common props to Field
+
   const f = (name) => ({ value: form[name], onChange: handleChange, error: errors[name] });
 
+  // ── Success screen ──
   if (submitted) {
     return (
-      <div className="dp-page">
-        <div className="dp-success">
-          <div className="dp-success-icon">✅</div>
+      <div className="dprof-page">
+        <div className="dprof-success">
+          <div className="dprof-success-icon">✅</div>
           <h2>Profile Saved!</h2>
           <p>Your doctor profile has been submitted successfully.</p>
-          <button className="dp-btn dp-btn-save"
-            onClick={() => { setSubmitted(false); setStep(0); setForm(initialState); navigate("/DoctorDashboard"); }}>
+          <button
+            className="dprof-btn dprof-btn-save"
+            onClick={() => { setSubmitted(false); setStep(0); setForm(initialState); navigate("/DoctorDashboard"); }}
+          >
             Go to Dashboard
           </button>
         </div>
@@ -539,37 +521,39 @@ const DoctorProfile = () => {
   }
 
   return (
-    <div className="dp-page">
-      <div className="dp-page-header">
+    <div className="dprof-page">
+      <div className="dprof-page-header">
         <h1>Doctor Profile</h1>
         <p>Complete all 3 sections to set up your profile</p>
       </div>
 
       {/* STEPPER */}
-      <div className="dp-stepper">
+      <div className="dprof-stepper">
         {STEPS.map((s, i) => (
-          <div key={i} className="dp-step-item">
-            <div className={"dp-step-circle" + (i < step ? " done" : i === step ? " active" : "")}>
+          <div key={i} className="dprof-step-item">
+            <div className={"dprof-step-circle" + (i < step ? " done" : i === step ? " active" : "")}>
               {i < step ? "✓" : i + 1}
             </div>
-            <span className={"dp-step-label" + (i === step ? " active" : "")}>{s.label}</span>
-            {i < STEPS.length - 1 && <div className={"dp-step-line" + (i < step ? " done" : "")} />}
+            <span className={"dprof-step-label" + (i === step ? " active" : "")}>{s.label}</span>
+            {i < STEPS.length - 1 && (
+              <div className={"dprof-step-line" + (i < step ? " done" : "")} />
+            )}
           </div>
         ))}
       </div>
 
       {/* CARD */}
-      <div className="dp-card">
-        <div className="dp-card-title">
-          <span className="dp-card-icon">{STEPS[step].icon}</span>
+      <div className="dprof-card">
+        <div className="dprof-card-title">
+          <span className="dprof-card-icon">{STEPS[step].icon}</span>
           {STEPS[step].label}
         </div>
 
         {step === 0 && (
-          <div className="dp-grid-2">
-            <Field label="Full Name" name="fullName" required {...f("fullName")} />
+          <div className="dprof-grid-2">
+            <Field label="Full Name"     name="fullName" required {...f("fullName")} />
             <Field label="Date of Birth" name="dob" type="date" required {...f("dob")} />
-            <Field label="Gender" name="gender" options={["Male", "Female", "Other"]} required {...f("gender")} />
+            <Field label="Gender" name="gender" options={["Male","Female","Other"]} required {...f("gender")} />
           </div>
         )}
 
@@ -583,7 +567,6 @@ const DoctorProfile = () => {
               }}
               error={errors.workingDays}
             />
-
             <WorkingHoursSessions
               sessions={form.workingHours}
               onChange={(sessions) => {
@@ -592,7 +575,6 @@ const DoctorProfile = () => {
               }}
               sessionErrors={typeof errors.workingHours === "object" ? errors.workingHours : null}
             />
-
             <ServiceTypePicker
               selected={form.serviceType}
               onChange={(types) => {
@@ -601,20 +583,19 @@ const DoctorProfile = () => {
               }}
               error={errors.serviceType}
             />
-
             <Field label="About Doctor" name="about" textarea required {...f("about")} />
           </>
         )}
 
         {step === 2 && (
           <>
-            <div className="dp-grid-2">
-              <Field label="Mobile Number" name="mobile" type="tel" required {...f("mobile")} />
-              <Field label="Emergency Contact" name="emergencyContact" type="tel" {...f("emergencyContact")} />
-              <Field label="Hospital / Clinic" name="hospitalName" required {...f("hospitalName")} />
-              <Field label="City" name="city" required {...f("city")} />
-              <Field label="State" name="state" required {...f("state")} />
-              <Field label="Map Link" name="mapLink" type="url" {...f("mapLink")} />
+            <div className="dprof-grid-2">
+              <Field label="Mobile Number"     name="mobile"           type="tel" required {...f("mobile")} />
+              <Field label="Emergency Contact" name="emergencyContact" type="tel"          {...f("emergencyContact")} />
+              <Field label="Hospital / Clinic" name="hospitalName"                required {...f("hospitalName")} />
+              <Field label="City"              name="city"                         required {...f("city")} />
+              <Field label="State"             name="state"                        required {...f("state")} />
+              <Field label="Map Link"          name="mapLink"          type="url"           {...f("mapLink")} />
             </div>
             <Field label="Address" name="address" {...f("address")} />
           </>
@@ -622,22 +603,20 @@ const DoctorProfile = () => {
       </div>
 
       {/* API error banner */}
-      {apiError && (
-        <div className="dp-api-error">
-          ❌ {apiError}
-        </div>
-      )}
+      {apiError && <div className="dprof-api-error">❌ {apiError}</div>}
 
       {/* NAVIGATION */}
-      <div className="dp-actions">
+      <div className="dprof-actions">
         {step > 0 && (
-          <button className="dp-btn dp-btn-back" onClick={handleBack} disabled={loading}>← Back</button>
+          <button className="dprof-btn dprof-btn-back" onClick={handleBack} disabled={loading}>
+            ← Back
+          </button>
         )}
         {step < STEPS.length - 1
-          ? <button className="dp-btn dp-btn-save" onClick={handleNext}>Next →</button>
-          : <button className="dp-btn dp-btn-save" onClick={handleSubmit} disabled={loading}>
-            {loading ? "Saving..." : "Save Profile"}
-          </button>
+          ? <button className="dprof-btn dprof-btn-save" onClick={handleNext}>Next →</button>
+          : <button className="dprof-btn dprof-btn-save" onClick={handleSubmit} disabled={loading}>
+              {loading ? "Saving..." : "Save Profile"}
+            </button>
         }
       </div>
     </div>

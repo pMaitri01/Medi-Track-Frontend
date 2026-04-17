@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import "../css/ForgotPassword.css";
+import "../css/OtpVerification.css";
 
 const DUMMY_OTP = "1234";
 const TIMER_SEC = 30;
@@ -68,21 +68,21 @@ const OtpVerification = ({ email, onBack, onSuccess }) => {
   };
 
   return (
-    <div className="fp-page">
-      <div className="fp-card">
-        <div className="fp-icon">📩</div>
-        <h2 className="fp-title">Verify OTP</h2>
-        <p className="fp-subtitle">
+    <div className="dotp-page">
+      <div className="dotp-card">
+        <div className="dotp-icon">📩</div>
+        <h2 className="dotp-title">Verify OTP</h2>
+        <p className="dotp-subtitle">
           Enter the 6-digit OTP sent to <strong>{email}</strong>
         </p>
 
         {/* OTP boxes */}
-        <div className="fp-otp-row" onPaste={handlePaste}>
+        <div className="dotp-otp-row" onPaste={handlePaste}>
           {otp.map((digit, i) => (
             <input
               key={i}
               ref={el => inputs.current[i] = el}
-              className={"fp-otp-box" + (error ? " error" : "")}
+              className={"dotp-otp-box" + (error ? " dotp-error" : "")}
               type="text"
               inputMode="numeric"
               maxLength={1}
@@ -94,10 +94,10 @@ const OtpVerification = ({ email, onBack, onSuccess }) => {
           ))}
         </div>
 
-        {error && <p className="fp-error" style={{ textAlign: "center", marginBottom: 8 }}>{error}</p>}
+        {error && <p className="dotp-error-text" style={{ textAlign: "center", marginBottom: 8 }}>{error}</p>}
 
         <button
-          className="fp-btn"
+          className="dotp-btn"
           onClick={handleVerify}
           disabled={otpValue.length < 6 || loading}
           style={{ marginTop: 12 }}
@@ -105,16 +105,16 @@ const OtpVerification = ({ email, onBack, onSuccess }) => {
           {loading ? "Verifying..." : "Verify OTP"}
         </button>
 
-        <div className="fp-timer">
+        <div className="dotp-timer">
           {canResend ? (
-            <button className="fp-resend" onClick={handleResend}>Resend OTP</button>
+            <button className="dotp-resend" onClick={handleResend}>Resend OTP</button>
           ) : (
             <>Resend OTP in <span>{timer}s</span></>
           )}
         </div>
 
-        <div className="fp-links" style={{ marginTop: 12 }}>
-          <button className="fp-link" onClick={() => onBack("forgot")}>← Back</button>
+        <div className="dotp-links" style={{ marginTop: 12 }}>
+          <button className="dotp-link" onClick={() => onBack("forgot")}>← Back</button>
         </div>
       </div>
     </div>

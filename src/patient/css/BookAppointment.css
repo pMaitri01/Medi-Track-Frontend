@@ -39,6 +39,31 @@
   font-size: 0.95rem;
 }
 
+.appointment-type-select {
+  width: 100%;
+  margin-top: 8px;
+  margin-bottom: 8px;
+  padding: 11px 12px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  background: #fff;
+  color: #1e293b;
+  font-size: 0.95rem;
+  font-family: inherit;
+  outline: none;
+}
+
+.appointment-type-select:focus {
+  border-color: #0aa5a5;
+  box-shadow: 0 0 0 3px rgba(10, 165, 165, 0.12);
+}
+
+.appointment-type-helper {
+  margin: 0 0 16px 0;
+  font-size: 0.86rem;
+  color: #475569;
+}
+
 .label-date {
   margin-top: 10px;
   display: block;
@@ -209,4 +234,11 @@
 /* Confirm Button Adjustment */
 .booking-submit-btn {
   flex: 1; /* Equal width as cancel */
+}
+
+@media (max-width: 768px) {
+  .appointment-grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
 }
