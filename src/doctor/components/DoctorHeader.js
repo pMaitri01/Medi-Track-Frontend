@@ -138,7 +138,7 @@ const handleLogout = async () => {
   return (
     <div style={styles.header}>
 <span style={{ fontWeight: "500", color: "#374151" }}>
-  Hi, Dr. {doctor?.fullName} 👋 Welcome to Medi-Track
+  Hi,👋 Dr. {doctor?.fullName}. Welcome to Medi-Track
 </span>      
       <div style={styles.actionArea}>
         
