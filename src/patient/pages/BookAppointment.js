@@ -150,8 +150,14 @@ setIsWorkingDay(data.isWorkingDay !== false); // default true
       <div className="booking-success">
         <div className="icon-check">✅</div>
         <h3>Booking Successful!</h3>
-        <p>{selectedDate.toDateString()} at {selectedTime}</p>
-      </div>
+<p>
+  {selectedDate.toDateString()} at {selectedTime} <br />
+  <strong>
+    {appointmentType === "physical"
+      ? "📍 Physical Visit"
+      : "🎥 Video Consultation"}
+  </strong>
+</p>      </div>
     );
   }
 
@@ -199,13 +205,13 @@ setIsWorkingDay(data.isWorkingDay !== false); // default true
         <div className="slots-container">
           <label className="label-text">3. Appointment Type</label>
           <select
-            className="appointment-type-select"
-            value={appointmentType}
-            onChange={(e) => setAppointmentType(e.target.value)}
-          >
-            <option value="physical">Physical (In Person - Clinic / Hospital Visit)</option>
-            <option value="video">Video Call</option>
-          </select>
+  className="appointment-type-select"
+  value={appointmentType}
+  onChange={(e) => setAppointmentType(e.target.value)}
+>
+  <option value="physical">Physical (Clinic Visit)</option>
+  <option value="video">Video Consultation</option>
+</select>
           <p className="appointment-type-helper">
             {appointmentType === "physical"
               ? "📍 Visit doctor at clinic/hospital"
