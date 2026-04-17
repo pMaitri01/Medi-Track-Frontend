@@ -3,6 +3,7 @@ import DoctorNavbar from "../components/DoctorNavbar";
 import DoctorHeader from "../components/DoctorHeader";
 import DoctorFooter from "../components/DoctorFooter";
 import Calendar from "../components/Calendar";
+import GenderChart from "../components/GenderChart";
 
 import { FaUserFriends, FaHospitalUser, FaClock } from "react-icons/fa";
 
@@ -12,7 +13,7 @@ export default function DoctorDashboard() {
   const [todayPatients, setTodayPatients] = useState(0);
   const [loading, setLoading] = useState(true);
   const [completed, setCompleted] = useState(0);
-  
+
   // Layout Constants
   const sidebarWidth = open ? "250px" : "100px";
 
@@ -35,67 +36,30 @@ export default function DoctorDashboard() {
 
         setPatientCount(data.totalPatients || 0);
         setTodayPatients(data.todayPatients || 0);
-        setCompleted(data.todayCompleted || 0);
+        setCompleted(data.totalCompleted || 0);
 
       } catch (error) {
-          console.log("Dashboard Error:", error);
-          setPatientCount(0);
-          setTodayPatients(0);
-          setCompleted(0);
-        } finally {
-            setLoading(false);
-          }
+        console.log("Dashboard Error:", error);
+        setPatientCount(0);
+        setTodayPatients(0);
+        setCompleted(0);
+      } finally {
+        setLoading(false);
+      }
     };
-      fetchDashboard();
-}, []);
-
-  // ── Fetch total patient count ──
-  // useEffect(() => {
-  //   fetch(`${process.env.REACT_APP_API_URL}/api/patient/count`, {
-  //     credentials: "include",
-  //   })
-  //     .then(res => res.json())
-  //     .then(data => setPatientCount(data?.totalPatients ?? 0))
-  //     .catch(() => setPatientCount(0));
-  // }, []);
-
-  // ── Fetch today's patient count ──
-//   useEffect(() => {
-//   const fetchTodayPatients = async () => {
-//     try {
-//       const res = await fetch(
-//         `${process.env.REACT_APP_API_URL}/api/patient/today`,
-//         {
-//           method: "GET",
-//           credentials: "include"
-//         }
-//       );
-
-//       const data = await res.json();
-
-//       setTodayPatients(data.totalTodayPatients || 0);
-
-//     } catch (error) {
-//       console.log("ERROR:", error);
-//       setTodayPatients(0);
-//     } finally {
-//       setLoading(false);
-//     }
-//   };
-
-//   fetchTodayPatients();
-// }, []);
+    fetchDashboard();
+  }, []);
 
   return (
     <div style={{ minHeight: "100vh", background: "#F8F9FD" }}>
       <DoctorNavbar open={open} setOpen={setOpen} />
 
-      <div style={{ 
-        marginLeft: sidebarWidth, 
+      <div style={{
+        marginLeft: sidebarWidth,
         width: `calc(100% - ${sidebarWidth})`,
         height: "100vh",    // Match screen height
-        display: "flex", 
-        flexDirection: "column", 
+        display: "flex",
+        flexDirection: "column",
         transition: "0.3s ease",
         overflowY: "auto",  // 🔥 THIS ENABLES THE SCROLL
         overflowX: "hidden"
@@ -103,13 +67,13 @@ export default function DoctorDashboard() {
         <DoctorHeader open={open} />
 
         <main style={{ padding: "30px", flex: 1, paddingBottom: "100px" }}>
-          
+
           {/* --- TOP ROW: STAT CARDS --- */}
           <div style={gridStyle(3)}>
             {[
-              { label: "Total Patient",      icon: <FaUserFriends />, value: loading ? "—" : patientCount },
-              { label: "Today Patient",      icon: <FaHospitalUser />, value: loading ? "—" : todayPatients },
-              { label: "Completed Appointments", icon: <FaClock />,        value: loading ? "—" : completed }
+              { label: "Total Patient", icon: <FaUserFriends />, value: loading ? "—" : patientCount },
+              { label: "Today Patient", icon: <FaHospitalUser />, value: loading ? "—" : todayPatients },
+              { label: "Total Completed Appointments", icon: <FaClock />, value: loading ? "—" : completed }
             ].map((card, i) => (
               <div key={i} style={{ ...cardStyle, flexDirection: "row", alignItems: "center" }}>
                 <div style={iconCircleStyle}>{card.icon}</div>
@@ -128,13 +92,16 @@ export default function DoctorDashboard() {
 
           {/* --- MIDDLE ROW: SUMMARY & LISTS --- */}
           <div style={{ display: "grid", gridTemplateColumns: "1.5fr 1fr 1.2fr", gap: "25px", marginBottom: "25px" }}>
-            
+
             {/* Chart Area */}
             <div style={cardStyle}>
-              <h4 style={titleStyle}>Patients Summary</h4>
-              <div style={placeholderBox}>Chart Visualization</div>
-            </div>
+              <h4 style={titleStyle}>Patients Gender</h4>
 
+              <div style={{ marginTop: "15px" }}>
+                <GenderChart />
+              </div>
+            </div>
+            
             {/* List Area */}
             <div style={cardStyle}>
               <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "15px" }}>
@@ -182,8 +149,8 @@ export default function DoctorDashboard() {
             <div style={cardStyle}>
               <h4 style={titleStyle}>Calendar</h4>
               <div style={placeholderBox}>
-                  
-                  <Calendar/>
+
+                <Calendar />
               </div>
             </div>
           </div>
