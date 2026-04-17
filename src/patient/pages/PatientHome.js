@@ -4,6 +4,7 @@ import doctorProfile from '../images/profile.png';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import Navbar from '../components/Navbar';
 import BookAppointment from './BookAppointment';
+import { useNavigate } from "react-router-dom";
 
 const PatientHome = () => {
   const [reviews, setReviews] = useState([
@@ -15,6 +16,7 @@ const PatientHome = () => {
   const [newReviewText, setNewReviewText] = useState("");
   const [rating, setRating] = useState(5);
   const [isBookingOpen, setIsBookingOpen] = useState(false);
+  const navigate = useNavigate();
   useEffect(() => {
     const fetchAppointments = async () => {
       try {
@@ -84,32 +86,58 @@ const PatientHome = () => {
 
     return d;
   };
-  const handleCancelAppointment = async () => {
-  if (!upcomingAppointment) return;
+  // ✅ Check if today
+  const isToday = (date) => {
+    const today = new Date();
+    const appDate = new Date(date);
 
-  try {
-    const res = await fetch(
-      `${process.env.REACT_APP_API_URL}/api/appointment/${upcomingAppointment._id}/cancel/`,
-      {
-        method: "PUT",
-        credentials: "include"
-      }
+    return (
+      today.getFullYear() === appDate.getFullYear() &&
+      today.getMonth() === appDate.getMonth() &&
+      today.getDate() === appDate.getDate()
     );
+  };
 
-    const data = await res.json();
+  // ✅ Check call time window
+  const isCallTime = (date, time) => {
+    if (!isToday(date)) return false;
 
-    if (!res.ok) throw new Error(data.message || "Cancel failed");
+    const now = new Date();
+    const appointmentTime = parseDateTime(date, time);
 
-    // ✅ Remove appointment from UI
-    setUpcomingAppointment(null);
+    // Allow: 10 min before → 30 min after
+    const startWindow = new Date(appointmentTime.getTime() - 10 * 60000);
+    const endWindow = new Date(appointmentTime.getTime() + 30 * 60000);
 
-    alert("Appointment cancelled successfully");
+    return now >= startWindow && now <= endWindow;
+  };
 
-  } catch (err) {
-    console.error(err);
-    alert("Failed to cancel appointment");
-  }
-};
+  const handleCancelAppointment = async () => {
+    if (!upcomingAppointment) return;
+
+    try {
+      const res = await fetch(
+        `${process.env.REACT_APP_API_URL}/api/appointment/${upcomingAppointment._id}/cancel/`,
+        {
+          method: "PUT",
+          credentials: "include"
+        }
+      );
+
+      const data = await res.json();
+
+      if (!res.ok) throw new Error(data.message || "Cancel failed");
+
+      // ✅ Remove appointment from UI
+      setUpcomingAppointment(null);
+
+      alert("Appointment cancelled successfully");
+
+    } catch (err) {
+      console.error(err);
+      alert("Failed to cancel appointment");
+    }
+  };
   const handlePostReview = (e) => {
     e.preventDefault();
     if (!newReviewText.trim()) return;
@@ -122,7 +150,10 @@ const PatientHome = () => {
     setReviews([newEntry, ...reviews]);
     setNewReviewText("");
   };
-
+  const canStartCall =
+    upcomingAppointment &&
+    upcomingAppointment?.type === "video" &&
+    isCallTime(upcomingAppointment.date, upcomingAppointment.time);
   return (
     <>
       <Navbar />
@@ -226,21 +257,62 @@ const PatientHome = () => {
                         </div>
                       </div>
 
-                      <div className="action-buttons">
-                        <button className="btn-outline">Reschedule</button>
-<button 
-  className="btn-danger-outline"
-  onClick={() => {
-    const confirmCancel = window.confirm(
-      "Are you sure you want to cancel this appointment?"
-    );
-    if (confirmCancel) {
-      handleCancelAppointment();
-    }
-  }}
->
-  Cancel
-</button>                   </div>
+<div className="action-buttons">
+
+  {/* ✅ START CALL BUTTON */}
+  {/* {upcomingAppointment?.type === "video" && (
+    canStartCall ? (
+      <button
+        className="btn-primary"
+        onClick={() =>
+  navigate(`/video-call/${upcomingAppointment._id}`, {
+    state: { isDoctor: false } // patient side
+  })
+}
+      >
+        Start Call
+      </button>
+    ) : (
+      <button className="btn-disabled" disabled>
+        Call not available
+      </button>
+    )
+  )} */}
+  {upcomingAppointment?.type === "video" && (
+  canStartCall ? (
+    <button
+      className="btn-primary"
+      onClick={() =>
+        navigate(`/video-call/${upcomingAppointment._id}`, {
+          state: { isDoctor: false }
+        })
+      }
+    >
+      Start Call
+    </button>
+  ) : (
+    <p style={{ color: "#888", fontSize: "14px" }}>
+      Call available near appointment time
+    </p>
+  )
+)}
+
+  <button className="btn-outline">Reschedule</button>
+
+  <button
+    className="btn-danger-outline"
+    onClick={() => {
+      const confirmCancel = window.confirm(
+        "Are you sure you want to cancel this appointment?"
+      );
+      if (confirmCancel) {
+        handleCancelAppointment();
+      }
+    }}
+  >
+    Cancel
+  </button>
+</div>
                     </>
                   ) : (
                     <div className="no-appt-state">

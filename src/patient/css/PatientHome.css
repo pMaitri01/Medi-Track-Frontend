@@ -806,3 +806,19 @@ html, body {
 .btn-danger-outline:hover {
   background: #fef2f2;
 }
+.btn-primary {
+  background: #2563eb;
+  color: white;
+  padding: 8px 14px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-disabled {
+  background: #ccc;
+  color: #666;
+  padding: 8px 14px;
+  border-radius: 6px;
+  border: none;
+}

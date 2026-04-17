@@ -261,7 +261,29 @@
   from { opacity: 0; transform: translateY(12px); }
   to   { opacity: 1; transform: translateY(0); }
 }
+.dappv-type {
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: capitalize;
+}
 
+/* Example variations */
+.dappv-type.online {
+  background-color: #e0f2fe;
+  color: #0369a1;
+}
+
+.dappv-type.offline {
+  background-color: #fef3c7;
+  color: #92400e;
+}
+
+.dappv-type.video {
+  background-color: #ede9fe;
+  color: #5b21b6;
+}
 /* ── Modal header ───────────────────────────────────────────────────────── */
 .dappv-modal-header {
   display: flex;
@@ -319,7 +341,18 @@
   font-size: 13px;
   color: #374151;
 }
+.dappv-btn-video {
+  background: #4f46e5;
+  color: white;
+  padding: 10px 14px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
 
+.dappv-btn-video:hover {
+  background: #4338ca;
+}
 /* ── Modal footer ───────────────────────────────────────────────────────── */
 .dappv-modal-footer {
   display: flex;
