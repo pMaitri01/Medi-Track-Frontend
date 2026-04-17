@@ -150,7 +150,7 @@
 
 /* --- SLOTS AND BUTTONS --- */
 
-.slots-grid {
+/* .slots-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 12px;
@@ -174,8 +174,26 @@
   background: #0AA5A5;
   color: #fff;
   border-color: #0AA5A5;
+} */
+.slot-pill {
+  padding: 10px;
+  border-radius: 20px;
+  border: 1px solid #ccc;
+  cursor: pointer;
+  background: white;
 }
 
+.slot-pill.selected {
+  background: #4caf50;
+  color: white;
+}
+
+.slot-pill.booked {
+  background: #e0e0e0;
+  color: #999;
+  cursor: not-allowed;
+  /* text-decoration: line-through; */
+}
 .placeholder-text {
   color: #94a3b8;
   font-style: italic;

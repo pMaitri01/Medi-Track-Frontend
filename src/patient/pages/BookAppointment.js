@@ -12,6 +12,10 @@ const BookAppointment = ({ onClose }) => {
   const [doctors, setDoctors]               = useState([]);
   const [loading, setLoading]               = useState(false);
   const [error, setError]                   = useState("");
+  const [allSlots, setAllSlots] = useState([]);
+const [bookedSlots, setBookedSlots] = useState([]);
+const [availableSlots, setAvailableSlots] = useState([]);
+const [isWorkingDay, setIsWorkingDay] = useState(true);
 
   // ── Fetch available doctors on mount ──
 //   useEffect(() => {
@@ -57,7 +61,34 @@ useEffect(() => {
 
   fetchDoctors();
 }, []);
-  const timeSlots = ["09:00 AM", "09:30 AM", "10:00 AM", "10:30 AM", "11:00 AM", "11:30 AM"];
+useEffect(() => {
+  const fetchSlots = async () => {
+    if (!selectedDoctor || !selectedDate) return;
+
+    try {
+      const formattedDate = selectedDate.toLocaleDateString("en-CA");
+
+      const res = await fetch(
+        `${process.env.REACT_APP_API_URL}/api/appointment/slots?doctorId=${selectedDoctor}&date=${formattedDate}`
+      );
+
+      const data = await res.json();
+
+      console.log("Slots API:", data);
+
+     
+      setAllSlots(data.allSlots || []);
+setBookedSlots(data.bookedSlots || []);
+setAvailableSlots(data.availableSlots || []);
+setIsWorkingDay(data.isWorkingDay !== false); // default true
+
+    } catch (err) {
+      console.error("Failed to fetch slots:", err);
+    }
+  };
+
+  fetchSlots();
+}, [selectedDoctor, selectedDate]);
 
   const handleDateChange = (date) => {
     setSelectedDate(date);
@@ -185,15 +216,52 @@ useEffect(() => {
 
           {selectedDate ? (
             <div className="slots-grid">
-              {timeSlots.map((time) => (
-                <button
-                  key={time}
-                  className={`slot-pill ${selectedTime === time ? "selected" : ""}`}
-                  onClick={() => toggleTimeSlot(time)}
-                >
-                  {time}
-                </button>
-              ))}
+              {/* {allSlots.map((time) => {
+  const isBooked = bookedSlots.includes(time);
+  const isSelected = selectedTime === time;
+
+  return (
+    <button
+      key={time}
+      disabled={isBooked}
+      className={`slot-pill 
+        ${isSelected ? "selected" : ""} 
+        ${isBooked ? "booked" : ""}`}
+      onClick={() => !isBooked && toggleTimeSlot(time)}
+    >
+      {time}
+    </button>
+  );
+})} */}
+{!isWorkingDay ? (
+  <div className="no-slots">
+    🚫 Doctor not available
+  </div>
+) : allSlots.length > 0 && availableSlots.length === 0 ? (
+  <div className="no-slots">
+    ❌ No slots available, try another day
+  </div>
+) : (
+  <div className="slots-grid">
+    {allSlots.map((time) => {
+      const isBooked = bookedSlots.includes(time);
+      const isSelected = selectedTime === time;
+
+      return (
+        <button
+          key={time}
+          disabled={isBooked}
+          className={`slot-pill 
+            ${isSelected ? "selected" : ""} 
+            ${isBooked ? "booked" : ""}`}
+          onClick={() => !isBooked && toggleTimeSlot(time)}
+        >
+          {time}
+        </button>
+      );
+    })}
+  </div>
+)}
             </div>
           ) : (
             <div className="placeholder-text">Please select a date first</div>
