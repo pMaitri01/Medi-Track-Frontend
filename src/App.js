@@ -7,7 +7,7 @@ import { DoctorProvider } from "./context/DoctorContext";
 // Shared
 import ProtectedRoute from './components/ProtectedRoute';
 import DoctorStatusRoute from "./components/DoctorStatusRoute";
-import VideoCall from "./pages/VideoCall";
+import VideoCall from './components/VideoCall';
 
 // Patient Pages
 import PatientLanding from './patient/pages/PatientLanding';
@@ -60,10 +60,7 @@ function App() {
             <DoctorProvider>
       <Routes>
         <Route path="/" element={<PatientLanding />} />
-        <Route
-  path="/video-call/:roomId"
-  element={<VideoCall roomId="appointment123" isDoctor={true} />}
-/>
+        <Route path="/video-call/:appointmentId" element={<VideoCall />} />
         {/* Patient Auth */}
         <Route path="/patient/login" element={<PatientLogin />} />
         <Route path="/patient/register" element={<PatientRegistration />} />
@@ -163,9 +160,10 @@ function App() {
         } /> */}
         <Route path="/DoctorWaiting" element={<WaitingApproval />} />
           <Route path="/DoctorRejected" element={<RejectedPage />} />
+          
           <Route path='/UpdateDoctorProfile' element={
             <ProtectedRoute role="doctor">
-              <DoctorProfile />
+              <UpdateDoctorProfile />
             </ProtectedRoute>
           } />
         {/* <Route path="/DoctorRejected" element={

@@ -1,0 +1,15 @@
+// import { io } from "socket.io-client";
+
+// export const socket = io(process.env.REACT_APP_API_URL, {
+//   transports: ["websocket"],
+//   withCredentials: true
+// });
+
+import { io } from "socket.io-client";
+
+const socket = io(process.env.REACT_APP_API_URL, {
+  withCredentials: true,
+  autoConnect: false, // connect manually when needed
+});
+
+export default socket;

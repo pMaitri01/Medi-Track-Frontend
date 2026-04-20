@@ -49,10 +49,9 @@ const PatientHome = () => {
             );
           })
           .sort(
-            (a, b) =>
-              new Date(`${a.date}T${a.time}`) -
-              new Date(`${b.date}T${b.time}`)
-          )[0];
+  (a, b) =>
+    parseDateTime(a.date, a.time) - parseDateTime(b.date, b.time)
+)[0];
 
         setUpcomingAppointment(upcoming);
 
@@ -255,6 +254,11 @@ const PatientHome = () => {
                           <i className="fa-regular fa-clock"></i>
                           <span>{upcomingAppointment.time}</span>
                         </div>
+                        <div className="type-badge-container">
+  <span className={`type-badge ${upcomingAppointment.type}`}>
+    {upcomingAppointment.type === "video" ? "🎥 Video" : "🏥 In-Person"}
+  </span>
+</div>
                       </div>
 
 <div className="action-buttons">
@@ -278,17 +282,15 @@ const PatientHome = () => {
       </button>
     )
   )} */}
-  {upcomingAppointment?.type === "video" && (
+ {upcomingAppointment?.type === "video" && (
   canStartCall ? (
     <button
       className="btn-primary"
       onClick={() =>
-        navigate(`/video-call/${upcomingAppointment._id}`, {
-          state: { isDoctor: false }
-        })
+        navigate(`/video-call/${upcomingAppointment._id}?role=patient`)
       }
     >
-      Start Call
+      Join Call
     </button>
   ) : (
     <p style={{ color: "#888", fontSize: "14px" }}>
@@ -296,7 +298,6 @@ const PatientHome = () => {
     </p>
   )
 )}
-
   <button className="btn-outline">Reschedule</button>
 
   <button

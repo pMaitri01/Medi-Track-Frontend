@@ -4,7 +4,16 @@
   --pa-bg:      #f8fafc;
   --pa-border:  #e2e8f0;
 }
+.pa-doc-card {
+  position: relative;
+}
 
+.pa-badge--top {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 2;
+}
 /* ── Page shell ─────────────────────────────────────────────────────────── */
 .pa-page {
   min-height: 100vh;
@@ -155,7 +164,8 @@
 }
 
 .pa-btn-reschedule,
-.pa-btn-cancel {
+.pa-btn-cancel,
+.pa-btn-consult {
   padding: 8px 14px;
   border: none;
   border-radius: 8px;
@@ -175,8 +185,14 @@
   color: #991b1b;
 }
 
+.pa-btn-consult {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
 .pa-btn-reschedule:hover,
-.pa-btn-cancel:hover {
+.pa-btn-cancel:hover,
+.pa-btn-consult:hover {
   opacity: 0.85;
 }
 
@@ -234,7 +250,8 @@
   }
 
   .pa-btn-reschedule,
-  .pa-btn-cancel {
+  .pa-btn-cancel,
+  .pa-btn-consult {
     width: 100%;
     text-align: center;
   }

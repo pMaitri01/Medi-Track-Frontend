@@ -10,6 +10,7 @@ export default function DoctorAppointmentView() {
   const [loading, setLoading]                     = useState(true);
   const [selectedAppointment, setSelectedAppointment] = useState(null);
 const navigate = useNavigate();
+const user = JSON.parse(localStorage.getItem("user"));
 
   useEffect(() => {
     fetchAppointments();
@@ -38,6 +39,7 @@ const navigate = useNavigate();
   .filter((item) => item.status?.toLowerCase() !== "completed")
   .map((item) => ({
     id:     item._id,
+    patientId: item.patient?._id || item.patient,
     name:   `${item.patient?.firstName || ""} ${item.patient?.lastName || ""}`.trim() || "Unknown",
     email:  item.patient?.email       || "N/A",
     phone:  item.patient?.phoneNumber || "N/A",
@@ -85,8 +87,11 @@ const navigate = useNavigate();
     }
   };
 const startVideoCall = (appointment) => {
-  navigate(`/video-call/${appointment.id}`, {
-    state: { isDoctor: true }
+  navigate(`/video-call/${appointment.id}?role=doctor`, {
+    state: {
+      role: "doctor",
+      patientId: appointment.patientId,
+    },
   });
 };
   return (

@@ -11,7 +11,29 @@ html, body {
   color: #334155;
   height: 100vh;   /* full screen height */
 }
+.type-badge-container {
+  margin-top: 8px;
+}
 
+.type-badge {
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  display: inline-block;
+}
+
+/* Video */
+.type-badge.video {
+  background: #e0f2fe;
+  color: #0369a1;
+}
+
+/* In-person */
+.type-badge.in-person {
+  background: #fef3c7;
+  color: #92400e;
+}
 .main-header {
   display: flex;
   justify-content: space-between;

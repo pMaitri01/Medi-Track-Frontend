@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import "../css/PatientAppointment.css";
 import defaultDoctorImg from "../images/user.png";
@@ -72,14 +73,50 @@ const getBadge = (status = "") => {
 };
 
 // ── Appointment Card ────────────────────────────────────────────────────────
-function AppointmentCard({ appt, onCancel, isNext }) {
+function AppointmentCard({ appt, onCancel, onStartConsultation, isNext }) {
   const upcoming = isUpcoming(appt.date);
   const badge = getBadge(appt.status);
+  // const canJoinVideoCall =
+  //   appt.type?.toLowerCase() === "video" &&
+  //   ["approved", "accepted", "confirmed"].includes(appt.status?.toLowerCase()) &&
+  //   upcoming;
+const canJoinVideoCall = (() => {
+  if (appt.type?.toLowerCase() !== "video") return false;
 
+  const validStatus = ["approved", "accepted", "confirmed"].includes(
+    appt.status?.toLowerCase()
+  );
+
+  if (!validStatus) return false;
+
+  const now = new Date();
+  const appointmentTime = new Date(appt.date);
+
+  if (appt.time) {
+    let [time, modifier] = appt.time.split(" ");
+    let [h, m] = time.split(":");
+
+    let hours = parseInt(h, 10);
+    let minutes = parseInt(m, 10);
+
+    if (modifier === "PM" && hours !== 12) hours += 12;
+    if (modifier === "AM" && hours === 12) hours = 0;
+
+    appointmentTime.setHours(hours, minutes, 0, 0);
+  }
+
+  // allow join 15 mins before
+  const diff = (appointmentTime - now) / (1000 * 60);
+
+  return diff <= 15 && diff >= -60; 
+  // allow till 1 hour after start also
+})();
   return (
     <div className={`pa-doc-card${isNext ? " pa-doc-card--next" : ""}`}>
       {isNext && <span className="pa-next-badge">📌 Next Appointment</span>}
-
+      <span className={`pa-badge pa-badge--top ${badge.cls}`}>
+  {badge.label}
+</span>
       {/* Top info row — mirrors doc-card layout */}
       <div className="pa-doc-info">
         <img src={defaultDoctorImg} alt="doctor" className="pa-doc-img" />
@@ -87,13 +124,15 @@ function AppointmentCard({ appt, onCancel, isNext }) {
           <h3>{appt.doctorName}</h3>
           <span className="pa-spec-tag">{appt.specialization}</span>
           <p>📅 {formatDate(appt.date)}</p>
-          <p>🕐 {appt.time}</p>
+<p>🕐 {appt.time}</p>
+<p>
+  {appt.type?.toLowerCase() === "video" ? "🎥 Video Consultation" : "🏥 In-Clinic Visit"}
+</p>
         </div>
       </div>
 
       {/* Status + footer */}
       <div className="pa-card-footer">
-        <span className={`pa-badge ${badge.cls}`}>{badge.label}</span>
 
         {/* {upcoming && (
           <div className="pa-doc-actions">
@@ -138,6 +177,20 @@ function AppointmentCard({ appt, onCancel, isNext }) {
 >
   ✖ Cancel
 </button>
+           {appt.type?.toLowerCase() === "video" && (
+  canJoinVideoCall ? (
+    <button
+      className="pa-btn-consult"
+      onClick={() => onStartConsultation(appt)}
+    >
+      🎥 Join Call
+    </button>
+  ) : (
+    <p style={{ fontSize: "12px", color: "#888" }}>
+      Call will be available near appointment time
+    </p>
+  )
+)}
           </div>
         )}
       </div>
@@ -146,7 +199,13 @@ function AppointmentCard({ appt, onCancel, isNext }) {
 }
 
 // ── Section block ───────────────────────────────────────────────────────────
-function Section({ title, appointments, onCancel, highlightFirst }) {
+function Section({
+  title,
+  appointments,
+  onCancel,
+  onStartConsultation,
+  highlightFirst,
+}) {
   return (
     <section className="pa-section">
       <h2 className="pa-section-title">{title}</h2>
@@ -159,6 +218,7 @@ function Section({ title, appointments, onCancel, highlightFirst }) {
               key={appt.id}
               appt={appt}
               onCancel={onCancel}
+              onStartConsultation={onStartConsultation}
               isNext={highlightFirst && idx === 0}
             />
           ))}
@@ -170,6 +230,7 @@ function Section({ title, appointments, onCancel, highlightFirst }) {
 
 // ── Main Page ───────────────────────────────────────────────────────────────
 export default function PatientAppointment() {
+  const navigate = useNavigate();
   const [appointments, setAppointments] = useState([]);
   const [loading, setLoading]           = useState(true);
   const [error, setError]               = useState("");
@@ -211,9 +272,11 @@ export default function PatientAppointment() {
             item.doctor?.fullName || item.doctorName || "Unknown Doctor",
           specialization:
             item.doctor?.specialization || item.specialization,
+          doctorId: item.doctor?._id || item.doctor,
           date: item.date,
           time: item.time || "—",
           status: item.status || "Pending",
+          type: item.type || item.appointmentType || "offline",
         }));
 
       setAppointments(mapped);
@@ -286,6 +349,15 @@ const past = appointments
   })
   .sort(byDateDesc);
 
+  const handleStartConsultation = (appointment) => {
+    navigate(`/video-call/${appointment.id}?role=patient`, {
+      state: {
+        role: "patient",
+        doctorId: appointment.doctorId,
+      },
+    });
+  };
+
   return (
     <div className="pa-page">
       <Navbar />
@@ -315,12 +387,14 @@ const past = appointments
               title="Upcoming Appointments"
               appointments={upcoming}
               onCancel={handleCancelAppointment}   
+              onStartConsultation={handleStartConsultation}
               highlightFirst
             />
             <Section
               title="Past Appointments"
               appointments={past}
               onCancel={handleCancelAppointment}   // ✅ correct
+              onStartConsultation={handleStartConsultation}
             />
           </>
         )}
