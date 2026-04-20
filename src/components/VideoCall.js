@@ -426,8 +426,6 @@
 //     </div>
 //   );
 // }
-
-
 import { useEffect, useRef, useState, useCallback } from "react";
 import { useParams, useLocation } from "react-router-dom";
 
@@ -457,12 +455,12 @@ export default function VideoCall() {
   const localVideoRef = useRef(null);
   const remoteVideoRef = useRef(null);
 
+  // ✅ SAFE FLAGS (IMPORTANT FIX)
   const peerCreatedRef = useRef(false);
   const offerSentRef = useRef(false);
 
   const [callState, setCallState] = useState("idle");
 
-  // attach stream
   const attachStream = (ref, stream) => {
     if (ref.current) ref.current.srcObject = stream;
   };
@@ -472,71 +470,95 @@ export default function VideoCall() {
     setCallState("active");
   }, []);
 
- useEffect(() => {
-  if (!socket.connected) socket.connect();
+  useEffect(() => {
+    if (!socket.connected) socket.connect();
 
-  let offerCreated = false;
-  let peerCreated = false;
+    // =========================
+    // INIT CALL
+    // =========================
+    const startCall = async () => {
+      try {
+        const stream = await getLocalStream();
+        attachStream(localVideoRef, stream);
 
-  const start = async () => {
-    const stream = await getLocalStream();
-    attachStream(localVideoRef, stream);
+        // create peer only once
+        if (!peerCreatedRef.current) {
+          createPeerConnection(socket, roomId, onRemoteStream);
+          peerCreatedRef.current = true;
+        }
 
-    if (!peerCreated) {
-      createPeerConnection(socket, roomId, onRemoteStream);
-      peerCreated = true;
-    }
+        socket.emit("join-room", { roomId, userId, role });
 
-    socket.emit("join-room", { roomId, userId, role });
+        // doctor creates offer ONCE
+        if (role === "doctor" && !offerSentRef.current) {
+          offerSentRef.current = true;
 
-    // ✅ ONLY ONE OFFER (VERY IMPORTANT)
-    if (role === "doctor" && !offerCreated) {
-      offerCreated = true;
+          console.log("Doctor creating offer...");
+          createOffer(socket, roomId);
+          setCallState("waiting");
+        }
+      } catch (err) {
+        console.error("Media error:", err);
+      }
+    };
 
-      setTimeout(() => {
-        console.log("Doctor sending offer...");
-        createOffer(socket, roomId);
-        setCallState("waiting");
-      }, 1500);
-    }
-  };
+    startCall();
 
-  start();
+    // =========================
+    // SOCKET EVENTS
+    // =========================
 
-  socket.off("offer");
-  socket.off("answer");
-  socket.off("ice-candidate");
+    const handleOfferEvent = async (offer) => {
+      console.log("Received offer");
 
-  socket.on("offer", async (offer) => {
-    console.log("Received offer");
+      if (!peerCreatedRef.current) {
+        createPeerConnection(socket, roomId, onRemoteStream);
+        peerCreatedRef.current = true;
+      }
 
-    if (!peerCreated) {
-      createPeerConnection(socket, roomId, onRemoteStream);
-      peerCreated = true;
-    }
+      await handleOffer(offer, socket, roomId);
+      setCallState("waiting");
+    };
 
-    await handleOffer(offer, socket, roomId);
-  });
+    const handleAnswerEvent = async (answer) => {
+      console.log("Received answer");
+      await handleAnswer(answer);
+    };
 
-  socket.on("answer", async (answer) => {
-    console.log("Received answer");
-    await handleAnswer(answer);
-  });
+    const handleIceEvent = async (candidate) => {
+      await handleIceCandidate(candidate);
+    };
 
-  socket.on("ice-candidate", async (candidate) => {
-    await handleIceCandidate(candidate);
-  });
+    const handleCallEnd = () => {
+      endCall();
+      setCallState("ended");
+    };
 
-  socket.on("call-ended", () => {
-    endCall();
-    setCallState("ended");
-  });
+    socket.on("offer", handleOfferEvent);
+    socket.on("answer", handleAnswerEvent);
+    socket.on("ice-candidate", handleIceEvent);
+    socket.on("call-ended", handleCallEnd);
 
-  return () => {
-    socket.disconnect();
-    endCall();
-  };
-}, [roomId, role]);
+    // =========================
+    // CLEANUP
+    // =========================
+    return () => {
+      socket.off("offer", handleOfferEvent);
+      socket.off("answer", handleAnswerEvent);
+      socket.off("ice-candidate", handleIceEvent);
+      socket.off("call-ended", handleCallEnd);
+
+      socket.disconnect();
+      endCall();
+
+      peerCreatedRef.current = false;
+      offerSentRef.current = false;
+    };
+  }, [roomId, role, onRemoteStream]);
+
+  // =========================
+  // CONTROLS
+  // =========================
 
   const handleEndCall = () => {
     socket.emit("end-call", roomId);
@@ -567,7 +589,7 @@ export default function VideoCall() {
 
       <div className="relative w-full max-w-3xl aspect-video bg-black rounded-lg overflow-hidden">
 
-        {/* remote */}
+        {/* Remote Video */}
         <video
           ref={remoteVideoRef}
           autoPlay
@@ -575,7 +597,7 @@ export default function VideoCall() {
           className="w-full h-full object-cover"
         />
 
-        {/* local */}
+        {/* Local Video */}
         <video
           ref={localVideoRef}
           autoPlay
@@ -592,6 +614,7 @@ export default function VideoCall() {
         )}
       </div>
 
+      {/* CONTROLS */}
       <div className="flex gap-3 mt-4">
         <button onClick={toggleMute} className="px-4 py-2 bg-gray-700 text-white">
           Mute
@@ -602,7 +625,7 @@ export default function VideoCall() {
         </button>
 
         <button onClick={handleEndCall} className="px-4 py-2 bg-red-600 text-white">
-          End
+          End Call
         </button>
       </div>
     </div>
