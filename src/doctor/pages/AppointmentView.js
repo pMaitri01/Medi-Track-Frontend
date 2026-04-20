@@ -42,12 +42,11 @@ const user = JSON.parse(localStorage.getItem("user"));
     patientId: item.patient?._id || item.patient,
     name:   `${item.patient?.firstName || ""} ${item.patient?.lastName || ""}`.trim() || "Unknown",
     email:  item.patient?.email       || "N/A",
-    phone:  item.patient?.phoneNumber || "N/A",
+    phone:  item.patient?.mobile || "N/A",
     gender: item.patient?.gender      || "N/A",
     time:   item.time,
     date:   new Date(item.date).toLocaleDateString(),
     status: item.status,
-    reason: item.reason || "No reason provided",
     type:   item.type || item.appointmentType || "N/A", // ✅ ADD THIS
     img:    `https://ui-avatars.com/api/?name=${item.patient?.firstName || "U"}&background=random&color=fff`,
   }));
@@ -202,7 +201,6 @@ const startVideoCall = (appointment) => {
                         {selectedAppointment.status}
                       </span>
                     </p>
-                    <p><b>Reason:</b> {selectedAppointment.reason}</p>
                   </div>
                 </div>
               </div>
