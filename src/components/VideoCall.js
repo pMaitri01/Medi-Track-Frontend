@@ -45,36 +45,55 @@ export default function VideoCall() {
     socket.emit("join-room", { roomId, userId, role });
 
     // ✅ Start camera with ERROR HANDLING
-    const startMedia = async () => {
-      try {
-        const stream = await getLocalStream();
-        attachStream(localVideoRef, stream);
-      } catch (err) {
-        console.error("Camera error:", err.name, err.message);
-        alert("Camera/Microphone access failed: " + err.message);
-      }
-    };
+    // const startMedia = async () => {
+    //   try {
+    //     const stream = await getLocalStream();
+    //     attachStream(localVideoRef, stream);
+    //   } catch (err) {
+    //     console.error("Camera error:", err.name, err.message);
+    //     alert("Camera/Microphone access failed: " + err.message);
+    //   }
+    // };
 
+    const startMedia = async () => {
+  try {
+    const stream = await getLocalStream();
+    attachStream(localVideoRef, stream);
+
+    // ✅ Create peer AFTER camera ready
+    createPeerConnection(socket, roomId, onRemoteStream);
+
+  } catch (err) {
+    console.error("Camera error:", err.name, err.message);
+  }
+};
     startMedia();
 
     // 👇 SOCKET EVENTS
 
     socket.on("user-joined", async () => {
-      if (role === "doctor") {
-        createPeerConnection(socket, roomId, onRemoteStream);
-      }
-    });
+  console.log("User joined room");
 
-    socket.on("call-started", async () => {
-      if (role === "patient") {
-        createPeerConnection(socket, roomId, onRemoteStream);
-        setCallState("waiting");
-      }
-    });
+  // ✅ BOTH sides create peer connection
+  createPeerConnection(socket, roomId, onRemoteStream);
 
-    socket.on("offer", async (offer) => {
-      await handleOffer(offer, socket, roomId);
-    });
+  // ✅ Doctor sends offer when patient joins
+  if (role === "doctor") {
+    createOffer(socket, roomId);
+    setCallState("waiting");
+  }
+});
+
+   socket.on("offer", async (offer) => {
+  console.log("Received offer");
+
+  // ✅ Ensure peer exists
+  createPeerConnection(socket, roomId, onRemoteStream);
+
+  await handleOffer(offer, socket, roomId);
+
+  setCallState("waiting");
+});
 
     socket.on("answer", async (answer) => {
       await handleAnswer(answer);
@@ -103,11 +122,14 @@ export default function VideoCall() {
   }, [roomId, userId, role, onRemoteStream]);
 
   // ▶️ Doctor starts call
-  const handleStartCall = () => {
-    socket.emit("start-call", roomId);
-    createOffer(socket, roomId);
-    setCallState("waiting");
-  };
+//   const handleStartCall = () => {
+//     socket.emit("start-call", roomId);
+//     createOffer(socket, roomId);
+//     setCallState("waiting");
+//   };
+const handleStartCall = () => {
+  setCallState("waiting");
+};
 
   // ❌ End call
   const handleEndCall = () => {
