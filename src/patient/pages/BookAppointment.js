@@ -17,6 +17,31 @@ const [bookedSlots, setBookedSlots] = useState([]);
 const [availableSlots, setAvailableSlots] = useState([]);
 const [isWorkingDay, setIsWorkingDay] = useState(true);
 
+// const [isWorkingDay, setIsWorkingDay] = useState(true);
+
+// 🔥 ADD THIS FUNCTION HERE (IMPORTANT)
+const isPastSlot = (slotTime) => {
+  if (!selectedDate) return false;
+
+  const now = new Date();
+
+  const isToday =
+    selectedDate.toDateString() === now.toDateString();
+
+  if (!isToday) return false;
+
+  const [time, modifier] = slotTime.split(" ");
+  let [hours, minutes] = time.split(":").map(Number);
+
+  if (modifier === "PM" && hours !== 12) hours += 12;
+  if (modifier === "AM" && hours === 12) hours = 0;
+
+  const slotDateTime = new Date(selectedDate);
+  slotDateTime.setHours(hours, minutes, 0, 0);
+
+  return slotDateTime < now;
+};
+
   // ── Fetch available doctors on mount ──
 //   useEffect(() => {
 //   fetch(`${process.env.REACT_APP_API_URL}/api/doctor/names`)
@@ -251,16 +276,18 @@ setIsWorkingDay(data.isWorkingDay !== false); // default true
   <div className="slots-grid">
     {allSlots.map((time) => {
       const isBooked = bookedSlots.includes(time);
+      const isPast = isPastSlot(time);
       const isSelected = selectedTime === time;
 
       return (
         <button
           key={time}
-          disabled={isBooked}
+          disabled={isBooked || isPast}
           className={`slot-pill 
             ${isSelected ? "selected" : ""} 
-            ${isBooked ? "booked" : ""}`}
-          onClick={() => !isBooked && toggleTimeSlot(time)}
+            ${isBooked ? "booked" : ""}
+            ${isPast ? "past" : ""}`}
+          onClick={() => !isBooked && !isPast && toggleTimeSlot(time)}
         >
           {time}
         </button>

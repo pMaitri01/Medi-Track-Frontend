@@ -260,3 +260,9 @@
     gap: 24px;
   }
 }
+
+.slot-pill.past {
+  background-color: #e5e7eb;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
