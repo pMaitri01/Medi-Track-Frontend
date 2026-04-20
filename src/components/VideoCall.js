@@ -231,6 +231,7 @@
 
 import { useEffect, useRef, useState, useCallback } from "react";
 import { useParams, useLocation } from "react-router-dom";
+
 import socket from "../services/socket";
 import {
   getLocalStream,
@@ -243,17 +244,32 @@ import {
 } from "../services/webrtc";
 
 export default function VideoCall() {
-  const { roomId } = useParams();
+//   const { roomId } = useParams();
+const { appointmentId } = useParams();   // ✅ ONLY THIS
+const roomId = appointmentId;  // ✅ unify variable
+
   const location = useLocation();
   const role = new URLSearchParams(location.search).get("role");
-  const userId = localStorage.getItem("userId");
+//   const userId = localStorage.getItem("userId");
 
+// const { appointmentId } = useParams();
+// console.log("ROOM ID:", id);
+console.log("ROLE:", role);
+
+// const userId = localStorage.getItem("userId");
+const userIdRef = useRef(
+  localStorage.getItem("userId") || "test-user-" + Math.random()
+);
+const userId = userIdRef.current;
   const localVideoRef = useRef(null);
   const remoteVideoRef = useRef(null);
 
   const [callState, setCallState] = useState("idle");
   const [isMuted, setIsMuted] = useState(false);
   const [isCamOff, setIsCamOff] = useState(false);
+console.log("ROOM ID:", roomId);
+console.log("USER ID:", userId);
+console.log("ROLE:", role);
 
   // Attach stream
   const attachStream = (ref, stream) => {
@@ -271,7 +287,7 @@ export default function VideoCall() {
       socket.connect();
     }
 
-    socket.emit("join-room", { roomId, userId, role });
+    socket.emit("join-room", {  roomId, userId, role });
 
     // ✅ Start camera FIRST
   const init = async () => {

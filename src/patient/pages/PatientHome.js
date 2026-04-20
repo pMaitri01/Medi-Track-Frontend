@@ -286,9 +286,12 @@ const PatientHome = () => {
   canStartCall ? (
     <button
       className="btn-primary"
-      onClick={() =>
-        navigate(`/video-call/${upcomingAppointment._id}?role=patient`)
-      }
+     onClick={() => {
+  console.log("APPOINTMENT:", upcomingAppointment);
+  console.log("APPOINTMENT ID:", upcomingAppointment?._id);
+
+  navigate(`/video-call/${upcomingAppointment._id}?role=patient`);
+}}
     >
       Join Call
     </button>
