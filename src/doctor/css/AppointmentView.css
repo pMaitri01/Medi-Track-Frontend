@@ -190,11 +190,11 @@
   white-space: nowrap;
 }
 
-.dappv-status.pending   { background: #fef3c7; color: #92400e; }
-.dappv-status.accepted  { background: #d1fae5; color: #065f46; }
-.dappv-status.rejected  { background: #fee2e2; color: #991b1b; }
+.dappv-status.pending   { background: #f3e8ff; color: #6b21a8; }
+.dappv-status.rejected  { background: #fef3c7; color: #92400e; }
 .dappv-status.completed { background: #dbeafe; color: #1e40af; }
 .dappv-status.approved  { background: #d1fae5; color: #065f46; }
+.dappv-status.cancelled { background: #fee2e2; color: #991b1b; }
 
 /* ── Action cell ────────────────────────────────────────────────────────── */
 .dappv-action-cell { display: flex; gap: 8px; }

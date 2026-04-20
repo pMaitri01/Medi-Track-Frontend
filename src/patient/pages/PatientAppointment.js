@@ -60,7 +60,7 @@ const byDateAsc  = (a, b) => new Date(a.date) - new Date(b.date);
 const byDateDesc = (a, b) => new Date(b.date) - new Date(a.date);
 
 const STATUS_META = {
-  confirmed:  { label: "Confirmed",  cls: "pa-badge--confirmed"  },
+  approved:  { label: "approved",  cls: "pa-badge--approved"  },
   completed:  { label: "Completed",  cls: "pa-badge--completed"  },
   cancelled:  { label: "Cancelled",  cls: "pa-badge--cancelled"  },
   rejected:   { label: "Rejected",   cls: "pa-badge--rejected"   },
@@ -74,7 +74,7 @@ const getBadge = (status = "") => {
 
 // ── Appointment Card ────────────────────────────────────────────────────────
 function AppointmentCard({ appt, onCancel, onStartConsultation, isNext }) {
-  const upcoming = isUpcoming(appt.date);
+  const upcoming = isUpcoming(appt.date, appt.time);
   const badge = getBadge(appt.status);
   // const canJoinVideoCall =
   //   appt.type?.toLowerCase() === "video" &&

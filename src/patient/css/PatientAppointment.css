@@ -151,8 +151,8 @@
   white-space: nowrap;
 }
 
-.pa-badge--confirmed { background: #dbeafe; color: #1d4ed8; }
-.pa-badge--completed { background: #d1fae5; color: #065f46; }
+.pa-badge--approved { background: #d1fae5;  color: #065f46;}
+.pa-badge--completed { background: #dbeafe; color: #1e40af; }
 .pa-badge--cancelled { background: #fee2e2; color: #991b1b; }
 .pa-badge--rejected  { background: #fef3c7; color: #92400e; }
 .pa-badge--pending   { background: #f3e8ff; color: #6b21a8; }
