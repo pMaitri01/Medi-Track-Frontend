@@ -274,28 +274,31 @@ export default function VideoCall() {
     socket.emit("join-room", { roomId, userId, role });
 
     // ✅ Start camera FIRST
-    const init = async () => {
-      try {
-        const stream = await getLocalStream();
-        attachStream(localVideoRef, stream);
+  const init = async () => {
+  try {
+    const stream = await getLocalStream();
+    attachStream(localVideoRef, stream);
 
-        // ✅ Create peer after camera
-        createPeerConnection(socket, roomId, onRemoteStream);
+    // ✅ Create peer ONLY ONCE
+    if (!window.peerCreated) {
+      createPeerConnection(socket, roomId, onRemoteStream);
+      window.peerCreated = true;
+    }
 
-        // ✅ Doctor auto-create offer after delay (FIXES timing issue)
-        if (role === "doctor") {
-          setTimeout(() => {
-            console.log("Doctor sending offer...");
-            createOffer(socket, roomId);
-            setCallState("waiting");
-          }, 2000);
-        }
+    // ✅ Doctor sends offer
+    if (role === "doctor") {
+      setTimeout(() => {
+        console.log("Doctor sending offer...");
+        createOffer(socket, roomId);
+        setCallState("waiting");
+      }, 2000);
+    }
 
-      } catch (err) {
-        console.error("Camera error:", err.name, err.message);
-        alert("Camera/Mic access failed");
-      }
-    };
+  } catch (err) {
+    console.error("Camera error:", err.name, err.message);
+    alert("Camera/Mic access failed");
+  }
+};
 
     init();
 
@@ -304,7 +307,7 @@ export default function VideoCall() {
     socket.on("offer", async (offer) => {
       console.log("Received offer");
 
-      createPeerConnection(socket, roomId, onRemoteStream);
+    //   createPeerConnection(socket, roomId, onRemoteStream);
       await handleOffer(offer, socket, roomId);
 
       setCallState("waiting");
