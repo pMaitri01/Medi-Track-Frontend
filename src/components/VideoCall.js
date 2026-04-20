@@ -1,5 +1,237 @@
+// // import { useEffect, useRef, useState, useCallback } from "react";
+// // import { useParams, useLocation } from "react-router-dom";
+// // import socket from "../services/socket";
+// // import {
+// //   getLocalStream,
+// //   createPeerConnection,
+// //   createOffer,
+// //   handleOffer,
+// //   handleAnswer,
+// //   handleIceCandidate,
+// //   endCall,
+// // } from "../services/webrtc";
+
+// // export default function VideoCall() {
+// //   const { roomId } = useParams();
+// //   const location = useLocation();
+// //   const role = new URLSearchParams(location.search).get("role");
+// //   const userId = localStorage.getItem("userId"); // adjust if needed
+
+// //   const localVideoRef = useRef(null);
+// //   const remoteVideoRef = useRef(null);
+
+// //   const [callState, setCallState] = useState("idle");
+// //   const [isMuted, setIsMuted] = useState(false);
+// //   const [isCamOff, setIsCamOff] = useState(false);
+
+// //   // Attach stream
+// //   const attachStream = (ref, stream) => {
+// //     if (ref.current) {
+// //       ref.current.srcObject = stream;
+// //     }
+// //   };
+
+// //   const onRemoteStream = useCallback((stream) => {
+// //     attachStream(remoteVideoRef, stream);
+// //     setCallState("active");
+// //   }, []);
+
+// //   useEffect(() => {
+// //     // ✅ Connect socket safely
+// //     if (!socket.connected) {
+// //       socket.connect();
+// //     }
+
+// //     socket.emit("join-room", { roomId, userId, role });
+
+// //     // ✅ Start camera with ERROR HANDLING
+// //     // const startMedia = async () => {
+// //     //   try {
+// //     //     const stream = await getLocalStream();
+// //     //     attachStream(localVideoRef, stream);
+// //     //   } catch (err) {
+// //     //     console.error("Camera error:", err.name, err.message);
+// //     //     alert("Camera/Microphone access failed: " + err.message);
+// //     //   }
+// //     // };
+
+// //     const startMedia = async () => {
+// //   try {
+// //     const stream = await getLocalStream();
+// //     attachStream(localVideoRef, stream);
+
+// //     // ✅ Create peer AFTER camera ready
+// //     createPeerConnection(socket, roomId, onRemoteStream);
+
+// //   } catch (err) {
+// //     console.error("Camera error:", err.name, err.message);
+// //   }
+// // };
+// //     startMedia();
+
+// //     // 👇 SOCKET EVENTS
+
+// //     socket.on("user-joined", async () => {
+// //   console.log("User joined room");
+
+// //   // ✅ BOTH sides create peer connection
+// //   createPeerConnection(socket, roomId, onRemoteStream);
+
+// //   // ✅ Doctor sends offer when patient joins
+// //   if (role === "doctor") {
+// //     createOffer(socket, roomId);
+// //     setCallState("waiting");
+// //   }
+// // });
+
+// //    socket.on("offer", async (offer) => {
+// //   console.log("Received offer");
+
+// //   // ✅ Ensure peer exists
+// //   createPeerConnection(socket, roomId, onRemoteStream);
+
+// //   await handleOffer(offer, socket, roomId);
+
+// //   setCallState("waiting");
+// // });
+
+// //     socket.on("answer", async (answer) => {
+// //       await handleAnswer(answer);
+// //     });
+
+// //     socket.on("ice-candidate", async (candidate) => {
+// //       await handleIceCandidate(candidate);
+// //     });
+
+// //     socket.on("call-ended", () => {
+// //       endCall();
+// //       setCallState("ended");
+// //     });
+
+// //     return () => {
+// //       socket.off("user-joined");
+// //       socket.off("call-started");
+// //       socket.off("offer");
+// //       socket.off("answer");
+// //       socket.off("ice-candidate");
+// //       socket.off("call-ended");
+
+// //       socket.disconnect();
+// //       endCall();
+// //     };
+// //   }, [roomId, userId, role, onRemoteStream]);
+
+// //   // ▶️ Doctor starts call
+// // //   const handleStartCall = () => {
+// // //     socket.emit("start-call", roomId);
+// // //     createOffer(socket, roomId);
+// // //     setCallState("waiting");
+// // //   };
+// // const handleStartCall = () => {
+// //   setCallState("waiting");
+// // };
+
+// //   // ❌ End call
+// //   const handleEndCall = () => {
+// //     socket.emit("end-call", roomId);
+// //     endCall();
+// //     setCallState("ended");
+// //   };
+
+// //   // 🔇 Mute toggle
+// //   const toggleMute = () => {
+// //     const stream = localVideoRef.current?.srcObject;
+// //     if (stream) {
+// //       stream.getAudioTracks().forEach((t) => (t.enabled = !t.enabled));
+// //       setIsMuted((m) => !m);
+// //     }
+// //   };
+
+// //   // 📷 Camera toggle
+// //   const toggleCamera = () => {
+// //     const stream = localVideoRef.current?.srcObject;
+// //     if (stream) {
+// //       stream.getVideoTracks().forEach((t) => (t.enabled = !t.enabled));
+// //       setIsCamOff((c) => !c);
+// //     }
+// //   };
+
+// //   if (callState === "ended") {
+// //     return <div className="text-center p-8">Call ended. Thank you!</div>;
+// //   }
+
+// //   return (
+// //     <div className="flex flex-col items-center gap-4 p-4 bg-gray-900 min-h-screen">
+// //       {/* VIDEO AREA */}
+// //       <div className="relative w-full max-w-3xl aspect-video bg-black rounded-xl overflow-hidden">
+        
+// //         {/* Remote Video */}
+// //         <video
+// //           ref={remoteVideoRef}
+// //           autoPlay
+// //           playsInline
+// //           className="w-full h-full object-cover"
+// //         />
+
+// //         {/* Local Video */}
+// //         <video
+// //           ref={localVideoRef}
+// //           autoPlay
+// //           playsInline
+// //           muted
+// //           className="absolute bottom-4 right-4 w-36 h-24 rounded-lg border-2 border-white object-cover"
+// //         />
+
+// //         {/* Overlay */}
+// //         {callState !== "active" && (
+// //           <div className="absolute inset-0 flex items-center justify-center bg-black/60 text-white text-lg">
+// //             {callState === "idle" && "Ready to connect..."}
+// //             {callState === "waiting" && "Waiting for other participant..."}
+// //           </div>
+// //         )}
+// //       </div>
+
+// //       {/* CONTROLS */}
+// //       <div className="flex items-center gap-4 mt-2">
+// //         <button
+// //           onClick={toggleMute}
+// //           className="px-4 py-2 bg-gray-700 text-white rounded-full"
+// //         >
+// //           {isMuted ? "Unmute" : "Mute"}
+// //         </button>
+
+// //         <button
+// //           onClick={toggleCamera}
+// //           className="px-4 py-2 bg-gray-700 text-white rounded-full"
+// //         >
+// //           {isCamOff ? "Cam On" : "Cam Off"}
+// //         </button>
+
+// //         {/* Doctor only */}
+// //         {role === "doctor" && callState === "idle" && (
+// //           <button
+// //             onClick={handleStartCall}
+// //             className="px-6 py-2 bg-green-600 text-white rounded-full font-semibold"
+// //           >
+// //             Start Call
+// //           </button>
+// //         )}
+
+// //         <button
+// //           onClick={handleEndCall}
+// //           className="px-6 py-2 bg-red-600 text-white rounded-full font-semibold"
+// //         >
+// //           End Call
+// //         </button>
+// //       </div>
+// //     </div>
+// //   );
+// // }
+
+
 // import { useEffect, useRef, useState, useCallback } from "react";
 // import { useParams, useLocation } from "react-router-dom";
+
 // import socket from "../services/socket";
 // import {
 //   getLocalStream,
@@ -12,23 +244,39 @@
 // } from "../services/webrtc";
 
 // export default function VideoCall() {
-//   const { roomId } = useParams();
+// //   const { roomId } = useParams();
+// const { appointmentId } = useParams();   // ✅ ONLY THIS
+// const roomId = appointmentId;  // ✅ unify variable
+// const hasJoinedRef = useRef(false);
+// const hasOfferSentRef = useRef(false);
+
+
 //   const location = useLocation();
 //   const role = new URLSearchParams(location.search).get("role");
-//   const userId = localStorage.getItem("userId"); // adjust if needed
+// //   const userId = localStorage.getItem("userId");
 
+// // const { appointmentId } = useParams();
+// // console.log("ROOM ID:", id);
+// console.log("ROLE:", role);
+
+// // const userId = localStorage.getItem("userId");
+// const userIdRef = useRef(
+//   localStorage.getItem("userId") || "test-user-" + Math.random()
+// );
+// const userId = userIdRef.current;
 //   const localVideoRef = useRef(null);
 //   const remoteVideoRef = useRef(null);
 
 //   const [callState, setCallState] = useState("idle");
 //   const [isMuted, setIsMuted] = useState(false);
 //   const [isCamOff, setIsCamOff] = useState(false);
+// console.log("ROOM ID:", roomId);
+// console.log("USER ID:", userId);
+// console.log("ROLE:", role);
 
 //   // Attach stream
 //   const attachStream = (ref, stream) => {
-//     if (ref.current) {
-//       ref.current.srcObject = stream;
-//     }
+//     if (ref.current) ref.current.srcObject = stream;
 //   };
 
 //   const onRemoteStream = useCallback((stream) => {
@@ -36,100 +284,69 @@
 //     setCallState("active");
 //   }, []);
 
-//   useEffect(() => {
-//     // ✅ Connect socket safely
-//     if (!socket.connected) {
-//       socket.connect();
-//     }
+// useEffect(() => {
+//   if (!socket.connected) socket.connect();
 
-//     socket.emit("join-room", { roomId, userId, role });
+//   let peerCreated = false;
+//   let offerSent = false;
 
-//     // ✅ Start camera with ERROR HANDLING
-//     // const startMedia = async () => {
-//     //   try {
-//     //     const stream = await getLocalStream();
-//     //     attachStream(localVideoRef, stream);
-//     //   } catch (err) {
-//     //     console.error("Camera error:", err.name, err.message);
-//     //     alert("Camera/Microphone access failed: " + err.message);
-//     //   }
-//     // };
+//   socket.emit("join-room", { roomId, userId, role });
 
-//     const startMedia = async () => {
-//   try {
+//   const init = async () => {
 //     const stream = await getLocalStream();
 //     attachStream(localVideoRef, stream);
 
-//     // ✅ Create peer AFTER camera ready
-//     createPeerConnection(socket, roomId, onRemoteStream);
+//     if (!peerCreated) {
+//       createPeerConnection(socket, roomId, onRemoteStream);
+//       peerCreated = true;
+//     }
 
-//   } catch (err) {
-//     console.error("Camera error:", err.name, err.message);
-//   }
-// };
-//     startMedia();
+//     if (role === "doctor" && !offerSent) {
+//       offerSent = true;
 
-//     // 👇 SOCKET EVENTS
+//       console.log("Doctor sending offer...");
+//       createOffer(socket, roomId);
+//       setCallState("waiting");
+//     }
+//   };
 
-//     socket.on("user-joined", async () => {
-//   console.log("User joined room");
+//   init();
 
-//   // ✅ BOTH sides create peer connection
-//   createPeerConnection(socket, roomId, onRemoteStream);
+//   socket.off("offer");
+//   socket.off("answer");
+//   socket.off("ice-candidate");
 
-//   // ✅ Doctor sends offer when patient joins
-//   if (role === "doctor") {
-//     createOffer(socket, roomId);
+//   socket.on("offer", async (offer) => {
+//     console.log("Received offer");
+
+//     if (!peerCreated) {
+//       createPeerConnection(socket, roomId, onRemoteStream);
+//       peerCreated = true;
+//     }
+
+//     await handleOffer(offer, socket, roomId);
 //     setCallState("waiting");
-//   }
-// });
+//   });
 
-//    socket.on("offer", async (offer) => {
-//   console.log("Received offer");
+//   socket.on("answer", async (answer) => {
+//     console.log("Received answer");
+//     await handleAnswer(answer);
+//   });
 
-//   // ✅ Ensure peer exists
-//   createPeerConnection(socket, roomId, onRemoteStream);
+//   socket.on("ice-candidate", async (candidate) => {
+//     await handleIceCandidate(candidate);
+//   });
 
-//   await handleOffer(offer, socket, roomId);
+//   socket.on("call-ended", () => {
+//     endCall();
+//     setCallState("ended");
+//   });
 
-//   setCallState("waiting");
-// });
-
-//     socket.on("answer", async (answer) => {
-//       await handleAnswer(answer);
-//     });
-
-//     socket.on("ice-candidate", async (candidate) => {
-//       await handleIceCandidate(candidate);
-//     });
-
-//     socket.on("call-ended", () => {
-//       endCall();
-//       setCallState("ended");
-//     });
-
-//     return () => {
-//       socket.off("user-joined");
-//       socket.off("call-started");
-//       socket.off("offer");
-//       socket.off("answer");
-//       socket.off("ice-candidate");
-//       socket.off("call-ended");
-
-//       socket.disconnect();
-//       endCall();
-//     };
-//   }, [roomId, userId, role, onRemoteStream]);
-
-//   // ▶️ Doctor starts call
-// //   const handleStartCall = () => {
-// //     socket.emit("start-call", roomId);
-// //     createOffer(socket, roomId);
-// //     setCallState("waiting");
-// //   };
-// const handleStartCall = () => {
-//   setCallState("waiting");
-// };
+//   return () => {
+//     socket.disconnect();
+//     endCall();
+//   };
+// }, [roomId, userId, role]);
 
 //   // ❌ End call
 //   const handleEndCall = () => {
@@ -138,7 +355,7 @@
 //     setCallState("ended");
 //   };
 
-//   // 🔇 Mute toggle
+//   // 🔇 Mute
 //   const toggleMute = () => {
 //     const stream = localVideoRef.current?.srcObject;
 //     if (stream) {
@@ -147,7 +364,7 @@
 //     }
 //   };
 
-//   // 📷 Camera toggle
+//   // 📷 Camera
 //   const toggleCamera = () => {
 //     const stream = localVideoRef.current?.srcObject;
 //     if (stream) {
@@ -162,10 +379,11 @@
 
 //   return (
 //     <div className="flex flex-col items-center gap-4 p-4 bg-gray-900 min-h-screen">
+      
 //       {/* VIDEO AREA */}
 //       <div className="relative w-full max-w-3xl aspect-video bg-black rounded-xl overflow-hidden">
         
-//         {/* Remote Video */}
+//         {/* Remote */}
 //         <video
 //           ref={remoteVideoRef}
 //           autoPlay
@@ -173,7 +391,7 @@
 //           className="w-full h-full object-cover"
 //         />
 
-//         {/* Local Video */}
+//         {/* Local */}
 //         <video
 //           ref={localVideoRef}
 //           autoPlay
@@ -186,41 +404,22 @@
 //         {callState !== "active" && (
 //           <div className="absolute inset-0 flex items-center justify-center bg-black/60 text-white text-lg">
 //             {callState === "idle" && "Ready to connect..."}
-//             {callState === "waiting" && "Waiting for other participant..."}
+//             {callState === "waiting" && "Connecting..."}
 //           </div>
 //         )}
 //       </div>
 
 //       {/* CONTROLS */}
 //       <div className="flex items-center gap-4 mt-2">
-//         <button
-//           onClick={toggleMute}
-//           className="px-4 py-2 bg-gray-700 text-white rounded-full"
-//         >
+//         <button onClick={toggleMute} className="px-4 py-2 bg-gray-700 text-white rounded-full">
 //           {isMuted ? "Unmute" : "Mute"}
 //         </button>
 
-//         <button
-//           onClick={toggleCamera}
-//           className="px-4 py-2 bg-gray-700 text-white rounded-full"
-//         >
+//         <button onClick={toggleCamera} className="px-4 py-2 bg-gray-700 text-white rounded-full">
 //           {isCamOff ? "Cam On" : "Cam Off"}
 //         </button>
 
-//         {/* Doctor only */}
-//         {role === "doctor" && callState === "idle" && (
-//           <button
-//             onClick={handleStartCall}
-//             className="px-6 py-2 bg-green-600 text-white rounded-full font-semibold"
-//           >
-//             Start Call
-//           </button>
-//         )}
-
-//         <button
-//           onClick={handleEndCall}
-//           className="px-6 py-2 bg-red-600 text-white rounded-full font-semibold"
-//         >
+//         <button onClick={handleEndCall} className="px-6 py-2 bg-red-600 text-white rounded-full font-semibold">
 //           End Call
 //         </button>
 //       </div>
@@ -244,34 +443,26 @@ import {
 } from "../services/webrtc";
 
 export default function VideoCall() {
-//   const { roomId } = useParams();
-const { appointmentId } = useParams();   // ✅ ONLY THIS
-const roomId = appointmentId;  // ✅ unify variable
+  const { appointmentId } = useParams();
+  const roomId = appointmentId;
 
   const location = useLocation();
   const role = new URLSearchParams(location.search).get("role");
-//   const userId = localStorage.getItem("userId");
 
-// const { appointmentId } = useParams();
-// console.log("ROOM ID:", id);
-console.log("ROLE:", role);
+  const userId = useRef(
+    localStorage.getItem("userId") ||
+      "test-user-" + Math.random().toString(36).substring(2)
+  ).current;
 
-// const userId = localStorage.getItem("userId");
-const userIdRef = useRef(
-  localStorage.getItem("userId") || "test-user-" + Math.random()
-);
-const userId = userIdRef.current;
   const localVideoRef = useRef(null);
   const remoteVideoRef = useRef(null);
 
-  const [callState, setCallState] = useState("idle");
-  const [isMuted, setIsMuted] = useState(false);
-  const [isCamOff, setIsCamOff] = useState(false);
-console.log("ROOM ID:", roomId);
-console.log("USER ID:", userId);
-console.log("ROLE:", role);
+  const peerCreatedRef = useRef(false);
+  const offerSentRef = useRef(false);
 
-  // Attach stream
+  const [callState, setCallState] = useState("idle");
+
+  // attach stream
   const attachStream = (ref, stream) => {
     if (ref.current) ref.current.srcObject = stream;
   };
@@ -281,115 +472,102 @@ console.log("ROLE:", role);
     setCallState("active");
   }, []);
 
-  useEffect(() => {
-    // ✅ Connect socket
-    if (!socket.connected) {
-      socket.connect();
-    }
+ useEffect(() => {
+  if (!socket.connected) socket.connect();
 
-    socket.emit("join-room", {  roomId, userId, role });
+  let offerCreated = false;
+  let peerCreated = false;
 
-    // ✅ Start camera FIRST
-  const init = async () => {
-  try {
+  const start = async () => {
     const stream = await getLocalStream();
     attachStream(localVideoRef, stream);
 
-    // ✅ Create peer ONLY ONCE
-    if (!window.peerCreated) {
+    if (!peerCreated) {
       createPeerConnection(socket, roomId, onRemoteStream);
-      window.peerCreated = true;
+      peerCreated = true;
     }
 
-    // ✅ Doctor sends offer
-    if (role === "doctor") {
+    socket.emit("join-room", { roomId, userId, role });
+
+    // ✅ ONLY ONE OFFER (VERY IMPORTANT)
+    if (role === "doctor" && !offerCreated) {
+      offerCreated = true;
+
       setTimeout(() => {
         console.log("Doctor sending offer...");
         createOffer(socket, roomId);
         setCallState("waiting");
-      }, 2000);
+      }, 1500);
+    }
+  };
+
+  start();
+
+  socket.off("offer");
+  socket.off("answer");
+  socket.off("ice-candidate");
+
+  socket.on("offer", async (offer) => {
+    console.log("Received offer");
+
+    if (!peerCreated) {
+      createPeerConnection(socket, roomId, onRemoteStream);
+      peerCreated = true;
     }
 
-  } catch (err) {
-    console.error("Camera error:", err.name, err.message);
-    alert("Camera/Mic access failed");
-  }
-};
+    await handleOffer(offer, socket, roomId);
+  });
 
-    init();
+  socket.on("answer", async (answer) => {
+    console.log("Received answer");
+    await handleAnswer(answer);
+  });
 
-    // ✅ SOCKET EVENTS
+  socket.on("ice-candidate", async (candidate) => {
+    await handleIceCandidate(candidate);
+  });
 
-    socket.on("offer", async (offer) => {
-      console.log("Received offer");
+  socket.on("call-ended", () => {
+    endCall();
+    setCallState("ended");
+  });
 
-    //   createPeerConnection(socket, roomId, onRemoteStream);
-      await handleOffer(offer, socket, roomId);
+  return () => {
+    socket.disconnect();
+    endCall();
+  };
+}, [roomId, role]);
 
-      setCallState("waiting");
-    });
-
-    socket.on("answer", async (answer) => {
-      console.log("Received answer");
-      await handleAnswer(answer);
-    });
-
-    socket.on("ice-candidate", async (candidate) => {
-      await handleIceCandidate(candidate);
-    });
-
-    socket.on("call-ended", () => {
-      endCall();
-      setCallState("ended");
-    });
-
-    return () => {
-      socket.off("offer");
-      socket.off("answer");
-      socket.off("ice-candidate");
-      socket.off("call-ended");
-
-      socket.disconnect();
-      endCall();
-    };
-  }, [roomId, userId, role, onRemoteStream]);
-
-  // ❌ End call
   const handleEndCall = () => {
     socket.emit("end-call", roomId);
     endCall();
     setCallState("ended");
   };
 
-  // 🔇 Mute
   const toggleMute = () => {
     const stream = localVideoRef.current?.srcObject;
     if (stream) {
       stream.getAudioTracks().forEach((t) => (t.enabled = !t.enabled));
-      setIsMuted((m) => !m);
     }
   };
 
-  // 📷 Camera
   const toggleCamera = () => {
     const stream = localVideoRef.current?.srcObject;
     if (stream) {
       stream.getVideoTracks().forEach((t) => (t.enabled = !t.enabled));
-      setIsCamOff((c) => !c);
     }
   };
 
   if (callState === "ended") {
-    return <div className="text-center p-8">Call ended. Thank you!</div>;
+    return <div className="p-5 text-center">Call Ended</div>;
   }
 
   return (
-    <div className="flex flex-col items-center gap-4 p-4 bg-gray-900 min-h-screen">
-      
-      {/* VIDEO AREA */}
-      <div className="relative w-full max-w-3xl aspect-video bg-black rounded-xl overflow-hidden">
-        
-        {/* Remote */}
+    <div className="flex flex-col items-center p-4 bg-gray-900 min-h-screen">
+
+      <div className="relative w-full max-w-3xl aspect-video bg-black rounded-lg overflow-hidden">
+
+        {/* remote */}
         <video
           ref={remoteVideoRef}
           autoPlay
@@ -397,36 +575,34 @@ console.log("ROLE:", role);
           className="w-full h-full object-cover"
         />
 
-        {/* Local */}
+        {/* local */}
         <video
           ref={localVideoRef}
           autoPlay
           playsInline
           muted
-          className="absolute bottom-4 right-4 w-36 h-24 rounded-lg border-2 border-white object-cover"
+          className="absolute bottom-3 right-3 w-32 h-24 border rounded"
         />
 
-        {/* Overlay */}
         {callState !== "active" && (
-          <div className="absolute inset-0 flex items-center justify-center bg-black/60 text-white text-lg">
-            {callState === "idle" && "Ready to connect..."}
+          <div className="absolute inset-0 flex items-center justify-center text-white bg-black/60">
+            {callState === "idle" && "Ready..."}
             {callState === "waiting" && "Connecting..."}
           </div>
         )}
       </div>
 
-      {/* CONTROLS */}
-      <div className="flex items-center gap-4 mt-2">
-        <button onClick={toggleMute} className="px-4 py-2 bg-gray-700 text-white rounded-full">
-          {isMuted ? "Unmute" : "Mute"}
+      <div className="flex gap-3 mt-4">
+        <button onClick={toggleMute} className="px-4 py-2 bg-gray-700 text-white">
+          Mute
         </button>
 
-        <button onClick={toggleCamera} className="px-4 py-2 bg-gray-700 text-white rounded-full">
-          {isCamOff ? "Cam On" : "Cam Off"}
+        <button onClick={toggleCamera} className="px-4 py-2 bg-gray-700 text-white">
+          Camera
         </button>
 
-        <button onClick={handleEndCall} className="px-6 py-2 bg-red-600 text-white rounded-full font-semibold">
-          End Call
+        <button onClick={handleEndCall} className="px-4 py-2 bg-red-600 text-white">
+          End
         </button>
       </div>
     </div>
