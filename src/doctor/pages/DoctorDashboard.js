@@ -5,7 +5,7 @@ import DoctorFooter from "../components/DoctorFooter";
 import Calendar from "../components/Calendar";
 import GenderChart from "../components/GenderChart";
 
-import { FaUserFriends, FaHospitalUser, FaClock } from "react-icons/fa";
+import { FaUserFriends, FaHospitalUser, FaClock, FaCheckCircle } from "react-icons/fa";
 
 export default function DoctorDashboard() {
   const [open, setOpen] = useState(true);
@@ -13,6 +13,8 @@ export default function DoctorDashboard() {
   const [todayPatients, setTodayPatients] = useState(0);
   const [loading, setLoading] = useState(true);
   const [completed, setCompleted] = useState(0);
+  const [todayAppointments, setTodayAppointments] = useState([]);
+  const [hoveredId, setHoveredId] = useState(null);
 
   // Layout Constants
   const sidebarWidth = open ? "250px" : "100px";
@@ -47,8 +49,74 @@ export default function DoctorDashboard() {
         setLoading(false);
       }
     };
+
     fetchDashboard();
+    fetchTodayAppointments();
   }, []);
+
+  const fetchTodayAppointments = async () => {
+    try {
+      const res = await fetch(
+        `${process.env.REACT_APP_API_URL}/api/appointment/today`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+          credentials: "include",
+        }
+      );
+
+      const data = await res.json();
+      setTodayAppointments(data);
+
+    } catch (error) {
+      console.log("Today Appointment Error:", error);
+      setTodayAppointments([]);
+    }
+  };
+
+  // check if appointment time is over
+  const isTimeOver = (time) => {
+    const now = new Date();
+
+    let [t, modifier] = time.split(" ");
+    let [hours, minutes] = t.split(":").map(Number);
+
+    if (modifier === "PM" && hours !== 12) hours += 12;
+    if (modifier === "AM" && hours === 12) hours = 0;
+
+    const appointmentTime = new Date();
+    appointmentTime.setHours(hours, minutes, 0, 0);
+
+    return appointmentTime < now;
+  };
+
+  // complete appointment
+  const completeAppointment = async (id) => {
+    try {
+      const res = await fetch(
+        `${process.env.REACT_APP_API_URL}/api/appointment/complete/${id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+          credentials: "include",
+        }
+      );
+
+      const data = await res.json();
+
+      // REFETCH DATA INSTEAD OF FILTERING
+      fetchTodayAppointments();
+    }
+    catch (error) {
+      console.log("Complete Error:", error);
+    }
+  };
 
   return (
     <div style={{ minHeight: "100vh", background: "#F8F9FD" }}>
@@ -101,7 +169,7 @@ export default function DoctorDashboard() {
                 <GenderChart />
               </div>
             </div>
-            
+
             {/* List Area */}
             <div style={cardStyle}>
               <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "15px" }}>
@@ -109,13 +177,71 @@ export default function DoctorDashboard() {
                 <span style={{ color: "#0AA5A5", fontSize: "12px", cursor: "pointer" }}>See All</span>
               </div>
               <div style={listContainer}>
-                {[1, 2, 3, 4].map((item) => (
+                {/* {[1, 2, 3, 4].map((item) => (
                   <div key={item} style={listItemStyle}>
                     <div style={avatarStyle}></div>
                     <div style={{ flex: 1, fontSize: "14px" }}>Patient Name</div>
                     <div style={badgeStyle}>00:00</div>
                   </div>
-                ))}
+                ))} */}
+                {todayAppointments.length > 0 ? (
+                  todayAppointments.map((appt) => (
+                    <div key={appt._id} style={listItemStyle}>
+
+                      <div style={avatarStyle}></div>
+
+                      <div style={{ flex: 1, fontSize: "14px" }}>
+                        {appt.patientName}
+                      </div>
+
+                      <div style={badgeStyle}>
+                        {appt.time}
+                      </div>
+
+                      {/* ✅ COMPLETE BUTTON */}
+                      {/* <FaCheckCircle
+        style={{
+          color: "green",
+          cursor: "pointer",
+          fontSize: "18px",
+          marginLeft: "10px"
+        }}
+      /> */}
+
+                      <FaCheckCircle
+                        onClick={() => {
+                          if (isTimeOver(appt.time)) {
+                            completeAppointment(appt._id);
+                          }
+                        }}
+                        onMouseEnter={() => setHoveredId(appt._id)}
+                        onMouseLeave={() => setHoveredId(null)}
+                        style={{
+                          color:
+                            isTimeOver(appt.time) && hoveredId === appt._id
+                              ? "#22c55e" // ✅ GREEN on hover
+                              : "#cbd5e1", // default grey
+                          cursor: isTimeOver(appt.time) ? "pointer" : "not-allowed",
+                          fontSize: "18px",
+                          marginLeft: "8px",
+                          opacity: isTimeOver(appt.time) ? 1 : 0.5,
+                          transition: "0.2s ease", // ✅ smooth effect
+                        }}
+                        title={
+                          isTimeOver(appt.time)
+                            ? "Click to complete"
+                            : "Can complete after time is over"
+                        }
+                      />
+
+                    </div>
+                  ))
+
+                ) : (
+                  <p style={{ fontSize: "13px", color: "#94a3b8" }}>
+                    No appointments today
+                  </p>
+                )}
               </div>
             </div>
 
