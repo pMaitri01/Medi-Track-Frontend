@@ -54,10 +54,33 @@ const formatDate = (dateStr) =>
     year: "numeric",
   });
 
+const getDateTime = (dateStr, timeStr) => {
+  const date = new Date(dateStr);
+
+  if (timeStr) {
+    let [time, modifier] = timeStr.split(" ");
+    let [h, m] = time.split(":");
+
+    let hours = parseInt(h, 10);
+    let minutes = parseInt(m, 10);
+
+    if (modifier === "PM" && hours !== 12) hours += 12;
+    if (modifier === "AM" && hours === 12) hours = 0;
+
+    date.setHours(hours, minutes, 0, 0);
+  }
+
+  return date;
+};
+
 // upcoming → nearest first (ascending)
-const byDateAsc  = (a, b) => new Date(a.date) - new Date(b.date);
-// past     → most recent first (descending)
-const byDateDesc = (a, b) => new Date(b.date) - new Date(a.date);
+const byDateAsc = (a, b) => {
+  return getDateTime(a.date, a.time) - getDateTime(b.date, b.time);
+};
+// past → most recent first (descending)
+const byDateDesc = (a, b) => {
+return getDateTime(b.date, b.time) - getDateTime(a.date, a.time);
+};
 
 const STATUS_META = {
   approved:  { label: "approved",  cls: "pa-badge--approved"  },
