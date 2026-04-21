@@ -302,8 +302,8 @@ const PatientHome = () => {
     </button>
   ) : (
     <p style={{ color: "#888", fontSize: "14px" }}>
-  You can join 10 minutes before appointment time
-</p>
+      You can join 10 minutes before appointment time
+    </p>
   )
 )}
   <button className="btn-outline">Reschedule</button>

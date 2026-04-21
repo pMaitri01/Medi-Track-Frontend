@@ -121,26 +121,18 @@ setAppointments(sorted);
     }
   };
 
-  const startVideoCall = (appointment) => {
-    navigate(`/video-call/${appointment.id}`, {
-      state: {
-        role: "doctor",
-        patientId: appointment.patientId,
-      },
-    });
-  };
+const startVideoCall = (appointment) => {
+  // Create unique room name using appointment id
+  const roomName = `meditrack-${appointment.id}`;
 
-  const isAppointmentTime = (rawDate, time) => {
-    const now = new Date();
-
-    const appointmentDateTime = new Date(rawDate);
-    const [hours, minutes] = time.split(":");
-
-    appointmentDateTime.setHours(hours, minutes, 0);
-
-    return now >= appointmentDateTime;
-  };
-
+  // Navigate to video call page
+  navigate(`/video-call/${roomName}`, {
+    state: {
+      appointmentId: appointment.id,
+      role: "doctor"
+    }
+  });
+};
   return (
     <>
       <DoctorNavbar open={open} setOpen={setOpen} />
@@ -270,19 +262,10 @@ setAppointments(sorted);
                     </button>
                   </>
                 )}
-                {/* If time NOT reached → show message */}
-{selectedAppointment.type?.toLowerCase() === "videocall" &&
-  selectedAppointment.status?.toLowerCase() === "approved" &&
-  !isAppointmentTime(selectedAppointment.rawDate, selectedAppointment.time) && (
-    <p style={{ color: "red", fontSize: "12px" }}>
-      You can start call only at appointment time
-    </p>
-)}
-
-
 {/* ✅ If time reached → show Start Call button */}
 {
-  selectedAppointment.status?.toLowerCase() === "approved" &&(
+  selectedAppointment.status?.toLowerCase() === "approved" &&
+  selectedAppointment.type?.toLowerCase() === "video" && (
     <button
       className="dappv-btn-startcall"
       onClick={() => startVideoCall(selectedAppointment)}
@@ -290,7 +273,6 @@ setAppointments(sorted);
       Start Call
     </button>
 )}
-
                 {selectedAppointment.status?.toLowerCase() === "approved" && (
 
                   <button
