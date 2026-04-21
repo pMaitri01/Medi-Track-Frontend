@@ -80,7 +80,6 @@ const VideoCall = () => {
 
   loadJitsi();
 }, []);
-  // return <div id="jitsi-container"></div>;
   return (
   <div>
     <h2>Video Call</h2>
