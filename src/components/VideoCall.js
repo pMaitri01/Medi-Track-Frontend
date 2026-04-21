@@ -8,7 +8,7 @@ const VideoCall = () => {
     const fetchMeeting = async () => {
       try {
         const response = await fetch(
-          `${process.env.REACT_APP_API_URL}/api/appointments/meeting/${appointmentId}`,
+          `${process.env.REACT_APP_API_URL}/api/appointment/meeting/${appointmentId}`,
           {
             method: "GET",
             headers: {
@@ -60,7 +60,33 @@ const VideoCall = () => {
     fetchMeeting();
   }, [appointmentId]);
 
-  return <div id="jitsi-container"></div>;
+  useEffect(() => {
+  const loadJitsi = () => {
+    if (!window.JitsiMeetExternalAPI) {
+      console.log("Jitsi script not loaded yet");
+      return;
+    }
+
+    const domain = "meet.jit.si";
+    const options = {
+      roomName: appointmentId,
+      parentNode: document.getElementById("jitsi-container"),
+      width: "100%",
+      height: 600,
+    };
+
+    const api = new window.JitsiMeetExternalAPI(domain, options);
+  };
+
+  loadJitsi();
+}, []);
+  // return <div id="jitsi-container"></div>;
+  return (
+  <div>
+    <h2>Video Call</h2>
+    <div id="jitsi-container" />
+  </div>
+);
 };
 
 export default VideoCall;
