@@ -414,3 +414,17 @@
   transition: opacity 0.2s;
 }
 .dappv-btn-cancel:hover { opacity: 0.85; }
+
+.dappv-btn-startcall {
+  background-color: #2563eb;
+  color: white;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-right: 10px;
+}
+
+.dappv-btn-startcall:hover {
+  background-color: #1d4ed8;
+}

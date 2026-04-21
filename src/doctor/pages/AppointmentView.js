@@ -270,15 +270,29 @@ setAppointments(sorted);
                     </button>
                   </>
                 )}
-                {selectedAppointment.type?.toLowerCase() === "video" &&
-                  selectedAppointment.status?.toLowerCase() === "approved" &&
-                  !isAppointmentTime(selectedAppointment.rawDate, selectedAppointment.time) && (
-                    <p style={{ color: "red", fontSize: "12px" }}>
-                      You can start call only at appointment time
-                    </p>
-                  )}
+                {/* If time NOT reached → show message */}
+{selectedAppointment.type?.toLowerCase() === "videocall" &&
+  selectedAppointment.status?.toLowerCase() === "approved" &&
+  !isAppointmentTime(selectedAppointment.rawDate, selectedAppointment.time) && (
+    <p style={{ color: "red", fontSize: "12px" }}>
+      You can start call only at appointment time
+    </p>
+)}
+
+
+{/* ✅ If time reached → show Start Call button */}
+{
+  selectedAppointment.status?.toLowerCase() === "approved" &&(
+    <button
+      className="dappv-btn-startcall"
+      onClick={() => startVideoCall(selectedAppointment)}
+    >
+      Start Call
+    </button>
+)}
 
                 {selectedAppointment.status?.toLowerCase() === "approved" && (
+
                   <button
                     className="dappv-btn-complete"
                     onClick={() => handleStatusUpdate(selectedAppointment.id, "completed")}
