@@ -5,7 +5,7 @@ import DoctorFooter from "../components/DoctorFooter";
 import Calendar from "../components/Calendar";
 import GenderChart from "../components/GenderChart";
 
-import { FaUserFriends, FaHospitalUser, FaClock, FaCheckCircle } from "react-icons/fa";
+import { FaUserFriends, FaHospitalUser, FaClock, FaCheckCircle, FaCheck, FaTimesCircle } from "react-icons/fa";
 
 export default function DoctorDashboard() {
   const [open, setOpen] = useState(true);
@@ -15,6 +15,7 @@ export default function DoctorDashboard() {
   const [completed, setCompleted] = useState(0);
   const [todayAppointments, setTodayAppointments] = useState([]);
   const [hoveredId, setHoveredId] = useState(null);
+  const [appointmentRequests, setAppointmentRequests] = useState([]);
 
   // Layout Constants
   const sidebarWidth = open ? "250px" : "100px";
@@ -52,6 +53,7 @@ export default function DoctorDashboard() {
 
     fetchDashboard();
     fetchTodayAppointments();
+    fetchAppointmentRequests();
   }, []);
 
   const fetchTodayAppointments = async () => {
@@ -117,6 +119,54 @@ export default function DoctorDashboard() {
       console.log("Complete Error:", error);
     }
   };
+
+  // fetch appointmment in doctor dashboard
+  const fetchAppointmentRequests = async () => {
+  try {
+    const res = await fetch(
+      `${process.env.REACT_APP_API_URL}/api/appointment/requests`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+        credentials: "include",
+      }
+    );
+
+    const data = await res.json();
+    setAppointmentRequests(data);
+
+  } catch (error) {
+    console.log("Request Error:", error);
+    setAppointmentRequests([]);
+  }
+};
+
+const updateStatus = async (id, status) => {
+  try {
+    await fetch(
+      `${process.env.REACT_APP_API_URL}/api/appointment/${id}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+        credentials: "include",
+        body: JSON.stringify({ status }),
+      }
+    );
+
+    // refresh both sections
+    fetchAppointmentRequests();
+    fetchTodayAppointments();
+
+  } catch (error) {
+    console.log("Status Update Error:", error);
+  }
+};
 
   return (
     <div style={{ minHeight: "100vh", background: "#F8F9FD" }}>
@@ -270,7 +320,70 @@ export default function DoctorDashboard() {
             </div>
             <div style={cardStyle}>
               <h4 style={titleStyle}>Appointment Request</h4>
-              <div style={placeholderBox}>Requests List</div>
+              <div style={{ ...listContainer, marginTop: "10px", flex: 1 }}>
+  {appointmentRequests.length > 0 ? (
+    appointmentRequests.map((req) => (
+      <div
+  key={req._id}
+  style={{
+    padding: "10px",
+    borderRadius: "10px",
+    background: "#F8F9FD",
+    display: "flex",
+    flexDirection: "column",
+    gap: "6px"
+  }}
+>
+  {/* 🔹 TOP ROW: NAME + ICONS */}
+  <div
+    style={{
+      display: "flex",
+      justifyContent: "space-between",
+      alignItems: "center"
+    }}
+  >
+    <div style={{ fontSize: "14px", fontWeight: "500" }}>
+      {req.patientName}
+    </div>
+
+    {/* ✅ ICONS BESIDE NAME */}
+    <div style={{ display: "flex", gap: "12px" }}>
+      
+      <FaCheck
+        onClick={() => updateStatus(req._id, "approved")}
+        style={{
+          color: "#22c55e",
+          cursor: "pointer",
+          fontSize: "26px",
+          marginTop: "10px"
+        }}
+        title="Accept"
+      />
+
+      <FaTimesCircle
+        onClick={() => updateStatus(req._id, "rejected")}
+        style={{
+          color: "#ef4444",
+          cursor: "pointer",
+          fontSize: "30px"
+        }}
+        title="Reject"
+      />
+    </div>
+  </div>
+
+  {/* 🔹 DATE + TIME BELOW */}
+  <div style={{ fontSize: "12px", color: "#64748b" }}>
+    {new Date(req.date).toLocaleDateString()} • {req.time}
+  </div>
+</div>
+    ))
+  ) : (
+    <p style={{ fontSize: "13px", color: "#94a3b8" }}>
+      No pending requests
+    </p>
+  )}
+</div>
             </div>
             <div style={cardStyle}>
               <h4 style={titleStyle}>Calendar</h4>
@@ -304,7 +417,8 @@ const cardStyle = {
   borderRadius: "15px",
   boxShadow: "0 4px 15px rgba(0,0,0,0.04)",
   display: "flex",
-  flexDirection: "column"
+  flexDirection: "column",
+  height: "100%"
 };
 
 const iconCircleStyle = {
