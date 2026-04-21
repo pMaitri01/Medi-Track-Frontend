@@ -21,16 +21,33 @@ const VideoCall = () => {
           }
         );
 
+        // ❗ check backend error first
+        if (!response.ok) {
+          const errorText = await response.text();
+          console.error("Backend Error:", errorText);
+          return;
+        }
+
         const data = await response.json();
 
-        const { meetingLink, role } = data;
+        console.log("Meeting API Response:", data);
+
+        const { meetingLink, role } = data || {};
+
+        // ❗ protect against undefined
+        if (!meetingLink) {
+          console.error("meetingLink is missing from API response");
+          return;
+        }
 
         const roomName = meetingLink.split("/").pop();
-        const domain = "meet.jit.si";
 
-        // ✅ Clear previous iframe if any
         const container = document.getElementById("jitsi-container");
-        if (container) container.innerHTML = "";
+        if (!container) return;
+
+        container.innerHTML = "";
+
+        const domain = "meet.jit.si";
 
         const options = {
           roomName,
@@ -59,11 +76,8 @@ const VideoCall = () => {
 
     fetchMeeting();
 
-    // ✅ cleanup on unmount
     return () => {
-      if (api) {
-        api.dispose();
-      }
+      if (api) api.dispose();
     };
   }, [appointmentId]);
 
