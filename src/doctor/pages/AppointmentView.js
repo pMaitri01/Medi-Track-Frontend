@@ -12,6 +12,25 @@ export default function DoctorAppointmentView() {
   const navigate = useNavigate();
   const user = JSON.parse(localStorage.getItem("user"));
 
+  const getDateTime = (dateStr, timeStr) => {
+  const date = new Date(dateStr);
+
+  if (timeStr) {
+    let [time, modifier] = timeStr.split(" ");
+    let [h, m] = time.split(":");
+
+    let hours = parseInt(h, 10);
+    let minutes = parseInt(m, 10);
+
+    if (modifier === "PM" && hours !== 12) hours += 12;
+    if (modifier === "AM" && hours === 12) hours = 0;
+
+    date.setHours(hours, minutes, 0, 0);
+  }
+
+  return date;
+};
+
   useEffect(() => {
     fetchAppointments();
   }, []);
@@ -63,7 +82,10 @@ export default function DoctorAppointmentView() {
           img: `https://ui-avatars.com/api/?name=${item.patient?.firstName || "U"}&background=random&color=fff`,
         }));
 
-      setAppointments(formatted);
+      const sorted = formatted.sort((a, b) => {
+  return getDateTime(a.rawDate, a.time) - getDateTime(b.rawDate, b.time);
+});
+setAppointments(sorted);
     } catch (error) {
       console.error("Fetch Error:", error);
     } finally {
