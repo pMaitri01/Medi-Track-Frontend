@@ -111,6 +111,14 @@ const PatientHome = () => {
     return now >= startWindow && now <= endWindow;
   };
 
+  const joinVideoCall = (appointment) => {
+  navigate(`/video-call/${appointment._id}`, {
+    state: {
+      role: "patient",
+    },
+  });
+};
+
   const handleCancelAppointment = async () => {
     if (!upcomingAppointment) return;
 
@@ -286,19 +294,16 @@ const PatientHome = () => {
   canStartCall ? (
     <button
       className="btn-primary"
-     onClick={() => {
-  console.log("APPOINTMENT:", upcomingAppointment);
-  console.log("APPOINTMENT ID:", upcomingAppointment?._id);
-
-  navigate(`/video-call/${upcomingAppointment._id}?role=patient`);
-}}
+      onClick={() => {
+        navigate(`/video-call/${upcomingAppointment._id}?role=patient`);
+      }}
     >
       Join Call
     </button>
   ) : (
     <p style={{ color: "#888", fontSize: "14px" }}>
-      Call available near appointment time
-    </p>
+  You can join 10 minutes before appointment time
+</p>
   )
 )}
   <button className="btn-outline">Reschedule</button>

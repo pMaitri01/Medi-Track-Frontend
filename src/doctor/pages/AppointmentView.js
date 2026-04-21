@@ -5,12 +5,12 @@ import DoctorNavbar from "../components/DoctorNavbar";
 import { useNavigate } from "react-router-dom";
 
 export default function DoctorAppointmentView() {
-  const [open, setOpen]                           = useState(true);
-  const [appointments, setAppointments]           = useState([]);
-  const [loading, setLoading]                     = useState(true);
+  const [open, setOpen] = useState(true);
+  const [appointments, setAppointments] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [selectedAppointment, setSelectedAppointment] = useState(null);
-const navigate = useNavigate();
-const user = JSON.parse(localStorage.getItem("user"));
+  const navigate = useNavigate();
+  const user = JSON.parse(localStorage.getItem("user"));
 
   useEffect(() => {
     fetchAppointments();
@@ -36,20 +36,32 @@ const user = JSON.parse(localStorage.getItem("user"));
       const appointmentArray = Array.isArray(data) ? data : data.appointments || [];
 
       const formatted = appointmentArray
-  .filter((item) => item.status?.toLowerCase() !== "completed")
-  .map((item) => ({
-    id:     item._id,
-    patientId: item.patient?._id || item.patient,
-    name:   `${item.patient?.firstName || ""} ${item.patient?.lastName || ""}`.trim() || "Unknown",
-    email:  item.patient?.email       || "N/A",
-    phone:  item.patient?.mobile || "N/A",
-    gender: item.patient?.gender      || "N/A",
-    time:   item.time,
-    date:   new Date(item.date).toLocaleDateString(),
-    status: item.status,
-    type:   item.type || item.appointmentType || "N/A", // ✅ ADD THIS
-    img:    `https://ui-avatars.com/api/?name=${item.patient?.firstName || "U"}&background=random&color=fff`,
-  }));
+        .filter((item) => item.status?.toLowerCase() !== "completed")
+        .map((item) => ({
+          id: item._id,
+          patientId: item.patient?._id || item.patient,
+
+          name:
+            `${item.patient?.firstName || ""} ${item.patient?.lastName || ""}`.trim() ||
+            "Unknown",
+
+          email: item.patient?.email || "N/A",
+          phone: item.patient?.mobile || "N/A",
+          gender: item.patient?.gender || "N/A",
+
+          time: item.time,
+
+          // ✅ KEEP ORIGINAL DATE
+          rawDate: item.date,
+
+          // ✅ DISPLAY DATE
+          date: new Date(item.date).toLocaleDateString(),
+
+          status: item.status,
+          type: item.type || item.appointmentType || "N/A",
+
+          img: `https://ui-avatars.com/api/?name=${item.patient?.firstName || "U"}&background=random&color=fff`,
+        }));
 
       setAppointments(formatted);
     } catch (error) {
@@ -58,6 +70,7 @@ const user = JSON.parse(localStorage.getItem("user"));
       setLoading(false);
     }
   };
+
 
   const handleStatusUpdate = async (id, newStatus) => {
     try {
@@ -85,14 +98,27 @@ const user = JSON.parse(localStorage.getItem("user"));
       console.error("Error updating status:", error);
     }
   };
-const startVideoCall = (appointment) => {
-  navigate(`/video-call/${appointment.id}?role=doctor`, {
-    state: {
-      role: "doctor",
-      patientId: appointment.patientId,
-    },
-  });
-};
+
+  const startVideoCall = (appointment) => {
+    navigate(`/video-call/${appointment.id}`, {
+      state: {
+        role: "doctor",
+        patientId: appointment.patientId,
+      },
+    });
+  };
+
+  const isAppointmentTime = (rawDate, time) => {
+    const now = new Date();
+
+    const appointmentDateTime = new Date(rawDate);
+    const [hours, minutes] = time.split(":");
+
+    appointmentDateTime.setHours(hours, minutes, 0);
+
+    return now >= appointmentDateTime;
+  };
+
   return (
     <>
       <DoctorNavbar open={open} setOpen={setOpen} />
@@ -140,10 +166,10 @@ const startVideoCall = (appointment) => {
                     <td>{item.time}</td>
                     <td>{item.date}</td>
                     <td>
-  <span className={`dappv-type ${item.type?.toLowerCase()}`}>
-    {item.type}
-  </span>
-</td>
+                      <span className={`dappv-type ${item.type?.toLowerCase()}`}>
+                        {item.type}
+                      </span>
+                    </td>
                     <td>
                       <span className={`dappv-status ${item.status.toLowerCase()}`}>
                         {item.status}
@@ -222,17 +248,15 @@ const startVideoCall = (appointment) => {
                     </button>
                   </>
                 )}
-                 {selectedAppointment.type?.toLowerCase() === "video" &&
- selectedAppointment.status?.toLowerCase() === "approved" && (
-  <button
-    className="dappv-btn-video"
-    onClick={() => startVideoCall(selectedAppointment)}
-  >
-    🎥 Start Video Call
-  </button>
-)}
+                {selectedAppointment.type?.toLowerCase() === "video" &&
+                  selectedAppointment.status?.toLowerCase() === "approved" &&
+                  !isAppointmentTime(selectedAppointment.rawDate, selectedAppointment.time) && (
+                    <p style={{ color: "red", fontSize: "12px" }}>
+                      You can start call only at appointment time
+                    </p>
+                  )}
 
-                {selectedAppointment.status?.toLowerCase() === "accepted" && (
+                {selectedAppointment.status?.toLowerCase() === "approved" && (
                   <button
                     className="dappv-btn-complete"
                     onClick={() => handleStatusUpdate(selectedAppointment.id, "completed")}

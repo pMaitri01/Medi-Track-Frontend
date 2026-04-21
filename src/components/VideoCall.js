@@ -1,633 +1,115 @@
-// // import { useEffect, useRef, useState, useCallback } from "react";
-// // import { useParams, useLocation } from "react-router-dom";
-// // import socket from "../services/socket";
-// // import {
-// //   getLocalStream,
-// //   createPeerConnection,
-// //   createOffer,
-// //   handleOffer,
-// //   handleAnswer,
-// //   handleIceCandidate,
-// //   endCall,
-// // } from "../services/webrtc";
-
-// // export default function VideoCall() {
-// //   const { roomId } = useParams();
-// //   const location = useLocation();
-// //   const role = new URLSearchParams(location.search).get("role");
-// //   const userId = localStorage.getItem("userId"); // adjust if needed
-
-// //   const localVideoRef = useRef(null);
-// //   const remoteVideoRef = useRef(null);
-
-// //   const [callState, setCallState] = useState("idle");
-// //   const [isMuted, setIsMuted] = useState(false);
-// //   const [isCamOff, setIsCamOff] = useState(false);
-
-// //   // Attach stream
-// //   const attachStream = (ref, stream) => {
-// //     if (ref.current) {
-// //       ref.current.srcObject = stream;
-// //     }
-// //   };
-
-// //   const onRemoteStream = useCallback((stream) => {
-// //     attachStream(remoteVideoRef, stream);
-// //     setCallState("active");
-// //   }, []);
-
-// //   useEffect(() => {
-// //     // ✅ Connect socket safely
-// //     if (!socket.connected) {
-// //       socket.connect();
-// //     }
-
-// //     socket.emit("join-room", { roomId, userId, role });
-
-// //     // ✅ Start camera with ERROR HANDLING
-// //     // const startMedia = async () => {
-// //     //   try {
-// //     //     const stream = await getLocalStream();
-// //     //     attachStream(localVideoRef, stream);
-// //     //   } catch (err) {
-// //     //     console.error("Camera error:", err.name, err.message);
-// //     //     alert("Camera/Microphone access failed: " + err.message);
-// //     //   }
-// //     // };
-
-// //     const startMedia = async () => {
-// //   try {
-// //     const stream = await getLocalStream();
-// //     attachStream(localVideoRef, stream);
-
-// //     // ✅ Create peer AFTER camera ready
-// //     createPeerConnection(socket, roomId, onRemoteStream);
-
-// //   } catch (err) {
-// //     console.error("Camera error:", err.name, err.message);
-// //   }
-// // };
-// //     startMedia();
-
-// //     // 👇 SOCKET EVENTS
-
-// //     socket.on("user-joined", async () => {
-// //   console.log("User joined room");
-
-// //   // ✅ BOTH sides create peer connection
-// //   createPeerConnection(socket, roomId, onRemoteStream);
-
-// //   // ✅ Doctor sends offer when patient joins
-// //   if (role === "doctor") {
-// //     createOffer(socket, roomId);
-// //     setCallState("waiting");
-// //   }
-// // });
-
-// //    socket.on("offer", async (offer) => {
-// //   console.log("Received offer");
-
-// //   // ✅ Ensure peer exists
-// //   createPeerConnection(socket, roomId, onRemoteStream);
-
-// //   await handleOffer(offer, socket, roomId);
-
-// //   setCallState("waiting");
-// // });
-
-// //     socket.on("answer", async (answer) => {
-// //       await handleAnswer(answer);
-// //     });
-
-// //     socket.on("ice-candidate", async (candidate) => {
-// //       await handleIceCandidate(candidate);
-// //     });
-
-// //     socket.on("call-ended", () => {
-// //       endCall();
-// //       setCallState("ended");
-// //     });
-
-// //     return () => {
-// //       socket.off("user-joined");
-// //       socket.off("call-started");
-// //       socket.off("offer");
-// //       socket.off("answer");
-// //       socket.off("ice-candidate");
-// //       socket.off("call-ended");
-
-// //       socket.disconnect();
-// //       endCall();
-// //     };
-// //   }, [roomId, userId, role, onRemoteStream]);
-
-// //   // ▶️ Doctor starts call
-// // //   const handleStartCall = () => {
-// // //     socket.emit("start-call", roomId);
-// // //     createOffer(socket, roomId);
-// // //     setCallState("waiting");
-// // //   };
-// // const handleStartCall = () => {
-// //   setCallState("waiting");
-// // };
-
-// //   // ❌ End call
-// //   const handleEndCall = () => {
-// //     socket.emit("end-call", roomId);
-// //     endCall();
-// //     setCallState("ended");
-// //   };
-
-// //   // 🔇 Mute toggle
-// //   const toggleMute = () => {
-// //     const stream = localVideoRef.current?.srcObject;
-// //     if (stream) {
-// //       stream.getAudioTracks().forEach((t) => (t.enabled = !t.enabled));
-// //       setIsMuted((m) => !m);
-// //     }
-// //   };
-
-// //   // 📷 Camera toggle
-// //   const toggleCamera = () => {
-// //     const stream = localVideoRef.current?.srcObject;
-// //     if (stream) {
-// //       stream.getVideoTracks().forEach((t) => (t.enabled = !t.enabled));
-// //       setIsCamOff((c) => !c);
-// //     }
-// //   };
-
-// //   if (callState === "ended") {
-// //     return <div className="text-center p-8">Call ended. Thank you!</div>;
-// //   }
-
-// //   return (
-// //     <div className="flex flex-col items-center gap-4 p-4 bg-gray-900 min-h-screen">
-// //       {/* VIDEO AREA */}
-// //       <div className="relative w-full max-w-3xl aspect-video bg-black rounded-xl overflow-hidden">
-        
-// //         {/* Remote Video */}
-// //         <video
-// //           ref={remoteVideoRef}
-// //           autoPlay
-// //           playsInline
-// //           className="w-full h-full object-cover"
-// //         />
-
-// //         {/* Local Video */}
-// //         <video
-// //           ref={localVideoRef}
-// //           autoPlay
-// //           playsInline
-// //           muted
-// //           className="absolute bottom-4 right-4 w-36 h-24 rounded-lg border-2 border-white object-cover"
-// //         />
-
-// //         {/* Overlay */}
-// //         {callState !== "active" && (
-// //           <div className="absolute inset-0 flex items-center justify-center bg-black/60 text-white text-lg">
-// //             {callState === "idle" && "Ready to connect..."}
-// //             {callState === "waiting" && "Waiting for other participant..."}
-// //           </div>
-// //         )}
-// //       </div>
-
-// //       {/* CONTROLS */}
-// //       <div className="flex items-center gap-4 mt-2">
-// //         <button
-// //           onClick={toggleMute}
-// //           className="px-4 py-2 bg-gray-700 text-white rounded-full"
-// //         >
-// //           {isMuted ? "Unmute" : "Mute"}
-// //         </button>
-
-// //         <button
-// //           onClick={toggleCamera}
-// //           className="px-4 py-2 bg-gray-700 text-white rounded-full"
-// //         >
-// //           {isCamOff ? "Cam On" : "Cam Off"}
-// //         </button>
-
-// //         {/* Doctor only */}
-// //         {role === "doctor" && callState === "idle" && (
-// //           <button
-// //             onClick={handleStartCall}
-// //             className="px-6 py-2 bg-green-600 text-white rounded-full font-semibold"
-// //           >
-// //             Start Call
-// //           </button>
-// //         )}
-
-// //         <button
-// //           onClick={handleEndCall}
-// //           className="px-6 py-2 bg-red-600 text-white rounded-full font-semibold"
-// //         >
-// //           End Call
-// //         </button>
-// //       </div>
-// //     </div>
-// //   );
-// // }
-
-
-// import { useEffect, useRef, useState, useCallback } from "react";
-// import { useParams, useLocation } from "react-router-dom";
-
-// import socket from "../services/socket";
-// import {
-//   getLocalStream,
-//   createPeerConnection,
-//   createOffer,
-//   handleOffer,
-//   handleAnswer,
-//   handleIceCandidate,
-//   endCall,
-// } from "../services/webrtc";
-
-// export default function VideoCall() {
-// //   const { roomId } = useParams();
-// const { appointmentId } = useParams();   // ✅ ONLY THIS
-// const roomId = appointmentId;  // ✅ unify variable
-// const hasJoinedRef = useRef(false);
-// const hasOfferSentRef = useRef(false);
-
-
-//   const location = useLocation();
-//   const role = new URLSearchParams(location.search).get("role");
-// //   const userId = localStorage.getItem("userId");
-
-// // const { appointmentId } = useParams();
-// // console.log("ROOM ID:", id);
-// console.log("ROLE:", role);
-
-// // const userId = localStorage.getItem("userId");
-// const userIdRef = useRef(
-//   localStorage.getItem("userId") || "test-user-" + Math.random()
-// );
-// const userId = userIdRef.current;
-//   const localVideoRef = useRef(null);
-//   const remoteVideoRef = useRef(null);
-
-//   const [callState, setCallState] = useState("idle");
-//   const [isMuted, setIsMuted] = useState(false);
-//   const [isCamOff, setIsCamOff] = useState(false);
-// console.log("ROOM ID:", roomId);
-// console.log("USER ID:", userId);
-// console.log("ROLE:", role);
-
-//   // Attach stream
-//   const attachStream = (ref, stream) => {
-//     if (ref.current) ref.current.srcObject = stream;
-//   };
-
-//   const onRemoteStream = useCallback((stream) => {
-//     attachStream(remoteVideoRef, stream);
-//     setCallState("active");
-//   }, []);
-
-// useEffect(() => {
-//   if (!socket.connected) socket.connect();
-
-//   let peerCreated = false;
-//   let offerSent = false;
-
-//   socket.emit("join-room", { roomId, userId, role });
-
-//   const init = async () => {
-//     const stream = await getLocalStream();
-//     attachStream(localVideoRef, stream);
-
-//     if (!peerCreated) {
-//       createPeerConnection(socket, roomId, onRemoteStream);
-//       peerCreated = true;
-//     }
-
-//     if (role === "doctor" && !offerSent) {
-//       offerSent = true;
-
-//       console.log("Doctor sending offer...");
-//       createOffer(socket, roomId);
-//       setCallState("waiting");
-//     }
-//   };
-
-//   init();
-
-//   socket.off("offer");
-//   socket.off("answer");
-//   socket.off("ice-candidate");
-
-//   socket.on("offer", async (offer) => {
-//     console.log("Received offer");
-
-//     if (!peerCreated) {
-//       createPeerConnection(socket, roomId, onRemoteStream);
-//       peerCreated = true;
-//     }
-
-//     await handleOffer(offer, socket, roomId);
-//     setCallState("waiting");
-//   });
-
-//   socket.on("answer", async (answer) => {
-//     console.log("Received answer");
-//     await handleAnswer(answer);
-//   });
-
-//   socket.on("ice-candidate", async (candidate) => {
-//     await handleIceCandidate(candidate);
-//   });
-
-//   socket.on("call-ended", () => {
-//     endCall();
-//     setCallState("ended");
-//   });
-
-//   return () => {
-//     socket.disconnect();
-//     endCall();
-//   };
-// }, [roomId, userId, role]);
-
-//   // ❌ End call
-//   const handleEndCall = () => {
-//     socket.emit("end-call", roomId);
-//     endCall();
-//     setCallState("ended");
-//   };
-
-//   // 🔇 Mute
-//   const toggleMute = () => {
-//     const stream = localVideoRef.current?.srcObject;
-//     if (stream) {
-//       stream.getAudioTracks().forEach((t) => (t.enabled = !t.enabled));
-//       setIsMuted((m) => !m);
-//     }
-//   };
-
-//   // 📷 Camera
-//   const toggleCamera = () => {
-//     const stream = localVideoRef.current?.srcObject;
-//     if (stream) {
-//       stream.getVideoTracks().forEach((t) => (t.enabled = !t.enabled));
-//       setIsCamOff((c) => !c);
-//     }
-//   };
-
-//   if (callState === "ended") {
-//     return <div className="text-center p-8">Call ended. Thank you!</div>;
-//   }
-
-//   return (
-//     <div className="flex flex-col items-center gap-4 p-4 bg-gray-900 min-h-screen">
-      
-//       {/* VIDEO AREA */}
-//       <div className="relative w-full max-w-3xl aspect-video bg-black rounded-xl overflow-hidden">
-        
-//         {/* Remote */}
-//         <video
-//           ref={remoteVideoRef}
-//           autoPlay
-//           playsInline
-//           className="w-full h-full object-cover"
-//         />
-
-//         {/* Local */}
-//         <video
-//           ref={localVideoRef}
-//           autoPlay
-//           playsInline
-//           muted
-//           className="absolute bottom-4 right-4 w-36 h-24 rounded-lg border-2 border-white object-cover"
-//         />
-
-//         {/* Overlay */}
-//         {callState !== "active" && (
-//           <div className="absolute inset-0 flex items-center justify-center bg-black/60 text-white text-lg">
-//             {callState === "idle" && "Ready to connect..."}
-//             {callState === "waiting" && "Connecting..."}
-//           </div>
-//         )}
-//       </div>
-
-//       {/* CONTROLS */}
-//       <div className="flex items-center gap-4 mt-2">
-//         <button onClick={toggleMute} className="px-4 py-2 bg-gray-700 text-white rounded-full">
-//           {isMuted ? "Unmute" : "Mute"}
-//         </button>
-
-//         <button onClick={toggleCamera} className="px-4 py-2 bg-gray-700 text-white rounded-full">
-//           {isCamOff ? "Cam On" : "Cam Off"}
-//         </button>
-
-//         <button onClick={handleEndCall} className="px-6 py-2 bg-red-600 text-white rounded-full font-semibold">
-//           End Call
-//         </button>
-//       </div>
-//     </div>
-//   );
-// }
-import { useEffect, useRef, useState, useCallback } from "react";
-import { useParams, useLocation } from "react-router-dom";
-
-import socket from "../services/socket";
-import {
-  getLocalStream,
-  createPeerConnection,
-  createOffer,
-  handleOffer,
-  handleAnswer,
-  handleIceCandidate,
-  endCall,
-} from "../services/webrtc";
-
-export default function VideoCall() {
+// import { useEffect } from "react";
+// import { useParams } from "react-router-dom";
+
+// const VideoCall = () => {
+//   const { appointmentId } = useParams();
+
+//   useEffect(() => {
+//     const fetchMeeting = async () => {
+//       try {
+//         const response = await fetch(
+//           `${process.env.REACT_APP_API_URL}/api/appointment/meeting/${appointmentId}`,
+//           {
+//             method: "GET",
+//             headers: {
+//               "Content-Type": "application/json",
+//               // ✅ If you are using token auth
+//               Authorization: `Bearer ${localStorage.getItem("token")}`,
+//             },
+//             credentials: "include",
+//           }
+//         );
+
+//         const data = await response.json();
+
+//         const { meetingLink, role } = data;
+
+//         const roomName = meetingLink.split("/").pop();
+
+//         const domain = "meet.jit.si";
+
+//         const options = {
+//           roomName: roomName,
+//           width: "100%",
+//           height: 600,
+//           parentNode: document.getElementById("jitsi-container"),
+
+//           configOverwrite: {
+//             prejoinPageEnabled: false,
+//           },
+
+//           interfaceConfigOverwrite: {
+//             SHOW_JITSI_WATERMARK: false,
+//           },
+//         };
+
+//         const api = new window.JitsiMeetExternalAPI(domain, options);
+
+//         // ✅ DOCTOR enables waiting room
+//         api.addEventListener("videoConferenceJoined", () => {
+//           if (role === "doctor") {
+//             api.executeCommand("toggleLobby", true);
+//           }
+//         });
+
+//       } catch (error) {
+//         console.error("Error fetching meeting:", error);
+//       }
+//     };
+
+//     fetchMeeting();
+//   }, [appointmentId]);
+
+//   return <div id="jitsi-container"></div>;
+// };
+
+// export default VideoCall;
+
+
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+
+const VideoCall = () => {
   const { appointmentId } = useParams();
-  const roomId = appointmentId;
-
-  const location = useLocation();
-  const role = new URLSearchParams(location.search).get("role");
-
-  const userId = useRef(
-    localStorage.getItem("userId") ||
-      "test-user-" + Math.random().toString(36).substring(2)
-  ).current;
-
-  const localVideoRef = useRef(null);
-  const remoteVideoRef = useRef(null);
-
-  // ✅ SAFE FLAGS (IMPORTANT FIX)
-  const peerCreatedRef = useRef(false);
-  const offerSentRef = useRef(false);
-
-  const [callState, setCallState] = useState("idle");
-
-  const attachStream = (ref, stream) => {
-    if (ref.current) ref.current.srcObject = stream;
-  };
-
-  const onRemoteStream = useCallback((stream) => {
-    attachStream(remoteVideoRef, stream);
-    setCallState("active");
-  }, []);
+  const [meetingLink, setMeetingLink] = useState("");
 
   useEffect(() => {
-    if (!socket.connected) socket.connect();
-
-    // =========================
-    // INIT CALL
-    // =========================
-    const startCall = async () => {
+    const fetchMeeting = async () => {
       try {
-        const stream = await getLocalStream();
-        attachStream(localVideoRef, stream);
+        const response = await fetch(
+          `${process.env.REACT_APP_API_URL}/api/appointment/meeting/${appointmentId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },credentials: "include",
+          }
+        );
 
-        // create peer only once
-        if (!peerCreatedRef.current) {
-          createPeerConnection(socket, roomId, onRemoteStream);
-          peerCreatedRef.current = true;
-        }
+        const data = await response.json();
+        setMeetingLink(data.meetingLink);
 
-        socket.emit("join-room", { roomId, userId, role });
-
-        // doctor creates offer ONCE
-        if (role === "doctor" && !offerSentRef.current) {
-          offerSentRef.current = true;
-
-          console.log("Doctor creating offer...");
-          createOffer(socket, roomId);
-          setCallState("waiting");
-        }
-      } catch (err) {
-        console.error("Media error:", err);
+      } catch (error) {
+        console.error("Error fetching meeting:", error);
       }
     };
 
-    startCall();
-
-    // =========================
-    // SOCKET EVENTS
-    // =========================
-
-    const handleOfferEvent = async (offer) => {
-      console.log("Received offer");
-
-      if (!peerCreatedRef.current) {
-        createPeerConnection(socket, roomId, onRemoteStream);
-        peerCreatedRef.current = true;
-      }
-
-      await handleOffer(offer, socket, roomId);
-      setCallState("waiting");
-    };
-
-    const handleAnswerEvent = async (answer) => {
-      console.log("Received answer");
-      await handleAnswer(answer);
-    };
-
-    const handleIceEvent = async (candidate) => {
-      await handleIceCandidate(candidate);
-    };
-
-    const handleCallEnd = () => {
-      endCall();
-      setCallState("ended");
-    };
-
-    socket.on("offer", handleOfferEvent);
-    socket.on("answer", handleAnswerEvent);
-    socket.on("ice-candidate", handleIceEvent);
-    socket.on("call-ended", handleCallEnd);
-
-    // =========================
-    // CLEANUP
-    // =========================
-    return () => {
-      socket.off("offer", handleOfferEvent);
-      socket.off("answer", handleAnswerEvent);
-      socket.off("ice-candidate", handleIceEvent);
-      socket.off("call-ended", handleCallEnd);
-
-      socket.disconnect();
-      endCall();
-
-      peerCreatedRef.current = false;
-      offerSentRef.current = false;
-    };
-  }, [roomId, role, onRemoteStream]);
-
-  // =========================
-  // CONTROLS
-  // =========================
-
-  const handleEndCall = () => {
-    socket.emit("end-call", roomId);
-    endCall();
-    setCallState("ended");
-  };
-
-  const toggleMute = () => {
-    const stream = localVideoRef.current?.srcObject;
-    if (stream) {
-      stream.getAudioTracks().forEach((t) => (t.enabled = !t.enabled));
-    }
-  };
-
-  const toggleCamera = () => {
-    const stream = localVideoRef.current?.srcObject;
-    if (stream) {
-      stream.getVideoTracks().forEach((t) => (t.enabled = !t.enabled));
-    }
-  };
-
-  if (callState === "ended") {
-    return <div className="p-5 text-center">Call Ended</div>;
-  }
+    fetchMeeting();
+  }, [appointmentId]);
 
   return (
-    <div className="flex flex-col items-center p-4 bg-gray-900 min-h-screen">
-
-      <div className="relative w-full max-w-3xl aspect-video bg-black rounded-lg overflow-hidden">
-
-        {/* Remote Video */}
-        <video
-          ref={remoteVideoRef}
-          autoPlay
-          playsInline
-          className="w-full h-full object-cover"
-        />
-
-        {/* Local Video */}
-        <video
-          ref={localVideoRef}
-          autoPlay
-          playsInline
-          muted
-          className="absolute bottom-3 right-3 w-32 h-24 border rounded"
-        />
-
-        {callState !== "active" && (
-          <div className="absolute inset-0 flex items-center justify-center text-white bg-black/60">
-            {callState === "idle" && "Ready..."}
-            {callState === "waiting" && "Connecting..."}
-          </div>
-        )}
-      </div>
-
-      {/* CONTROLS */}
-      <div className="flex gap-3 mt-4">
-        <button onClick={toggleMute} className="px-4 py-2 bg-gray-700 text-white">
-          Mute
-        </button>
-
-        <button onClick={toggleCamera} className="px-4 py-2 bg-gray-700 text-white">
-          Camera
-        </button>
-
-        <button onClick={handleEndCall} className="px-4 py-2 bg-red-600 text-white">
-          End Call
-        </button>
-      </div>
+    <div style={{ width: "100%", height: "100vh" }}>
+      {meetingLink && (
+        <iframe
+          src={meetingLink}
+          title="Video Call"
+          width="100%"
+          height="100%"
+          allow="camera; microphone; fullscreen; display-capture"
+          style={{ border: 0 }}
+        ></iframe>
+      )}
     </div>
   );
-}
+};
+
+export default VideoCall;

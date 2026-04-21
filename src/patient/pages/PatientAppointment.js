@@ -96,7 +96,7 @@ const getBadge = (status = "") => {
 };
 
 // ── Appointment Card ────────────────────────────────────────────────────────
-function AppointmentCard({ appt, onCancel, onStartConsultation, isNext }) {
+function AppointmentCard({ appt, onCancel, onStartConsultation, isNext, onViewDetails }) {
   const upcoming = isUpcoming(appt.date, appt.time);
   const badge = getBadge(appt.status);
   // const canJoinVideoCall =
@@ -135,7 +135,8 @@ const canJoinVideoCall = (() => {
   // allow till 1 hour after start also
 })();
   return (
-    <div className={`pa-doc-card${isNext ? " pa-doc-card--next" : ""}`}>
+    <div className={`pa-doc-card${isNext ? " pa-doc-card--next" : ""}`}  onClick={() => onViewDetails(appt)}
+  style={{ cursor: "pointer" }}>
       {isNext && <span className="pa-next-badge">📌 Next Appointment</span>}
       <span className={`pa-badge pa-badge--top ${badge.cls}`}>
   {badge.label}
@@ -173,49 +174,57 @@ const canJoinVideoCall = (() => {
           </div>
         )} */}
 
-        {upcoming && appt.status !== "cancelled" && appt.status !== "completed" && (
-          <div className="pa-doc-actions">
-            <button
-              className="pa-btn-reschedule"
-              onClick={() => alert(`Reschedule: ${appt.id}`)}
-            >
-              📆 Reschedule
-            </button>
-            {/* <button
-              className="pa-btn-cancel"
-              onClick={() => onCancel(appt.id)}
-            >
-              ✖ Cancel
-            </button> */}
-            <button
-  className="pa-btn-cancel"
-  onClick={() => {
-    const confirmCancel = window.confirm(
-      "Are you sure you want to cancel this appointment?"
-    );
-    if (confirmCancel) {
-      onCancel(appt.id);
-    }
-  }}
->
-  ✖ Cancel
-</button>
-           {appt.type?.toLowerCase() === "video" && (
-  canJoinVideoCall ? (
+       {upcoming && appt.status !== "cancelled" && appt.status !== "completed" && (
+  <div className="pa-doc-actions">
+
+    {/* ✅ RESCHEDULE */}
     <button
-      className="pa-btn-consult"
-      onClick={() => onStartConsultation(appt)}
+      className="pa-btn-reschedule"
+      onClick={(e) => {
+        e.stopPropagation();   // 🔥 PREVENT MODAL OPEN
+        alert(`Reschedule: ${appt.id}`);
+      }}
     >
-      🎥 Join Call
+      📆 Reschedule
     </button>
-  ) : (
-    <p style={{ fontSize: "12px", color: "#888" }}>
-      Call will be available near appointment time
-    </p>
-  )
+
+    {/* ✅ CANCEL */}
+    <button
+      className="pa-btn-cancel"
+      onClick={(e) => {
+        e.stopPropagation();   // 🔥 IMPORTANT
+        const confirmCancel = window.confirm(
+          "Are you sure you want to cancel this appointment?"
+        );
+        if (confirmCancel) {
+          onCancel(appt.id);
+        }
+      }}
+    >
+      ✖ Cancel
+    </button>
+
+    {/* ✅ VIDEO CALL */}
+    {appt.type?.toLowerCase() === "video" && (
+      canJoinVideoCall ? (
+        <button
+          className="pa-btn-consult"
+          onClick={(e) => {
+            e.stopPropagation();   // 🔥 IMPORTANT
+            onStartConsultation(appt);
+          }}
+        >
+          🎥 Join Call
+        </button>
+      ) : (
+        <p style={{ fontSize: "12px", color: "#888" }}>
+          Call will be available near appointment time
+        </p>
+      )
+    )}
+
+  </div>
 )}
-          </div>
-        )}
       </div>
     </div>
   );
@@ -228,6 +237,7 @@ function Section({
   onCancel,
   onStartConsultation,
   highlightFirst,
+    onViewDetails,
 }) {
   return (
     <section className="pa-section">
@@ -243,6 +253,7 @@ function Section({
               onCancel={onCancel}
               onStartConsultation={onStartConsultation}
               isNext={highlightFirst && idx === 0}
+              onViewDetails={onViewDetails}
             />
           ))}
         </div>
@@ -257,7 +268,8 @@ export default function PatientAppointment() {
   const [appointments, setAppointments] = useState([]);
   const [loading, setLoading]           = useState(true);
   const [error, setError]               = useState("");
-
+const [selectedAppointment, setSelectedAppointment] = useState(null);
+const [showModal, setShowModal] = useState(false);
   useEffect(() => {
     loadAppointments();
   }, []);
@@ -265,7 +277,10 @@ export default function PatientAppointment() {
   
   const user = JSON.parse(localStorage.getItem("user"));
   const userId = user?._id;
-
+const handleViewDetails = (appt) => {
+  setSelectedAppointment(appt);
+  setShowModal(true);
+};
  const loadAppointments = async () => {
     setLoading(true);
     setError("");
@@ -290,17 +305,16 @@ export default function PatientAppointment() {
           return item.patient === userId;
         })
         .map((item) => ({
-          id: item._id,
-          doctorName:
-            item.doctor?.fullName || item.doctorName || "Unknown Doctor",
-          specialization:
-            item.doctor?.specialization || item.specialization,
-          doctorId: item.doctor?._id || item.doctor,
-          date: item.date,
-          time: item.time || "—",
-          status: item.status || "Pending",
-          type: item.type || item.appointmentType || "offline",
-        }));
+  id: item._id,
+  doctorName: item.doctor?.fullName || item.doctorName || "Unknown Doctor",
+  specialization: item.doctor?.specialization || item.specialization,
+  doctorId: item.doctor?._id || item.doctor,
+  date: item.date,
+  time: item.time || "—",
+  status: item.status || "Pending",
+  type: item.type || item.appointmentType || "offline",
+  meetingLink: item.meetingLink || "",   // ✅ ADD THIS
+}));
 
       setAppointments(mapped);
     } catch (err) {
@@ -412,16 +426,67 @@ const past = appointments
               onCancel={handleCancelAppointment}   
               onStartConsultation={handleStartConsultation}
               highlightFirst
+                onViewDetails={handleViewDetails}
             />
             <Section
               title="Past Appointments"
               appointments={past}
               onCancel={handleCancelAppointment}   // ✅ correct
               onStartConsultation={handleStartConsultation}
+                onViewDetails={handleViewDetails}
             />
           </>
         )}
       </main>
+      {showModal && selectedAppointment && (
+  <div className="pa-modal-overlay" onClick={() => setShowModal(false)}>
+    <div
+      className="pa-modal"
+      onClick={(e) => e.stopPropagation()}
+    >
+      <h2>Appointment Details</h2>
+
+      <p><strong>Doctor:</strong> {selectedAppointment.doctorName}</p>
+      <p><strong>Specialization:</strong> {selectedAppointment.specialization}</p>
+      <p><strong>Date:</strong> {formatDate(selectedAppointment.date)}</p>
+      <p><strong>Time:</strong> {selectedAppointment.time}</p>
+      <p><strong>Status:</strong> {selectedAppointment.status}</p>
+      <p>
+        <strong>Type:</strong>{" "}
+        {selectedAppointment.type === "video"
+          ? "Video Consultation"
+          : "In-Clinic"}
+      </p>
+
+      {/* ✅ VIDEO LINK */}
+      {selectedAppointment.type === "video" && (
+        <>
+          {selectedAppointment.meetingLink ? (
+            <a
+              href={selectedAppointment.meetingLink}
+              target="_blank"
+              rel="noreferrer"
+              className="pa-btn-consult"
+            >
+              🎥 Join Video Call
+            </a>
+          ) : (
+            <p style={{ color: "gray" }}>
+              Waiting for doctor to start meeting...
+            </p>
+          )}
+        </>
+      )}
+
+      <button
+        className="pa-btn-cancel"
+        onClick={() => setShowModal(false)}
+      >
+        Close
+      </button>
+    </div>
+  </div>
+)}
     </div>
   );
 }
