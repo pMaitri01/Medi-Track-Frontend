@@ -8,8 +8,9 @@
 import { io } from "socket.io-client";
 
 const socket = io(process.env.REACT_APP_API_URL, {
+  transports: ["websocket"],
   withCredentials: true,
-  autoConnect: false, // connect manually when needed
+  autoConnect: false,
 });
 
 export default socket;
