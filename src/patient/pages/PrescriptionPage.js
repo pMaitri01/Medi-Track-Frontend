@@ -8,7 +8,7 @@ const TIMING_ORDER = ["Morning", "Afternoon", "Night"];
 const TIMING_ICON = { Morning: "🌅", Afternoon: "🌇", Night: "🌙" };
 
 const DATES = ["All Time", "Last 7 Days", "Last Month"];
-
+ 
 const formatDate = (d) =>
   new Date(d).toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric" });
 
@@ -27,7 +27,9 @@ function PrescriptionCard({ rx, onView }) {
       <div className="rx-card-top">
         <img src={defaultDoctorImg} alt="doctor" className="rx-doc-img" />
         <div className="rx-card-info">
-          <h3 className="rx-doctor-name">{rx.doctor?.fullName}</h3>
+          <h3 className="rx-doctor-name">
+            {rx.doctor?.fullName ? `Dr. ${rx.doctor.fullName}` : "—"}
+          </h3>
           <span className="rx-spec-tag">{rx.doctor?.specialization}</span>        </div>
         {/* <span className={`rx-badge ${isActive ? "rx-badge--active" : "rx-badge--past"}`}>
         </span> */}
@@ -177,7 +179,7 @@ function PrescriptionModal({ rx, onClose }) {
           <div className="rx-modal-header-left">
             <img src={defaultDoctorImg} alt="doctor" className="rx-modal-img" />
             <div>
-              <h2>{rx.doctor?.fullName}</h2>
+              <h2>{rx.doctor ? `Dr. ${rx.doctor.fullName}` : ""}</h2>
               <p className="rx-modal-spec">{rx.specialization}</p>
             </div>
           </div>

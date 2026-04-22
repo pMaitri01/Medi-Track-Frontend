@@ -246,7 +246,7 @@ const PatientHome = () => {
                     <>
                       <div className="info-group">
                         <h3 className="dr-name">
-                          {upcomingAppointment.doctor?.fullName}
+                          {`Dr. ${upcomingAppointment.doctor?.fullName || ""}`}
                         </h3>
                         <p className="dr-specialty">
                           {upcomingAppointment.doctor?.specialization}
