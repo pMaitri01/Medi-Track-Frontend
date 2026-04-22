@@ -4,26 +4,27 @@ import "../css/AppointmentManagement.css";
 const FILTERS = ["All", "Pending", "Accepted", "Rejected"];
 
 const statusClass = {
-  Pending:  "am-badge am-badge-pending",
+  Pending: "am-badge am-badge-pending",
   Accepted: "am-badge am-badge-accepted",
   Rejected: "am-badge am-badge-rejected",
 };
 
 // ── Map backend fields to UI fields ──
 const mapAppointment = (a, i) => ({
-  id:      a._id || i,
+  id: a._id || i,
   patient: a.patient || "—",
-  doctor:  typeof a.doctor === "object" ? (a.doctor?.fullName || "—") : (a.doctor || "—"),
-  date:    a.date  || "—",
-  time:    a.time  || "—",
-  status:  a.status || "Pending",   // default to Pending if not set
+  doctor: typeof a.doctor === "object" ? (a.doctor?.fullName || "—") : (a.doctor || "—"),
+  date: a.date || "—",
+  time: a.time || "—",
+  type: a.type || "N/A",
+  status: a.status || "Pending",   // default to Pending if not set
 });
 
 const AppointmentManagement = () => {
   const [appointments, setAppointments] = useState([]);
-  const [loading, setLoading]           = useState(true);
-  const [error, setError]               = useState("");
-  const [filter, setFilter]             = useState("All");
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+  const [filter, setFilter] = useState("All");
 
   // ── Fetch appointments from backend on mount ──
   useEffect(() => {
@@ -134,6 +135,7 @@ const AppointmentManagement = () => {
                 <th>Doctor Name</th>
                 <th>Date</th>
                 <th>Time</th>
+                <th>Type</th>
                 <th>Status</th>
               </tr>
             </thead>
@@ -143,12 +145,17 @@ const AppointmentManagement = () => {
                   <td>{i + 1}</td>
                   <td className="am-patient">{a.patient?.firstName} {a.patient?.lastName}</td>
                   <td className="am-doctor">{a.doctor}</td>
-                  <td>{new Date(a.date).toLocaleDateString("en-IN",{
-                    day : "2-digit",
-                    month:"short",
-                    year:"numeric",
+                  <td>{new Date(a.date).toLocaleDateString("en-IN", {
+                    day: "2-digit",
+                    month: "short",
+                    year: "numeric",
                   })}</td>
                   <td>{a.time}</td>
+                  <td>
+                    <span className={`dappv-type ${a.type ? a.type.toLowerCase() : "default"}`}>
+                      {a.type || "N/A"}
+                    </span>
+                  </td>
                   <td><span className={statusClass[a.status]}>{a.status}</span></td>
                 </tr>
               ))}
