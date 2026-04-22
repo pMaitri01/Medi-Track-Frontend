@@ -13,7 +13,7 @@ const VideoCall = () => {
       );
       const data = await response.json();
 
-      const roomName = data.roomId; // IMPORTANT
+      const roomName = `meditrack-${appointmentId}`;
 
       const script = document.createElement("script");
       script.src = "https://meet.jit.si/external_api.js";
@@ -51,7 +51,7 @@ const VideoCall = () => {
         //   api.dispose();
         //   navigate("/"); // redirect to homepage
         // });
-        
+
         api.addEventListener("readyToClose", () => {
           api.dispose();
           navigate("/");
