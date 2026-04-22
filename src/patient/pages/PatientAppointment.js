@@ -306,7 +306,7 @@ const handleViewDetails = (appt) => {
         })
         .map((item) => ({
   id: item._id,
-  doctorName: item.doctor?.fullName || item.doctorName || "Unknown Doctor",
+  doctorName: `Dr. ${item.doctor?.fullName || item.doctorName || "Unknown Doctor"}`,
   specialization: item.doctor?.specialization || item.specialization,
   doctorId: item.doctor?._id || item.doctor,
   date: item.date,
