@@ -49,9 +49,9 @@ const PatientHome = () => {
             );
           })
           .sort(
-  (a, b) =>
-    parseDateTime(a.date, a.time) - parseDateTime(b.date, b.time)
-)[0];
+            (a, b) =>
+              parseDateTime(a.date, a.time) - parseDateTime(b.date, b.time)
+          )[0];
 
         setUpcomingAppointment(upcoming);
 
@@ -112,12 +112,12 @@ const PatientHome = () => {
   };
 
   const joinVideoCall = (appointment) => {
-  navigate(`/video-call/${appointment._id}`, {
-    state: {
-      role: "patient",
-    },
-  });
-};
+    navigate(`/video-call/${appointment._id}`, {
+      state: {
+        role: "patient",
+      },
+    });
+  };
 
   const handleCancelAppointment = async () => {
     if (!upcomingAppointment) return;
@@ -263,16 +263,16 @@ const PatientHome = () => {
                           <span>{upcomingAppointment.time}</span>
                         </div>
                         <div className="type-badge-container">
-  <span className={`type-badge ${upcomingAppointment.type}`}>
-    {upcomingAppointment.type === "video" ? "🎥 Video" : "🏥 In-Person"}
-  </span>
-</div>
+                          <span className={`type-badge ${upcomingAppointment.type}`}>
+                            {upcomingAppointment.type === "video" ? "🎥 Video" : "🏥 In-Person"}
+                          </span>
+                        </div>
                       </div>
 
-<div className="action-buttons">
+                      <div className="action-buttons">
 
-  {/* ✅ START CALL BUTTON */}
-  {/* {upcomingAppointment?.type === "video" && (
+                        {/* ✅ START CALL BUTTON */}
+                        {/* {upcomingAppointment?.type === "video" && (
     canStartCall ? (
       <button
         className="btn-primary"
@@ -290,43 +290,43 @@ const PatientHome = () => {
       </button>
     )
   )} */}
- {upcomingAppointment?.type === "video" && (
-  canStartCall ? (
-    // <button
-    //   className="btn-primary"
-    //   onClick={() => {
-    //     navigate(`/video-call/${upcomingAppointment._id}?role=patient`);
-    //   }}
-    // >
-    //   Join Call
-    // </button>
-    <button
-  onClick={() => navigate(`/video-call/${upcomingAppointment._id}`)}
->
-  Start Video Consultation
-</button>
-  ) : (
-    <p style={{ color: "#888", fontSize: "14px" }}>
-      You can join 10 minutes before appointment time
-    </p>
-  )
-)}
-  <button className="btn-outline">Reschedule</button>
+                        {upcomingAppointment?.type === "video" && (
+                          canStartCall ? (
+                            // <button
+                            //   className="btn-primary"
+                            //   onClick={() => {
+                            //     navigate(`/video-call/${upcomingAppointment._id}?role=patient`);
+                            //   }}
+                            // >
+                            //   Join Call
+                            // </button>
+                            <button className="btn-primary"
+                              onClick={() => navigate(`/video-call/${upcomingAppointment._id}`)}
+                            >
+                              Join Call
+                            </button>
+                          ) : (
+                            <p style={{ color: "#888", fontSize: "14px" }}>
+                              You can join 10 minutes before appointment time
+                            </p>
+                          )
+                        )}
+                        <button className="btn-outline">Reschedule</button>
 
-  <button
-    className="btn-danger-outline"
-    onClick={() => {
-      const confirmCancel = window.confirm(
-        "Are you sure you want to cancel this appointment?"
-      );
-      if (confirmCancel) {
-        handleCancelAppointment();
-      }
-    }}
-  >
-    Cancel
-  </button>
-</div>
+                        <button
+                          className="btn-danger-outline"
+                          onClick={() => {
+                            const confirmCancel = window.confirm(
+                              "Are you sure you want to cancel this appointment?"
+                            );
+                            if (confirmCancel) {
+                              handleCancelAppointment();
+                            }
+                          }}
+                        >
+                          Cancel
+                        </button>
+                      </div>
                     </>
                   ) : (
                     <div className="no-appt-state">
