@@ -41,11 +41,12 @@ const PatientHome = () => {
                 ? appt.patient._id
                 : appt.patient;
 
-            const appointmentDateTime = parseDateTime(appt.date, appt.time);
+            const endTime = getAppointmentEndTime(appt.date, appt.time);
+
             return (
               patientId === user._id &&
               appt.status !== "cancelled" &&
-              appointmentDateTime > now
+              endTime > now
             );
           })
           .sort(
@@ -84,6 +85,14 @@ const PatientHome = () => {
     d.setSeconds(0);
 
     return d;
+  };
+  const getAppointmentEndTime = (date, time) => {
+    const start = parseDateTime(date, time);
+
+    // appointment duration = 30 min
+    const end = new Date(start.getTime() + 30 * 60000);
+
+    return end;
   };
   // ✅ Check if today
   const isToday = (date) => {
