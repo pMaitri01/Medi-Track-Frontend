@@ -38,12 +38,11 @@ export default function AppointmentHistory() {
           id:     item._id,
           name:   `${item.patient?.firstName || ""} ${item.patient?.lastName || ""}`.trim() || "Unknown",
           email:  item.patient?.email       || "N/A",
-          phone:  item.patient?.phoneNumber || "N/A",
+          phone:  item.patient?.mobile || "N/A",
           gender: item.patient?.gender      || "N/A",
           time:   item.time,
           date:   new Date(item.date).toLocaleDateString(),
           status: item.status,
-          reason: item.reason || "No reason provided",
           img:    `https://ui-avatars.com/api/?name=${item.patient?.firstName || "U"}&background=random&color=fff`,
         }));
 
@@ -179,7 +178,6 @@ export default function AppointmentHistory() {
                         {selectedAppointment.status}
                       </span>
                     </p>
-                    <p><b>Reason:</b> {selectedAppointment.reason}</p>
                   </div>
                 </div>
               </div>
