@@ -1,87 +1,63 @@
-import { useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useEffect, useRef } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 
 const VideoCall = () => {
   const { appointmentId } = useParams();
+  const navigate = useNavigate();
+  const jitsiContainerRef = useRef(null);
 
   useEffect(() => {
-    let api = null;
+    const loadJitsi = async () => {
+      const response = await fetch(
+        `${process.env.REACT_APP_API_URL}/api/appointment/${appointmentId}`
+      );
+      const data = await response.json();
 
-    const fetchMeeting = async () => {
-      try {
-        const response = await fetch(
-          `${process.env.REACT_APP_API_URL}/api/appointment/meeting/${appointmentId}`,
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
-            },
-            credentials: "include",
-          }
-        );
+      const roomName = data.roomId; // IMPORTANT
 
-        // ❗ check backend error first
-        if (!response.ok) {
-          const errorText = await response.text();
-          console.error("Backend Error:", errorText);
-          return;
-        }
+      const script = document.createElement("script");
+      script.src = "https://meet.jit.si/external_api.js";
+      script.async = true;
+      document.body.appendChild(script);
 
-        const data = await response.json();
-
-        console.log("Meeting API Response:", data);
-
-        const { meetingLink, role } = data || {};
-
-        // ❗ protect against undefined
-        if (!meetingLink) {
-          console.error("meetingLink is missing from API response");
-          return;
-        }
-
-        const roomName = meetingLink.split("/").pop();
-
-        const container = document.getElementById("jitsi-container");
-        if (!container) return;
-
-        container.innerHTML = "";
-
+      script.onload = () => {
         const domain = "meet.jit.si";
 
-        const options = {
-          roomName,
+        const api = new window.JitsiMeetExternalAPI(domain, {
+          roomName: roomName,
+          parentNode: jitsiContainerRef.current,
           width: "100%",
-          height: 600,
-          parentNode: container,
+          height: "100%",
           configOverwrite: {
-            prejoinPageEnabled: false,
+            startWithAudioMuted: false,
+            startWithVideoMuted: false,
           },
           interfaceConfigOverwrite: {
-            SHOW_JITSI_WATERMARK: false,
+            TOOLBAR_BUTTONS: [
+              "microphone",
+              "camera",
+              "hangup",
+              "chat",
+            ],
           },
-        };
-
-        api = new window.JitsiMeetExternalAPI(domain, options);
-
-        api.addEventListener("videoConferenceJoined", () => {
-          if (role === "doctor") {
-            api.executeCommand("toggleLobby", true);
-          }
         });
-      } catch (error) {
-        console.error("Error fetching meeting:", error);
-      }
+
+        // 🔴 IMPORTANT: handle end call
+        api.addEventListener("readyToClose", () => {
+          api.dispose();
+          navigate("/"); // redirect to homepage
+        });
+      };
     };
 
-    fetchMeeting();
+    loadJitsi();
+  }, [appointmentId, navigate]);
 
-    return () => {
-      if (api) api.dispose();
-    };
-  }, [appointmentId]);
-
-  return <div id="jitsi-container" style={{ width: "100%", height: "600px" }} />;
+  return (
+    <div style={{ height: "100vh", width: "100%" }}>
+      <div ref={jitsiContainerRef} style={{ height: "100%", width: "100%" }} />
+    </div>
+  );
 };
 
 export default VideoCall;

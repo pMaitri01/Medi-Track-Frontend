@@ -266,12 +266,17 @@ const startVideoCall = (appointment) => {
 {
   selectedAppointment.status?.toLowerCase() === "approved" &&
   selectedAppointment.type?.toLowerCase() === "video" && (
-    <button
-      className="dappv-btn-startcall"
-      onClick={() => startVideoCall(selectedAppointment)}
-    >
-      Start Call
-    </button>
+    // <button
+    //   className="dappv-btn-startcall"
+    //   onClick={() => startVideoCall(selectedAppointment)}
+    // >
+    //   Start Call
+    // </button>
+    <button  className="dappv-btn-startcall"
+  onClick={() => navigate(`/video/${selectedAppointment._id}`)}
+>
+  Start Video Consultation
+</button>
 )}
                 {selectedAppointment.status?.toLowerCase() === "approved" && (
 

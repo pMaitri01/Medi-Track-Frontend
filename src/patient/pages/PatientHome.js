@@ -292,14 +292,19 @@ const PatientHome = () => {
   )} */}
  {upcomingAppointment?.type === "video" && (
   canStartCall ? (
+    // <button
+    //   className="btn-primary"
+    //   onClick={() => {
+    //     navigate(`/video-call/${upcomingAppointment._id}?role=patient`);
+    //   }}
+    // >
+    //   Join Call
+    // </button>
     <button
-      className="btn-primary"
-      onClick={() => {
-        navigate(`/video-call/${upcomingAppointment._id}?role=patient`);
-      }}
-    >
-      Join Call
-    </button>
+  onClick={() => navigate(`/video/${upcomingAppointment._id}`)}
+>
+  Start Video Consultation
+</button>
   ) : (
     <p style={{ color: "#888", fontSize: "14px" }}>
       You can join 10 minutes before appointment time
