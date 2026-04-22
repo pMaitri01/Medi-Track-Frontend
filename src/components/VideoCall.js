@@ -5,66 +5,92 @@ const VideoCall = () => {
   const { appointmentId } = useParams();
   const navigate = useNavigate();
   const jitsiContainerRef = useRef(null);
+  const jitsiRef = useRef(null);
 
   useEffect(() => {
     const loadJitsi = async () => {
-      const response = await fetch(
-        `${process.env.REACT_APP_API_URL}/api/appointment/meeting/${appointmentId}`
-      );
-      const data = await response.json();
+      try {
+        // ✅ Get token correctly
+        const token = JSON.parse(localStorage.getItem("user"))?.token;
 
-      const roomName = `meditrack-${appointmentId}`;
+        // ✅ Fetch meeting (fix 401)
+        await fetch(
+          `${process.env.REACT_APP_API_URL}/api/appointment/meeting/${appointmentId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
 
-      const script = document.createElement("script");
-      script.src = "https://meet.jit.si/external_api.js";
-      script.async = true;
-      document.body.appendChild(script);
+        const roomName = `meditrack-${appointmentId}`;
 
-      script.onload = () => {
-        const domain = "meet.jit.si";
+        // ✅ Function to start Jitsi
+        const startJitsi = () => {
+          if (jitsiRef.current) return; // prevent multiple frames
 
-        const api = new window.JitsiMeetExternalAPI(domain, {
-          roomName: roomName,
-          parentNode: jitsiContainerRef.current,
-          width: "100%",
-          height: "100%",
-          configOverwrite: {
-            startWithAudioMuted: false,
-            startWithVideoMuted: false,
+          const domain = "meet.jit.si";
 
-              prejoinPageEnabled: false,   
-            enableLobby: false,           
-            enableUserRolesBasedOnToken: false,
-          },
-          interfaceConfigOverwrite: {
-            TOOLBAR_BUTTONS: [
-              "microphone",
-              "camera",
-              "hangup",
-              "chat",
-            ],
-          },
-        });
+          jitsiRef.current = new window.JitsiMeetExternalAPI(domain, {
+            roomName: roomName,
+            parentNode: jitsiContainerRef.current,
+            width: "100%",
+            height: "100%",
+            configOverwrite: {
+              startWithAudioMuted: false,
+              startWithVideoMuted: false,
+              prejoinPageEnabled: false,
+            },
+            interfaceConfigOverwrite: {
+              TOOLBAR_BUTTONS: [
+                "microphone",
+                "camera",
+                "hangup",
+                "chat",
+              ],
+            },
+          });
 
-        // 🔴 IMPORTANT: handle end call
-        // api.addEventListener("readyToClose", () => {
-        //   api.dispose();
-        //   navigate("/"); // redirect to homepage
-        // });
+          // ✅ Redirect when call ends
+          jitsiRef.current.addEventListener("readyToClose", () => {
+            jitsiRef.current.dispose();
+            navigate("/");
+          });
+        };
 
-        api.addEventListener("readyToClose", () => {
-          api.dispose();
-          navigate("/");
-        });
-      };
+        // ✅ Load script only once
+        if (!window.JitsiMeetExternalAPI) {
+          const script = document.createElement("script");
+          script.src = "https://meet.jit.si/external_api.js";
+          script.async = true;
+          document.body.appendChild(script);
+
+          script.onload = startJitsi;
+        } else {
+          startJitsi();
+        }
+      } catch (error) {
+        console.error("Error loading Jitsi:", error);
+      }
     };
 
     loadJitsi();
+
+    // ✅ Cleanup (important)
+    return () => {
+      if (jitsiRef.current) {
+        jitsiRef.current.dispose();
+        jitsiRef.current = null;
+      }
+    };
   }, [appointmentId, navigate]);
 
   return (
     <div style={{ height: "100vh", width: "100%" }}>
-      <div ref={jitsiContainerRef} style={{ height: "100%", width: "100%" }} />
+      <div
+        ref={jitsiContainerRef}
+        style={{ height: "100%", width: "100%" }}
+      />
     </div>
   );
 };
