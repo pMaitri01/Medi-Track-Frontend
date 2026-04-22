@@ -39,7 +39,7 @@ const DoctorManagement = () => {
   if (data.success) {
     const formatted = data.doctors.map((doc) => ({
   id: doc._id,
-  fullname: doc.fullName,
+  fullname: `Dr. ${doc.fullName || ""}`,
   email: doc.email,
   phone: doc.mobile,
   gender: doc.gender,

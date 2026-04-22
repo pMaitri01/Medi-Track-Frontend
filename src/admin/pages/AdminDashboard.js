@@ -148,7 +148,7 @@ const AdminDashboard = () => {
                   </td>
 
                   <td>
-                    {row.doctor?.fullName || "—"}
+                    {`Dr. ${row.doctor?.fullName || "—"}`}
                   </td>
                   <td>
                     {new Date(row.date).toLocaleDateString("en-IN", {
