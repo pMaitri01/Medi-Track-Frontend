@@ -18,6 +18,9 @@ const [availableSlots, setAvailableSlots] = useState([]);
 const [isWorkingDay, setIsWorkingDay] = useState(true);
 
 // const [isWorkingDay, setIsWorkingDay] = useState(true);
+const selectedDoctorData = doctors.find(
+  (doc) => doc._id === selectedDoctor
+);
 
 // 🔥 ADD THIS FUNCTION HERE (IMPORTANT)
 const isPastSlot = (slotTime) => {
@@ -77,7 +80,12 @@ useEffect(() => {
       console.log("Approved Doctors:", data);
 
       // ✅ no need for filtering anymore (backend already filters)
-      setDoctors(data);
+      const filteredDoctors = data.filter(doc =>
+  doc.fullName &&
+  doc.specialization
+);
+
+setDoctors(filteredDoctors);
     } catch (err) {
       console.error("Failed to load doctors:", err);
       setDoctors([]);
@@ -201,7 +209,10 @@ setIsWorkingDay(data.isWorkingDay !== false); // default true
           <select
   className="doctor-dropdown"
   value={selectedDoctor}
-  onChange={(e) => setSelectedDoctor(e.target.value)}
+  onChange={(e) => {
+  setSelectedDoctor(e.target.value);
+  setAppointmentType(""); // reset when doctor changes
+}}
 >
   <option value="">-- Choose Doctor --</option>
 
@@ -232,10 +243,16 @@ setIsWorkingDay(data.isWorkingDay !== false); // default true
           <select
   className="appointment-type-select"
   value={appointmentType}
+  disabled={!selectedDoctor}
   onChange={(e) => setAppointmentType(e.target.value)}
 >
-  <option value="physical">Physical (Clinic Visit)</option>
-  <option value="video">Video Consultation</option>
+  {selectedDoctorData?.serviceType?.includes("physical") && (
+    <option value="physical">Physical (Clinic Visit)</option>
+  )}
+
+  {selectedDoctorData?.serviceType?.includes("videocall") && (
+    <option value="video">Video Consultation</option>
+  )}
 </select>
           <p className="appointment-type-helper">
             {appointmentType === "physical"
