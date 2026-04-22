@@ -121,18 +121,18 @@ setAppointments(sorted);
     }
   };
 
-const startVideoCall = (appointment) => {
-  // Create unique room name using appointment id
-  const roomName = `meditrack-${appointment.id}`;
+// const startVideoCall = (appointment) => {
+//   // Create unique room name using appointment id
+//   const roomName = `meditrack-${appointment.id}`;
 
-  // Navigate to video call page
-  navigate(`/video-call/${roomName}`, {
-    state: {
-      appointmentId: appointment.id,
-      role: "doctor"
-    }
-  });
-};
+//   // Navigate to video call page
+//   navigate(`/video-call/${roomName}`, {
+//     state: {
+//       appointmentId: appointment.id,
+//       role: "doctor"
+//     }
+//   });
+// };
   return (
     <>
       <DoctorNavbar open={open} setOpen={setOpen} />
@@ -273,7 +273,7 @@ const startVideoCall = (appointment) => {
     //   Start Call
     // </button>
     <button  className="dappv-btn-startcall"
-  onClick={() => navigate(`/video-call/${selectedAppointment._id}`)}
+  onClick={() => navigate(`/video-call/${selectedAppointment.id}`)}
 >
   Start Video Consultation
 </button>

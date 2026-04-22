@@ -31,6 +31,10 @@ const VideoCall = () => {
           configOverwrite: {
             startWithAudioMuted: false,
             startWithVideoMuted: false,
+
+              prejoinPageEnabled: false,   
+            enableLobby: false,           
+            enableUserRolesBasedOnToken: false,
           },
           interfaceConfigOverwrite: {
             TOOLBAR_BUTTONS: [
@@ -43,9 +47,14 @@ const VideoCall = () => {
         });
 
         // 🔴 IMPORTANT: handle end call
+        // api.addEventListener("readyToClose", () => {
+        //   api.dispose();
+        //   navigate("/"); // redirect to homepage
+        // });
+        
         api.addEventListener("readyToClose", () => {
           api.dispose();
-          navigate("/"); // redirect to homepage
+          navigate("/");
         });
       };
     };
