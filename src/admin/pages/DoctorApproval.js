@@ -156,7 +156,7 @@ const DoctorApproval = () => {
       if (data.success) {
         const formatted = data.doctors.map(doc => ({
           id: doc._id,
-          name: doc.fullName,
+          name: doc.fullName ? `Dr. ${doc.fullName}` : "",
           email: doc.email,
           mobile: doc.mobile,
           specialization: doc.specialization,

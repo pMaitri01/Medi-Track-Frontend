@@ -13,7 +13,7 @@ const statusClass = {
 const mapAppointment = (a, i) => ({
   id: a._id || i,
   patient: a.patient || "—",
-  doctor: typeof a.doctor === "object" ? (a.doctor?.fullName || "—") : (a.doctor || "—"),
+  doctor: typeof a.doctor === "object" ? `Dr. ${a.doctor?.fullName || "—"}` : `Dr. ${a.doctor || "—"}`,
   date: a.date || "—",
   time: a.time || "—",
   type: a.type || "N/A",
