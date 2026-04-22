@@ -76,6 +76,11 @@ export default function DoctorLogin() {
         localStorage.setItem("doctor", JSON.stringify(doctor));
         setDoctor(doctor);
 
+        localStorage.setItem("user", JSON.stringify({
+        token: doctor.token,
+        role: "doctor"
+      }));
+
         if (status === "pending") {
           navigate("/DoctorWaiting", { state: { doctor } });
         } else if (status === "rejected") {

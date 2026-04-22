@@ -9,7 +9,7 @@ export default function PatientLogin() {
   const [formData, setFormData] = useState({
     email: "",
     password: ""
-  }); 
+  });
 
   const [errors, setErrors] = useState({});
   const [showPassword, setShowPassword] = useState(false);
@@ -41,7 +41,7 @@ export default function PatientLogin() {
       if (!value) {
         error = "Password is required";
       } else if (value.length < 6) {
-          error = "Password must be at least 6 characters";
+        error = "Password must be at least 6 characters";
       }
     }
 
@@ -59,57 +59,64 @@ export default function PatientLogin() {
       [name]: error
     }));
   };
-  
+
   const navigate = useNavigate();
-  
+
   // Handle Submit (Full Form Validation)
   const handleSubmit = async (e) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  const newErrors = {};
+    const newErrors = {};
 
-  const emailError = validateField("email", formData.email);
-  if (emailError) newErrors.email = emailError;
+    const emailError = validateField("email", formData.email);
+    if (emailError) newErrors.email = emailError;
 
-  const passwordError = validateField("password", formData.password);
-  if (passwordError) newErrors.password = passwordError;
+    const passwordError = validateField("password", formData.password);
+    if (passwordError) newErrors.password = passwordError;
 
-  setErrors(newErrors);
+    setErrors(newErrors);
 
-  if (Object.keys(newErrors).length === 0) {
-    try {
-      const response = await fetch(
-        `${process.env.REACT_APP_API_URL}/api/patient/login`,  
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          credentials: "include",
-          body: JSON.stringify({
-            email: formData.email,
-            password: formData.password,
-          }),
+    if (Object.keys(newErrors).length === 0) {
+      try {
+        const response = await fetch(
+          `${process.env.REACT_APP_API_URL}/api/patient/login`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            credentials: "include",
+            body: JSON.stringify({
+              email: formData.email,
+              password: formData.password,
+            }),
+          }
+        );
+
+        const data = await response.json();
+
+        if (response.ok) {
+          alert(data.message);//print login successfull msg in alart
+          localStorage.setItem(
+            "user",
+            JSON.stringify({
+              token: data.token,          // ✅ store token
+              role: data.user.role        // ✅ store role
+            })
+          );
+            localStorage.setItem("user", JSON.stringify(data.user));
+          navigate("/PatientHome");
         }
-      );
+        else {
+          alert(data.message);
+        }
 
-      const data = await response.json();
-
-      if (response.ok) {
-        alert(data.message);//print login successfull msg in alart
-        localStorage.setItem("user", JSON.stringify(data.user));
-        navigate("/PatientHome");
+      } catch (error) {
+        console.error(error);
+        alert("Server Error");
       }
-      else{
-        alert(data.message);
-      }
-
-    } catch (error) {
-      console.error(error);
-      alert("Server Error");
     }
-  } 
-};
+  };
   return (
     <div className="login-container">
       <div className="main-heading">
@@ -129,9 +136,8 @@ export default function PatientLogin() {
             <input
               type="email"
               name="email"
-              className={`form-control mb-3 ${
-                errors.email ? "is-invalid" : ""
-              }`}
+              className={`form-control mb-3 ${errors.email ? "is-invalid" : ""
+                }`}
               placeholder="Email"
               value={formData.email}
               onChange={handleChange}
@@ -146,9 +152,8 @@ export default function PatientLogin() {
               <input
                 type={showPassword ? "text" : "password"}
                 name="password"
-                className={`form-control mb-3 ${
-                  errors.password ? "is-invalid" : ""
-                }`}
+                className={`form-control mb-3 ${errors.password ? "is-invalid" : ""
+                  }`}
                 placeholder="Password"
                 value={formData.password}
                 onChange={handleChange}
@@ -171,12 +176,12 @@ export default function PatientLogin() {
 
             <div className="d-flex justify-content-between mb-3">
               <small>
-                <input type="checkbox" className="ckb"/> Remember me
+                <input type="checkbox" className="ckb" /> Remember me
               </small>
               <small className="text-primary">
-                  <Link to="/patient/forgot" className="text-primary">
-                      Forgot Password?
-                  </Link>
+                <Link to="/patient/forgot" className="text-primary">
+                  Forgot Password?
+                </Link>
 
               </small>
             </div>

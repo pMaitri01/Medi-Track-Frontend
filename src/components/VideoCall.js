@@ -7,13 +7,7 @@ const VideoCall = () => {
   const jitsiContainerRef = useRef(null);
   const jitsiRef = useRef(null);
 
-  const doctor = JSON.parse(localStorage.getItem("doctor"));
-const patient = JSON.parse(localStorage.getItem("patient"));
-
-let role = null;
-
-if (doctor) role = "doctor";
-else if (patient) role = "patient";
+  const user = JSON.parse(localStorage.getItem("user") || "null");
 
   useEffect(() => {
     const loadJitsi = async () => {
@@ -59,17 +53,8 @@ else if (patient) role = "patient";
             },
           });
 
-          // ✅ Redirect when call ends
-          // jitsiRef.current.addEventListener("readyToClose", () => {
-          //   jitsiRef.current.dispose();
-          //   navigate("/");
-          // });
-
           // jitsiRef.current.addEventListener("videoConferenceLeft", () => {
           //   jitsiRef.current.dispose();
-
-          //   const user = JSON.parse(localStorage.getItem("user"));
-          //   const role = user?.user?.role || user?.role;
 
           //   console.log("FINAL ROLE:", role);
 
@@ -81,17 +66,18 @@ else if (patient) role = "patient";
           //     navigate("/");
           //   }
           // });
-          jitsiRef.current.addEventListener("videoConferenceLeft", () => {
+        jitsiRef.current.addEventListener("videoConferenceLeft", () => {
   jitsiRef.current.dispose();
+
+  const user = JSON.parse(localStorage.getItem("user") || "null");
+  const role = user?.role;
 
   console.log("FINAL ROLE:", role);
 
   if (role === "doctor") {
     navigate("/DoctorDashboard");
-  } else if (role === "patient") {
+  }  else {
     navigate("/PatientHome");
-  } else {
-    navigate("/");
   }
 });
         };
