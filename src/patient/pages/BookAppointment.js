@@ -211,7 +211,7 @@ setIsWorkingDay(data.isWorkingDay !== false); // default true
   value={selectedDoctor}
   onChange={(e) => {
   setSelectedDoctor(e.target.value);
-  setAppointmentType(""); // reset when doctor changes
+  // setAppointmentType(""); // reset when doctor changes
 }}
 >
   <option value="">-- Choose Doctor --</option>
