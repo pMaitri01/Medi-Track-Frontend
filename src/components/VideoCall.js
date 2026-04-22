@@ -9,7 +9,7 @@ const VideoCall = () => {
   useEffect(() => {
     const loadJitsi = async () => {
       const response = await fetch(
-        `${process.env.REACT_APP_API_URL}/api/appointment/${appointmentId}`
+        `${process.env.REACT_APP_API_URL}/api/appointment/meeting/${appointmentId}`
       );
       const data = await response.json();
 

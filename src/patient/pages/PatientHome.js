@@ -301,7 +301,7 @@ const PatientHome = () => {
     //   Join Call
     // </button>
     <button
-  onClick={() => navigate(`/video/${upcomingAppointment._id}`)}
+  onClick={() => navigate(`/video-call/${upcomingAppointment._id}`)}
 >
   Start Video Consultation
 </button>

@@ -273,7 +273,7 @@ const startVideoCall = (appointment) => {
     //   Start Call
     // </button>
     <button  className="dappv-btn-startcall"
-  onClick={() => navigate(`/video/${selectedAppointment._id}`)}
+  onClick={() => navigate(`/video-call/${selectedAppointment._id}`)}
 >
   Start Video Consultation
 </button>
