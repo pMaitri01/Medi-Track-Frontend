@@ -83,6 +83,12 @@ export default function DoctorHeader({ open }) {
   const [showNotifications, setShowNotifications] = useState(false); // New state
   const navigate = useNavigate();
   const { doctor } = useDoctor();
+
+  const goToProfile = () => {
+    navigate("/UpdateDoctorProfile"); // your route
+    setShowProfile(false); // close dropdown
+  };
+
   const styles = {
     header: {
       height: "70px",
@@ -183,7 +189,10 @@ const handleLogout = async () => {
 
           {showProfile && (
             <div style={styles.dropdown}>
-              <div style={{ padding: "12px 15px", fontSize: "14px", display: "flex", alignItems: "center", gap: "10px", cursor: "pointer" }} className="hover-gray">
+              <div style={{ padding: "12px 15px", fontSize: "14px", display: "flex", alignItems: "center", gap: "10px", cursor: "pointer" }} 
+                className="hover-gray"
+                onClick={goToProfile}
+              >
                 <FaUser size={13} /> Profile
               </div>
               <div

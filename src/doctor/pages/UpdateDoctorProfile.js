@@ -1,8 +1,7 @@
 import { useState, useCallback } from "react";
 import "../css/UpdateDoctorProfile.css";
-
-// ── SVG Icons ────────────────────────────────────────────────────────────────
-
+import { useNavigate } from "react-router-dom";
+// ── SVG Icons ──
 const IconBack = () => (
   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
     <polyline points="15 18 9 12 15 6" />
@@ -140,12 +139,17 @@ const initialForm = {
 };
 
 export default function MediTrackProfile() {
+  const navigate = useNavigate();
   const [editing, setEditing] = useState(false);
   const [form, setForm] = useState(initialForm);
   const [snapshot, setSnapshot] = useState(null);
   const [activeDays, setActiveDays] = useState(new Set(DEFAULT_ACTIVE_DAYS));
   const [snapshotDays, setSnapshotDays] = useState(null);
   const [toast, setToast] = useState(false);
+
+  const goToDashboard = () => {
+    navigate("/DoctorDashboard"); // match your route
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -189,7 +193,9 @@ export default function MediTrackProfile() {
       {/* ── Topbar ── */}
       <div className="topbar">
         <div className="topbar-left">
-          <button className="back-btn">
+          <button className="back-btn"
+          onClick={goToDashboard}
+          >
             <IconBack /> Dashboard
           </button>
           <span className="topbar-sep">|</span>
