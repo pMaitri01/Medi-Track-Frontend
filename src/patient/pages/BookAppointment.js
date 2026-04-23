@@ -7,7 +7,7 @@ const BookAppointment = ({ onClose }) => {
   const [selectedDoctor, setSelectedDoctor] = useState("");
   const [selectedDate, setSelectedDate]     = useState(null);
   const [selectedTime, setSelectedTime]     = useState(null);
-  const [appointmentType, setAppointmentType] = useState("physical");
+  const [appointmentType, setAppointmentType] = useState(null);
   const [isBooked, setIsBooked]             = useState(false);
   const [doctors, setDoctors]               = useState([]);
   const [loading, setLoading]               = useState(false);
@@ -21,6 +21,16 @@ const [isWorkingDay, setIsWorkingDay] = useState(true);
 const selectedDoctorData = doctors.find(
   (doc) => doc._id === selectedDoctor
 );
+
+useEffect(() => {
+  if (selectedDoctorData?.serviceType?.length > 0) {
+    const firstService = selectedDoctorData.serviceType[0];
+
+    setAppointmentType(
+      firstService === "videocall" ? "videocall" : "physical"
+    );
+  }
+}, [selectedDoctorData]);
 
 // 🔥 ADD THIS FUNCTION HERE (IMPORTANT)
 const isPastSlot = (slotTime) => {
@@ -251,14 +261,20 @@ setIsWorkingDay(data.isWorkingDay !== false); // default true
   )}
 
   {selectedDoctorData?.serviceType?.includes("videocall") && (
-    <option value="video">Video Consultation</option>
+    <option value="videocall">Video Consultation</option>
   )}
 </select>
           <p className="appointment-type-helper">
-            {appointmentType === "physical"
-              ? "📍 Visit doctor at clinic/hospital"
-              : "🎥 Consult doctor via video call"}
-          </p>
+  {!selectedDoctor && "Please select doctor first"}
+
+  {selectedDoctor && !appointmentType && "Please select appointment type"}
+
+  {appointmentType === "physical" &&
+    "📍 Visit doctor at clinic/hospital"}
+
+  {appointmentType === "videocall" &&
+    "🎥 Consult doctor via video call"}
+</p>
 
           <label className="label-text">4. Select Time Slot</label>
 
