@@ -185,7 +185,7 @@ function PrescriptionForm({ form, setForm, onSave, onCancel, isEdit, patients })
     });
     setForm({ ...form, medicines: meds });
   };
-  const addMed    = () => setForm({ ...form, medicines: [...form.medicines, BLANK_MEDICINE()] });
+  const addMed = () => setForm({ ...form, medicines: [...form.medicines, BLANK_MEDICINE()] });
   const removeMed = (i) => setForm({ ...form, medicines: form.medicines.filter((_, idx) => idx !== i) });
 
   const handlePatient = (e) => {
@@ -375,14 +375,14 @@ function ViewModal({ rx, onClose }) {
 
 // ── Main Page ────────────────────────────────────────────────────────────────
 export default function DoctorPrescription() {
-  const [open, setOpen]               = useState(true);
+  const [open, setOpen] = useState(true);
   const [prescriptions, setPrescriptions] = useState([]);
-  const [showForm, setShowForm]       = useState(false);
-  const [form, setForm]               = useState(BLANK_FORM());
-  const [viewRx, setViewRx]           = useState(null);
-  const [search, setSearch]           = useState("");
+  const [showForm, setShowForm] = useState(false);
+  const [form, setForm] = useState(BLANK_FORM());
+  const [viewRx, setViewRx] = useState(null);
+  const [search, setSearch] = useState("");
   const [filterStatus, setFilterStatus] = useState("All");
-  const [patients, setPatients]       = useState([]);
+  const [patients, setPatients] = useState([]);
 
   useEffect(() => {
     const fetchPatients = async () => {
@@ -399,7 +399,7 @@ export default function DoctorPrescription() {
           if (appt.patient && !map.has(appt.patient._id)) {
             map.set(appt.patient._id, true);
             unique.push({
-              id:   appt.patient._id,
+              id: appt.patient._id,
               name: `${appt.patient.firstName} ${appt.patient.lastName}`.trim(),
             });
           }
@@ -422,12 +422,12 @@ export default function DoctorPrescription() {
       if (!res.ok) throw new Error(result.message);
 
       const formatted = result.data.map((rx) => ({
-        id:          rx._id,
-        patientId:   rx.patient?._id,
+        id: rx._id,
+        patientId: rx.patient?._id,
         patientName: `${rx.patient?.firstName || ""} ${rx.patient?.lastName || ""}`.trim(),
-        date:        rx.createdAt.split("T")[0],
-        diagnosis:   rx.diagnosis,
-        medicines:   (rx.medicines || []).map((m) => {
+        date: rx.createdAt.split("T")[0],
+        diagnosis: rx.diagnosis,
+        medicines: (rx.medicines || []).map((m) => {
           const timingArray = [];
           const foodPrefObj = {};
           (m.timing || []).forEach((t) => {
@@ -435,17 +435,17 @@ export default function DoctorPrescription() {
             foodPrefObj[t.timeOfDay] = t.intake === "before_food" ? "Before Food" : "After Food";
           });
           return {
-            id:       m._id || "",
-            name:     m.name,
-            dosage:   m.dosage,
+            id: m._id || "",
+            name: m.name,
+            dosage: m.dosage,
             duration: m.duration,
-            status:   m.status || "Active",
-            timing:   timingArray,
+            status: m.status || "Active",
+            timing: timingArray,
             foodPref: foodPrefObj,
           };
         }),
         status: rx.status || "Active",
-        notes:  rx.notes || "",
+        notes: rx.notes || "",
       }));
 
       setPrescriptions(formatted);
@@ -462,33 +462,53 @@ export default function DoctorPrescription() {
       return;
     }
     const isEdit = !!form.id;
-    const url    = isEdit
+    const url = isEdit
       ? `${process.env.REACT_APP_API_URL}/api/prescription/${form.id}`
       : `${process.env.REACT_APP_API_URL}/api/prescription/createPres`;
     const method = isEdit ? "PUT" : "POST";
 
     try {
-      const formattedMedicines = form.medicines.map((m) => ({
-        _id:      m.id,
-        name:     m.name,
-        dosage:   m.dosage,
-        duration: m.duration,
-        status:   m.status || "Active",
-        timing:   m.timing.map((t) => ({
-          timeOfDay: t,
-          intake: m.foodPref[t] === "Before Food" ? "before_food" : "after_food",
-        })),
-      }));
+      // const formattedMedicines = form.medicines.map((m) => ({
+      //   // _id:      m.id,
+      //   name:     m.name,
+      //   dosage:   m.dosage,
+      //   duration: m.duration,
+      //   status:   m.status || "Active",
+      //   timing:   m.timing.map((t) => ({
+      //     timeOfDay: t,
+      //     intake: m.foodPref[t] === "Before Food" ? "before_food" : "after_food",
+      //   })),
+      // }));
 
+      const formattedMedicines = form.medicines.map((m) => {
+        const medObj = {
+          name: m.name,
+          dosage: m.dosage,
+          duration: m.duration,
+          status: m.status || "Active",
+          timing: m.timing.map((t) => ({
+            timeOfDay: t,
+            intake: m.foodPref[t] === "Before Food" ? "before_food" : "after_food",
+          })),
+        };
+
+        // ✅ ONLY include _id if it exists
+        if (m.id && m.id.trim() !== "") {
+          medObj._id = m.id;
+        }
+
+        return medObj;
+      });
+      
       const res = await fetch(url, {
         method,
-        headers:     { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json" },
         credentials: "include",
         body: JSON.stringify({
-          patient:   form.patientId,
+          patient: form.patientId,
           diagnosis: form.diagnosis,
           medicines: formattedMedicines,
-          notes:     form.notes,
+          notes: form.notes,
         }),
       });
       const data = await res.json();
@@ -506,13 +526,13 @@ export default function DoctorPrescription() {
 
   const handleEdit = (rx) => {
     setForm({
-      id:          rx.id,
-      patientId:   rx.patientId,
+      id: rx.id,
+      patientId: rx.patientId,
       patientName: rx.patientName,
-      date:        rx.date,
-      diagnosis:   rx.diagnosis,
-      medicines:   rx.medicines,
-      notes:       rx.notes,
+      date: rx.date,
+      diagnosis: rx.diagnosis,
+      medicines: rx.medicines,
+      notes: rx.notes,
     });
     setShowForm(true);
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -542,10 +562,10 @@ export default function DoctorPrescription() {
       const res = await fetch(
         `${process.env.REACT_APP_API_URL}/api/prescription/${id}/status`,
         {
-          method:      "PUT",
-          headers:     { "Content-Type": "application/json" },
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
           credentials: "include",
-          body:        JSON.stringify({ status: newStatus }),
+          body: JSON.stringify({ status: newStatus }),
         }
       );
       const data = await res.json();
@@ -644,12 +664,12 @@ export default function DoctorPrescription() {
                     {rx.status}
                   </span>
                   <div className="dpresc-rx-actions">
-                    <button className="dpresc-icon-btn dpresc-icon-btn--view"   onClick={() => setViewRx(rx)}                    title="View">👁</button>
-                    <button className="dpresc-icon-btn dpresc-icon-btn--edit"   onClick={() => handleEdit(rx)}                   title="Edit">✏️</button>
+                    <button className="dpresc-icon-btn dpresc-icon-btn--view" onClick={() => setViewRx(rx)} title="View">👁</button>
+                    <button className="dpresc-icon-btn dpresc-icon-btn--edit" onClick={() => handleEdit(rx)} title="Edit">✏️</button>
                     <button className="dpresc-icon-btn dpresc-icon-btn--toggle" onClick={() => handleToggleStatus(rx.id, rx.status)} title="Toggle status">
                       {rx.status === "Active" ? "✅" : "🔄"}
                     </button>
-                    <button className="dpresc-icon-btn dpresc-icon-btn--delete" onClick={() => handleDelete(rx.id)}              title="Delete">🗑</button>
+                    <button className="dpresc-icon-btn dpresc-icon-btn--delete" onClick={() => handleDelete(rx.id)} title="Delete">🗑</button>
                   </div>
                 </div>
               </div>
