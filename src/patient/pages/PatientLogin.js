@@ -105,7 +105,7 @@ export default function PatientLogin() {
             })
           );
             localStorage.setItem("user", JSON.stringify(data.user));
-          navigate("/PatientHome");
+          navigate("/PatientProfileSetup");
         }
         else {
           alert(data.message);

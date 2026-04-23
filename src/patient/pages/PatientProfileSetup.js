@@ -14,14 +14,14 @@ const STEPS = [
 
 const initialForm = {
   // Step 1
-  fullName: "", dob: "", age: "", gender: "", bloodGroup: "", mobile: "9876543210",
+  firstName: "", lastName: "", dob: "", age: "", gender: "", bloodGroup: "", mobile: "",
   // Step 2
   address: "", city: "", state: "", pincode: "",
   // Step 3
-  allergies: "", diseases: [], medications: "",
+  allergies: "", diseases: [], medications: "", weight: "",
   // Step 4
   emergencyName: "", relationship: "", emergencyMobile: "",
-  photo: null, photoPreview: "",
+  // photo: null, photoPreview: "",
 };
 
 // ── Auto-calculate age from DOB ──
@@ -38,11 +38,11 @@ const calcAge = (dob) => {
 // ── Completion % ──
 const calcCompletion = (form) => {
   const fields = [
-    form.fullName, form.dob, form.gender, form.bloodGroup,
+    form.firstName, form.lastName, form.dob, form.gender, form.bloodGroup,
     form.address, form.city, form.state, form.pincode,
     form.emergencyName, form.relationship, form.emergencyMobile,
   ];
-  const filled = fields.filter(f => f.toString().trim()).length;
+  const filled = fields.filter(f => f && String(f).trim() !== "").length;
   return Math.round((filled / fields.length) * 100);
 };
 
@@ -84,14 +84,22 @@ const PatientProfileSetup = () => {
   // ── Per-step validation ──
   const validate = (s) => {
     const e = {};
-    const t = (f) => form[f].toString().trim();
+    const t = (f) => (form[f] ? String(form[f]).trim() : "");
 
     if (s === 0) {
-      if (!t("fullName"))
-        e.fullName = "Full name is required.";
-      else if (!/^[a-zA-Z\s]+$/.test(t("fullName")))
-        e.fullName = "Only alphabets allowed.";
+  // First Name
+  if (!t("firstName")) {
+    e.firstName = "First name is required.";
+  } else if (!/^[a-zA-Z\s]+$/.test(t("firstName"))) {
+    e.firstName = "Only alphabets allowed.";
+  }
 
+  // Last Name
+  if (!t("lastName")) {
+    e.lastName = "Last name is required.";
+  } else if (!/^[a-zA-Z\s]+$/.test(t("lastName"))) {
+    e.lastName = "Only alphabets allowed.";
+  }
       if (!t("dob"))
         e.dob = "Date of birth is required.";
       else if (new Date(form.dob) >= new Date())
@@ -131,12 +139,68 @@ const PatientProfileSetup = () => {
 
   const handleBack = () => { setErrors({}); setStep(s => s - 1); };
 
-  const handleSubmit = () => {
-    const errs = validate(3);
-    if (Object.keys(errs).length > 0) { setErrors(errs); return; }
-    console.log("Patient Profile Submitted:", form);
+  // const handleSubmit = () => {
+  //   const errs = validate(3);
+  //   if (Object.keys(errs).length > 0) { setErrors(errs); return; }
+  //   console.log("Patient Profile Submitted:", form);
+  //   setSubmitted(true);
+  // };
+
+  const handleSubmit = async () => {
+  const errs = validate(3);
+  if (Object.keys(errs).length > 0) {
+    setErrors(errs);
+    return;
+  }
+
+  try {
+    const payload = {
+      firstName: form.firstName,
+      lastName: form.lastName,
+      dob: form.dob,
+      gender: form.gender,
+      mobile: form.mobile,
+      bloodGroup: form.bloodGroup,
+
+      address: form.address,
+      city: form.city,
+      state: form.state,
+      pincode: form.pincode,
+
+      allergies: form.allergies,
+      diseases: form.diseases,
+      medications: form.medications,
+      weight: form.weight,
+
+      emergencyContact: {
+        name: form.emergencyName,
+        mobile: form.emergencyMobile,
+        relationship: form.relationship,
+      },
+
+      isProfileComplete: true, // ✅ IMPORTANT
+    };
+
+    const res = await fetch("http://localhost:5000/api/patient/complete-profile", {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+      credentials: "include",
+      body: JSON.stringify(payload),
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) throw new Error(data.message);
+
     setSubmitted(true);
-  };
+
+  } catch (err) {
+    alert(err.message);
+  }
+};
 
   const f = (name) => ({
     name,
@@ -221,8 +285,10 @@ const PatientProfileSetup = () => {
               <div className="pps-grid-2">
                 <div className="pps-field">
                   <label className="pps-label">Full Name <span className="pps-req">*</span></label>
-                  <input {...f("fullName")} type="text" placeholder="Enter full name" />
-                  {errors.fullName && <span className="pps-error">{errors.fullName}</span>}
+                  <input {...f("firstName")} placeholder="First Name" />
+                  <input {...f("lastName")} placeholder="Last Name" />
+                  {errors.firstName && <span className="pps-error">{errors.firstName}</span>}
+                  {errors.lastName && <span className="pps-error">{errors.lastName}</span>}
                 </div>
 
                 <div className="pps-field">
@@ -324,6 +390,15 @@ const PatientProfileSetup = () => {
                 <textarea name="medications" value={form.medications} onChange={handleChange}
                   className="pps-textarea" placeholder="List any medications you are currently taking" />
               </div>
+
+              <div className="pps-field">
+                <label className="pps-label">Weight (kg)</label>
+                  <input
+                    {...f("weight")}
+                      type="string"
+                      placeholder="Enter weight"
+                    />
+              </div>
             </>
           )}
 
@@ -348,18 +423,6 @@ const PatientProfileSetup = () => {
                 </div>
               </div>
 
-              <div className="pps-field">
-                <label className="pps-label">Profile Photo</label>
-                <div className="pps-photo-wrap">
-                  {form.photoPreview
-                    ? <img src={form.photoPreview} alt="Preview" className="pps-photo-preview" />
-                    : <div className="pps-photo-placeholder">👤</div>}
-                  <label className="pps-upload-btn">
-                    📷 Upload Photo
-                    <input ref={fileRef} type="file" accept="image/*" onChange={handlePhoto} hidden />
-                  </label>
-                </div>
-              </div>
             </>
           )}
 
