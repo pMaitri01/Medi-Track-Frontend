@@ -28,22 +28,47 @@ const Review = ({ onClose }) => {
         fetchDoctors();
     }, []);
 
-    const submitReview = () => {
-        if (!selectedDoctor || selectedRating === 0 || reviewText.trim() === "") {
-            alert("Please fill all fields");
-            return;
+  const submitReview = async () => {
+    if (!selectedDoctor || selectedRating === 0 || reviewText.trim() === "") {
+        alert("Please fill all fields");
+        return;
+    }
+
+    try {
+        const res = await fetch(`${process.env.REACT_APP_API_URL}/api/review/`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            credentials: "include", // IMPORTANT for protect middleware
+            body: JSON.stringify({
+                doctorId: selectedDoctor,
+                rating: selectedRating,
+                comment: reviewText,
+            }),
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+            throw new Error(data.message || "Failed to submit review");
         }
 
-        const reviewData = {
-            doctor: selectedDoctor,
-            rating: selectedRating,
-            reviewText: reviewText,
-        };
+        alert("Review submitted successfully!");
+        console.log("Saved Review:", data);
 
-        console.log("Submitted Review:", reviewData);
-        alert("Review Submitted!");
+        // reset form
+        setSelectedDoctor("");
+        setSelectedRating(0);
+        setReviewText("");
+
         onClose();
-    };
+
+    } catch (error) {
+        console.error("Review error:", error.message);
+        alert(error.message);
+    }
+};
 
     return (
         <div className="review-modal-overlay">
