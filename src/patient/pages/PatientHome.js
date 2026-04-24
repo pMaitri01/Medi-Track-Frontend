@@ -9,10 +9,7 @@ import UploadMedicalRecord from './UploadMedicalRecord';
 import Review from "./Review";
 
 const PatientHome = () => {
-  const [reviews, setReviews] = useState([
-    { name: "Amy T", date: "May 01", text: "Sarah Williams was very patient and thorough during visit my visit.", stars: 4 },
-    { name: "Robert L", date: "April 26", text: "Dr. Choi was great! Explained everything clearly.", stars: 4 }
-  ]);
+  const [reviews, setReviews] = useState([]);
   const [upcomingAppointment, setUpcomingAppointment] = useState(null);
   const [loadingAppt, setLoadingAppt] = useState(true);
   const [newReviewText, setNewReviewText] = useState("");
@@ -158,6 +155,45 @@ const PatientHome = () => {
       alert("Failed to cancel appointment");
     }
   };
+  useEffect(() => {
+  const fetchReviews = async () => {
+    try {
+      const res = await fetch(
+        `${process.env.REACT_APP_API_URL}/api/review/publicreview`,
+        { credentials: "include" }
+      );
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        console.error("Backend error:", data);
+        setReviews([]);
+        return;
+      }
+
+      const latestTwo = data
+        .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+        .slice(0, 2)
+        .map((rev) => ({
+          name: `${rev.patient?.firstName || ""} ${rev.patient?.lastName || ""}`.trim(),
+          date: new Date(rev.createdAt).toLocaleDateString("en-US", {
+            month: "short",
+            day: "2-digit",
+          }),
+          text: rev.comment,
+          stars: rev.rating,
+        }));
+
+      setReviews(latestTwo);
+    } catch (err) {
+      console.error("Error fetching reviews:", err);
+      setReviews([]);
+    }
+  };
+
+  fetchReviews();
+}, []);
+
   const handlePostReview = (e) => {
     e.preventDefault();
     if (!newReviewText.trim()) return;
@@ -414,29 +450,32 @@ const PatientHome = () => {
   </div>
 
   <div className="timeline">
-    {reviews.map((rev, i) => (
-      <div className="timeline-item" key={i}>
-        <div className="timeline-dot"></div>
+    {reviews.length > 0 ? (
+  reviews.map((rev, i) => (
+    <div className="timeline-item" key={i}>
+      <div className="timeline-dot"></div>
 
-        <div className="timeline-content">
-          <div className="review-top">
-            <div>
-              <h4 className="review-name">{rev.name}</h4>
-              <span className="review-date">{rev.date}</span>
-            </div>
-
-            <div className="review-stars">
-              {"⭐".repeat(rev.stars)}
-            </div>
+      <div className="timeline-content">
+        <div className="review-top">
+          <div>
+            <h4 className="review-name">{rev.name}</h4>
+            <span className="review-date">{rev.date}</span>
           </div>
 
-          <p className="review-text">"{rev.text}"</p>
+          <div className="review-stars">
+            {"⭐".repeat(rev.stars)}
+          </div>
         </div>
-          {showReview && (
-            <Review onClose={() => setShowReview(false)} />
-          )}
+
+        <p className="review-text">"{rev.text}"</p>
       </div>
-    ))}
+    </div>
+  ))
+) : (
+  <p style={{ padding: "10px", color: "#777" }}>
+    No reviews yet
+  </p>
+)}
   </div>
 
   <div className="view-all">
