@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "../css/PatientProfileSetup.css";
 
@@ -53,6 +53,14 @@ const PatientProfileSetup = () => {
   const [submitted, setSubmitted] = useState(false);
   const fileRef = useRef(null);
   const navigate = useNavigate();
+
+    useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("user"));
+
+    if (user?.isProfileComplete) {
+      navigate("/PatientHome");
+    }
+  }, []);
 
   const completion = calcCompletion(form);
 
@@ -195,6 +203,12 @@ const PatientProfileSetup = () => {
 
     if (!res.ok) throw new Error(data.message);
 
+    const updatedUser = {
+  ...JSON.parse(localStorage.getItem("user")),
+  isProfileComplete: true,
+};
+
+localStorage.setItem("user", JSON.stringify(updatedUser));
     setSubmitted(true);
 
   } catch (err) {

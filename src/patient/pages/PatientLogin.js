@@ -97,18 +97,16 @@ export default function PatientLogin() {
 
         if (response.ok) {
           alert(data.message);//print login successfull msg in alart
-          localStorage.setItem(
-            "user",
-            JSON.stringify({
-              token: data.token,          // ✅ store token
-              role: data.user.role        // ✅ store role
-            })
-          );
-            localStorage.setItem("user", JSON.stringify(data.user));
-          navigate("/PatientProfileSetup");
-        }
-        else {
-          alert(data.message);
+
+          // ✅ store token separately
+          localStorage.setItem("token", data.token);
+          localStorage.setItem("user", JSON.stringify(data.user));
+          // ✅ REDIRECT LOGIC
+          if (!data.user.isProfileComplete) {
+            navigate("/PatientProfileSetup");
+          } else {
+            navigate("/PatientHome");
+          }
         }
 
       } catch (error) {
