@@ -25,6 +25,7 @@ import MedicalRecords from './patient/pages/MedicalRecords';
 import PrescriptionPage from './patient/pages/PrescriptionPage';
 import RescheduleAppointment from './patient/pages/RescheduleAppointment';
 import UpdatePatientProfile from './patient/pages/UpdatePatientProfile';
+import ReviewSection from "./patient/pages/ReviewSection";
 
 // Doctor Pages
 import DoctorLogin from './doctor/pages/DoctorLogin';
@@ -69,7 +70,7 @@ function App() {
         <Route path="/patient/forgot" element={<PatientForgotPwd />} />
         <Route path="/PatientOtp" element={<PatientOtp />} />
         <Route path="/PatientResetPwd" element={<PatientResetPwd />} />
-
+        <Route path="/patient/reviews" element={<ReviewSection />} />
         {/* Patient Protected */}
         <Route path="/PatientProfileSetup" element={
           <ProtectedRoute role="patient">

@@ -485,7 +485,7 @@ const PatientHome = () => {
 )}
   </div>
 
-  <div className="view-all">
+  <div className="view-all" onClick={() => navigate("/patient/reviews")}>
     <span>View all reviews →</span>
   </div>
 </section>
