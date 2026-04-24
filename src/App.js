@@ -23,6 +23,7 @@ import BookAppointment from './patient/pages/BookAppointment';
 import PatientAppointment from './patient/pages/PatientAppointment';
 import MedicalRecords from './patient/pages/MedicalRecords';
 import PrescriptionPage from './patient/pages/PrescriptionPage';
+import RescheduleAppointment from './patient/pages/RescheduleAppointment';
 
 // Doctor Pages
 import DoctorLogin from './doctor/pages/DoctorLogin';
@@ -110,6 +111,8 @@ function App() {
             <BookAppointment />
           </ProtectedRoute>
         } />
+        <Route path="/reschedule/:id" element={<RescheduleAppointment />} />
+        
 
         {/* Doctor */}
         <Route path="/DoctorLogin" element={<DoctorLogin />} />

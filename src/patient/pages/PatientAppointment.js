@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import "../css/PatientAppointment.css";
+import RescheduleAppointment from "./RescheduleAppointment";
 import defaultDoctorImg from "../images/user.png";
 
 const TODAY = new Date();
@@ -111,7 +112,7 @@ const getBadge = (status = "") => {
 };
 
 // ── Appointment Card ────────────────────────────────────────────────────────
-function AppointmentCard({ appt, onCancel, onStartConsultation, isNext, onViewDetails }) {
+function AppointmentCard({ appt, onCancel, onStartConsultation, isNext, onViewDetails, onReschedule }) {
   const upcoming = isUpcoming(appt.date, appt.time);
   const badge = getBadge(appt.status);
   // const canJoinVideoCall =
@@ -119,7 +120,7 @@ function AppointmentCard({ appt, onCancel, onStartConsultation, isNext, onViewDe
   //   ["approved", "accepted", "confirmed"].includes(appt.status?.toLowerCase()) &&
   //   upcoming;
   const canJoinVideoCall = (() => {
-    if (appt.type?.toLowerCase() !== "video") return false;
+    if (appt.type?.toLowerCase() !== "videocall") return false;
 
     const validStatus = ["approved", "accepted", "confirmed"].includes(
       appt.status?.toLowerCase()
@@ -165,7 +166,7 @@ function AppointmentCard({ appt, onCancel, onStartConsultation, isNext, onViewDe
           <p>📅 {formatDate(appt.date)}</p>
           <p>🕐 {appt.time}</p>
           <p>
-            {appt.type?.toLowerCase() === "video" ? "🎥 Video Consultation" : "🏥 In-Clinic Visit"}
+            {appt.type?.toLowerCase() === "videocall" ? "🎥 Video Consultation" : "🏥 In-Clinic Visit"}
           </p>
         </div>
       </div>
@@ -196,8 +197,8 @@ function AppointmentCard({ appt, onCancel, onStartConsultation, isNext, onViewDe
             <button
               className="pa-btn-reschedule"
               onClick={(e) => {
-                e.stopPropagation();   // 🔥 PREVENT MODAL OPEN
-                alert(`Reschedule: ${appt.id}`);
+                e.stopPropagation();
+                onReschedule(appt);
               }}
             >
               📆 Reschedule
@@ -220,7 +221,7 @@ function AppointmentCard({ appt, onCancel, onStartConsultation, isNext, onViewDe
             </button>
 
             {/* ✅ VIDEO CALL */}
-            {appt.type?.toLowerCase() === "video" && (
+            {appt.type?.toLowerCase() === "videocall" && (
               canJoinVideoCall ? (
                 <button
                   className="pa-btn-consult"
@@ -253,6 +254,7 @@ function Section({
   onStartConsultation,
   nextAppointmentId,
   onViewDetails,
+  onReschedule
 }) {
   return (
     <section className="pa-section">
@@ -269,6 +271,7 @@ function Section({
               onStartConsultation={onStartConsultation}
               isNext={appt.id === nextAppointmentId}
               onViewDetails={onViewDetails}
+              onReschedule={onReschedule}
             />
           ))}
         </div>
@@ -281,6 +284,7 @@ function Section({
 export default function PatientAppointment() {
   const navigate = useNavigate();
   const [appointments, setAppointments] = useState([]);
+  const [showReschedule, setShowReschedule] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [selectedAppointment, setSelectedAppointment] = useState(null);
@@ -290,12 +294,28 @@ export default function PatientAppointment() {
   }, []);
 
 
-  const user = JSON.parse(localStorage.getItem("user"));
+  // const user = JSON.parse(localStorage.getItem("user"));
+  const user = JSON.parse(localStorage.getItem("user") || "{}");
   const userId = user?._id;
   const handleViewDetails = (appt) => {
     setSelectedAppointment(appt);
     setShowModal(true);
   };
+
+  const handleReschedule = (appt) => {
+    setSelectedAppointment({
+      id: appt.id,
+      doctorId: appt.doctorId,
+      doctorName: appt.doctorName,
+      specialization: appt.specialization,
+      date: appt.date,
+      time: appt.time,
+      type: (appt.type || "").toLowerCase(),
+    });
+
+    setShowReschedule(true);
+  };
+
   const loadAppointments = async () => {
     setLoading(true);
     setError("");
@@ -327,7 +347,7 @@ export default function PatientAppointment() {
           date: item.date,
           time: item.time || "—",
           status: item.status || "Pending",
-          type: item.type || item.appointmentType || "offline",
+          type: (item.type || item.appointmentType || "").toLowerCase(),
         }));
 
       setAppointments(mapped);
@@ -372,7 +392,7 @@ export default function PatientAppointment() {
 
   const upcoming = appointments
     .filter((a) => {
-      
+
       const upcomingDate = isUpcoming(a.date, a.time);
 
       // ❌ Cancelled should NOT be in upcoming
@@ -385,9 +405,9 @@ export default function PatientAppointment() {
       return upcomingDate;
     })
     .sort(byDateAsc);
-    const nextAppointmentId = upcoming.find((a) =>
-  isFutureAppointment(a.date, a.time)
-)?.id;
+  const nextAppointmentId = upcoming.find((a) =>
+    isFutureAppointment(a.date, a.time)
+  )?.id;
 
   const past = appointments
     .filter((a) => {
@@ -440,6 +460,7 @@ export default function PatientAppointment() {
               onStartConsultation={handleStartConsultation}
               nextAppointmentId={nextAppointmentId}
               onViewDetails={handleViewDetails}
+              onReschedule={handleReschedule}
             />
             <Section
               title="Past Appointments"
@@ -466,7 +487,7 @@ export default function PatientAppointment() {
             <p><strong>Status:</strong> {selectedAppointment.status}</p>
             <p>
               <strong>Type:</strong>{" "}
-              {selectedAppointment.type === "video"
+              {selectedAppointment.type === "videocall"
                 ? "Video Consultation"
                 : "In-Clinic"}
             </p>
@@ -477,6 +498,23 @@ export default function PatientAppointment() {
             >
               Close
             </button>
+          </div>
+        </div>
+      )}
+      {showReschedule && selectedAppointment && (
+        <div
+          className="pa-modal-overlay"
+          onClick={() => setShowReschedule(false)}
+        >
+          <div
+            className="pa-modal"
+            onClick={(e) => e.stopPropagation()}
+            style={{ maxWidth: "900px", width: "95%" }} // optional for bigger UI
+          >
+            <RescheduleAppointment
+              appointment={selectedAppointment}
+              onClose={() => setShowReschedule(false)}
+            />
           </div>
         </div>
       )}
