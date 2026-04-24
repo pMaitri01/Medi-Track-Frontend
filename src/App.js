@@ -24,6 +24,7 @@ import PatientAppointment from './patient/pages/PatientAppointment';
 import MedicalRecords from './patient/pages/MedicalRecords';
 import PrescriptionPage from './patient/pages/PrescriptionPage';
 import RescheduleAppointment from './patient/pages/RescheduleAppointment';
+import UpdatePatientProfile from './patient/pages/UpdatePatientProfile';
 
 // Doctor Pages
 import DoctorLogin from './doctor/pages/DoctorLogin';
@@ -112,6 +113,7 @@ function App() {
           </ProtectedRoute>
         } />
         <Route path="/reschedule/:id" element={<RescheduleAppointment />} />
+        <Route path="/UpdatePatientProfile" element={<UpdatePatientProfile/>} />
         
 
         {/* Doctor */}
