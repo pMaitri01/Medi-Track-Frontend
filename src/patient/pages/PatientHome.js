@@ -186,12 +186,12 @@ const PatientHome = () => {
         </div>
       )}
       {isUploadOpen && (
-  <div className="booking-modal-overlay">
-    <div className="booking-modal-content">
-      <UploadMedicalRecord onClose={() => setIsUploadOpen(false)} />
-    </div>
-  </div>
-)}
+        <div className="booking-modal-overlay">
+          <div className="booking-modal-content">
+            <UploadMedicalRecord onClose={() => setIsUploadOpen(false)} />
+          </div>
+        </div>
+      )}
 
       <div className={`patient-home-wrapper ${isBookingOpen ? 'prevent-scroll' : ''}`}>
         <div className="dashboard-grid">
@@ -363,18 +363,18 @@ const PatientHome = () => {
                 <div className="icon-circle icon-cyan">📅</div>
                 <span>Book Appointment</span>
               </div>
-<div 
-  className="action-card" 
-  onClick={() => setIsUploadOpen(true)} 
-  style={{ cursor: 'pointer' }}
->
-  <div className="icon-circle icon-orange">📄</div>
-  <span>Upload Records</span>
-</div>              <div className="action-card"><div className="icon-circle icon-red">💊</div><span>Prescriptions</span></div>
+              <div
+                className="action-card"
+                onClick={() => setIsUploadOpen(true)}
+                style={{ cursor: 'pointer' }}
+              >
+                <div className="icon-circle icon-orange">📄</div>
+                <span>Upload Records</span>
+              </div>              <div className="action-card"><div className="icon-circle icon-red">💊</div><span>Prescriptions</span></div>
               <div className="action-card"><div className="icon-circle icon-blue">📋</div><span>Lab Results</span></div>
             </div>
 
-            <section className="card card-blue-solid">
+            {/* <section className="card card-blue-solid">
               <h2 className="card-heading white-text">Patient Reviews</h2>
               <form className="review-form" onSubmit={handlePostReview}>
                 <textarea
@@ -403,7 +403,42 @@ const PatientHome = () => {
                   </div>
                 ))}
               </div>
-            </section>
+            </section> */}
+            <section className="card card-white review-timeline-card">
+  <div className="review-header">
+    <h2 className="card-heading">What Patients Say</h2>
+    <button className="write-review-btn">
+      <i className="fa-solid fa-pen"></i> Write a Review
+    </button>
+  </div>
+
+  <div className="timeline">
+    {reviews.map((rev, i) => (
+      <div className="timeline-item" key={i}>
+        <div className="timeline-dot"></div>
+
+        <div className="timeline-content">
+          <div className="review-top">
+            <div>
+              <h4 className="review-name">{rev.name}</h4>
+              <span className="review-date">{rev.date}</span>
+            </div>
+
+            <div className="review-stars">
+              {"⭐".repeat(rev.stars)}
+            </div>
+          </div>
+
+          <p className="review-text">"{rev.text}"</p>
+        </div>
+      </div>
+    ))}
+  </div>
+
+  <div className="view-all">
+    <span>View all reviews →</span>
+  </div>
+</section>
           </div>
 
           {/* RIGHT COLUMN - Fully Restored */}
