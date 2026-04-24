@@ -5,6 +5,7 @@ import '@fortawesome/fontawesome-free/css/all.min.css';
 import Navbar from '../components/Navbar';
 import BookAppointment from './BookAppointment';
 import { useNavigate } from "react-router-dom";
+import UploadMedicalRecord from './UploadMedicalRecord';
 
 const PatientHome = () => {
   const [reviews, setReviews] = useState([
@@ -15,6 +16,7 @@ const PatientHome = () => {
   const [loadingAppt, setLoadingAppt] = useState(true);
   const [newReviewText, setNewReviewText] = useState("");
   const [rating, setRating] = useState(5);
+  const [isUploadOpen, setIsUploadOpen] = useState(false);
   const [isBookingOpen, setIsBookingOpen] = useState(false);
   const navigate = useNavigate();
   useEffect(() => {
@@ -183,6 +185,13 @@ const PatientHome = () => {
           </div>
         </div>
       )}
+      {isUploadOpen && (
+  <div className="booking-modal-overlay">
+    <div className="booking-modal-content">
+      <UploadMedicalRecord onClose={() => setIsUploadOpen(false)} />
+    </div>
+  </div>
+)}
 
       <div className={`patient-home-wrapper ${isBookingOpen ? 'prevent-scroll' : ''}`}>
         <div className="dashboard-grid">
@@ -354,8 +363,14 @@ const PatientHome = () => {
                 <div className="icon-circle icon-cyan">📅</div>
                 <span>Book Appointment</span>
               </div>
-              <div className="action-card"><div className="icon-circle icon-orange">📄</div><span>Upload Records</span></div>
-              <div className="action-card"><div className="icon-circle icon-red">💊</div><span>Prescriptions</span></div>
+<div 
+  className="action-card" 
+  onClick={() => setIsUploadOpen(true)} 
+  style={{ cursor: 'pointer' }}
+>
+  <div className="icon-circle icon-orange">📄</div>
+  <span>Upload Records</span>
+</div>              <div className="action-card"><div className="icon-circle icon-red">💊</div><span>Prescriptions</span></div>
               <div className="action-card"><div className="icon-circle icon-blue">📋</div><span>Lab Results</span></div>
             </div>
 

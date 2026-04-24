@@ -1,0 +1,143 @@
+/* Overlay - SAME as booking */
+.upload-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+/* Modal Container - MATCH WIDTH & STYLE */
+.upload-modal {
+  background: #ffffff;
+  width: 700px;
+  max-width: 95%;
+  border-radius: 12px;
+  padding: 24px 28px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  position: relative;
+}
+
+/* Header */
+.upload-modal h2 {
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  color: #1f2937;
+  border-bottom: 1px solid #e5e7eb;
+  padding-bottom: 10px;
+}
+
+/* Close Button (same style) */
+.upload-close {
+  position: absolute;
+  top: 16px;
+  right: 20px;
+  font-size: 18px;
+  cursor: pointer;
+  color: #6b7280;
+}
+
+.upload-close:hover {
+  color: #111827;
+}
+
+/* FORM GRID (2 column like booking modal) */
+.upload-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+}
+
+/* Full width fields */
+.upload-form textarea,
+.upload-form input[type="file"],
+.upload-btn-group {
+  grid-column: span 2;
+}
+
+/* Labels (like booking sections) */
+.upload-form label {
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 5px;
+  display: block;
+  color: #374151;
+}
+
+/* Inputs */
+.upload-form input,
+.upload-form select,
+.upload-form textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+  font-size: 14px;
+  outline: none;
+}
+
+/* Focus */
+.upload-form input:focus,
+.upload-form select:focus,
+.upload-form textarea:focus {
+  border-color: #2563eb;
+}
+
+/* Textarea */
+.upload-form textarea {
+  min-height: 80px;
+}
+textarea {
+    resize: vertical;
+    margin-left: 2px !important;
+}
+/* File input */
+.upload-form input[type="file"] {
+  padding: 8px;
+  background: #f9fafb;
+  border: 1px solid #d1d5db;
+  cursor: pointer;
+}
+
+/* Buttons section - EXACT SAME ALIGNMENT */
+.upload-btn-group {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 10px;
+}
+
+/* Primary button (same as confirm appointment) */
+.upload-btn-primary {
+  padding: 10px 18px;
+  background: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.upload-btn-primary:hover {
+  background: #1d4ed8;
+}
+
+/* Cancel button */
+.upload-btn-cancel {
+  padding: 10px 18px;
+  background: white;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.upload-btn-cancel:hover {
+  background: #f3f4f6;
+}
