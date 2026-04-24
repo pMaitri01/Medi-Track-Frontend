@@ -6,6 +6,7 @@ import Navbar from '../components/Navbar';
 import BookAppointment from './BookAppointment';
 import { useNavigate } from "react-router-dom";
 import UploadMedicalRecord from './UploadMedicalRecord';
+import PrescriptionModal from './PrescriptionModal';
 import Review from "./Review";
 
 const PatientHome = () => {
@@ -17,6 +18,7 @@ const PatientHome = () => {
   const [showReview, setShowReview] = useState(false);
   const [isUploadOpen, setIsUploadOpen] = useState(false);
   const [isBookingOpen, setIsBookingOpen] = useState(false);
+  const [showPrescription, setShowPrescription] = useState(false);
   const navigate = useNavigate();
   useEffect(() => {
     const fetchAppointments = async () => {
@@ -407,7 +409,12 @@ const PatientHome = () => {
               >
                 <div className="icon-circle icon-orange">📄</div>
                 <span>Upload Records</span>
-              </div>              <div className="action-card"><div className="icon-circle icon-red">💊</div><span>Prescriptions</span></div>
+              </div>              <div className="action-card" onClick={() => setShowPrescription(true)}><div className="icon-circle icon-red">💊</div><span>Prescriptions</span></div>
+
+              <PrescriptionModal
+  isOpen={showPrescription}
+  onClose={() => setShowPrescription(false)}
+/>
               <div className="action-card"><div className="icon-circle icon-blue">📋</div><span>Lab Results</span></div>
             </div>
 
