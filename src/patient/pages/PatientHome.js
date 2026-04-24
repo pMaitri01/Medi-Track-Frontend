@@ -6,6 +6,7 @@ import Navbar from '../components/Navbar';
 import BookAppointment from './BookAppointment';
 import { useNavigate } from "react-router-dom";
 import UploadMedicalRecord from './UploadMedicalRecord';
+import Review from "./Review";
 
 const PatientHome = () => {
   const [reviews, setReviews] = useState([
@@ -16,6 +17,7 @@ const PatientHome = () => {
   const [loadingAppt, setLoadingAppt] = useState(true);
   const [newReviewText, setNewReviewText] = useState("");
   const [rating, setRating] = useState(5);
+  const [showReview, setShowReview] = useState(false);
   const [isUploadOpen, setIsUploadOpen] = useState(false);
   const [isBookingOpen, setIsBookingOpen] = useState(false);
   const navigate = useNavigate();
@@ -192,7 +194,6 @@ const PatientHome = () => {
           </div>
         </div>
       )}
-
       <div className={`patient-home-wrapper ${isBookingOpen ? 'prevent-scroll' : ''}`}>
         <div className="dashboard-grid">
 
@@ -407,7 +408,7 @@ const PatientHome = () => {
             <section className="card card-white review-timeline-card">
   <div className="review-header">
     <h2 className="card-heading">What Patients Say</h2>
-    <button className="write-review-btn">
+    <button className="write-review-btn" onClick={() => setShowReview(true)}>
       <i className="fa-solid fa-pen"></i> Write a Review
     </button>
   </div>
@@ -431,6 +432,9 @@ const PatientHome = () => {
 
           <p className="review-text">"{rev.text}"</p>
         </div>
+          {showReview && (
+            <Review onClose={() => setShowReview(false)} />
+          )}
       </div>
     ))}
   </div>
