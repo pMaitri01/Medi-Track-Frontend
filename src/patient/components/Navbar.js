@@ -4,11 +4,17 @@ import { Link} from "react-router-dom";
 import { FaBell, FaUserCircle,FaChevronDown } from "react-icons/fa";
 import "./Navbar.css";
 import Img from "../images/LogoP.png"
+import { useNavigate } from "react-router-dom";
 
 function Navbar() {
   const [showDropdown, setShowDropdown] = useState(false);
   const dropdownRef = useRef(null);
   const [username, setUsername] = useState("");
+  const navigate = useNavigate();
+
+  const goToProfile = () => {
+    navigate("/UpdatePatientProfile"); // your route
+  };
 
   const handleLogout = async () => {
     try{
@@ -102,7 +108,7 @@ setUsername(
 </div>
   {showDropdown && (
     <div className="profile-dropdown">
-      <div className="dropdown-item">
+      <div className="dropdown-item" onClick={goToProfile}>
         <span>👤</span> Profile
       </div>
       <div className="dropdown-item logout" onClick={handleLogout}>
