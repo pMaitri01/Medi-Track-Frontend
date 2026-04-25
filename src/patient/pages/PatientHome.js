@@ -418,36 +418,6 @@ const PatientHome = () => {
               <div className="action-card"><div className="icon-circle icon-blue">📋</div><span>Lab Results</span></div>
             </div>
 
-            {/* <section className="card card-blue-solid">
-              <h2 className="card-heading white-text">Patient Reviews</h2>
-              <form className="review-form" onSubmit={handlePostReview}>
-                <textarea
-                  className="review-input"
-                  placeholder="Share your experience..."
-                  value={newReviewText}
-                  onChange={(e) => setNewReviewText(e.target.value)}
-                />
-                <div className="review-form-footer">
-                  <select value={rating} onChange={(e) => setRating(Number(e.target.value))} className="rating-picker">
-                    <option value="5">5 Stars</option>
-                    <option value="4">4 Stars</option>
-                    <option value="3">3 Stars</option>
-                  </select>
-                  <button type="submit" className="reviewbtn1">Post Review</button>
-                </div>
-              </form>
-              <div className="reviews-list">
-                {reviews.map((rev, i) => (
-                  <div className="review-item" key={i}>
-                    <p>"{rev.text}"</p>
-                    <div className="review-meta">
-                      <span>{rev.date}. {rev.name}</span>
-                      <span className="stars">{"⭐".repeat(rev.stars)}</span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </section> */}
             <section className="card card-white review-timeline-card">
   <div className="review-header">
     <h2 className="card-heading">What Patients Say</h2>
@@ -567,6 +537,13 @@ const PatientHome = () => {
 
         </div>
       </div>
+      {showReview && (
+  <div className="booking-modal-overlay">
+    <div className="booking-modal-content">
+      <Review onClose={() => setShowReview(false)} />
+    </div>
+  </div>
+)}
     </>
   );
 };
