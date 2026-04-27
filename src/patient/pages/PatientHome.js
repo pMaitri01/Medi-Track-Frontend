@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import UploadMedicalRecord from './UploadMedicalRecord';
 import PrescriptionModal from './PrescriptionModal';
 import Review from "./Review";
+import RescheduleAppointment from './RescheduleAppointment';
 
 const PatientHome = () => {
   const [reviews, setReviews] = useState([]);
@@ -18,6 +19,8 @@ const PatientHome = () => {
   const [showReview, setShowReview] = useState(false);
   const [isUploadOpen, setIsUploadOpen] = useState(false);
   const [isBookingOpen, setIsBookingOpen] = useState(false);
+  const [showReschedule, setShowReschedule] = useState(false);
+  const [selectedAppointment,setSelectedAppointment] = useState(null);
   const [showPrescription, setShowPrescription] = useState(false);
   const navigate = useNavigate();
   useEffect(() => {
@@ -68,6 +71,22 @@ const PatientHome = () => {
 
     fetchAppointments();
   }, []);
+
+  const handleReschedule = () => {
+  if (!upcomingAppointment) return;
+
+  setSelectedAppointment({
+    id: upcomingAppointment._id,
+    doctorId: upcomingAppointment.doctor?._id,
+    doctorName: `Dr. ${upcomingAppointment.doctor?.fullName}`,
+    specialization: upcomingAppointment.doctor?.specialization,
+    date: upcomingAppointment.date,
+    time: upcomingAppointment.time,
+    type: (upcomingAppointment.type || "").toLowerCase(),
+  });
+
+  setShowReschedule(true);
+};
 
   const parseDateTime = (date, time) => {
     const d = new Date(date);
@@ -368,7 +387,7 @@ const PatientHome = () => {
                             </p>
                           )
                         )}
-                        <button className="btn-outline">Reschedule</button>
+                        <button className="btn-outline" onClick={handleReschedule}>Reschedule</button>
 
                         <button
                           className="btn-danger-outline"
@@ -544,6 +563,25 @@ const PatientHome = () => {
     </div>
   </div>
 )}
+
+{showReschedule && selectedAppointment && (
+  <div
+    className="booking-modal-overlay"
+    onClick={() => setShowReschedule(false)}
+  >
+    <div
+      className="booking-modal-content"
+      onClick={(e) => e.stopPropagation()}
+      style={{ maxWidth: "900px", width: "95%" }}
+    >
+      <RescheduleAppointment
+        appointment={selectedAppointment}
+        onClose={() => setShowReschedule(false)}
+      />
+    </div>
+  </div>
+)}
+
     </>
   );
 };
