@@ -4,7 +4,8 @@ import DoctorHeader from "../components/DoctorHeader";
 import DoctorFooter from "../components/DoctorFooter";
 import Calendar from "../components/Calendar";
 import GenderChart from "../components/GenderChart";
-
+import { FaStar } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 import { FaUserFriends, FaHospitalUser, FaClock, FaCheckCircle, FaCheck, FaTimesCircle } from "react-icons/fa";
 
 export default function DoctorDashboard() {
@@ -16,7 +17,14 @@ export default function DoctorDashboard() {
   const [todayAppointments, setTodayAppointments] = useState([]);
   const [hoveredId, setHoveredId] = useState(null);
   const [appointmentRequests, setAppointmentRequests] = useState([]);
-
+  const [reviewData, setReviewData] = useState({
+    avgRating: 0,
+    totalReviews: 0,
+    ratingCount: { 5: 0, 4: 0, 3: 0, 2: 0, 1: 0 }, // ✅ ADD THIS
+    latestReviews: [],
+  });
+  const reviews = reviewData.latestReviews;
+  const navigate = useNavigate();
   // Layout Constants
   const sidebarWidth = open ? "250px" : "100px";
 
@@ -54,8 +62,29 @@ export default function DoctorDashboard() {
     fetchDashboard();
     fetchTodayAppointments();
     fetchAppointmentRequests();
+    fetchReviews();
   }, []);
+  const fetchReviews = async () => {
+    try {
+      const doctorId = localStorage.getItem("doctorId");
 
+      const res = await fetch(
+        `${process.env.REACT_APP_API_URL}/api/review/${doctorId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+          credentials: "include",
+        }
+      );
+
+      const data = await res.json();
+      setReviewData(data);
+
+    } catch (err) {
+      console.log(err);
+    }
+  };
   const fetchTodayAppointments = async () => {
     try {
       const res = await fetch(
@@ -122,51 +151,51 @@ export default function DoctorDashboard() {
 
   // fetch appointmment in doctor dashboard
   const fetchAppointmentRequests = async () => {
-  try {
-    const res = await fetch(
-      `${process.env.REACT_APP_API_URL}/api/appointment/requests`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-        credentials: "include",
-      }
-    );
+    try {
+      const res = await fetch(
+        `${process.env.REACT_APP_API_URL}/api/appointment/requests`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+          credentials: "include",
+        }
+      );
 
-    const data = await res.json();
-    setAppointmentRequests(data);
+      const data = await res.json();
+      setAppointmentRequests(data);
 
-  } catch (error) {
-    console.log("Request Error:", error);
-    setAppointmentRequests([]);
-  }
-};
+    } catch (error) {
+      console.log("Request Error:", error);
+      setAppointmentRequests([]);
+    }
+  };
 
-const updateStatus = async (id, status) => {
-  try {
-    await fetch(
-      `${process.env.REACT_APP_API_URL}/api/appointment/${id}`,
-      {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-        credentials: "include",
-        body: JSON.stringify({ status }),
-      }
-    );
+  const updateStatus = async (id, status) => {
+    try {
+      await fetch(
+        `${process.env.REACT_APP_API_URL}/api/appointment/${id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+          credentials: "include",
+          body: JSON.stringify({ status }),
+        }
+      );
 
-    // refresh both sections
-    fetchAppointmentRequests();
-    fetchTodayAppointments();
+      // refresh both sections
+      fetchAppointmentRequests();
+      fetchTodayAppointments();
 
-  } catch (error) {
-    console.log("Status Update Error:", error);
-  }
-};
+    } catch (error) {
+      console.log("Status Update Error:", error);
+    }
+  };
 
   return (
     <div style={{ minHeight: "100vh", background: "#F8F9FD" }}>
@@ -315,75 +344,162 @@ const updateStatus = async (id, status) => {
           {/* --- BOTTOM ROW: REVIEW & REQUESTS --- */}
           <div style={gridStyle(3)}>
             <div style={cardStyle}>
-              <h4 style={titleStyle}>Patients Review</h4>
-              <div style={placeholderBox}>Review List</div>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                <h4 style={titleStyle}>Patient Reviews</h4>
+              </div>
+
+              {/* TOP RATING SECTION */}
+              <div style={{ display: "flex", gap: "20px", marginTop: "15px" }}>
+
+                {/* LEFT BOX */}
+                <div style={ratingBox}>
+                  <p style={{ fontSize: "12px", color: "#64748b" }}>Overall Rating</p>
+                  <h2 style={{ margin: "5px 0" }}>
+                    {reviewData.avgRating || 0}
+                  </h2>
+                  <div>
+                    {[...Array(5)].map((_, i) => (
+                      <FaStar
+                        key={i}
+                        color={
+                          i < Math.floor(reviewData.avgRating)
+                            ? "#facc15"   // filled ⭐
+                            : "#e2e8f0"   // empty ☆
+                        }
+                      />
+                    ))}
+                  </div>
+
+                  <p style={{ fontSize: "12px", color: "#94a3b8" }}>
+                    ({reviewData.totalReviews || 0} reviews)
+                  </p>
+                </div>
+
+                {/* RIGHT BARS */}
+                <div style={{ flex: 1 }}>
+                  {[5, 4, 3, 2, 1].map((star) => (
+                    <div key={star} style={barRow}>
+                      <span style={{ width: "20px", fontSize: "12px" }}>{star}★</span>
+
+                      <div style={barBg}>
+                        <div
+                          style={{
+                            ...barFill,
+                            width: reviewData.totalReviews
+                              ? `${(reviewData.ratingCount[star] / reviewData.totalReviews) * 100}%`
+                              : "0%"
+                          }}
+                        ></div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* REVIEW LIST */}
+              <div style={{ marginTop: "20px" }}>
+                {reviewData.latestReviews && reviewData.latestReviews.length > 0 ? (
+                  reviewData.latestReviews.map((r) => (
+                    <div key={r._id} style={reviewItem}>
+                      <div style={avatarStyle}></div>
+
+                      <div>
+                        <div style={{ fontWeight: "500", fontSize: "14px" }}>
+                          {r.patient
+                            ? `${r.patient.firstName} ${r.patient.lastName}`
+                            : "Patient"}            <span style={{ marginLeft: "8px", fontSize: "11px", color: "#94a3b8" }}>
+                            {new Date(r.createdAt).toLocaleDateString()}
+                          </span>
+                        </div>
+
+                        <div style={{ color: "#facc15", fontSize: "12px" }}>
+                          {[...Array(5)].map((_, i) => (
+                            <FaStar key={i} color={i < r.rating ? "#facc15" : "#e2e8f0"} />
+                          ))}
+                        </div>
+
+                        <p style={reviewText}>{r.comment}</p>
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <p style={{ fontSize: "13px", color: "#94a3b8" }}>
+                    No reviews yet
+                  </p>
+                )}
+              </div>
+
+              <div className="review-header"  onClick={() => navigate("/doctor/reviews")} style={{marginLeft:"290px"}}>  
+                {/* <button className="view-more-btn"> </button>   */}
+                View More →
+              </div>
             </div>
             <div style={cardStyle}>
               <h4 style={titleStyle}>Appointment Request</h4>
               <div style={{ ...listContainer, marginTop: "10px", flex: 1 }}>
-  {appointmentRequests.length > 0 ? (
-    appointmentRequests.map((req) => (
-      <div
-  key={req._id}
-  style={{
-    padding: "10px",
-    borderRadius: "10px",
-    background: "#F8F9FD",
-    display: "flex",
-    flexDirection: "column",
-    gap: "6px"
-  }}
->
-  {/* 🔹 TOP ROW: NAME + ICONS */}
-  <div
-    style={{
-      display: "flex",
-      justifyContent: "space-between",
-      alignItems: "center"
-    }}
-  >
-    <div style={{ fontSize: "14px", fontWeight: "500" }}>
-      {req.patientName}
-    </div>
+                {appointmentRequests.length > 0 ? (
+                  appointmentRequests.map((req) => (
+                    <div
+                      key={req._id}
+                      style={{
+                        padding: "10px",
+                        borderRadius: "10px",
+                        background: "#F8F9FD",
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: "6px"
+                      }}
+                    >
+                      {/* 🔹 TOP ROW: NAME + ICONS */}
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                          alignItems: "center"
+                        }}
+                      >
+                        <div style={{ fontSize: "14px", fontWeight: "500" }}>
+                          {req.patientName}
+                        </div>
 
-    {/* ✅ ICONS BESIDE NAME */}
-    <div style={{ display: "flex", gap: "12px" }}>
-      
-      <FaCheck
-        onClick={() => updateStatus(req._id, "approved")}
-        style={{
-          color: "#22c55e",
-          cursor: "pointer",
-          fontSize: "26px",
-          marginTop: "10px"
-        }}
-        title="Accept"
-      />
+                        {/* ✅ ICONS BESIDE NAME */}
+                        <div style={{ display: "flex", gap: "12px" }}>
 
-      <FaTimesCircle
-        onClick={() => updateStatus(req._id, "rejected")}
-        style={{
-          color: "#ef4444",
-          cursor: "pointer",
-          fontSize: "30px"
-        }}
-        title="Reject"
-      />
-    </div>
-  </div>
+                          <FaCheck
+                            onClick={() => updateStatus(req._id, "approved")}
+                            style={{
+                              color: "#22c55e",
+                              cursor: "pointer",
+                              fontSize: "26px",
+                              marginTop: "10px"
+                            }}
+                            title="Accept"
+                          />
 
-  {/* 🔹 DATE + TIME BELOW */}
-  <div style={{ fontSize: "12px", color: "#64748b" }}>
-    {new Date(req.date).toLocaleDateString()} • {req.time}
-  </div>
-</div>
-    ))
-  ) : (
-    <p style={{ fontSize: "13px", color: "#94a3b8" }}>
-      No pending requests
-    </p>
-  )}
-</div>
+                          <FaTimesCircle
+                            onClick={() => updateStatus(req._id, "rejected")}
+                            style={{
+                              color: "#ef4444",
+                              cursor: "pointer",
+                              fontSize: "30px"
+                            }}
+                            title="Reject"
+                          />
+                        </div>
+                      </div>
+
+                      {/* 🔹 DATE + TIME BELOW */}
+                      <div style={{ fontSize: "12px", color: "#64748b" }}>
+                        {new Date(req.date).toLocaleDateString()} • {req.time}
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <p style={{ fontSize: "13px", color: "#94a3b8" }}>
+                    No pending requests
+                  </p>
+                )}
+              </div>
             </div>
             <div style={cardStyle}>
               <h4 style={titleStyle}>Calendar</h4>
@@ -465,4 +581,61 @@ const infoGridStyle = {
   borderRadius: "10px",
   marginTop: "15px",
   textAlign: "left"
+};
+const reviewBtn = {
+  background: "#0AA5A5",
+  color: "#fff",
+  border: "none",
+  padding: "6px 12px",
+  borderRadius: "6px",
+  cursor: "pointer",
+  fontSize: "12px"
+};
+
+const ratingBox = {
+  background: "#F1F5F9",
+  padding: "15px",
+  borderRadius: "10px",
+  textAlign: "center",
+  width: "140px"
+};
+
+const barRow = {
+  display: "flex",
+  alignItems: "center",
+  gap: "10px",
+  marginBottom: "6px"
+};
+
+const barBg = {
+  background: "#E2E8F0",
+  height: "6px",
+  borderRadius: "5px",
+  flex: 1
+};
+
+const barFill = {
+  background: "#facc15",
+  height: "6px",
+  borderRadius: "5px"
+};
+
+const reviewItem = {
+  display: "flex",
+  gap: "10px",
+  marginBottom: "12px"
+};
+
+const reviewText = {
+  fontSize: "13px",
+  color: "#475569",
+  marginTop: "2px"
+};
+
+const viewMore = {
+  textAlign: "center",
+  marginTop: "10px",
+  color: "#0AA5A5",
+  cursor: "pointer",
+  fontSize: "13px"
 };

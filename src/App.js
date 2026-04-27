@@ -41,7 +41,7 @@ import AppointmentView from './doctor/pages/AppointmentView';
 import DoctorAppointmentHistory from './doctor/pages/DoctorAppointmentHistory';
 import DoctorPrescription from './doctor/pages/DoctorPrescription';
 import UpdateDoctorProfile from './doctor/pages/UpdateDoctorProfile';
-
+import DoctorReviews from './doctor/pages/DoctorReview';
 // Admin Pages
 import AdminLayout from './admin/pages/AdminLayout';
 import AdminLogin from './admin/pages/AdminLogin';
@@ -122,7 +122,7 @@ function App() {
         <Route path="/DoctorSignUp" element={<DoctorSignUp />} />
         <Route path="/DoctorRegister" element={<DoctorRegister />} />
         <Route path="/DoctorForgotPassword" element={<DoctorForgotFlow />} />
-
+        <Route path="/doctor/reviews" element={<DoctorReviews />} />
         <Route path="/DoctorProfile" element={
           <ProtectedRoute role="doctor">
             <DoctorProfile />
