@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import Navbar from "../components/Navbar";
 import "../css/MedicalRecords.css";
+import UploadMedicalRecord from "./UploadMedicalRecord";
 import defaultDoctorImg from "../images/user.png";
 
 // ── Dummy Data ──────────────────────────────────────────────────────────────
@@ -174,6 +175,7 @@ function TimelineItem({ record }) {
 // ── Main Page ────────────────────────────────────────────────────────────────
 export default function MedicalRecords() {
   const [activeTab, setActiveTab] = useState("All Records");
+  const [showUpload, setShowUpload] = useState(false);
   const [search, setSearch] = useState("");
   const [dateFilter, setDateFilter] = useState("All Time");
   const [viewMode, setViewMode] = useState("card");   // "card" | "timeline"
@@ -253,7 +255,13 @@ export default function MedicalRecords() {
         <div className="mr-page-nav">
           <span className="mr-page-icon">🗂</span>
           <h1 className="mr-heading">Medical Records</h1>
-          <button className="mr-upload-btn">⬆ Upload Record</button>
+          {/* <button className="mr-upload-btn">⬆ Upload Record</button> */}
+          <button
+            className="mr-upload-btn"
+            onClick={() => setShowUpload(true)}
+          >
+            ⬆ Upload Record
+          </button>
         </div>
 
         {/* ── Health Summary Cards ── */}
@@ -338,7 +346,9 @@ export default function MedicalRecords() {
           </div>
         )}
       </main>
-
+        {showUpload && (
+  <UploadMedicalRecord onClose={() => setShowUpload(false)} />
+)}
       {/* ── Modal ── */}
     </div>
   );
