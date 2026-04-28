@@ -5,13 +5,12 @@ const UploadMedicalRecord = ({ onClose }) => {
     const [formData, setFormData] = useState({
         title: "",
         type: "scan",
-        doctorName: "",
+        doctorId: "",
         date: "",
         description: "",
         file: null
     });
     const [doctors, setDoctors] = useState([]);
-    const [selectedDoctor, setSelectedDoctor] = useState("");
     const handleChange = (e) => {
         const { name, value, files } = e.target;
 
@@ -44,7 +43,7 @@ const UploadMedicalRecord = ({ onClose }) => {
         const data = new FormData();
         data.append("title", formData.title);
         data.append("type", formData.type);
-        data.append("doctorName", formData.doctorName);
+        data.append("doctorId", formData.doctorId);
         data.append("date", formData.date);
         data.append("description", formData.description);
         data.append("file", formData.file);
@@ -93,19 +92,13 @@ const UploadMedicalRecord = ({ onClose }) => {
                         <option value="prescription">Prescription</option>
                     </select>
 
-                    <select
-  name="doctorName"
-  onChange={handleChange}
-  required
->
+                   <select onChange={(e) => setFormData({ ...formData, doctorId: e.target.value })}>
   <option value="">Select Doctor</option>
-
-  {Array.isArray(doctors) &&
-    doctors.map((doc) => (
-      <option key={doc._id} value={doc.fullName}>
-        {doc.fullName} ({doc.specialization})
-      </option>
-    ))}
+  {doctors.map((doc) => (
+    <option key={doc._id} value={doc._id}>
+      {doc.fullName}
+    </option>
+  ))}
 </select>
 
                     {/* <input

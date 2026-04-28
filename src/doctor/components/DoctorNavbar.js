@@ -1,5 +1,5 @@
 import React from "react";
-import { FaTachometerAlt, FaUserMd, FaCalendarCheck, FaHistory, FaFileMedical } from "react-icons/fa";
+import { FaTachometerAlt, FaUserMd, FaCalendarCheck, FaHistory, FaFileMedical,FaNotesMedical} from "react-icons/fa";
 import userImg from "../images/Logo-1.png";
 import { useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
@@ -132,8 +132,17 @@ export default function DoctorNavbar({ open, setOpen }) {
         }}
           onClick={() => navigate("/DoctorPrescription")}
         >
-          <FaFileMedical style={styles.icon}/>
+          <FaNotesMedical style={styles.icon}/>
           {open && "Prescriptions"}
+        </div>
+        <div style={{
+          ...styles.menuItem,
+          ...(location.pathname === "/DoctorMedicalRecords" && styles.active)
+        }}
+          onClick={() => navigate("/DoctorMedicalRecords")}
+        >
+          <FaFileMedical style={styles.icon}/>
+          {open && "Medical Records"}
         </div>
       </div>
       <div style={styles.footer}>
