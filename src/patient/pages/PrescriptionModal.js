@@ -23,31 +23,31 @@
 //   if (!isOpen) return null;
 
 //   return (
-//     <div className="modal-overlay">
-//       <div className="modal-container">
+//     <div className="PrescriptionModal-modal-overlay">
+//       <div className="PrescriptionModal-modal-container">
 
 //         {/* SAME HEADER STYLE AS BOOK APPOINTMENT */}
-//         <div className="modal-header">
+//         <div className="PrescriptionModal-modal-header">
 //           <h2>Prescriptions</h2>
-//           <button className="close-btn" onClick={onClose}>×</button>
+//           <button className="PrescriptionModal-close-btn" onClick={onClose}>×</button>
 //         </div>
 
 //         {/* BODY */}
-//         <div className="modal-body">
+//         <div className="PrescriptionModal-modal-body">
 //   {prescriptions.length === 0 ? (
-//     <p className="no-data">No active prescriptions</p>
+//     <p className="PrescriptionModal-no-data">No active prescriptions</p>
 //   ) : Array.isArray(prescriptions) ? (
 //     prescriptions.map((p) => (
-//       <div key={p._id} className="list-card">
+//       <div key={p._id} className="PrescriptionModal-list-card">
 //         <div>
 //           <h4>Dr. {p.doctorName}</h4>
 //           <p>{new Date(p.createdAt).toDateString()}</p>
 //         </div>
-//         <span className="status-badge active">Active</span>
+//         <span className="PrescriptionModal-status-badge active">Active</span>
 //       </div>
 //     ))
 //   ) : (
-//     <p className="no-data">Loading or invalid data</p>
+//     <p className="PrescriptionModal-no-data">Loading or invalid data</p>
 //   )}
 // </div>
 
@@ -103,18 +103,18 @@ const PrescriptionModal = ({ isOpen, onClose }) => {
 
     if (!isOpen) return null;
 return (
-  <div className="modal-overlay">
+  <div className="PrescriptionModal-modal-overlay">
 
-    <div className="modal-container">
+    <div className="PrescriptionModal-modal-container">
 
       {/* HEADER */}
-      <div className="modal-header">
+      <div className="PrescriptionModal-modal-header">
         <h2>
           {selectedPrescription ? "Prescription Details" : "Active Prescriptions"}
         </h2>
 
         <button
-          className="close-btn"
+          className="PrescriptionModal-close-btn"
           onClick={() => {
             selectedPrescription
               ? setSelectedPrescription(null)
@@ -126,16 +126,16 @@ return (
       </div>
 
       {/* BODY */}
-      <div className="modal-body">
+      <div className="PrescriptionModal-modal-body">
 
         {/* LIST VIEW */}
         {!selectedPrescription && (
           <>
             {loading ? (
-              <p className="no-data">Loading prescriptions...</p>
+              <p className="PrescriptionModal-no-data">Loading prescriptions...</p>
             ) : prescriptions.length > 0 ? (
               prescriptions.map((p) => (
-                <div key={p._id} className="list-card">
+                <div key={p._id} className="PrescriptionModal-list-card">
 
                   <div>
                     <h4>Dr. {p.doctor?.fullName || "Unknown"}</h4>
@@ -144,7 +144,7 @@ return (
                   </div>
 
                   <button
-                    className="view-btn"
+                    className="PrescriptionModal-view-btn"
                     onClick={() => setSelectedPrescription(p)}
                   >
                     View Details
@@ -153,14 +153,14 @@ return (
                 </div>
               ))
             ) : (
-              <p className="no-data">No active prescriptions</p>
+              <p className="PrescriptionModal-no-data">No active prescriptions</p>
             )}
           </>
         )}
 
         {/* DETAIL VIEW */}
         {selectedPrescription && (
-          <div className="prescription-detail">
+          <div className="PrescriptionModal-prescription-detail">
 
             <h3>Dr. {selectedPrescription.doctor?.fullName}</h3>
 
@@ -168,7 +168,7 @@ return (
 
             <h4>💊 Medicines</h4>
 
-            <table className="medicine-table">
+            <table className="PrescriptionModal-medicine-table">
               <thead>
                 <tr>
                   <th>Name</th>
@@ -194,13 +194,13 @@ return (
               </tbody>
             </table>
 
-            <div className="section-box">
+            <div className="PrescriptionModal-section-box">
               <h4>📝 Notes</h4>
               <p>{selectedPrescription.notes || "No notes provided"}</p>
             </div>
 
             <button
-              className="back-btn"
+              className="PrescriptionModal-back-btn"
               onClick={() => setSelectedPrescription(null)}
             >
               ← Back

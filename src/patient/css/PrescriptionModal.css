@@ -1,11 +1,11 @@
 /* Overlay (shared system) */
-.modal-overlay {
+.PrescriptionModal-modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0,0,0,0.4);
+  background: rgba(0,0,0,0.PrescriptionModal-4);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -13,18 +13,18 @@
 }
 
 /* Modal container (same as booking/upload) */
-.modal-container {
+.PrescriptionModal-modal-container {
   width: 700px;
   max-width: 95%;
   background: #fff;
   border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.PrescriptionModal-1);
 }
 
 /* Header */
-.modal-header {
-  background: #2b6cb0;
+.PrescriptionModal-modal-header {
+  background: #0AA5A5 !important;
   color: white;
   padding: 15px 20px;
   display: flex;
@@ -32,7 +32,7 @@
   align-items: center;
 }
 
-.close-btn {
+.PrescriptionModal-close-btn {
   background: transparent;
   border: none;
   font-size: 22px;
@@ -41,14 +41,14 @@
 }
 
 /* Body */
-.modal-body {
+.PrescriptionModal-modal-body {
   padding: 15px;
   max-height: 60vh;
   overflow-y: auto;
 }
 
 /* List item */
-.list-card {
+.PrescriptionModal-list-card {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -60,20 +60,20 @@
 }
 
 /* Status */
-.status-badge.active {
+.PrescriptionModal-status-badge.PrescriptionModal-active {
   color: green;
   font-weight: 600;
   font-size: 12px;
 }
 
 /* Empty state */
-.no-data {
+.PrescriptionModal-no-data {
   text-align: center;
   color: gray;
   padding: 20px;
 }
 
-.list-card-detail {
+.PrescriptionModal-list-card-detail {
   border: 1px solid #e5e7eb;
   padding: 15px;
   border-radius: 10px;
@@ -82,7 +82,7 @@
 }
 
 /* Header */
-.prescription-header {
+.PrescriptionModal-prescription-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -92,54 +92,54 @@
 }
 
 /* Sections */
-.section-box {
+.PrescriptionModal-section-box {
   margin-top: 12px;
   padding: 10px;
   background: #f9fafb;
   border-radius: 8px;
 }
 
-.section-box h4 {
+.PrescriptionModal-section-box h4 {
   margin-bottom: 6px;
   font-size: 14px;
   color: #374151;
 }
 
 /* Table */
-.medicine-table {
+.PrescriptionModal-medicine-table {
   width: 100%;
   border-collapse: collapse;
   font-size: 13px;
 }
 
-.medicine-table th,
-.medicine-table td {
+.PrescriptionModal-medicine-table th,
+.PrescriptionModal-medicine-table td {
   border: 1px solid #ddd;
   padding: 6px;
   text-align: left;
 }
 
-.medicine-table th {
+.PrescriptionModal-medicine-table th {
   background: #f3f4f6;
 }
 
 /* Schedule */
-.schedule-item {
+.PrescriptionModal-schedule-item {
   padding: 6px 0;
   border-bottom: 1px dashed #ddd;
 }
 
-.schedule-item strong {
+.PrescriptionModal-schedule-item strong {
   color: #2563eb;
 }
 
-.modal-body {
+.PrescriptionModal-modal-body {
   max-height: 70vh;
   overflow-y: auto;
 }
 
 /* List card */
-.list-card {
+.PrescriptionModal-list-card {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -151,8 +151,8 @@
 }
 
 /* View button */
-.view-btn {
-  background: #2563eb;
+.PrescriptionModal-view-btn {
+  background: #0AA5A5;
   color: white;
   border: none;
   padding: 6px 12px;
@@ -161,7 +161,7 @@
 }
 
 /* Back button */
-.back-btn {
+.PrescriptionModal-back-btn {
   margin-top: 15px;
   background: #6b7280;
   color: white;
@@ -172,24 +172,24 @@
 }
 
 /* Detail section */
-.prescription-detail {
+.PrescriptionModal-prescription-detail {
   padding: 10px;
 }
 
 /* Table fix */
-.medicine-table {
+.PrescriptionModal-medicine-table {
   width: 100%;
   border-collapse: collapse;
   margin-top: 10px;
 }
 
-.medicine-table th,
-.medicine-table td {
+.PrescriptionModal-medicine-table th,
+.PrescriptionModal-medicine-table td {
   border: 1px solid #ddd;
   padding: 6px;
   text-align: left;
 }
 
-.medicine-table th {
+.PrescriptionModal-medicine-table th {
   background: #f3f4f6;
 }
