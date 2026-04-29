@@ -1,18 +1,18 @@
-.timeline-container {
+.ReviewSec-timeline-container {
   padding: 30px;
   background: #f5f7fb;
   min-height: 100vh;
   font-family: Arial, sans-serif;
 }
 
-.title {
+.ReviewSec-title {
   font-size: 26px;
   margin-bottom: 25px;
   color: #1e293b;
 }
 
 /* Timeline structure */
-.timeline {
+.ReviewSec-timeline {
   position: relative;
   margin-left: 20px;
   border-left: 3px solid #cbd5e1;
@@ -20,13 +20,13 @@
 }
 
 /* Each item */
-.timeline-item {
+.ReviewSec-timeline-item {
   position: relative;
   margin-bottom: 30px;
 }
 
 /* Dot */
-.timeline-dot {
+.ReviewSec-timeline-dot {
   position: absolute;
   left: -30px;
   top: 10px;
@@ -38,50 +38,50 @@
 }
 
 /* Card */
-.timeline-content {
+.ReviewSec-timeline-content {
   background: white;
   padding: 15px;
   border-radius: 12px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+  box-shadow: 0 2px 10px rgba(0,0,0,0.ReviewSec-08);
 }
 
 /* Header row */
-.top-row {
+.ReviewSec-top-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.top-row h3 {
+.ReviewSec-top-row h3 {
   margin: 0;
   color: #0f172a;
 }
 
-.date {
+.ReviewSec-date {
   font-size: 12px;
   color: #64748b;
 }
 
-.specialty {
+.ReviewSec-specialty {
   font-size: 13px;
   color: #475569;
   margin: 5px 0;
 }
 
 /* Stars */
-.stars {
+.ReviewSec-stars {
   color: #f59e0b;
   font-weight: bold;
   margin: 5px 0;
 }
 
 /* Comment */
-.comment {
+.ReviewSec-comment {
   margin: 8px 0;
   color: #334155;
 }
 
 /* Patient */
-.patient {
+.ReviewSec-patient {
   color: #64748b;
 }

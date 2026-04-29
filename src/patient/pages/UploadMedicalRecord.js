@@ -69,14 +69,14 @@ const UploadMedicalRecord = ({ onClose }) => {
     };
 
     return (
-        <div className="upload-modal-overlay">
-            <div className="upload-modal">
+        <div className="UploadMedRec-upload-modal-overlay">
+            <div className="UploadMedRec-upload-modal">
 
-                <span className="upload-close" onClick={onClose}>✖</span>
+                <span className="UploadMedRec-upload-close" onClick={onClose}>✖</span>
 
                 <h2>Upload Medical Record</h2>
 
-                <form onSubmit={handleSubmit} className="upload-form">
+                <form onSubmit={handleSubmit} className="UploadMedRec-upload-form">
 
                     <input
                         type="text"
@@ -127,15 +127,15 @@ const UploadMedicalRecord = ({ onClose }) => {
                         required
                     />
 
-                    <div className="upload-btn-group">
-                        <button type="submit" className="upload-btn-primary">
+                    <div className="UploadMedRec-upload-btn-group">
+                        <button type="submit" className="UploadMedRec-upload-btn-primary">
                             Upload
                         </button>
 
                         <button
                             type="button"
                             onClick={onClose}
-                            className="upload-btn-cancel"
+                            className="UploadMedRec-upload-btn-cancel"
                         >
                             Cancel
                         </button>

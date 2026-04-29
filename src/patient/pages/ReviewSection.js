@@ -37,36 +37,36 @@ const ReviewSection = () => {
   return (
     <>
      <Navbar />
-    <div className="timeline-container">
-      <h2 className="title">Patient Reviews Timeline</h2>
+    <div className="ReviewSec-timeline-container">
+      <h2 className="ReviewSec-title">Patient Reviews Timeline</h2>
 
-      <div className="timeline">
+      <div className="ReviewSec-timeline">
         {reviews.map((r, index) => (
-          <div className="timeline-item" key={index}>
+          <div className="ReviewSec-timeline-item" key={index}>
             
             {/* Dot */}
-            <div className="timeline-dot"></div>
+            <div className="ReviewSec-timeline-dot"></div>
 
             {/* Content */}
-            <div className="timeline-content">
-              <div className="top-row">
+            <div className="ReviewSec-timeline-content">
+              <div className="ReviewSec-top-row">
                 <h3>{r.doctor?.fullName}</h3>
-                <span className="date">
+                <span className="ReviewSec-date">
                   {new Date(r.createdAt).toLocaleDateString()}
                 </span>
               </div>
 
-              <p className="specialty">
+              <p className="ReviewSec-specialty">
                 {r.doctor?.specialization}
               </p>
 
-              <div className="stars">
+              <div className="ReviewSec-stars">
                 {"⭐".repeat(r.rating)} <span>{r.rating}/5</span>
               </div>
 
-              <p className="comment">"{r.comment}"</p>
+              <p className="ReviewSec-comment">"{r.comment}"</p>
 
-              <small className="patient">
+              <small className="ReviewSec-patient">
                 — {r.patient?.name}
               </small>
             </div>

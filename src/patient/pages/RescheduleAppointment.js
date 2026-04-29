@@ -55,22 +55,22 @@
 //   if (!open) return null;
 
 //   return (
-//     <div className="ba-overlay">
-//       <div className="ba-modal">
+//     <div className="RescheduleApp-ba-overlay">
+//       <div className="RescheduleApp-ba-modal">
 
 //         {/* HEADER */}
-//         <div className="ba-header">
+//         <div className="RescheduleApp-ba-header">
 //           <h2>Reschedule Your Visit</h2>
-//           <button className="ba-close" onClick={closeModal}>×</button>
+//           <button className="RescheduleApp-ba-close" onClick={closeModal}>×</button>
 //         </div>
 
-//         <div className="ba-body">
+//         <div className="RescheduleApp-ba-body">
 
 //           {/* LEFT SIDE */}
-//           <div className="ba-left">
+//           <div className="RescheduleApp-ba-left">
 
 //             {/* 1. Doctor */}
-//             <div className="ba-section">
+//             <div className="RescheduleApp-ba-section">
 //               <h4>1. Select Doctor</h4>
 //               <select
 //                 value={doctor}
@@ -84,7 +84,7 @@
 //             </div>
 
 //             {/* 2. Date */}
-//             <div className="ba-section">
+//             <div className="RescheduleApp-ba-section">
 //               <h4>2. Select Date</h4>
 //               <input
 //                 type="date"
@@ -95,10 +95,10 @@
 //           </div>
 
 //           {/* RIGHT SIDE */}
-//           <div className="ba-right">
+//           <div className="RescheduleApp-ba-right">
 
 //             {/* 3. Type */}
-//             <div className="ba-section">
+//             <div className="RescheduleApp-ba-section">
 //               <h4>3. Appointment Type</h4>
 //               <select value={type} onChange={(e) => setType(e.target.value)}>
 //                 <option value="">-- Select Type --</option>
@@ -106,11 +106,11 @@
 //                 <option value="video">Video Consultation</option>
 //               </select>
 
-//               <p className="ba-note">📍 Visit doctor at clinic/hospital</p>
+//               <p className="RescheduleApp-ba-note">📍 Visit doctor at clinic/hospital</p>
 //             </div>
 
 //             {/* 4. Time */}
-//             <div className="ba-section">
+//             <div className="RescheduleApp-ba-section">
 //               <h4>4. Select Time Slot</h4>
 
 //               <input
@@ -123,12 +123,12 @@
 //         </div>
 
 //         {/* FOOTER */}
-//         <div className="ba-footer">
-//           <button className="ba-cancel" onClick={closeModal}>
+//         <div className="RescheduleApp-ba-footer">
+//           <button className="RescheduleApp-ba-cancel" onClick={closeModal}>
 //             Cancel
 //           </button>
 
-//           <button className="ba-confirm" onClick={handleReschedule}>
+//           <button className="RescheduleApp-ba-confirm" onClick={handleReschedule}>
 //             Confirm Reschedule
 //           </button>
 //         </div>
@@ -154,8 +154,8 @@
 //   const closeModal = () => onClose(); 
 //   // if (!appointment) {
 //   //   return (
-//   //     <div className="rs-overlay">
-//   //       <div className="rs-modal">
+//   //     <div className="RescheduleApp-rs-overlay">
+//   //       <div className="RescheduleApp-rs-modal">
 //   //         <p>❌ No appointment data found</p>
 //   //         <button onClick={() => navigate("/PatientAppointment")}>
 //   //           Go Back
@@ -219,29 +219,29 @@
 //   };
 
 //   return (
-//     <div className="rs-overlay">
-//       <div className="rs-modal">
+//     <div className="RescheduleApp-rs-overlay">
+//       <div className="RescheduleApp-rs-modal">
 
 //         {/* HEADER */}
-//         <div className="rs-header">
+//         <div className="RescheduleApp-rs-header">
 //           <h2>Reschedule Your Visit</h2>
-//           <button className="rs-close" onClick={closeModal}>×</button>
+//           <button className="RescheduleApp-rs-close" onClick={closeModal}>×</button>
 //         </div>
 
-//         <div className="rs-body">
+//         <div className="RescheduleApp-rs-body">
 
 //           {/* LEFT SIDE */}
-//           <div className="rs-left">
+//           <div className="RescheduleApp-rs-left">
 
 //             {/* 1 DOCTOR */}
-//             <div className="rs-section">
-//               <div className="doctor-info">
+//             <div className="RescheduleApp-rs-section">
+//               <div className="RescheduleApp-doctor-info">
 //                 {appointment?.doctorName} ({appointment?.specialization})
 //               </div>
 //             </div>
 
 //             {/* 2 DATE */}
-//             <div className="rs-section">
+//             <div className="RescheduleApp-rs-section">
 //               <label>2. Select Date</label>
 //               <input
 //                 type="date"
@@ -253,10 +253,10 @@
 //           </div>
 
 //           {/* RIGHT SIDE */}
-//           <div className="rs-right">
+//           <div className="RescheduleApp-rs-right">
 
 //             {/* 3 TYPE */}
-//             <div className="rs-section">
+//             <div className="RescheduleApp-rs-section">
 //               <label>3. Appointment Type</label>
 //               <select value={type} onChange={(e) => setType(e.target.value)}>
 //                 <option value="">Select Type</option>
@@ -266,12 +266,12 @@
 //             </div>
 
 //             {/* 4 TIME */}
-//            <div className="rs-section">
+//            <div className="RescheduleApp-rs-section">
 //   <label>4. Select Time Slot</label>
 
 //   {date ? (
 //     availableSlots.length > 0 ? (
-//       <div className="rs-slots">
+//       <div className="RescheduleApp-rs-slots">
 //         {availableSlots.map((slot, index) => (
 //           <button
 //             key={index}
@@ -288,22 +288,22 @@
 //         ))}
 //       </div>
 //     ) : (
-//       <p className="rs-hint">No slots available</p>
+//       <p className="RescheduleApp-rs-hint">No slots available</p>
 //     )
 //   ) : (
-//     <p className="rs-hint">Please select a date first</p>
+//     <p className="RescheduleApp-rs-hint">Please select a date first</p>
 //   )}
 // </div>
 //           </div>
 //         </div>
 
 //         {/* FOOTER */}
-//         <div className="rs-footer">
-//           <button className="rs-confirm" onClick={handleReschedule} disabled={loading}>
+//         <div className="RescheduleApp-rs-footer">
+//           <button className="RescheduleApp-rs-confirm" onClick={handleReschedule} disabled={loading}>
 //             {loading ? "Rescheduling..." : "Reschedule Appointment"}
 //           </button>
 
-//           <button className="rs-cancel" onClick={closeModal}>
+//           <button className="RescheduleApp-rs-cancel" onClick={closeModal}>
 //             Cancel
 //           </button>
 //         </div>
@@ -489,8 +489,8 @@ useEffect(() => {
   // ✅ SUCCESS SCREEN
   if (isBooked) {
     return (
-      <div className="booking-success">
-        <div className="icon-check">✅</div>
+      <div className="RescheduleApp-booking-success">
+        <div className="RescheduleApp-icon-check">✅</div>
         <h3>Appointment Rescheduled!</h3>
         <p>
           {selectedDate?.toDateString()} at {selectedTime} <br />
@@ -504,108 +504,208 @@ useEffect(() => {
     );
   }
 
+  // return (
+  //   <div className="RescheduleApp-appointment-card">
+  //     <div className="RescheduleApp-appointment-header">
+  //       <h2>Reschedule Appointment</h2>
+  //       <button className="RescheduleApp-close-modal" onClick={onClose}>&times;</button>
+  //     </div>
+
+  //     <div className="RescheduleApp-appointment-grid">
+
+  //       {/* LEFT */}
+  //       <div className="RescheduleApp-calendar-container">
+  //         <label className="RescheduleApp-label-text">Doctor</label>
+
+  //         {/* ✅ DOCTOR NAME ONLY */}
+  //         <div className="RescheduleApp-doctor-display">
+  //           {appointment?.doctorName} ({appointment?.specialization})
+  //         </div>
+
+  //         <label className="RescheduleApp-label-date">Select Date</label>
+  //         <Calendar
+  //           onChange={handleDateChange}
+  //           value={selectedDate}
+  //           minDate={new Date()}
+  //           view="month"
+  //           prev2Label={null}
+  //           next2Label={null}
+  //         />
+  //       </div>
+
+  //       {/* RIGHT */}
+  //       <div className="RescheduleApp-slots-container">
+
+  //         <label className="RescheduleApp-label-text">Appointment Type</label>
+  //         <select
+  //           className="RescheduleApp-appointment-type-select"
+  //           value={appointmentType || ""}
+  //           onChange={(e) => setAppointmentType(e.target.value)}
+  //         >
+  //           {selectedDoctorData?.serviceType?.includes("physical") && (
+  //             <option value="physical">Physical (Clinic Visit)</option>
+  //           )}
+  //           {selectedDoctorData?.serviceType?.includes("videocall") && (
+  //             <option value="videocall">Video Consultation</option>
+  //           )}
+  //         </select>
+
+  //         <p className="RescheduleApp-appointment-type-helper">
+  //           {appointmentType === "physical"
+  //             ? "📍 Visit doctor at clinic"
+  //             : "🎥 Video Consultation"}
+  //         </p>
+
+  //         <label className="RescheduleApp-label-text">Select Time Slot</label>
+
+  //         {selectedDate ? (
+  //           !isWorkingDay ? (
+  //             <div className="RescheduleApp-no-slots">🚫 Doctor not available</div>
+  //           ) : allSlots.length > 0 && availableSlots.length === 0 ? (
+  //             <div className="RescheduleApp-no-slots">❌ No slots available</div>
+  //           ) : (
+  //             <div className="RescheduleApp-slots-grid">
+  //               {allSlots.map((time) => {
+  //                 const isBooked = bookedSlots.includes(time);
+  //                 const isPast = isPastSlot(time);
+  //                 const isSelected = selectedTime === time;
+
+  //                 return (
+  //                   <button
+  //                     key={time}
+  //                     disabled={isBooked || isPast}
+  //                     className={`slot-pill 
+  //                       ${isSelected ? "selected" : ""} 
+  //                       ${isBooked ? "booked" : ""}
+  //                       ${isPast ? "past" : ""}`}
+  //                     onClick={() => !isBooked && !isPast && toggleTimeSlot(time)}
+  //                   >
+  //                     {time}
+  //                   </button>
+  //                 );
+  //               })}
+  //             </div>
+  //           )
+  //         ) : (
+  //           <div className="RescheduleApp-placeholder-text">Select a date first</div>
+  //         )}
+
+  //         {error && <p className="RescheduleApp-booking-error">❌ {error}</p>}
+
+  //         <div className="RescheduleApp-button-group">
+  //           <button
+  //             className="RescheduleApp-booking-submit-btn"
+  //             disabled={!selectedDate || !selectedTime || loading}
+  //             onClick={handleReschedule}
+  //           >
+  //             {loading ? "Updating..." : "Confirm Reschedule"}
+  //           </button>
+
+  //           <button className="RescheduleApp-cancel-btn" onClick={onClose}>
+  //             Cancel
+  //           </button>
+  //         </div>
+
+  //       </div>
+  //     </div>
+  //   </div>
+  // );
   return (
-    <div className="appointment-card">
-      <div className="appointment-header">
-        <h2>Reschedule Appointment</h2>
-        <button className="close-modal" onClick={onClose}>&times;</button>
-      </div>
-
-      <div className="appointment-grid">
-
-        {/* LEFT */}
-        <div className="calendar-container">
-          <label className="label-text">Doctor</label>
-
-          {/* ✅ DOCTOR NAME ONLY */}
-          <div className="doctor-display">
-            {appointment?.doctorName} ({appointment?.specialization})
-          </div>
-
-          <label className="label-date">Select Date</label>
-          <Calendar
-            onChange={handleDateChange}
-            value={selectedDate}
-            minDate={new Date()}
-            view="month"
-            prev2Label={null}
-            next2Label={null}
-          />
+    <div className="RescheduleApp-rs-overlay">
+      <div className="RescheduleApp-rs-modal">
+        {/* HEADER */}
+        <div className="RescheduleApp-rs-header">
+          <h2>Reschedule Your Visit</h2>
+          <button className="RescheduleApp-rs-close" onClick={onClose}>&times;</button>
         </div>
 
-        {/* RIGHT */}
-        <div className="slots-container">
-
-          <label className="label-text">Appointment Type</label>
-          <select
-            className="appointment-type-select"
-            value={appointmentType || ""}
-            onChange={(e) => setAppointmentType(e.target.value)}
-          >
-            {selectedDoctorData?.serviceType?.includes("physical") && (
-              <option value="physical">Physical (Clinic Visit)</option>
-            )}
-            {selectedDoctorData?.serviceType?.includes("videocall") && (
-              <option value="videocall">Video Consultation</option>
-            )}
-          </select>
-
-          <p className="appointment-type-helper">
-            {appointmentType === "physical"
-              ? "📍 Visit doctor at clinic"
-              : "🎥 Video Consultation"}
-          </p>
-
-          <label className="label-text">Select Time Slot</label>
-
-          {selectedDate ? (
-            !isWorkingDay ? (
-              <div className="no-slots">🚫 Doctor not available</div>
-            ) : allSlots.length > 0 && availableSlots.length === 0 ? (
-              <div className="no-slots">❌ No slots available</div>
-            ) : (
-              <div className="slots-grid">
-                {allSlots.map((time) => {
-                  const isBooked = bookedSlots.includes(time);
-                  const isPast = isPastSlot(time);
-                  const isSelected = selectedTime === time;
-
-                  return (
-                    <button
-                      key={time}
-                      disabled={isBooked || isPast}
-                      className={`slot-pill 
-                        ${isSelected ? "selected" : ""} 
-                        ${isBooked ? "booked" : ""}
-                        ${isPast ? "past" : ""}`}
-                      onClick={() => !isBooked && !isPast && toggleTimeSlot(time)}
-                    >
-                      {time}
-                    </button>
-                  );
-                })}
+        <div className="RescheduleApp-rs-body">
+          {/* LEFT SIDE: Doctor & Calendar */}
+          <div className="RescheduleApp-rs-left">
+            <div className="RescheduleApp-rs-section">
+              <label>1. Doctor</label>
+              <div className="RescheduleApp-doctor-display">
+                {appointment?.doctorName} ({appointment?.specialization})
               </div>
-            )
-          ) : (
-            <div className="placeholder-text">Select a date first</div>
-          )}
+            </div>
 
-          {error && <p className="booking-error">❌ {error}</p>}
-
-          <div className="button-group">
-            <button
-              className="booking-submit-btn"
-              disabled={!selectedDate || !selectedTime || loading}
-              onClick={handleReschedule}
-            >
-              {loading ? "Updating..." : "Confirm Reschedule"}
-            </button>
-
-            <button className="cancel-btn" onClick={onClose}>
-              Cancel
-            </button>
+            <div className="RescheduleApp-rs-section">
+              <label>2. Select Date</label>
+              <Calendar
+                onChange={handleDateChange}
+                value={selectedDate}
+                minDate={new Date()}
+                view="month"
+                prev2Label={null}
+                next2Label={null}
+              />
+            </div>
           </div>
 
+          {/* RIGHT SIDE: Type, Slots & Actions */}
+          <div className="RescheduleApp-rs-right">
+            <div className="RescheduleApp-rs-section">
+              <label>3. Appointment Type</label>
+              <select
+                className="RescheduleApp-type-select"
+                value={appointmentType || ""}
+                onChange={(e) => setAppointmentType(e.target.value)}
+              >
+                {selectedDoctorData?.serviceType?.includes("physical") && (
+                  <option value="physical">Physical (Clinic Visit)</option>
+                )}
+                {selectedDoctorData?.serviceType?.includes("videocall") && (
+                  <option value="videocall">Video Consultation</option>
+                )}
+              </select>
+            </div>
+
+            <div className="RescheduleApp-rs-section">
+              <label>4. Select Time Slot</label>
+              {selectedDate ? (
+                !isWorkingDay ? (
+                  <p className="RescheduleApp-rs-hint">🚫 Doctor not available</p>
+                ) : (
+                  <div className="RescheduleApp-rs-slots">
+                    {allSlots.map((time) => {
+                      const isBooked = bookedSlots.includes(time);
+                      const isPast = isPastSlot(time);
+                      const isSelected = selectedTime === time;
+
+                      return (
+                        <button
+                          key={time}
+                          disabled={isBooked || isPast}
+                          className={`RescheduleApp-rs-slot ${isSelected ? "RescheduleApp-active" : ""} ${isBooked ? "booked" : ""} ${isPast ? "past" : ""}`}
+                          onClick={() => !isBooked && !isPast && toggleTimeSlot(time)}
+                        >
+                          {time}
+                        </button>
+                      );
+                    })}
+                  </div>
+                )
+              ) : (
+                <p className="RescheduleApp-rs-hint">Please select a date first</p>
+              )}
+            </div>
+
+            {error && <p className="RescheduleApp-error-msg">❌ {error}</p>}
+
+            {/* ACTION BUTTONS (Inside Right Column to match Book Appointment UI) */}
+            <div className="RescheduleApp-rs-footer">
+              <button
+                className="RescheduleApp-rs-confirm"
+                disabled={!selectedDate || !selectedTime || loading}
+                onClick={handleReschedule}
+              >
+                {loading ? "Updating..." : "Reschedule Appointment"}
+              </button>
+              <button className="RescheduleApp-rs-cancel" onClick={onClose}>
+                Cancel
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
