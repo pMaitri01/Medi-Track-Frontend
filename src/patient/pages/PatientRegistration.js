@@ -169,27 +169,27 @@ const handleBlur = (e) => {
 };
 
   return (
-    <div className="register-container">
+    <div className="PatReg-register-container">
 
-      <div className="register-card">
+      <div className="PatReg-register-card">
 
         {/* LEFT IMAGE */}
-        <div className="left-section">
+        <div className="PatReg-left-section">
           <img src={registerImage} alt="register" />
         </div>
 
         {/* RIGHT FORM BOX */}
-        <div className="right-section">
+        <div className="PatReg-right-section">
 
-          <div className="form-box">
+          <div className="PatReg-form-box">
             <h2>Patient Registration</h2>
 
             <form onSubmit={handleSubmit}>
 
   {/* BASIC INFO */}
-  <h3 className="section-title">Basic Information</h3>
+  <h3 className="PatReg-section-title">Basic Information</h3>
 
-  <div className="row">
+  <div className="PatReg-row">
     <input type="text" name="firstName" placeholder="First Name" onChange={handleChange} onKeyPress={(e) => {
     if (!/[A-Za-z ]/.test(e.key)) {
       e.preventDefault(); // ❌ blocks numbers & symbols
@@ -202,7 +202,7 @@ const handleBlur = (e) => {
   }}required />
   </div>
 
-  <div className="row">
+  <div className="PatReg-row">
     <select name="gender" onChange={handleChange} required>
       <option value="">Gender</option>
       <option>Male</option>
@@ -225,9 +225,9 @@ const handleBlur = (e) => {
   </div>
 
   {/* CONTACT DETAILS */}
-  <h3 className="section-title">Contact Details</h3>
+  <h3 className="PatReg-section-title">Contact Details</h3>
 
-  <div className="row">
+  <div className="PatReg-row">
     <input
       type="text"
       name="mobile"
@@ -252,16 +252,16 @@ const handleBlur = (e) => {
       title="Enter valid email (example: abc@gmail.com)"
       required
     />
-    {errors.email && <p className="error">{errors.email}</p>}
+    {errors.email && <p className="PatReg-error">{errors.email}</p>}
   </div>
 
   <textarea name="address" placeholder="Full Address" onChange={handleChange} required />
 
   {/* LOGIN CREDENTIALS */}
-  <h3 className="section-title">Login Credentials</h3>
+  <h3 className="PatReg-section-title">Login Credentials</h3>
 
-  <div className="row">
-    <div className="password-field-1" id="pwd">
+  <div className="PatReg-row">
+    <div className="PatReg-password-field-1" id="pwd">
       <input
         type={showPassword ? "text" : "password"}
         name="password"
@@ -271,13 +271,13 @@ const handleBlur = (e) => {
       />
 
       <span
-        className="eye-icon"
+        className="PatReg-eye-icon"
         onClick={() => setShowPassword(!showPassword)}
       >
         {showPassword ? <FaEyeSlash /> : <FaEye />}
       </span>
     </div>
-    <div className="password-field-1" id="pwd">
+    <div className="PatReg-password-field-1" id="pwd">
       <input
         type={showConfirmPassword ? "text" : "password"}
         name="confirmPassword"
@@ -287,24 +287,24 @@ const handleBlur = (e) => {
       />
 
       <span
-        className="eye-icon"
+        className="PatReg-eye-icon"
         onClick={() => setShowConfirmPassword(!showConfirmPassword)}
       >
         {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
       </span>
     </div>
-    {/* <div className="errormsg"> */}
-      {errors.password && <p className="error">{errors.password}</p>}
-      {errors.confirmPassword && <p className="error">{errors.confirmPassword}</p>}
-      {errors.server && <p className="error">{errors.server}</p>}
+    {/* <div className="PatReg-errormsg"> */}
+      {errors.password && <p className="PatReg-error">{errors.password}</p>}
+      {errors.confirmPassword && <p className="PatReg-error">{errors.confirmPassword}</p>}
+      {errors.server && <p className="PatReg-error">{errors.server}</p>}
     {/* </div> */}
   </div>
 
-      <button type="submit" className="PReg">Register</button>
-      <div className="log">
-        <small className="txtlog">
+      <button type="submit" className="PatReg-PReg">Register</button>
+      <div className="PatReg-log">
+        <small className="PatReg-txtlog">
           Already have account?
-          <Link to="/patient/login" className="text-primary">
+          <Link to="/patient/login" className="PatReg-text-primary">
             Login
           </Link>
         </small>

@@ -6,7 +6,7 @@
 }
 
 /* BACKGROUND */
-.register-container {
+.PatReg-register-container {
   height: 100vh;
   background-color:#BFEAEA;
   display: flex;
@@ -15,7 +15,7 @@
 }
 
 /* MAIN CARD */
-.register-card {
+.PatReg-register-card {
   display: flex;
   width: 1000px;
   height: 600px;
@@ -23,11 +23,11 @@
     background-color: #F2F2F2;
   border-radius: 15px;
   overflow: hidden;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.PatReg-15);
 }
 
 /* LEFT IMAGE */
-.left-section {
+.PatReg-left-section {
   width: 50%;
   display: flex;
   justify-content: center;
@@ -35,14 +35,14 @@
   background: #F2F2F2 !important;
 }
 
-.left-section img {
+.PatReg-left-section img {
   width: 100%;
   height: 100%;
   position:cover;
 }
 
 /* RIGHT SIDE */
-.right-section {
+.PatReg-right-section {
   width: 50%;
   display: flex;
   justify-content: center;
@@ -51,7 +51,7 @@
 }
 
 /* FORM BOX */
-.form-box {
+.PatReg-form-box {
   /* background: #b7d3d3; */
   background-color: #CFE5E5;
   padding: 20px;
@@ -61,14 +61,14 @@
   overflow-y: hidden;
 }
 
-.form-box h2 {
+.PatReg-form-box h2 {
   text-align: center;
   margin-bottom: 10px;
   color: #0a8f8f;
 }
 
 /* SECTION TITLE */
-.section-title {
+.PatReg-section-title {
   font-size: 15px;
   font-weight: 600;
   margin: 12px 0 6px;
@@ -78,14 +78,14 @@
 }
 
 /* ROW ALIGNMENT */
-.row {
+.PatReg-row {
   display: flex;
   gap: 10px;
   margin-bottom: 8px;
 }
 
-.row input,
-.row select {
+.PatReg-row input,
+.PatReg-row select {
   flex: 1;
 }
 
@@ -111,7 +111,7 @@ textarea {
 }
 
 /* BUTTON */
-.PReg button {
+.PatReg-PReg button {
   width: 100%;
   padding: 10px;
   background-color: #0a8f8f;
@@ -130,36 +130,36 @@ button:hover {
 }
 
 /* LOGIN LINK */
-.login-link {
+.PatReg-login-link {
   text-align: center;
   font-size: 12px;
   margin-top: 8px;
 }
 
-.login-link span {
+.PatReg-login-link span {
   color: #0a8f8f;
   font-weight: bold;
   cursor: pointer;
 }
 
 /* SCROLLBAR (optional nice UI) */
-.form-box::-webkit-scrollbar {
+.PatReg-form-box::-webkit-scrollbar {
   width: 5px;
 }
 
-.form-box::-webkit-scrollbar-thumb {
+.PatReg-form-box::-webkit-scrollbar-thumb {
   background: #0a8f8f;
   border-radius: 10px;
 }
-.log{
+.PatReg-log{
   text-align: center !important;
   margin-top: 5px !important;
 }
-.text-primary{
+.PatReg-text-primary{
   margin-left: 3px;
 }
 
-.row{
+.PatReg-row{
   display: flex;
   gap: 10px;
   margin-bottom: 8px;
@@ -167,14 +167,14 @@ button:hover {
 }
 
 /* PASSWORD FIELD */
-.password-field-1{
+.PatReg-password-field-1{
   position: relative;
   flex: 1;
   width: 50% !important;
 }
 
 /* INPUT */
-.password-field-1 input{
+.PatReg-password-field-1 input{
   padding-right: 35px;
   border: none;
   outline: none;
@@ -186,7 +186,7 @@ button:hover {
   width: 113% !important;
 }
 
-.eye-icon{
+.PatReg-eye-icon{
   position: absolute;
   right: -5px !important;
   top: 50%;
@@ -195,17 +195,17 @@ button:hover {
   color: gray;
   font-size: 18px;
 }
-.error{
+.PatReg-error{
   position: inherit;
   font-size: 12px;
   color: red;
   /* margin-top: 4px; */
 }
-p.error{
+p.PatReg-error{
     margin-bottom: 0rem !important;
 }
 
-.row{
+.PatReg-row{
   display: flex;
   gap: 10px;
   margin-bottom: 8px;
