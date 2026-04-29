@@ -1,13 +1,26 @@
 /* ── Page shell ─────────────────────────────────────────────────────────── */
 .dpresc-page {
   padding: 80px 40px 40px;
-  background: #f4f2ee;
   min-height: 100vh;
   font-family: sans-serif;
   max-width: 1600px;
   margin: 0 auto;
 }
+/* Example logic for your Header CSS */
+.doctor-header {
+  position: fixed;
+  top: 0;
+  right: 0;
+  /* Instead of width 100%, use calc to leave space for the sidebar */
+  width: calc(100% - 250px); 
+  z-index: 100;
+  transition: 0.3s;
+}
 
+/* If the sidebar is collapsed */
+.sidebar-closed .doctor-header {
+  width: calc(100% - 100px);
+}
 /* ── Page heading ───────────────────────────────────────────────────────── */
 .dpresc-page-header {
   display: flex;

@@ -136,7 +136,9 @@ setAppointments(sorted);
   return (
     <>
       <DoctorNavbar open={open} setOpen={setOpen} />
-      <DoctorHeader open={open} />
+      <div style={{ marginLeft: open ? "250px" : "100px", transition: "0.3s" }}>
+         <DoctorHeader open={open} />
+      </div>
 
       <div
         className="dappv-container"

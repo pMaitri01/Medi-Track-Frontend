@@ -20,7 +20,21 @@
   min-height: 80px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
 }
+/* Example logic for your Header CSS */
+.doctor-header {
+  position: fixed;
+  top: 0;
+  right: 0;
+  /* Instead of width 100%, use calc to leave space for the sidebar */
+  width: calc(100% - 250px); 
+  z-index: 100;
+  transition: 0.3s;
+}
 
+/* If the sidebar is collapsed */
+.sidebar-closed .doctor-header {
+  width: calc(100% - 100px);
+}
 .dhist-header h2 {
   font-size: 28px;
   font-weight: 700;

@@ -5,7 +5,21 @@
   min-height: 100vh;
   font-family: sans-serif;
 }
+/* Example logic for your Header CSS */
+.doctor-header {
+  position: fixed;
+  top: 0;
+  right: 0;
+  /* Instead of width 100%, use calc to leave space for the sidebar */
+  width: calc(100% - 250px); 
+  z-index: 100;
+  transition: 0.3s;
+}
 
+/* If the sidebar is collapsed */
+.sidebar-closed .doctor-header {
+  width: calc(100% - 100px);
+}
 /* ── Page heading bar ───────────────────────────────────────────────────── */
 .dappv-header {
   display: flex;

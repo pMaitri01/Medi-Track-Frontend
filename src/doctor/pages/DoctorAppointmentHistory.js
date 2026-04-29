@@ -4,9 +4,9 @@ import DoctorHeader from "../components/DoctorHeader";
 import DoctorNavbar from "../components/DoctorNavbar";
 
 export default function AppointmentHistory() {
-  const [open, setOpen]                           = useState(true);
-  const [appointments, setAppointments]           = useState([]);
-  const [loading, setLoading]                     = useState(true);
+  const [open, setOpen] = useState(true);
+  const [appointments, setAppointments] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [selectedAppointment, setSelectedAppointment] = useState(null);
 
   useEffect(() => {
@@ -35,15 +35,15 @@ export default function AppointmentHistory() {
       const formatted = appointmentArray
         .filter((item) => item.status?.toLowerCase() === "completed")
         .map((item) => ({
-          id:     item._id,
-          name:   `${item.patient?.firstName || ""} ${item.patient?.lastName || ""}`.trim() || "Unknown",
-          email:  item.patient?.email       || "N/A",
-          phone:  item.patient?.mobile || "N/A",
-          gender: item.patient?.gender      || "N/A",
-          time:   item.time,
-          date:   new Date(item.date).toLocaleDateString(),
+          id: item._id,
+          name: `${item.patient?.firstName || ""} ${item.patient?.lastName || ""}`.trim() || "Unknown",
+          email: item.patient?.email || "N/A",
+          phone: item.patient?.mobile || "N/A",
+          gender: item.patient?.gender || "N/A",
+          time: item.time,
+          date: new Date(item.date).toLocaleDateString(),
           status: item.status,
-          img:    `https://ui-avatars.com/api/?name=${item.patient?.firstName || "U"}&background=random&color=fff`,
+          img: `https://ui-avatars.com/api/?name=${item.patient?.firstName || "U"}&background=random&color=fff`,
         }));
 
       setAppointments(formatted);
@@ -84,8 +84,9 @@ export default function AppointmentHistory() {
   return (
     <>
       <DoctorNavbar open={open} setOpen={setOpen} />
-      <DoctorHeader open={open} />
-
+      <div style={{ marginLeft: open ? "250px" : "100px", transition: "0.3s" }}>
+        <DoctorHeader open={open} />
+      </div>
       <div
         className="dhist-container"
         style={{ marginLeft: open ? "250px" : "100px", transition: "0.3s" }}
