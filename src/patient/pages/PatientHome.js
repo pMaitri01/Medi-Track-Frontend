@@ -351,7 +351,7 @@ const PatientHome = () => {
                         {/* {upcomingAppointment?.type === "video" && (
     canStartCall ? (
       <button
-        className="btn-primary"
+        className="PatHome-btn-primary"
         onClick={() =>
   navigate(`/video-call/${upcomingAppointment._id}`, {
     state: { isDoctor: false } // patient side
