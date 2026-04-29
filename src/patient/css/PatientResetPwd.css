@@ -1,4 +1,4 @@
-.otp-container h2{
+.PatResetPwdotp-container h2{
   font-size: 25px;
 }
 
@@ -9,20 +9,20 @@ input{
   border-radius: 8px;
   margin-bottom: 15px;
   outline: none;
-  transition: 0.3s;
+  transition: 0.PatResetPwd3s;
   margin-top: 3px !important;
 }
 input:focus {
   border-color: #0aa5a5;
-  box-shadow: 0 0 5px rgba(10, 165, 165, 0.3);
+  box-shadow: 0 0 5px rgba(10, 165, 165, 0.PatResetPwd3);
 }
-.password-field {
+.PatResetPwdpassword-field {
   position: relative;
   width: 100%;
   margin-bottom: 15px;
 }
 
-.password-field input {
+.PatResetPwdpassword-field input {
   width: 100%;
   padding: 10px 40px 10px 12px;
   border: 1px solid #ccc;
@@ -30,7 +30,7 @@ input:focus {
   font-size: 14px;
 }
 
-.toggle-eye {
+.PatResetPwdtoggle-eye {
   position: absolute;
   right: 12px;
   top: 50%;
@@ -39,7 +39,7 @@ input:focus {
   font-size: 16px;
 }
 
-.otp-btn button {
+.PatResetPwdotp-btn button {
   width: 100%;
   padding: 10px;
   background-color: #0aa5a5;
@@ -48,7 +48,7 @@ input:focus {
   margin-top: 10px !important;
   border-radius: 8px;
   cursor: pointer;
-  transition: 0.3s;
+  transition: 0.PatResetPwd3s;
 }
 button:hover {
   background-color: #088f8f;

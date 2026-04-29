@@ -73,16 +73,16 @@ const handleSubmit = async (e) => {
 
 
   return (
-    <div className="otp-container">
-      <div className="otp-wrapper">
+    <div className="PatResetPwd-otp-container">
+      <div className="PatResetPwd-otp-wrapper">
         {/* Left Side */}
-        <div className="otp-left">
+        <div className="PatResetPwd-otp-left">
           <img src={resetImage} alt="Reset Password" />
         </div>
 
         {/* Right Side */}
-        <div className="otp-right">
-          <div className="otp-card">
+        <div className="PatResetPwd-otp-right">
+          <div className="PatResetPwd-otp-card">
             <h2>Change Your Password</h2>
 
             <form onSubmit={handleSubmit}>
@@ -98,7 +98,7 @@ const handleSubmit = async (e) => {
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
               /> */}
-              <div className="password-field">
+              <div className="PatResetPwd-password-field">
   <input
     type={showPassword ? "text" : "password"}
     placeholder="New Password"
@@ -106,14 +106,14 @@ const handleSubmit = async (e) => {
     onChange={(e) => setPassword(e.target.value)}
   />
   <span
-    className="toggle-eye"
+    className="PatResetPwd-toggle-eye"
     onClick={() => setShowPassword(!showPassword)}
   >
     {showPassword ? <FaEyeSlash /> : <FaEye />}
   </span>
 </div>
 
-<div className="password-field">
+<div className="PatResetPwd-password-field">
   <input
     type={showConfirmPassword ? "text" : "password"}
     placeholder="Confirm Password"
@@ -121,16 +121,16 @@ const handleSubmit = async (e) => {
     onChange={(e) => setConfirmPassword(e.target.value)}
   />
   <span
-    className="toggle-eye"
+    className="PatResetPwd-toggle-eye"
     onClick={() => setShowConfirmPassword(!showConfirmPassword)}
   >
     {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
   </span>
 </div>
 
-              {error && <p className="otp-error">{error}</p>}
+              {error && <p className="PatResetPwd-otp-error">{error}</p>}
 
-              <button type="submit" className="otp-btn">
+              <button type="submit" className="PatResetPwd-otp-btn">
                 Reset Password
               </button>
             </form>
