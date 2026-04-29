@@ -6,11 +6,11 @@ import defaultDoctorImg from "../images/user.png";
 
 // ── Dummy Data ──────────────────────────────────────────────────────────────
 
-const HEALTH_SUMMARY = [
-  { icon: "🩸", label: "Blood Pressure", value: "120 / 80", unit: "mmHg", color: "#fee2e2", text: "#991b1b" },
-  { icon: "🍬", label: "Sugar Level", value: "92", unit: "mg/dL", color: "#fef3c7", text: "#92400e" },
-  { icon: "⚖️", label: "Weight", value: "72", unit: "kg", color: "#d1fae5", text: "#065f46" },
-];
+// const HEALTH_SUMMARY = [
+//   { icon: "🩸", label: "Blood Pressure", value: "120 / 80", unit: "mmHg", color: "#fee2e2", text: "#991b1b" },
+//   { icon: "🍬", label: "Sugar Level", value: "92", unit: "mg/dL", color: "#fef3c7", text: "#92400e" },
+//   { icon: "⚖️", label: "Weight", value: "72", unit: "kg", color: "#d1fae5", text: "#065f46" },
+// ];
 
 const TABS = ["All Records", "Lab", "Scan", "Visit"];
 const DATES = ["All Time", "Last 7 Days", "Last Month"];
@@ -265,7 +265,7 @@ export default function MedicalRecords() {
         </div>
 
         {/* ── Health Summary Cards ── */}
-        <div className="mr-summary-grid">
+        {/* <div className="mr-summary-grid">
           {HEALTH_SUMMARY.map((s) => (
             <div className="mr-summary-card" key={s.label}
               style={{ borderTop: `4px solid ${s.text}` }}>
@@ -278,7 +278,7 @@ export default function MedicalRecords() {
               </div>
             </div>
           ))}
-        </div>
+        </div> */}
 
         {/* ── Search + Filter bar ── */}
         <div className="mr-filter-card">
