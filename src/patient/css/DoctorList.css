@@ -16,7 +16,7 @@ body {
   font-family: sans-serif;
 }
 
-.navbar1 {
+.DocList-navbar1 {
   display: flex;
   align-items: center;
   padding: 18px;
@@ -36,7 +36,7 @@ button {
   border: none;
   transition: none;
 }
-.DL-btn-secondary{
+.DocList-DL-btn-secondary{
  background: var(--primary);
     color: white;
     padding: 10px 18px;
@@ -45,7 +45,7 @@ button {
     width: 130px;  
   width:130px;
 }
-.btn-primary {
+.DocList-btn-primary {
   background: var(--primary);
   color: white;
   padding: 10px 18px;
@@ -54,7 +54,7 @@ button {
   width:130px;
 
 }
-.DL-collapse-btn{
+.DocList-DL-collapse-btn{
     background: var(--primary);
     color: white;
     padding: 10px 18px;
@@ -62,7 +62,7 @@ button {
     font-weight: 600;
     width: 150px;  
 }
-.btn-reset {
+.DocList-btn-reset {
   background: var(--primary);
     color: white;
     padding: 10px 18px;
@@ -72,7 +72,7 @@ button {
   width:130px;
 }
 
-.btn-apply {
+.DocList-btn-apply {
   background: var(--primary);
     color: white;
     padding: 10px 18px;
@@ -81,7 +81,7 @@ button {
     width: 130px;  
   width:130px;
 }
-.DL-main-search-btn {
+.DocList-DL-main-search-btn {
   margin-right: 20px;
   border-radius: 8px;
   background: var(--primary);
@@ -92,7 +92,7 @@ button {
   width:130px;
 }
 /* Layout Elements */
-.filter-card {
+.DocList-filter-card {
   background: white;
   border-radius: 12px;
   border: 1px solid var(--border);
@@ -101,26 +101,26 @@ button {
   margin-top: 20px;
 }
 
-.filter-header {
+.DocList-filter-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.search-footer {
+.DocList-search-footer {
   margin-top: 20px !important;
   width: fit-content;
   margin-left: 630px;
 }
 
-.filter-grid {
+.DocList-filter-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 15px;
   margin-top: 20px;
 }
 
-.input-group label {
+.DocList-input-group label {
   font-size: 11px;
   color: #64748b;
   font-weight: bold;
@@ -128,8 +128,8 @@ button {
   display: block;
 }
 
-.input-group select,
-.date-input {
+.DocList-input-group select,
+.DocList-date-input {
   width: 100%;
   padding: 10px;
   border-radius: 6px;
@@ -137,8 +137,7 @@ button {
   background: #f8fafc;
 }
 
-/* .filter-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 15px; border-top: 1px solid #f1f5f9; padding-top: 15px; } */
-.filter-actions {
+.DocList-filter-actions {
   display: flex;
   justify-content: center !important;
   /* Center horizontally */
@@ -148,19 +147,19 @@ button {
   border-top: 1px solid #f1f5f9;
   padding-top: 15px;
 }
-.doctor-list-grid {
+.DocList-doctor-list-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
   gap: 20px;
 }
-.doctor-list-grid {
+.DocList-doctor-list-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
   gap: 20px;
 }
 
 /* CARD */
-.doc-card {
+.DocList-doc-card {
   background: white;
   border: 1px solid var(--border);
   padding: 20px;
@@ -175,23 +174,23 @@ button {
 }
 
 /* TOP */
-.doc-info {
+.DocList-doc-info {
   display: flex;
   gap: 15px;
 }
 
-.doc-img {
+.DocList-doc-img {
   width: 70px;
   height: 70px;
   border-radius: 50%;
 }
 
 /* TEXT */
-.doc-text h3 {
+.DocList-doc-text h3 {
   margin: 0;
 }
 
-.spec-tag {
+.DocList-spec-tag {
   background: #e0f2fe;
   color: #0369a1;
   padding: 3px 8px;
@@ -200,24 +199,24 @@ button {
 }
 
 /* FOOTER */
-.doc-footer {
+.DocList-doc-footer {
   display: flex;
   gap: 10px;
   margin-top: 15px;
 }
 
-.doc-footer button {
+.DocList-doc-footer button {
   flex: 1;
 }
 
-.doc-img {
+.DocList-doc-img {
   width: 70px;
   height: 70px;
   border-radius: 50%;
   object-fit: cover;
 }
 
-.doc-actions {
+.DocList-doc-actions {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 10px;
@@ -225,7 +224,7 @@ button {
 
 /* Modals */
 
- .modal-overlay {
+.DocList-modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
@@ -239,18 +238,18 @@ button {
 
   z-index: 9999; /* VERY IMPORTANT */
 }
-.booking-modal {
+.DocList-booking-modal {
   width: 500px;
   background: white;
   border-radius: 15px;
   overflow: hidden;
-  animation: fadeIn 0.3s ease;
+  animation: DocList-fadeIn 0.3s ease;
     z-index: 10000;
 
 }
 
 /* HEADER */
-.booking-header {
+.DocList-booking-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -258,21 +257,21 @@ button {
   border-bottom: 1px solid #eee;
 }
 
-.doctor-summary {
+.DocList-doctor-summary {
   display: flex;
   gap: 10px;
   align-items: center;
 }
 
-.doctor-summary img {
+.DocList-doctor-summary img {
   width: 100px;
   height: 70px;
   border-radius: 50%;
 }
-.doctor-name{
+.DocList-doctor-name{
   margin-top: 20px;
 }
-.close-btn {
+.DocList-close-btn {
   background: none;
   font-size: 18px;
   margin-top: -50px;
@@ -280,24 +279,24 @@ button {
   height:35px;
   width: 35px;
 }
-.close-btn:hover{
+.DocList-close-btn:hover{
   color: white !important;
 }
 /* BODY */
-.booking-body {
+.DocList-booking-body {
   padding: 20px;
 }
 
-.booking-step {
+.DocList-booking-step {
   margin-bottom: 20px;
 }
 
-.booking-step h4 {
+.DocList-booking-step h4 {
   margin-bottom: 10px;
 }
 
 /* DATE INPUT */
-.booking-step input {
+.DocList-booking-step input {
   width: 100%;
   padding: 10px;
   border-radius: 8px;
@@ -305,13 +304,13 @@ button {
 }
 
 /* SLOTS */
-.slots-grid {
+.DocList-slots-grid {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
 }
 
-.slot-btn {
+.DocList-slot-btn {
   padding: 8px 12px;
   border-radius: 8px;
   background: #f1f5f9;
@@ -319,17 +318,17 @@ button {
   cursor: pointer;
 }
 
-.slot-btn.active {
+.DocList-slot-btn.active {
   background: var(--primary);
   color: white;
 }
-.error-text {
+.DocList-error-text {
   color: red;
   font-size: 13px;
   margin-top: 5px;
 }
 /* FOOTER */
-.booking-footer {
+.DocList-booking-footer {
   display: flex;
   justify-content:center;
   gap: 7px;
@@ -337,7 +336,7 @@ button {
   border-top: 1px solid #eee;
 }
 
-.cancel-btn {
+.DocList-cancel-btn {
   background: #e2e8f0;
   padding: 8px;
   border-radius: 8px;
@@ -346,7 +345,7 @@ button {
   height:50px;
 }
 
-.confirm-btn {
+.DocList-confirm-btn {
   background: var(--primary);
   color: white;
   padding: 8px;
@@ -355,24 +354,24 @@ button {
   margin-top: 30px;
 }
 
-.confirm-btn.disabled {
+.DocList-confirm-btn.disabled {
   opacity: 0.4;
   cursor: not-allowed;
 }
 
 /* Placeholder */
-.placeholder {
+.DocList-placeholder {
   font-size: 14px;
   background-color: white !important;
 }
-.placeholder p{
+.DocList-placeholder p{
     display: inline-block;
     color: black;
   background-color: white !important;
 }
 
 /* Animation */
-@keyframes fadeIn {
+@keyframes DocList-fadeIn {
   from {
     transform: translateY(20px);
     opacity: 0;
@@ -382,7 +381,7 @@ button {
     opacity: 1;
   }
 }
-.slot-btn {
+.DocList-slot-btn {
   background: #f1f5f9;
   padding: 8px;
   border-radius: 6px;
@@ -390,11 +389,11 @@ button {
   border: 1px solid transparent;
 }
 
-.slot-btn.active {
+.DocList-slot-btn.active {
   background: var(--primary);
   color: white;
 }
-.success-card {
+.DocList-success-card {
   background: white;
   padding: 50px;
   border-radius: 20px;
@@ -402,17 +401,17 @@ button {
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
 }
 
-.disabled {
+.DocList-disabled {
   opacity: 0.3;
   cursor: not-allowed;
 }
-.universal-search-wrapper {
+.DocList-universal-search-wrapper {
   flex: 1;
   margin: 0 20px;
   max-width: 400px;
 }
 
-.universal-search-input {
+.DocList-universal-search-input {
   width: 100%;
   padding: 10px 15px;
   border: 1px solid #ddd;
@@ -421,11 +420,11 @@ button {
   outline: none;
 }
 
-.universal-search-input:focus {
+.DocList-universal-search-input:focus {
   border-color: #008080; /* Match your theme color */
 }
 /* Ensure the success card can contain absolute elements */
-.success-card {
+.DocList-success-card {
   position: relative; 
   padding: 40px 30px;
   background: white;
@@ -433,11 +432,11 @@ button {
   text-align: center;
   box-shadow: 0 10px 25px rgba(0,0,0,0.2);
   min-width: 350px;
-  animation: fadeInScale 0.3s ease-out;
+  animation: DocList-fadeInScale 0.3s ease-out;
 }
 
 /* The Top-Right Cancel Button */
-.close-btn-success {
+.DocList-close-btn-success {
   position: absolute;
   top: 15px;
   right: 15px;
@@ -451,13 +450,13 @@ button {
   line-height: 1;
 }
 
-.close-btn-success:hover {
+.DocList-close-btn-success:hover {
   color: #ef4444; /* Turns red on hover */
   transform: scale(1.1);
 }
 
 /* Smooth entry animation */
-@keyframes fadeInScale {
+@keyframes DocList-fadeInScale {
   from {
     opacity: 0;
     transform: scale(0.9);
@@ -468,24 +467,24 @@ button {
   }
 }
 
-.details-modal{
+.DocList-details-modal{
   background-color: white !important;
   width: 500px;
   border-radius: 8px;
 }
-.details-body {
+.DocList-details-body {
   padding: 2rem;
   max-height: 70vh; /* Limits height to 70% of screen */
   overflow-y: auto;  /* Adds a scrollbar if content is too long */
 }
 
-.info-group h4 {
+.DocList-info-group h4 {
   margin-bottom: 8px;
   font-size: 0.9rem;
   text-transform: uppercase;
   letter-spacing: 1px;
 }
 
-.info-group p {
+.DocList-info-group p {
   margin: 4px 0 !important;
 }

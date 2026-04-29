@@ -91,7 +91,7 @@ const DoctorList = () => {
     const emptyFilters = { specialization: '', location: '', gender: '', experience: '' };
     setFilterInputs(emptyFilters);
     setAppliedFilters(emptyFilters);
-    setSearchTerm("");     
+    setSearchTerm("");     
   };
 
   // --- LIVE FILTER LOGIC (uses fetched doctors) ---
@@ -173,15 +173,15 @@ const handleConfirmBooking = async () => {
 };
 
   return (
-    <div className="app-container">
+    <div className="DocList-app-container">
       <Navbar />
-      <main className="content">
-        <nav className="navbar1">
-          <div className="nav-logo"><span className="logo-icon">🩺</span> Find a Doctor</div>
+      <main className="DocList-content">
+        <nav className="DocList-navbar1">
+          <div className="DocList-nav-logo"><span className="DocList-logo-icon">🩺</span> Find a Doctor</div>
         </nav>
 
-        <div className="filter-card">
-          <div className="filter-header">
+        <div className="DocList-filter-card">
+          <div className="DocList-filter-header">
             <input 
               type="text" 
               placeholder="Search by name, city, or specialty..." 
@@ -196,15 +196,15 @@ const handleConfirmBooking = async () => {
               onChange={(e) => setSearchTerm(e.target.value)} 
             />
 
-            <button className="DL-collapse-btn" onClick={() => setIsFilterOpen(!isFilterOpen)}>
+            <button className="DocList-DL-collapse-btn" onClick={() => setIsFilterOpen(!isFilterOpen)}>
               {isFilterOpen ? "Hide Filters ↑" : "Show Filters ↓"}
             </button>
           </div>
 
           {isFilterOpen && (
             <>
-              <div className="filter-grid">
-                <div className="input-group">
+              <div className="DocList-filter-grid">
+                <div className="DocList-input-group">
                   <label>SPECIALIZATION</label>
                   <select name="specialization" value={filterInputs.specialization} onChange={handleInputChange}>
                     <option value="">All Specializations</option>
@@ -213,7 +213,7 @@ const handleConfirmBooking = async () => {
                     <option value="Orthopedic">Orthopedic</option>
                   </select>
                 </div>
-                <div className="input-group">
+                <div className="DocList-input-group">
                   <label>LOCATION</label>
                   <select name="location" value={filterInputs.location} onChange={handleInputChange}>
                     <option value="">All Locations</option>
@@ -222,7 +222,7 @@ const handleConfirmBooking = async () => {
                     <option value="Vadodara">Vadodara</option>
                   </select>
                 </div>
-                <div className="input-group">
+                <div className="DocList-input-group">
                   <label>GENDER</label>
                   <select name="gender" value={filterInputs.gender} onChange={handleInputChange}>
                     <option value="">All Genders</option>
@@ -230,7 +230,7 @@ const handleConfirmBooking = async () => {
                     <option value="Female">Female</option>
                   </select>
                 </div>
-                <div className="input-group">
+                <div className="DocList-input-group">
                   <label>EXPERIENCE</label>
                   <select name="experience" value={filterInputs.experience} onChange={handleInputChange}>
                     <option value="">Any Experience</option>
@@ -239,54 +239,30 @@ const handleConfirmBooking = async () => {
                   </select>
                 </div>
               </div>
-              <div className="search-footer">
-                <button className="DL-main-search-btn" onClick={handleApplyFilters}>Apply Filter</button>
-                <button className="DL-btn-secondary" onClick={handleResetFilters} style={{marginRight: '10px'}}>Reset</button>
+              <div className="DocList-search-footer">
+                <button className="DocList-DL-main-search-btn" onClick={handleApplyFilters}>Apply Filter</button>
+                <button className="DocList-DL-btn-secondary" onClick={handleResetFilters} style={{marginRight: '10px'}}>Reset</button>
               </div>
             </>
           )}
         </div>
 
-        {/* <div className="doctor-list-grid">
-          {loading ? (
-            <p style={{ padding: "20px", color: "#64748b" }}>Loading doctors...</p>
-          ) : fetchError ? (
-            <p style={{ padding: "20px", color: "#dc2626" }}>❌ {fetchError}</p>
-          ) : filteredDoctors.length > 0 ? filteredDoctors.map(doc => (
-            <div key={doc.id} className="doc-card">
-              <div className="doc-info">
-                <img src={defaultDoctorImg} alt="doctor" className="doc-img" />
-                <div className="doc-text">
-                  <h3>{doc.name}</h3>
-                  <span className="spec-tag">{doc.spec}</span>
-                  <p>💼 {doc.rank}</p>
-                  <p>🕒 {doc.exp} years experience</p>
-                  <p>📍 {doc.city}</p>
-                </div>
-              </div>
-              <div className="doc-actions">
-                <button className="DL-btn-secondary" onClick={() => setSelectedDoctor(doc)}>👁 Details</button>
-                <button className="btn-primary" onClick={() => { setSelectedDoctor(doc); setShowBooking(true); }}>📅 Book</button>
-              </div>
-            </div>
-          )) : <p style={{ padding: "20px" }}>No doctors found.</p>}
-        </div> */}
-        <div className="doctor-list-grid">
+        <div className="DocList-doctor-list-grid">
   {loading ? (
     <p>Loading doctors...</p>
   ) : fetchError ? (
     <p style={{ color: "red" }}>{fetchError}</p>
   ) : filteredDoctors.length > 0 ? (
     filteredDoctors.map((doc) => (
-      <div key={doc.id} className="doc-card">
+      <div key={doc.id} className="DocList-doc-card">
 
         {/* Top Section */}
-        <div className="doc-info">
-          <img src={defaultDoctorImg} alt="doctor" className="doc-img" />
+        <div className="DocList-doc-info">
+          <img src={defaultDoctorImg} alt="doctor" className="DocList-doc-img" />
 
-          <div className="doc-text">
+          <div className="DocList-doc-text">
             <h3>{doc.name}</h3>
-            <span className="spec-tag">{doc.spec}</span>
+            <span className="DocList-spec-tag">{doc.spec}</span>
             <p>💼 {doc.rank}</p>
             <p>🕒 {doc.exp} years experience</p>
             <p>📍 {doc.city}</p>
@@ -294,9 +270,9 @@ const handleConfirmBooking = async () => {
         </div>
 
         {/* Bottom Buttons */}
-        <div className="doc-footer">
+        <div className="DocList-doc-footer">
           <button
-            className="DL-btn-secondary"
+            className="DocList-DL-btn-secondary"
             onClick={() => {
               setSelectedDoctor(doc);
               setShowDetails(true);
@@ -306,9 +282,8 @@ const handleConfirmBooking = async () => {
           </button>
 
           <button
-            className="btn-primary"
+            className="DocList-btn-primary"
            onClick={() => {
-            // console.log("Book clicked", doc);
             setSelectedDoctor(doc);
             setShowBooking(true);
           }}
@@ -327,26 +302,26 @@ const handleConfirmBooking = async () => {
 
       {/* Booking Modal */}
       {showBooking && selectedDoctor && (
-  <div className="modal-overlay">
-    <div className="booking-modal">
+  <div className="DocList-modal-overlay">
+    <div className="DocList-booking-modal">
 
       {/* HEADER */}
-      <div className="booking-header">
-        <div className="doctor-summary">
+      <div className="DocList-booking-header">
+        <div className="DocList-doctor-summary">
           <img src={defaultDoctorImg} alt="doc" />
-          <div className="doctor-name">
+          <div className="DocList-doctor-name">
             <h3>{selectedDoctor.name}</h3>
             <p>{selectedDoctor.spec} • {selectedDoctor.city}</p>
           </div>
         </div>
-        <button className="close-btn" onClick={() => setShowBooking(false)}>✖</button>
+        <button className="DocList-close-btn" onClick={() => setShowBooking(false)}>✖</button>
       </div>
 
       {/* BODY */}
-      <div className="booking-body">
+      <div className="DocList-booking-body">
 
         {/* STEP 1 - DATE */}
-        <div className="booking-step">
+        <div className="DocList-booking-step">
           <h4>📅 Select Date</h4>
           <input
             type="date"
@@ -359,20 +334,20 @@ const handleConfirmBooking = async () => {
             }}
           />
 
-        {errors.date && <p className="error-text">{errors.date}</p>}
+        {errors.date && <p className="DocList-error-text">{errors.date}</p>}
         </div>
 
         {/* STEP 2 - TIME */}
-        <div className="booking-step">
+        <div className="DocList-booking-step">
           <h4>⏰ Select Time</h4>
 
           {bookingDate ? (
           <>
-            <div className="slots-grid">
+            <div className="DocList-slots-grid">
               {timeSlots.map((slot) => (
                 <button
                   key={slot}
-                  className={`slot-btn ${selectedSlot === slot ? "active" : ""}`}
+                  className={`DocList-slot-btn ${selectedSlot === slot ? "active" : ""}`}
                   onClick={() => {
                     setSelectedSlot(slot);
                     setErrors({ ...errors, slot: "" }); // clear error
@@ -383,19 +358,19 @@ const handleConfirmBooking = async () => {
               ))}
             </div>
 
-            {errors.slot && <p className="error-text">{errors.slot}</p>}
+            {errors.slot && <p className="DocList-error-text">{errors.slot}</p>}
           </>
         ) : (
-          <p className="placeholder">Select date first</p>
+          <p className="DocList-placeholder">Select date first</p>
         )}
         </div>
 
       </div>
 
       {/* FOOTER */}
-      <div className="booking-footer">
+      <div className="DocList-booking-footer">
         <button
-          className={`confirm-btn ${
+          className={`DocList-confirm-btn ${
             (!bookingDate || !selectedSlot) ? "disabled" : ""
           }`}
           disabled={!bookingDate || !selectedSlot}
@@ -403,7 +378,7 @@ const handleConfirmBooking = async () => {
         >
           Confirm Appointment
         </button>
-        <button className="cancel-btn" onClick={() => setShowBooking(false)}>
+        <button className="DocList-cancel-btn" onClick={() => setShowBooking(false)}>
           Cancel
         </button>
       </div>
@@ -413,23 +388,23 @@ const handleConfirmBooking = async () => {
 )}
 
   {showSuccess && (
-  <div className="modal-overlay">
-    <div className="success-card">
+  <div className="DocList-modal-overlay">
+    <div className="DocList-success-card">
       {/* Cancel/Close button at top right */}
       <button 
-        className="close-btn-success" 
+        className="DocList-close-btn-success" 
         onClick={() => setShowSuccess(false)}
       >
         ✖
       </button>
 
-      <div className="success-icon">✅</div>
+      <div className="DocList-success-icon">✅</div>
       <h2>Appointment Confirmed</h2>
       <p>Your visit has been successfully scheduled.</p>
       
       {/* Optional: Add an 'OK' button to make it user-friendly */}
       <button 
-        className="DL-main-search-btn" 
+        className="DocList-DL-main-search-btn" 
         style={{ marginTop: '20px' }} 
         onClick={() => setShowSuccess(false)}
       >
@@ -440,47 +415,29 @@ const handleConfirmBooking = async () => {
 )}
 
 {showDetails && selectedDoctor && (
-  <div className="modal-overlay">
-    <div className="details-modal">
+  <div className="DocList-modal-overlay">
+    <div className="DocList-details-modal">
 
       {/* HEADER */}
-      <div className="booking-header">
+      <div className="DocList-booking-header">
         <h3>Doctor Details</h3>
         <button onClick={() => setShowDetails(false)}>✖</button>
       </div>
 
       {/* BODY */}
-      {/* <div className="details-body">
-
-        <img 
-          src={defaultDoctorImg} 
-          alt="doctor" 
-          style={{ width: "120px", borderRadius: "50%" }}
-        />
-
-        <h2>{selectedDoctor.name}</h2>
-        <p><strong>Specialization:</strong> {selectedDoctor.spec}</p>
-        <p><strong>Experience:</strong> {selectedDoctor.exp} years</p>
-        <p><strong>City:</strong> {selectedDoctor.city}</p>
-        <p><strong>Gender:</strong> {selectedDoctor.gender}</p>
-        <p><strong>Designation:</strong> {selectedDoctor.rank}</p>
-        <p><strong>About:</strong> {selectedDoctor.about}</p>
-
-      </div> */}
-
-      <div className="details-body">
+      <div className="DocList-details-body">
   <img 
     src={defaultDoctorImg} 
     alt="doctor" 
     style={{ width: "100px", borderRadius: "50%", marginBottom: '10px' }}
   />
   <h2>{selectedDoctor.name}</h2>
-  <span className="spec-tag">{selectedDoctor.spec}</span>
+  <span className="DocList-spec-tag">{selectedDoctor.spec}</span>
 
-  <div className="info-sections" style={{ textAlign: 'left', marginTop: '20px' }}>
+  <div className="DocList-info-sections" style={{ textAlign: 'left', marginTop: '20px' }}>
     
     {/* Section 1: Professional Details */}
-    <div className="info-group">
+    <div className="DocList-info-group">
       <h4 style={{ color: '#0d9488', borderBottom: '1px solid #eee' }}>Professional Info</h4>
       <p><strong>Designation:</strong> {selectedDoctor.rank}</p>
       <p><strong>Experience:</strong> {selectedDoctor.exp} years</p>
@@ -489,7 +446,7 @@ const handleConfirmBooking = async () => {
     </div>
 
     {/* Section 2: Contact Details */}
-    <div className="info-group" style={{ marginTop: '15px' }}>
+    <div className="DocList-info-group" style={{ marginTop: '15px' }}>
       <h4 style={{ color: '#0d9488', borderBottom: '1px solid #eee' }}>Contact & Location</h4>
       <p><strong>Email:</strong> {selectedDoctor.email}</p>
       <p><strong>Mobile:</strong> {selectedDoctor.mobile}</p>
@@ -498,7 +455,7 @@ const handleConfirmBooking = async () => {
     </div>
 
     {/* Section 3: Clinic & Availability */}
-    <div className="info-group" style={{ marginTop: '15px' }}>
+    <div className="DocList-info-group" style={{ marginTop: '15px' }}>
       <h4 style={{ color: '#0d9488', borderBottom: '1px solid #eee' }}>Clinic Details</h4>
       <p><strong>Clinic:</strong> {selectedDoctor.clinicName}</p>
       <p><strong>Address:</strong> {selectedDoctor.clinicAddress}</p>
@@ -525,7 +482,7 @@ const handleConfirmBooking = async () => {
  </div>
 
     {/* Section 4: About */}
-    <div className="info-group" style={{ marginTop: '15px' }}>
+    <div className="DocList-info-group" style={{ marginTop: '15px' }}>
       <h4 style={{ color: '#0d9488', borderBottom: '1px solid #eee' }}>About</h4>
       <p style={{ fontStyle: 'italic', color: '#64748b' }}>{selectedDoctor.about}</p>
     </div>
@@ -534,9 +491,9 @@ const handleConfirmBooking = async () => {
 </div>
 
       {/* FOOTER */}
-      <div className="booking-footer">
+      <div className="DocList-booking-footer">
         <button 
-          className="btn-primary"
+          className="DocList-btn-primary"
           onClick={() => {
             setShowDetails(false);
             setShowBooking(true);
