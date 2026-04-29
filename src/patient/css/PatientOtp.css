@@ -1,5 +1,5 @@
 /* Background */
-.otp-container {
+.PatOtp-otp-container {
   height: 100vh;
   background-color: #bfeaea;
   display: flex;
@@ -8,18 +8,18 @@
 }
 
 /* Main Box */
-.otp-wrapper {
+.PatOtp-otp-wrapper {
   width: 900px;
   height: 450px;
   background: #f2f2f2;  /*   */
   border-radius: 20px;
   display: flex;
   overflow: hidden;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.PatOtp-1);
 }
 
 /* Left Side */
-.otp-left {
+.PatOtp-otp-left {
   flex: 1;
   background-color: white;  /* #cfe5e5 */
   display: flex;
@@ -27,12 +27,12 @@
   align-items: center;
 }
 
-.otp-left img {
+.PatOtp-otp-left img {
   width: 75%;
 }
 
 /* Right Side */
-.otp-right {
+.PatOtp-otp-right {
   flex: 1;
   display: flex;
   justify-content: center;
@@ -40,7 +40,7 @@
 }
 
 /* Card */
-.otp-card {
+.PatOtp-otp-card {
   background: #cfe5e5;
   padding: 40px;
   border-radius: 15px;
@@ -48,25 +48,25 @@
   text-align: center;
 }
 
-.otp-card h2 {
+.PatOtp-otp-card h2 {
   color: #0aa5a5;
   margin-bottom: 10px;
 }
 
-.otp-card p {
+.PatOtp-otp-card p {
   font-size: 14px;
   margin-bottom: 20px;
   color: #555;
 }
 
 /* OTP Inputs */
-.otp-input-group {
+.PatOtp-otp-input-group {
   display: flex;
   justify-content: space-between;
   margin-bottom: 15px;
 }
 
-.otp-input-group input {
+.PatOtp-otp-input-group input {
   width: 50px;
   height: 50px;
   text-align: center;
@@ -76,12 +76,12 @@
   outline: none;
 }
 
-.otp-input-group input:focus {
+.PatOtp-otp-input-group input:focus {
   border-color: #0aa5a5;
 }
 
 /* Button */
-.otp-btn {
+.PatOtp-otp-btn {
   width: 100%;
   padding: 10px;
   background-color: #0aa5a5;
@@ -89,24 +89,24 @@
   border: none;
   border-radius: 8px;
   cursor: pointer;
-  transition: 0.3s;
+  transition: 0.PatOtp-3s;
 }
 
-.otp-btn:hover {
+.PatOtp-otp-btn:hover {
   background-color: #088f8f;
 }
 
 /* Error */
-.otp-error {
+.PatOtp-otp-error {
   color: red !important;
   font-size: 13px;
   margin-bottom: 10px;
 }
-.text-primary{
+.PatOtp-text-primary{
   margin-bottom: 16px;
   font-size: 15px;
 }
-.resend-container {
+.PatOtp-resend-container {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -115,7 +115,7 @@
   font-size: 18px;
 }
 
-.resend-btn {
+.PatOtp-resend-btn {
   background: none;
   border: none;
   color: #0aa5a5;
@@ -126,7 +126,7 @@
   width: 70px;
 }
 
-.resend-btn:hover {
+.PatOtp-resend-btn:hover {
   text-decoration: underline;
   background: none;
   border-radius: 5px;

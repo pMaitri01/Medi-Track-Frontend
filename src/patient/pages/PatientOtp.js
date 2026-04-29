@@ -111,21 +111,21 @@ export default function PatientOtp() {
 
 
   return (
-    <div className="otp-container">
-      <div className="otp-wrapper">
+    <div className="PatOtp-otp-container">
+      <div className="PatOtp-otp-wrapper">
         {/* Left Side */}
-        <div className="otp-left">
+        <div className="PatOtp-otp-left">
           <img src={forgotImage} alt="OTP Verification" />
         </div>
 
         {/* Right Side */}
-        <div className="otp-right">
-          <div className="otp-card">
+        <div className="PatOtp-otp-right">
+          <div className="PatOtp-otp-card">
             <h2>Verify OTP</h2>
             <p>Enter the 4-digit code sent to your email</p>
 
             <form onSubmit={handleSubmit}>
-              <div className="otp-input-group">
+              <div className="PatOtp-otp-input-group">
                 {otp.map((data, index) => (
                   <input
                     key={index}
@@ -139,10 +139,10 @@ export default function PatientOtp() {
                 ))}
               </div>
 
-              {error && <p className="otp-error">{error}</p>}
+              {error && <p className="PatOtp-otp-error">{error}</p>}
               {/* <small>
                 <span> Didn't receive code?  </span>
-                <a className="text-primary">
+                <a className="PatOtp-text-primary">
                       Resend 
                 </a>
               </small> */}
@@ -151,7 +151,7 @@ export default function PatientOtp() {
                 <button class="resend-btn" onClick={handleResend}>Resend</button>
               </div>
 
-              <button type="submit" className="otp-btn">
+              <button type="submit" className="PatOtp-otp-btn">
                 Verify OTP
               </button>
             </form>
