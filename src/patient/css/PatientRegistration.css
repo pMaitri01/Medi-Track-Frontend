@@ -111,7 +111,7 @@ textarea {
 }
 
 /* BUTTON */
-.PatReg-PReg button {
+.PatReg-PReg-btn {
   width: 100%;
   padding: 10px;
   background-color: #0a8f8f;
@@ -125,7 +125,7 @@ textarea {
 
 }
 
-button:hover {
+.PatReg-PReg-btn:hover {
   background-color: #086f6f;
 }
 
@@ -165,12 +165,16 @@ button:hover {
   margin-bottom: 8px;
   align-items: flex-start;
 }
-
+.PatReg-address1{
+  resize: none;
+  height: 55px;
+  margin-bottom: 8px;
+  width: 100%;
+}
 /* PASSWORD FIELD */
 .PatReg-password-field-1{
   position: relative;
   flex: 1;
-  width: 50% !important;
 }
 
 /* INPUT */
@@ -183,12 +187,22 @@ button:hover {
   left: -12px;
 }
 #pwd input{
-  width: 113% !important;
+  width: 100% !important;
 }
 
-.PatReg-eye-icon{
+.PatReg-eye-icon-1{
   position: absolute;
-  right: -5px !important;
+  right: 20px !important;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: gray;
+  font-size: 18px;
+  margin-left: 300px !important;
+}
+.PatReg-eye-icon-2{
+  position: absolute;
+  right: 20px !important;
   top: 50%;
   transform: translateY(-50%);
   cursor: pointer;

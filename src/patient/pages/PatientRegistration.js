@@ -255,7 +255,7 @@ const handleBlur = (e) => {
     {errors.email && <p className="PatReg-error">{errors.email}</p>}
   </div>
 
-  <textarea name="address" placeholder="Full Address" onChange={handleChange} required />
+  <textarea name="address1" className="PatReg-address1" placeholder="Full Address" onChange={handleChange} required />
 
   {/* LOGIN CREDENTIALS */}
   <h3 className="PatReg-section-title">Login Credentials</h3>
@@ -271,13 +271,13 @@ const handleBlur = (e) => {
       />
 
       <span
-        className="PatReg-eye-icon"
+        className="PatReg-eye-icon-1"
         onClick={() => setShowPassword(!showPassword)}
       >
         {showPassword ? <FaEyeSlash /> : <FaEye />}
       </span>
     </div>
-    <div className="PatReg-password-field-1" id="pwd">
+    <div className="PatReg-password-field-2" id="pwd">
       <input
         type={showConfirmPassword ? "text" : "password"}
         name="confirmPassword"
@@ -287,7 +287,7 @@ const handleBlur = (e) => {
       />
 
       <span
-        className="PatReg-eye-icon"
+        className="PatReg-eye-icon-2"
         onClick={() => setShowConfirmPassword(!showConfirmPassword)}
       >
         {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
@@ -300,7 +300,7 @@ const handleBlur = (e) => {
     {/* </div> */}
   </div>
 
-      <button type="submit" className="PatReg-PReg">Register</button>
+      <button type="submit" className="PatReg-PReg-btn">Register</button>
       <div className="PatReg-log">
         <small className="PatReg-txtlog">
           Already have account?
