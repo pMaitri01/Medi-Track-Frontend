@@ -1,19 +1,18 @@
-.appointment-card {
+.BookApp-appointment-card {
   padding: 18px;
   background: #fff;
   border-radius: 12px;
 }
 
-.appointment-header {
+.BookApp-appointment-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   border-bottom: 2px solid #f1f5f9;
-  /* padding-bottom: 15px; */
   margin-bottom: 25px;
 }
 
-.close-modal {
+.BookApp-close-modal {
   background: none;
   border: none;
   font-size: 28px;
@@ -21,248 +20,81 @@
   cursor: pointer;
   width: 5%;
 }
-.close-modal:hover{
+
+.BookApp-close-modal:hover {
   color: white;
   background-color: #0AA5A5;
 }
-.appointment-grid {
+
+.BookApp-appointment-grid {
   display: grid;
   grid-template-columns: 1.2fr 0.8fr;
   gap: 40px;
 }
-
-.label-text {
+.BookApp-calendar-container{
+  width: 80%;
+}
+.BookApp-slots-container {
+  margin-left: -100px;
+ 
+}
+.BookApp-doctor-dropdown{
+  width: 70%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+.BookApp-label-text,
+.BookApp-label-date {
   display: block;
   font-weight: 700;
-  /* margin-bottom: 15px; */
   color: #1e293b;
   font-size: 0.95rem;
 }
 
-.appointment-type-select {
-  width: 100%;
-  margin-top: 8px;
-  margin-bottom: 8px;
-  padding: 11px 12px;
-  border: 1px solid #e2e8f0;
-  border-radius: 8px;
-  background: #fff;
-  color: #1e293b;
-  font-size: 0.95rem;
-  font-family: inherit;
-  outline: none;
-}
-
-.appointment-type-select:focus {
-  border-color: #0aa5a5;
-  box-shadow: 0 0 0 3px rgba(10, 165, 165, 0.12);
-}
-
-.appointment-type-helper {
-  margin: 0 0 16px 0;
-  font-size: 0.86rem;
-  color: #475569;
-}
-
-.label-date {
-  margin-top: 10px;
-  display: block;
-  font-weight: 700;
-  /* margin-bottom: 15px; */
-  color: #1e293b;
-  font-size: 0.95rem;
-}
-
-/* --- FIXING THE VISIBILITY ISSUES --- */
-
-.react-calendar {
-  width: 100% !important;
-  border: 1px solid #e2e8f0 !important;
-  border-radius: 12px !important;
-  padding: 15px;
-  background: white;
-  font-family: inherit;
-}
-
-/* 1. Fix Navigation (Month Name and Arrows) */
-.react-calendar__navigation button {
-  color: #1e293b !important; /* Dark blue/black text */
-  min-width: 44px;
-  background: none;
-  font-size: 16px;
-  font-weight: 700;
-  border: none;
-  cursor: pointer;
-}
-
-.react-calendar__navigation button:disabled {
-  background-color: #f1f5f9;
-  color: #cbd5e1 !important;
-}
-
-/* 2. Fix Weekday Names (Mon, Tue, etc.) */
-.react-calendar__month-view__weekdays__weekday abbr {
-  text-decoration: none;
-  color: #64748b; /* Grey text */
-  font-weight: 700;
-  text-transform: uppercase;
-  font-size: 0.75rem;
-}
-
-/* 3. Fix Day Numbers Visibility */
-.react-calendar__tile {
-  color: #334155 !important; /* Dark text for dates */
-  font-weight: 500;
-  padding: 12px !important;
-  background: none;
-  border: none;
-  text-align: center;
-  line-height: 16px;
-}
-
-/* 4. Weekend and Past Dates Color */
-.react-calendar__month-view__days__day--weekend {
-  color: #ef4444 !important; /* Soft red for weekends */
-}
-
-.react-calendar__tile:disabled {
-  background-color: #f8fafc !important;
-  color: #cbd5e1 !important; /* Faded for past dates */
-  cursor: not-allowed;
-}
-
-/* 5. Highlight Selected Date */
-.react-calendar__tile--active {
-  background: transparent !important;  /* remove fill */
-  color: #3487a0 !important;
-  border: 2px solid #3487a0 !important;
-  border-radius: 50% !important; /* perfect circle */
-  font-weight: 700;
-}
-
-/* 6. Today's Date Marker */
-.react-calendar__tile--now {
-  background: #589cb1 !important; /* Light yellow tint for 'today' */
-  border: 1px solid #589cb1 ;
-  border-radius: 50%;
-  color: white !important;
-}
-
-/* --- SLOTS AND BUTTONS --- */
-
-/* .slots-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-}
-
-.slot-pill {
-  padding: 12px;
-  border: 1.5px solid #e2e8f0;
-  background: #fff;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: 500;
-  color: #475569;
-}
-.slot-pill:hover
-{
-  color:white;
-  background-color:#0AA5A5;
-}
-.slot-pill.selected {
-  background: #0AA5A5;
-  color: #fff;
-  border-color: #0AA5A5;
-} */
-.slot-pill {
+.BookApp-slot-pill {
   padding: 10px;
   border-radius: 20px;
   border: 1px solid #ccc;
   cursor: pointer;
   background: white;
+  margin: 5px;
 }
 
-.slot-pill.selected {
+.BookApp-slot-pill.selected {
   background: #4caf50;
   color: white;
 }
 
-.slot-pill.booked {
+.BookApp-slot-pill.booked {
   background: #e0e0e0;
   color: #999;
   cursor: not-allowed;
-  /* text-decoration: line-through; */
-}
-.placeholder-text {
-  color: #94a3b8;
-  font-style: italic;
-  margin-top: 20px;
 }
 
-.booking-submit-btn {
-  width: 100%;
+.BookApp-slot-pill.past {
+  background-color: #e5e7eb;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.BookApp-booking-submit-btn {
+  width: 40%;
   margin-top: 30px;
-  padding: 15px;
+  padding: 10px;
   background: #0AA5A5;
   color: #fff;
   border: none;
   border-radius: 8px;
   font-weight: 700;
-  cursor: pointer;
-  flex: 1;
-}
-.booking-submit-btn:hover
-{
-  background-color:#0AA5A5;
-}
-.booking-submit-btn:disabled {
-  background: #e2e8f0;
-  color: #94a3b8;
-  cursor: not-allowed;
 }
 
-/* --- BUTTON GROUP (Cancel + Confirm) --- */
-
-.button-group {
-  display: flex;
-  gap: 15px;
+.BookApp-cancel-btn {
+   width: 40%;
   margin-top: 30px;
-}
-
-/* Cancel Button */
-.cancel-btn {
-  /* flex: 1; */
-  padding: 15px;
-  background: #e2e8f0;
-  color: #1e293b;
+  padding: 10px;
   border: none;
   border-radius: 8px;
   font-weight: 700;
-  cursor: pointer;
-  transition: 0.3s;
-  height: 55px;
-  margin-top: 30px
-}
-
-.cancel-btn:hover {
-  background: #cbd5e1;
-}
-
-/* Confirm Button Adjustment */
-.booking-submit-btn {
-  flex: 1; /* Equal width as cancel */
-}
-
-@media (max-width: 768px) {
-  .appointment-grid {
-    grid-template-columns: 1fr;
-    gap: 24px;
-  }
-}
-
-.slot-pill.past {
-  background-color: #e5e7eb;
-  cursor: not-allowed;
-  opacity: 0.6;
+  margin-left: 30px;
 }
