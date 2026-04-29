@@ -1,73 +1,243 @@
+// import React, { useState, useRef, useEffect } from "react";
+// import { Link} from "react-router-dom";
+// // import { FaBell } from "react-icons/fa";
+// import { FaBell, FaUserCircle,FaChevronDown } from "react-icons/fa";
+// import "./Navbar.css";
+// import Img from "../images/LogoP.png"
+// import { useNavigate } from "react-router-dom";
+
+// function Navbar() {
+//   const [showDropdown, setShowDropdown] = useState(false);
+//   const dropdownRef = useRef(null);
+//   const [username, setUsername] = useState("");
+//   const navigate = useNavigate();
+
+//   const goToProfile = () => {
+//     navigate("/UpdatePatientProfile"); // your route
+//   };
+
+//   const handleLogout = async () => {
+//     try{
+//       await fetch(`${process.env.REACT_APP_API_URL}/api/Patient/logout`, {
+//         method: "POST",
+//         credentials: "include",
+//       })
+       
+//       localStorage.removeItem("user");
+//       alert("logged out");
+
+//       window.location.href = "/";
+//     }catch(error){
+//       console.log(error);
+//     }
+//   };
+//   // Close dropdown when clicking outside
+//   useEffect(() => {
+//   const user = JSON.parse(localStorage.getItem("user") || "{}");
+
+//   console.log("USER:", user); // ✅ DEBUG
+
+// setUsername(
+//   user?.fullName || 
+//   user?.name || 
+//   `${user?.firstName || ""} ${user?.lastName || ""}`.trim() || 
+//   "User"
+// );
+//   function handleClickOutside(event) {
+//     if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+//       setShowDropdown(false);
+//     }
+//   }
+
+//   document.addEventListener("mousedown", handleClickOutside);
+//   return () => {
+//     document.removeEventListener("mousedown", handleClickOutside);
+//   };
+// }, []);
+
+//   // const handleLogout = () => {
+//   //   localStorage.removeItem("token"); // if using auth
+//   //   navigate("/login");
+//   // };
+
+//   return (
+//     <nav className="navbar">
+//       {/* Logo */}
+//       <div className="logo">
+//         <img src={Img} alt="" className="Logo" style={{width:"80px", marginLeft:"15px", height:"80px"}}/>
+//       </div>
+
+//       {/* Navigation Links */}
+//       <ul className="nav-links">
+//         <li><Link to="/PatientHome">Home</Link></li>
+//         <li><Link to="/DoctorList">Doctors</Link></li>
+//         <li><Link to="/PatientAppointment">Appointments</Link></li>
+//         <li><Link to="/records">Medical Records</Link></li>
+//         <li><Link to="/prescriptions">Prescriptions</Link></li>
+//       </ul>
+
+//       {/* Right Side */}
+//       <div className="nav-right">
+//         <FaBell className="icon" />
+//         <div className="profile-container" ref={dropdownRef}>
+//   {/* <div 
+//     className="profile-trigger"
+//     onClick={() => setShowDropdown(!showDropdown)}
+//   >
+//     <FaUserCircle className="profile-icon" />
+//     <FaChevronDown className={`arrow-icon ${showDropdown ? "rotate" : ""}`} />
+//   </div> */}
+// {/* <div 
+//   className="profile-trigger"
+//   onClick={() => setShowDropdown(!showDropdown)}
+// >
+//   <FaUserCircle className="profile-icon" />
+  
+//   <span className="username-text">{username}</span>
+
+//   <FaChevronDown className={`arrow-icon ${showDropdown ? "rotate" : ""}`} />
+// </div> */}
+
+// <div 
+//   className="profile-pill"
+//   onClick={() => setShowDropdown(!showDropdown)}
+// >
+//     <FaUserCircle className="profile-icon" />
+
+//   <span className="profile-name">{username}</span>
+// </div>
+//   {showDropdown && (
+//     <div className="profile-dropdown">
+//       <div className="dropdown-item" onClick={goToProfile}>
+//         <span>👤</span> Profile
+//       </div>
+//       <div className="dropdown-item logout" onClick={handleLogout}>
+//         <span>🚪</span> Logout
+//       </div>
+//     </div>
+//   )}
+// </div>
+//       </div>
+//     </nav>
+//   );
+// }
+
+// export default Navbar;
+
+
 import React, { useState, useRef, useEffect } from "react";
-import { Link} from "react-router-dom";
-// import { FaBell } from "react-icons/fa";
-import { FaBell, FaUserCircle,FaChevronDown } from "react-icons/fa";
+import { Link } from "react-router-dom";
+import { FaBell, FaUserCircle } from "react-icons/fa";
 import "./Navbar.css";
-import Img from "../images/LogoP.png"
+import Img from "../images/LogoP.png";
 import { useNavigate } from "react-router-dom";
+import socket from "../../socket";
 
 function Navbar() {
-  const [showDropdown, setShowDropdown] = useState(false);
+  const [showProfileDropdown, setShowProfileDropdown] = useState(false); // ✅ FIXED
+  const [showNotificationDropdown, setShowNotificationDropdown] = useState(false); // ✅ NEW
+    const [notifications, setNotifications] = useState([]);
   const dropdownRef = useRef(null);
   const [username, setUsername] = useState("");
+  const unreadCount = notifications.filter((n) => !n.isRead).length;
   const navigate = useNavigate();
 
+
+  const user = JSON.parse(localStorage.getItem("user") || "{}");
+
   const goToProfile = () => {
-    navigate("/UpdatePatientProfile"); // your route
+    navigate("/UpdatePatientProfile");
   };
 
   const handleLogout = async () => {
-    try{
+    try {
       await fetch(`${process.env.REACT_APP_API_URL}/api/Patient/logout`, {
         method: "POST",
         credentials: "include",
-      })
-       
+      });
+
       localStorage.removeItem("user");
       alert("logged out");
 
       window.location.href = "/";
-    }catch(error){
+    } catch (error) {
       console.log(error);
     }
   };
-  // Close dropdown when clicking outside
+
+  // ✅ SET USERNAME
   useEffect(() => {
-  const user = JSON.parse(localStorage.getItem("user") || "{}");
+    setUsername(
+      user?.fullName ||
+        user?.name ||
+        `${user?.firstName || ""} ${user?.lastName || ""}`.trim() ||
+        "User"
+    );
+  }, []);
 
-  console.log("USER:", user); // ✅ DEBUG
-
-setUsername(
-  user?.fullName || 
-  user?.name || 
-  `${user?.firstName || ""} ${user?.lastName || ""}`.trim() || 
-  "User"
-);
-  function handleClickOutside(event) {
-    if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-      setShowDropdown(false);
+  // ✅ CLOSE DROPDOWN
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setShowProfileDropdown(false);
+        setShowNotificationDropdown(false);
+      }
     }
-  }
 
-  document.addEventListener("mousedown", handleClickOutside);
-  return () => {
-    document.removeEventListener("mousedown", handleClickOutside);
-  };
-}, []);
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
-  // const handleLogout = () => {
-  //   localStorage.removeItem("token"); // if using auth
-  //   navigate("/login");
-  // };
+  // 🔥 SOCKET JOIN
+  useEffect(() => {
+    if (user?._id) {
+      socket.emit("join", user._id);
+      console.log("Joined:", user._id);
+    }
+  }, [user]);
+
+  // 🔔 REAL-TIME LISTENER
+  useEffect(() => {
+    socket.on("newNotification", (data) => {
+      console.log("🔔 New Notification:", data);
+      setNotifications((prev) => [data, ...prev]);
+    });
+
+    return () => socket.off("newNotification");
+  }, []);
+
+  // 📥 FETCH OLD NOTIFICATIONS
+  useEffect(() => {
+    const fetchNotifications = async () => {
+      const res = await fetch(
+        `${process.env.REACT_APP_API_URL}/api/notification/getnotifications`,
+        {
+          credentials: "include",
+        }
+      );
+
+      const data = await res.json();
+      setNotifications(data);
+    };
+
+    fetchNotifications();
+  }, []);
 
   return (
     <nav className="navbar">
       {/* Logo */}
       <div className="logo">
-        <img src={Img} alt="" className="Logo" style={{width:"80px", marginLeft:"15px", height:"80px"}}/>
+        <img
+          src={Img}
+          alt=""
+          className="Logo"
+          style={{ width: "80px", marginLeft: "15px", height: "80px" }}
+        />
       </div>
 
-      {/* Navigation Links */}
+      {/* Links */}
       <ul className="nav-links">
         <li><Link to="/PatientHome">Home</Link></li>
         <li><Link to="/DoctorList">Doctors</Link></li>
@@ -76,47 +246,107 @@ setUsername(
         <li><Link to="/prescriptions">Prescriptions</Link></li>
       </ul>
 
-      {/* Right Side */}
-      <div className="nav-right">
-        <FaBell className="icon" />
-        <div className="profile-container" ref={dropdownRef}>
-  {/* <div 
-    className="profile-trigger"
-    onClick={() => setShowDropdown(!showDropdown)}
-  >
-    <FaUserCircle className="profile-icon" />
-    <FaChevronDown className={`arrow-icon ${showDropdown ? "rotate" : ""}`} />
-  </div> */}
-{/* <div 
-  className="profile-trigger"
-  onClick={() => setShowDropdown(!showDropdown)}
->
-  <FaUserCircle className="profile-icon" />
-  
-  <span className="username-text">{username}</span>
+      {/* RIGHT SIDE */}
+      <div className="nav-right" ref={dropdownRef}>
 
-  <FaChevronDown className={`arrow-icon ${showDropdown ? "rotate" : ""}`} />
-</div> */}
+        {/* 🔔 NOTIFICATION BELL */}
+        <div style={{ position: "relative", marginRight: "20px" }}>
+          <FaBell
+            className="icon"
+            onClick={() =>
+              setShowNotificationDropdown(!showNotificationDropdown)
+            }
+          />
 
-<div 
-  className="profile-pill"
-  onClick={() => setShowDropdown(!showDropdown)}
->
-    <FaUserCircle className="profile-icon" />
+          {/* 🔴 COUNT */}
+          {notifications.filter((n) => !n.isRead).length > 0 && (
+            <span
+              style={{
+                position: "absolute",
+                top: "-5px",
+                right: "-5px",
+                background: "red",
+                color: "white",
+                borderRadius: "50%",
+                padding: "2px 6px",
+                fontSize: "12px",
+              }}
+            >
+              {notifications.filter((n) => !n.isRead).length}
+            </span>
+          )}
 
-  <span className="profile-name">{username}</span>
-</div>
-  {showDropdown && (
-    <div className="profile-dropdown">
-      <div className="dropdown-item" onClick={goToProfile}>
-        <span>👤</span> Profile
-      </div>
-      <div className="dropdown-item logout" onClick={handleLogout}>
-        <span>🚪</span> Logout
-      </div>
-    </div>
-  )}
-</div>
+          {/* 📦 DROPDOWN */}
+          {showNotificationDropdown && (
+            <div
+              style={{
+                position: "absolute",
+                top: "40px",
+                right: "0",
+                width: "300px",
+                background: "#fff",
+                border: "1px solid #ccc",
+                borderRadius: "5px",
+                maxHeight: "300px",
+                overflowY: "auto",
+                zIndex: 1000,
+              }}
+            >
+              {notifications.length === 0 ? (
+                <p style={{ padding: "10px" }}>No notifications</p>
+              ) : (
+                notifications.map((n) => (
+                  <div
+                    key={n._id}
+                    style={{
+                      padding: "10px",
+                      borderBottom: "1px solid #eee",
+                      background: n.isRead ? "#fff" : "#e6f7ff",
+                      cursor: "pointer",
+                    }}
+                    onClick={async () => {
+                      await fetch(
+                        `${process.env.REACT_APP_API_URL}/api/notifications/${n._id}/read`,
+                        {
+                          method: "PUT",
+                          credentials: "include",
+                        }
+                      );
+
+                      window.location.href = n.link;
+                    }}
+                  >
+                    {n.message}
+                  </div>
+                ))
+              )}
+            </div>
+          )}
+        </div>
+
+        {/* 👤 PROFILE */}
+        <div className="profile-container">
+          <div
+            className="profile-pill"
+            onClick={() =>
+              setShowProfileDropdown(!showProfileDropdown)
+            }
+          >
+            <FaUserCircle className="profile-icon" />
+            <span className="profile-name">{username}</span>
+          </div>
+
+          {showProfileDropdown && (
+            <div className="profile-dropdown">
+              <div className="dropdown-item" onClick={goToProfile}>
+                👤 Profile
+              </div>
+              <div className="dropdown-item logout" onClick={handleLogout}>
+                🚪 Logout
+              </div>
+            </div>
+          )}
+        </div>
       </div>
     </nav>
   );
