@@ -24,13 +24,13 @@ html, body {
 }
 
 /* Video */
-.PatHome-type-badge.video {
+.PatHome-type-badge.PatHome-video {
   background: #e0f2fe;
   color: #0369a1;
 }
 
 /* In-person */
-.PatHome-type-badge.in-person {
+.PatHome-type-badge.PatHome-in-person {
   background: #fef3c7;
   color: #92400e;
 }
@@ -71,10 +71,10 @@ html, body {
   grid-template-columns: 1fr 1.4fr;
   gap: 25px;
 }
-.avatar-placeholder, 
-.dr-avatar-large, 
+.PatHome-avatar-placeholder, 
+.PatHome-dr-avatar-large, 
 .PatHome-icon-circle, 
-.bot-avatar-icon {
+.PatHome-bot-avatar-icon {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -99,7 +99,7 @@ html, body {
   gap: 20px;
 }
 
-.dr-avatar-large {
+.PatHome-dr-avatar-large {
   width: 60px;
   height: 60px;
   /* background: #e2e8f0; */
@@ -120,7 +120,7 @@ html, body {
   margin: 5px 0;
 }
 
-.medical-data-tag {
+.PatHome-medical-data-tag {
   background: #fee2e2;
   color: #ef4444;
   font-size: 10px;
@@ -136,7 +136,7 @@ html, body {
   margin-top: 15px;
 }
 
-.btn-light {
+.PatHome-btn-light {
   border: 1px solid #e2e8f0;
   background: white;
   padding: 8px;
@@ -146,7 +146,7 @@ html, body {
   font-size: 12px;
 }
 
-.btn-blue {
+.PatHome-btn-blue {
   background: #0AA5A5;
   color: white;
   border: none;
@@ -308,14 +308,14 @@ html, body {
   margin-bottom: 15px;
 }
 
-.search-inputs {
+.PatHome-search-inputs {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 15px;
   margin-bottom: 15px;
 }
 
-.main-input {
+.PatHome-main-input {
   padding: 12px;
   border: 1px solid #f1f5f9;
   border-radius: 8px;
@@ -422,23 +422,23 @@ html, body {
   margin-bottom: 20px;
 }
 
-.chat-interface {
+.PatHome-chat-interface {
   margin-top: 20px;
 }
 
-.bot-message-row {
+.PatHome-bot-message-row {
   display: flex;
   gap: 12px;
   margin-bottom: 15px;
 }
 
-.bot-avatar-icon {
+.PatHome-bot-avatar-icon {
   background: #eff6ff;
   padding: 10px;
   border-radius: 10px;
 }
 
-.bot-bubble {
+.PatHome-bot-bubble {
   background: #f8fafc;
   padding: 12px;
   border-radius: 0 12px 12px 12px;
@@ -446,11 +446,11 @@ html, body {
   border: 1px solid #eee;
 }
 
-.chat-input-wrapper {
+.PatHome-chat-input-wrapper {
   position: relative;
 }
 
-.chat-input {
+.PatHome-chat-input {
   width: 100%;
   padding: 15px;
   border-radius: 12px;
@@ -458,7 +458,7 @@ html, body {
   box-sizing: border-box;
 }
 
-.chat-send-btn {
+.PatHome-chat-send-btn {
   position: absolute;
   right: 5px;
   top: 5px;
@@ -471,7 +471,7 @@ html, body {
   cursor: pointer;
 }
 /* Profile Card Specifics */
-.dr-icon-avatar {
+.PatHome-dr-icon-avatar {
   width: 100%;
   height: 100%;
   border-radius: 50%;
@@ -482,30 +482,30 @@ html, body {
 }
 
 /* The Font Awesome Icon style */
-.dr-icon-avatar i {
+.PatHome-dr-icon-avatar i {
   font-size: 28px;
   color: #7dd3fc; /* A slightly darker blue for the icon itself */
 }
 
-.profile-text .profile-label {
+.PatHome-profile-text .PatHome-profile-label {
   font-weight: 700;
   font-size: 14px;
   display: block;
 }
 
-.profile-text .profile-subtext {
+.PatHome-profile-text .PatHome-profile-subtext {
   font-size: 12px;
   color: #64748b;
   margin: 0;
 }
 
-.toggle-icon {
+.PatHome-toggle-icon {
   color: #94a3b8;
   font-size: 12px;
 }
 
 /* Redefine Dropdown for inline use */
-.profile-dropdown-inline {
+.PatHome-profile-dropdown-inline {
   position: absolute;
   left: 0;
   right: 0;

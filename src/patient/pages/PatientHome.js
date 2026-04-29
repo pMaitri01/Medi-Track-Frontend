@@ -251,38 +251,38 @@ const PatientHome = () => {
           </div>
         </div>
       )}
-      <div className={`PatHome-patient-home-wrapper ${isBookingOpen ? 'prevent-scroll' : ''}`}>
+      <div className={`PatHome-patient-home-wrapper ${isBookingOpen ? 'PatHome-prevent-scroll' : ''}`}>
         <div className="PatHome-dashboard-grid">
 
           {/* LEFT COLUMN */}
           <div className="PatHome-left-column">
-            {/* <section className="card card-white">
-              <h2 className="card-heading">Upcoming Appointment</h2>
-              <div className="appointment-body">
-                <div className="profile-image-wrapper">
-                  <img src={doctorProfile} className="profile-image" alt="Profile" />
+            {/* <section className="PatHome-card PatHome-card-white">
+              <h2 className="PatHome-card-heading">Upcoming Appointment</h2>
+              <div className="PatHome-appointment-body">
+                <div className="PatHome-profile-image-wrapper">
+                  <img src={doctorProfile} className="PatHome-profile-image" alt="Profile" />
                 </div>
-                <div className="appointment-details">
-                  <div className="dr-header-row">
+                <div className="PatHome-appointment-details">
+                  <div className="PatHome-dr-header-row">
                     <div>
                       {loadingAppt ? (
                         <p>Loading appointment...</p>
                       ) : upcomingAppointment ? (
                         <>
-                          <h3 className="dr-name">
+                          <h3 className="PatHome-dr-name">
                             {upcomingAppointment.doctor?.fullName || "Doctor"}
                           </h3>
 
-                          <p className="appt-time">
+                          <p className="PatHome-appt-time">
                             {new Date(upcomingAppointment.date).toDateString()} at{" "}
                             {upcomingAppointment.time}
                           </p>
 
-                          <p className="dr-specialty">
+                          <p className="PatHome-dr-specialty">
                             {upcomingAppointment.doctor?.specialization}
                           </p>
 
-                          <p className={`status ${upcomingAppointment.status.toLowerCase()}`}>
+                          <p className={`PatHome-status PatHome-${upcomingAppointment.status.toLowerCase()}`}>
                             {upcomingAppointment.status}
                           </p>
                         </>
@@ -292,9 +292,9 @@ const PatientHome = () => {
                     </div>
                   </div>
                   {upcomingAppointment && (
-                    <div className="action-buttons">
-                      <button className="reviewbtn">Reschedule</button>
-                      <button className="reviewbtn">Cancel</button>
+                    <div className="PatHome-action-buttons">
+                      <button className="PatHome-reviewbtn">Reschedule</button>
+                      <button className="PatHome-reviewbtn">Cancel</button>
                     </div>
                   )}
                 </div>
@@ -304,7 +304,7 @@ const PatientHome = () => {
               <div className="PatHome-card-header-flex">
                 <h2 className="PatHome-card-heading">Upcoming Appointment</h2>
                 {upcomingAppointment && (
-                  <span className={`PatHome-status-pill ${upcomingAppointment.status.toLowerCase()}`}>
+                  <span className={`PatHome-status-pill PatHome-${upcomingAppointment.status.toLowerCase()}`}>
                     {upcomingAppointment.status}
                   </span>
                 )}
@@ -339,7 +339,7 @@ const PatientHome = () => {
                           <span>{upcomingAppointment.time}</span>
                         </div>
                         <div className="PatHome-type-badge-container">
-                          <span className={`PatHome-type-badge ${upcomingAppointment.type}`}>
+                          <span className={`PatHome-type-badge PatHome-${upcomingAppointment.type}`}>
                             {upcomingAppointment.type === "video" ? "🎥 Video" : "🏥 In-Person"}
                           </span>
                         </div>
@@ -361,7 +361,7 @@ const PatientHome = () => {
         Start Call
       </button>
     ) : (
-      <button className="btn-disabled" disabled>
+      <button className="PatHome-btn-disabled" disabled>
         Call not available
       </button>
     )
@@ -369,7 +369,7 @@ const PatientHome = () => {
                         {upcomingAppointment?.type === "video" && (
                           canStartCall ? (
                             // <button
-                            //   className="btn-primary"
+                            //   className="PatHome-btn-primary"
                             //   onClick={() => {
                             //     navigate(`/video-call/${upcomingAppointment._id}?role=patient`);
                             //   }}
