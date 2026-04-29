@@ -56,7 +56,7 @@ export default function UpdateDoctorProfile() {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const res = await fetch("http://localhost:5000/api/doctor/profile-full", {
+        const res = await fetch(`${process.env.REACT_APP_API_URL}/api/doctor/profile-full`, {
           credentials: "include"
         });
 
@@ -144,7 +144,7 @@ export default function UpdateDoctorProfile() {
   // ✅ SAVE API
   const handleSave = async () => {
     try {
-      const res = await fetch("http://localhost:5000/api/doctor/complete-profile", {
+      const res = await fetch(`${process.env.REACT_APP_API_URL}/api/doctor/complete-profile`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
