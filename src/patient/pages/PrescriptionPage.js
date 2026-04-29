@@ -23,14 +23,14 @@ const shortId = (id = "") => `RX-${String(id).slice(-8).toUpperCase()}`;
 // ── PrescriptionCard ─────────────────────────────────────────────────────────
 function PrescriptionCard({ rx, onView }) {
   const isActive = rx.pStatus === "active"; return (
-    <div className="rx-card">
-      <div className="rx-card-top">
-        <img src={defaultDoctorImg} alt="doctor" className="rx-doc-img" />
-        <div className="rx-card-info">
-          <h3 className="rx-doctor-name">
+    <div className="PrescriptionPage-rx-card">
+      <div className="PrescriptionPage-rx-card-top">
+        <img src={defaultDoctorImg} alt="doctor" className="PrescriptionPage-rx-doc-img" />
+        <div className="PrescriptionPage-rx-card-info">
+          <h3 className="PrescriptionPage-rx-doctor-name">
             {rx.doctor?.fullName ? `Dr. ${rx.doctor.fullName}` : "—"}
           </h3>
-          <span className="rx-spec-tag">{rx.doctor?.specialization}</span>        </div>
+          <span className="PrescriptionPage-rx-spec-tag">{rx.doctor?.specialization}</span>        </div>
         {/* <span className={`rx-badge ${isActive ? "rx-badge--active" : "rx-badge--past"}`}>
         </span> */}
         <span className={`rx-badge ${isActive ? "rx-badge--active" : "rx-badge--past"}`}>
@@ -38,19 +38,19 @@ function PrescriptionCard({ rx, onView }) {
         </span>
       </div>
 
-      <div className="rx-card-meta">
+      <div className="PrescriptionPage-rx-card-meta">
         <span>📅{formatDate(rx.createdAt)}</span>
         <span>🩺 {rx.diagnosis}</span>
       </div>
 
-      <p className="rx-medicine-summary">💊 {medicineSummary(rx.medicines)}</p>
+      <p className="PrescriptionPage-rx-medicine-summary">💊 {medicineSummary(rx.medicines)}</p>
 
-      <div className="rx-card-actions">
-        <button className="rx-btn rx-btn--view" onClick={() => onView(rx)}>
+      <div className="PrescriptionPage-rx-card-actions">
+        <button className="PrescriptionPage-rx-btn rx-btn--view" onClick={() => onView(rx)}>
           👁 View Full Prescription
         </button>
-        {/* <button className="rx-btn rx-btn--download">⬇ Download</button> */}
-          <button className="rx-btn rx-btn--download" onClick={() => generatePrescriptionPDF(rx)}>
+        {/* <button className="PrescriptionPage-rx-btn rx-btn--download">⬇ Download</button> */}
+          <button className="PrescriptionPage-rx-btn rx-btn--download" onClick={() => generatePrescriptionPDF(rx)}>
   Download
 </button>
       </div>
@@ -61,8 +61,8 @@ function PrescriptionCard({ rx, onView }) {
 // ── Medicine Table ────────────────────────────────────────────────────────────
 function MedicineTable({ medicines }) {
   return (
-    <div className="rx-table-wrap">
-      <table className="rx-table">
+    <div className="PrescriptionPage-rx-table-wrap">
+      <table className="PrescriptionPage-rx-table">
         <thead>
           <tr>
             <th>Medicine</th>
@@ -122,17 +122,17 @@ function TimingGroups({ medicines }) {
   }, {});
 
   if (Object.keys(groups).length === 0) {
-    return <p className="rx-empty">No schedule available</p>;
+    return <p className="PrescriptionPage-rx-empty">No schedule available</p>;
   }
 
   return (
-    <div className="rx-timing-groups">
+    <div className="PrescriptionPage-rx-timing-groups">
       {Object.entries(groups).map(([slot, list]) => (
-        <div key={slot} className="rx-timing-group">
-          <p className="rx-timing-label">
+        <div key={slot} className="PrescriptionPage-rx-timing-group">
+          <p className="PrescriptionPage-rx-timing-label">
             {TIMING_ICON[slot]} {slot}
           </p>
-          <div className="rx-timing-pills">
+          <div className="PrescriptionPage-rx-timing-pills">
             {list.map((m, i) => {
               const timingObj = m.timing.find((t) => {
                 const s =
@@ -149,7 +149,7 @@ function TimingGroups({ medicines }) {
                   : "";
 
               return (
-                <span key={`${m.name}-${i}`} className="rx-timing-pill">
+                <span key={`${m.name}-${i}`} className="PrescriptionPage-rx-timing-pill">
                   {m.name} · {m.dosage} {food}
                 </span>
               );
@@ -171,58 +171,58 @@ function PrescriptionModal({ rx, onClose }) {
 
   const isActive = rx.pStatus === "active";
   return (
-    <div className="rx-overlay" onClick={onClose}>
-      <div className="rx-modal" onClick={(e) => e.stopPropagation()}>
+    <div className="PrescriptionPage-rx-overlay" onClick={onClose}>
+      <div className="PrescriptionPage-rx-modal" onClick={(e) => e.stopPropagation()}>
        
         {/* Header */}
-        <div className="rx-modal-header">
-          <div className="rx-modal-header-left">
-            <img src={defaultDoctorImg} alt="doctor" className="rx-modal-img" />
+        <div className="PrescriptionPage-rx-modal-header">
+          <div className="PrescriptionPage-rx-modal-header-left">
+            <img src={defaultDoctorImg} alt="doctor" className="PrescriptionPage-rx-modal-img" />
             <div>
               <h2>{rx.doctor ? `Dr. ${rx.doctor.fullName}` : ""}</h2>
-              <p className="rx-modal-spec">{rx.specialization}</p>
+              <p className="PrescriptionPage-rx-modal-spec">{rx.specialization}</p>
             </div>
           </div>
-          <button className="rx-modal-close" onClick={onClose}>✖</button>
+          <button className="PrescriptionPage-rx-modal-close" onClick={onClose}>✖</button>
         </div>
 
         {/* Meta strip */}
-        <div className="rx-modal-meta">
-          <div className="rx-modal-meta-item">
-            <span className="rx-modal-meta-label">Date</span>
+        <div className="PrescriptionPage-rx-modal-meta">
+          <div className="PrescriptionPage-rx-modal-meta-item">
+            <span className="PrescriptionPage-rx-modal-meta-label">Date</span>
             <span>{formatDate(rx.createdAt)}</span>
           </div>
-          <div className="rx-modal-meta-item">
-            <span className="rx-modal-meta-label">Diagnosis</span>
+          <div className="PrescriptionPage-rx-modal-meta-item">
+            <span className="PrescriptionPage-rx-modal-meta-label">Diagnosis</span>
             <span>{rx.diagnosis}</span>
           </div>
-          <div className="rx-modal-meta-item">
-            <span className="rx-modal-meta-label">Status</span>
+          <div className="PrescriptionPage-rx-modal-meta-item">
+            <span className="PrescriptionPage-rx-modal-meta-label">Status</span>
             <span className={`rx-badge ${isActive ? "rx-badge--active" : "rx-badge--past"}`}>
               {rx.pStatus}
             </span>
           </div>
         </div>
 
-        <div className="rx-modal-body">
+        <div className="PrescriptionPage-rx-modal-body">
           {/* Medicine table */}
-          <div className="rx-modal-section">
-            <h4 className="rx-modal-section-title">💊 Medicines</h4>
+          <div className="PrescriptionPage-rx-modal-section">
+            <h4 className="PrescriptionPage-rx-modal-section-title">💊 Medicines</h4>
             <MedicineTable medicines={rx.medicines} />
           </div>
 
           {/* Timing groups */}
-          <div className="rx-modal-section">
-            <h4 className="rx-modal-section-title">⏰ Medicine Schedule</h4>
+          <div className="PrescriptionPage-rx-modal-section">
+            <h4 className="PrescriptionPage-rx-modal-section-title">⏰ Medicine Schedule</h4>
             <TimingGroups medicines={rx.medicines} />
           </div>
 
           {/* Doctor notes */}
-          <div className="rx-modal-section">
-            <h4 className="rx-modal-section-title">📝 Doctor Notes</h4>
-            <div className="rx-notes-box">
+          <div className="PrescriptionPage-rx-modal-section">
+            <h4 className="PrescriptionPage-rx-modal-section-title">📝 Doctor Notes</h4>
+            <div className="PrescriptionPage-rx-notes-box">
               {(rx.notes || "").split(". ").filter(Boolean).map((note, i) => (
-                <p key={i} className="rx-note-item">• {note.replace(/\.$/, "")}</p>
+                <p key={i} className="PrescriptionPage-rx-note-item">• {note.replace(/\.$/, "")}</p>
               ))}
             </div>
           </div>
@@ -231,11 +231,11 @@ function PrescriptionModal({ rx, onClose }) {
         </div>
 
         {/* Footer */}
-        <div className="rx-modal-footer">
-          <button className="rx-btn rx-btn--download"
+        <div className="PrescriptionPage-rx-modal-footer">
+          <button className="PrescriptionPage-rx-btn rx-btn--download"
             onClick={handleDownload}
           >⬇ Download</button>
-          <button className="rx-btn rx-btn--close" onClick={onClose}>Close</button>
+          <button className="PrescriptionPage-rx-btn rx-btn--close" onClick={onClose}>Close</button>
         </div>
       </div>
     </div>
@@ -298,29 +298,29 @@ export default function PrescriptionPage() {
     .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
   return (
-    <div className="rx-page">
+    <div className="PrescriptionPage-rx-page">
       <Navbar />
 
-      <main className="rx-content">
+      <main className="PrescriptionPage-rx-content">
 
         {/* Page heading bar */}
-        <div className="rx-page-nav">
-          <span className="rx-page-icon">💊</span>
-          <h1 className="rx-heading">My Prescriptions</h1>
+        <div className="PrescriptionPage-rx-page-nav">
+          <span className="PrescriptionPage-rx-page-icon">💊</span>
+          <h1 className="PrescriptionPage-rx-heading">My Prescriptions</h1>
         </div>
 
         {/* Search + filter */}
-        <div className="rx-filter-card">
-          <div className="rx-filter-row">
+        <div className="PrescriptionPage-rx-filter-card">
+          <div className="PrescriptionPage-rx-filter-row">
             <input
-              className="rx-search"
+              className="PrescriptionPage-rx-search"
               type="text"
               placeholder="Search by doctor, medicine, or diagnosis..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
             />
             <select
-              className="rx-select"
+              className="PrescriptionPage-rx-select"
               value={dateFilter}
               onChange={(e) => setDateFilter(e.target.value)}
             >
@@ -330,7 +330,7 @@ export default function PrescriptionPage() {
         </div>
 
         {/* Tabs */}
-        <div className="rx-tabs">
+        <div className="PrescriptionPage-rx-tabs">
           {["Active", "Past"].map((tab) => (
             <button
               key={tab}
@@ -344,9 +344,9 @@ export default function PrescriptionPage() {
 
         {/* Cards */}
         {filtered.length === 0 ? (
-          <p className="rx-empty">No prescriptions found.</p>
+          <p className="PrescriptionPage-rx-empty">No prescriptions found.</p>
         ) : (
-          <div className="rx-grid">
+          <div className="PrescriptionPage-rx-grid">
             {filtered.map((rx) => (
               <PrescriptionCard key={rx._id} rx={rx} onView={setModalRx} />
             ))}
