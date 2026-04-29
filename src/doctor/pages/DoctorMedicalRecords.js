@@ -64,7 +64,16 @@ const DoctorMedicalRecords = () => {
         minHeight: "100vh",
         backgroundColor: "#f8fafc",
     };
+    const getDownloadUrl = (url, fileName) => {
+        if (!url) return "#";
 
+        const safeName = encodeURIComponent(fileName || "medical-record.pdf");
+
+        return url.replace(
+            "/upload/",
+            `/upload/fl_attachment:${safeName}/`
+        );
+    };
     return (
         <>
             <DoctorNavbar open={open} setOpen={setOpen} />
@@ -159,9 +168,15 @@ const DoctorMedicalRecords = () => {
                                                 <td>{rec.type}</td>
                                                 <td>{new Date(rec.date).toLocaleDateString()}</td>
                                                 <td>
-                                                    <a href={rec.fileUrl} target="_blank" rel="noreferrer">
-                                                        <button className="download-btn">Download Record</button>
-                                                    </a>
+                                                    {rec.fileUrl ? (
+                                                        <a href={rec.fileUrl} target="_blank" rel="noreferrer">
+                                                            <button className="download-btn">
+                                                                Download Record
+                                                            </button>
+                                                        </a>
+                                                    ) : (
+                                                        <span>No file</span>
+                                                    )}
                                                 </td>
                                             </tr>
                                         ))
