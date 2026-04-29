@@ -3,19 +3,19 @@ html, body {
   margin: 0;
   overflow: hidden;
 }
-.patient-home-wrapper {
+.PatHome-patient-home-wrapper {
   background-color: #f3f7fd;
   min-height: 100vh;
   padding: 40px;
   font-family: sans-serif;
   color: #334155;
-  height: 100vh;   /* full screen height */
+  height: 100%;   /* full screen height */
 }
-.type-badge-container {
+.PatHome-type-badge-container {
   margin-top: 8px;
 }
 
-.type-badge {
+.PatHome-type-badge {
   padding: 4px 10px;
   border-radius: 20px;
   font-size: 12px;
@@ -24,23 +24,23 @@ html, body {
 }
 
 /* Video */
-.type-badge.video {
+.PatHome-type-badge.video {
   background: #e0f2fe;
   color: #0369a1;
 }
 
 /* In-person */
-.type-badge.in-person {
+.PatHome-type-badge.in-person {
   background: #fef3c7;
   color: #92400e;
 }
-.main-header {
+.PatHome-main-header {
   display: flex;
   justify-content: space-between;
   margin-bottom: 30px;
 }
 
-.avatar-placeholder {
+.PatHome-avatar-placeholder {
   width: 35px;
   height: 35px;
   background: #cbd5e1;
@@ -49,7 +49,7 @@ html, body {
   position: relative;
 }
 
-.profile-dropdown {
+.PatHome-profile-dropdown {
   position: absolute;
   right: 40px;
   top: 80px;
@@ -60,41 +60,41 @@ html, body {
   z-index: 10;
 }
 
-.dropdown-item {
+.PatHome-dropdown-item {
   padding: 10px;
   font-size: 13px;
   border-bottom: 1px solid #eee;
 }
 
-.dashboard-grid {
+.PatHome-dashboard-grid {
   display: grid;
   grid-template-columns: 1fr 1.4fr;
   gap: 25px;
 }
 .avatar-placeholder, 
 .dr-avatar-large, 
-.icon-circle, 
+.PatHome-icon-circle, 
 .bot-avatar-icon {
   display: flex;
   align-items: center;
   justify-content: center;
 }
-.card {
+.PatHome-card {
   border-radius: 20px;
   padding: 25px;
   margin-bottom: 25px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
 }
 
-.card-white {
+.PatHome-card-white {
   background: #ffffff;
 }
 
-.card-blue-solid {
+.PatHome-card-blue-solid {
   background: white;
 }
 
-.appointment-body {
+.PatHome-appointment-body {
   display: flex;
   gap: 20px;
 }
@@ -107,13 +107,13 @@ html, body {
   border-radius: 50%;
 }
 
-.dr-header-row {
+.PatHome-dr-header-row {
   display: flex;
   justify-content: space-between;
   width: 100%;
 }
 
-.appt-time {
+.PatHome-appt-time {
   color: #2563eb;
   font-weight: 600;
   font-size: 14px;
@@ -130,7 +130,7 @@ html, body {
   height: fit-content;
 }
 
-.action-buttons {
+.PatHome-action-buttons {
   display: flex;
   gap: 10px;
   margin-top: 15px;
@@ -157,21 +157,21 @@ html, body {
   font-size: 12px;
 }
 
-.quick-actions-grid {
+.PatHome-quick-actions-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 15px;
   margin-bottom: 25px;
 }
 
-.action-card {
+.PatHome-action-card {
   background: white;
   border-radius: 15px;
   padding: 15px 5px;
   text-align: center;
 }
 
-.action-card span {
+.PatHome-action-card span {
   display: block;
   font-size: 10px;
   font-weight: 700;
@@ -179,7 +179,7 @@ html, body {
   margin-top: 10px;
 }
 
-.icon-circle {
+.PatHome-icon-circle {
   width: 35px;
   height: 35px;
   border-radius: 8px;
@@ -189,31 +189,31 @@ html, body {
   margin: 0 auto;
 }
 
-.icon-cyan {
+.PatHome-icon-cyan {
   background: #ecfeff;
 }
 
-.icon-orange {
+.PatHome-icon-orange {
   background: #fff7ed;
 }
 
-.icon-red {
+.PatHome-icon-red {
   background: #fef2f2;
 }
 
-.icon-blue {
+.PatHome-icon-blue {
   background: #eff6ff;
 }
 
 /* Review Styles */
-.review-form {
+.PatHome-review-form {
   background: rgba(255, 255, 255, 0.1);
   padding: 12px;
   border-radius: 12px;
   margin-bottom: 20px;
 }
 
-.review-input {
+.PatHome-review-input {
   width: 105% !important;
   height: 50px;
   border: 1px solid #e2e8f0 !important; 
@@ -226,12 +226,12 @@ html, body {
   margin-bottom: 10px;
 }
 
-.review-form-footer {
+.PatHome-review-form-footer {
   display: flex;
   justify-content: space-between;
 }
 
-.rating-picker {
+.PatHome-rating-picker {
   background: transparent;
   color: black;
   /* border: 1px solid white; */
@@ -241,7 +241,7 @@ html, body {
   border: 1px solid #e2e8f0;
 }
 
-.reviewbtn {
+.PatHome-reviewbtn {
   background: #0AA5A5;
   border-radius: 8px !important;
   color: white;
@@ -254,10 +254,10 @@ html, body {
   margin-left: 30px;
 }
 
-.reviewbtn:hover{
+.PatHome-reviewbtn:hover{
   background-color: #0AA5A5;
 }
-.reviewbtn1{
+.PatHome-reviewbtn1{
   background: #0AA5A5;
   padding: 12px;
   color: white;
@@ -265,34 +265,34 @@ html, body {
   width: 200px ;
 
 }
-.reviewbtn1:hover{
+.PatHome-reviewbtn1:hover{
   background-color: #0AA5A5;
 }
-.review-item {
+.PatHome-review-item {
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   padding: 12px 0;
 }
 
-.review-item p {
+.PatHome-review-item p {
   font-size: 13px;
   font-style: italic;
   margin-bottom: 5px;
 }
 
-.review-meta {
+.PatHome-review-meta {
   display: flex;
   justify-content: space-between;
   font-size: 10px;
   font-weight: 700;
 }
-.profile-image-wrapper {
+.PatHome-profile-image-wrapper {
   display: flex;
   justify-content: center;
   margin-top: 0px; /* slight overlap effect (optional) */
   margin-bottom: 20px;
 }
 
-.profile-image {
+.PatHome-profile-image {
   width: 80px;
   height: 80px;
   /* border-radius: 50%; */
@@ -301,7 +301,7 @@ html, body {
   /* box-shadow: 0 4px 10px rgba(0,0,0,0.1); */
 }
 /* Search & Chat */
-.search-header-flex {
+.PatHome-search-header-flex {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -321,7 +321,7 @@ html, body {
   border-radius: 8px;
   background: #f8fafc;
 }
-.search-filters-grid {
+.PatHome-search-filters-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 15px;
@@ -331,13 +331,13 @@ html, body {
   border: 1px solid #edf2f7;
 }
 
-.filter-group {
+.PatHome-filter-group {
   display: flex;
   flex-direction: column;
   gap: 5px;
 }
 
-.filter-group label {
+.PatHome-filter-group label {
   font-size: 11px;
   font-weight: 700;
   color: #64748b;
@@ -345,7 +345,7 @@ html, body {
   letter-spacing: 0.5px;
 }
 
-.filter-input {
+.PatHome-filter-input {
   width: 100%;
   padding: 10px 12px;
   border: 1px solid #cbd5e1;
@@ -356,16 +356,16 @@ html, body {
   transition: border-color 0.2s;
 }
 
-.filter-input:focus {
+.PatHome-filter-input:focus {
   border-color: #2563eb;
 }
 
 /* Icons inside inputs */
-.input-with-icon {
+.PatHome-input-with-icon {
   position: relative;
 }
 
-.input-with-icon i {
+.PatHome-input-with-icon i {
   position: absolute;
   left: 10px;
   top: 50%;
@@ -374,16 +374,16 @@ html, body {
   font-size: 12px;
 }
 
-.input-with-icon .filter-input {
+.PatHome-input-with-icon .PatHome-filter-input {
   padding-left: 30px;
 }
 
 /* Submit Button Style */
-.submit-group {
+.PatHome-submit-group {
   justify-content: flex-end;
 }
 
-.btn-search-apply {
+.PatHome-btn-search-apply {
   background: #0AA5A5;
   color: white;
   border: none;
@@ -398,18 +398,18 @@ html, body {
   /* transition: background 0.2s; */
 }
 
-.btn-search-apply:hover {
+.PatHome-btn-search-apply:hover {
   background: #0AA5A5;
 }
 
 /* Extended Results Area */
-.filtered-results-container {
+.PatHome-filtered-results-container {
   margin-top: 20px;
   min-height: 50px;
   transition: all 0.3s ease-in-out;
 }
 
-.no-results-hint {
+.PatHome-no-results-hint {
   text-align: center;
   color: #94a3b8;
   font-size: 13px;
@@ -417,7 +417,7 @@ html, body {
   border: 2px dashed #e2e8f0;
   border-radius: 12px;
 }
-.ai-text-center {
+.PatHome-ai-text-center {
   text-align: center;
   margin-bottom: 20px;
 }
@@ -519,7 +519,7 @@ html, body {
 }
 
 /* Fix for the Review Input overflow */
-.review-input {
+.PatHome-review-input {
   width: 100%; /* Changed from 105% to 100% to stop it going outside the card */
   height: 60px;
   border: 1px solid #e2e8f0 !important; 
@@ -532,19 +532,19 @@ html, body {
 }
 
 /* Spacing fix for review footer */
-.review-form-footer {
+.PatHome-review-form-footer {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.ai-chatbot-container {
+.PatHome-ai-chatbot-container {
   display: flex;
   flex-direction: column;
   height: 500px; /* Fixed height for the chat card */
 }
 
-.chat-window {
+.PatHome-chat-window {
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -554,7 +554,7 @@ html, body {
   border: 1px solid #f1f5f9;
 }
 
-.chat-messages-scroll {
+.PatHome-chat-messages-scroll {
   flex: 1;
   overflow-y: auto;
   padding: 20px;
@@ -564,23 +564,23 @@ html, body {
 }
 
 /* Message Rows */
-.message-row {
+.PatHome-message-row {
   display: flex;
   max-width: 85%;
   gap: 10px;
 }
 
-.bot-row {
+.PatHome-bot-row {
   align-self: flex-start;
 }
 
-.user-row {
+.PatHome-user-row {
   align-self: flex-end;
   flex-direction: row-reverse;
 }
 
 /* Icons & Bubbles */
-.bot-icon-bg {
+.PatHome-bot-icon-bg {
   width: 32px;
   height: 32px;
   background: #2563eb;
@@ -593,28 +593,28 @@ html, body {
   flex-shrink: 0;
 }
 
-.message-bubble {
+.PatHome-message-bubble {
   padding: 12px 16px;
   font-size: 13px;
   line-height: 1.5;
   border-radius: 18px;
 }
 
-.bot-bubble {
+.PatHome-bot-bubble {
   background: white;
   color: #334155;
   border: 1px solid #e2e8f0;
   border-top-left-radius: 2px;
 }
 
-.user-bubble {
+.PatHome-user-bubble {
   background: #2563eb;
   color: white;
   border-top-right-radius: 2px;
 }
 
 /* Input Styling */
-.chat-input-container {
+.PatHome-chat-input-container {
   padding: 15px;
   background: white;
   border-top: 1px solid #f1f5f9;
@@ -622,7 +622,7 @@ html, body {
   gap: 10px;
 }
 
-.chat-input-field {
+.PatHome-chat-input-field {
   flex: 1;
   border: 1px solid #e2e8f0;
   border-radius: 25px;
@@ -632,11 +632,11 @@ html, body {
   transition: border-color 0.2s;
 }
 
-.chat-input-field:focus {
+.PatHome-chat-input-field:focus {
   border-color: #2563eb;
 }
 
-.chat-submit-btn {
+.PatHome-chat-submit-btn {
   background: #0AA5A5;
   color: white;
   border: none;
@@ -650,12 +650,12 @@ html, body {
   transition: transform 0.2s;
 }
 
-.chat-submit-btn:hover {
+.PatHome-chat-submit-btn:hover {
   transform: scale(1.05);
   background: #1d4ed8;
 }
 /* Dark background that covers the screen */
-.booking-modal-overlay {
+.PatHome-booking-modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
@@ -669,7 +669,7 @@ html, body {
 }
 
 /* The box containing your BookAppointment component */
-.booking-modal-content {
+.PatHome-booking-modal-content {
   background: white;
   border-radius: 12px;
   max-width: 900px;
@@ -681,11 +681,11 @@ html, body {
 }
 
 /* Stops the background page from scrolling when card is open */
-.prevent-scroll {
+.PatHome-prevent-scroll {
   overflow: hidden;
   height: 100vh;
 }
-.status {
+.PatHome-status {
   padding: 4px 10px;
   border-radius: 12px;
   font-size: 12px;
@@ -694,24 +694,24 @@ html, body {
 }
 
 /* Approved */
-.status.approved {
+.PatHome-status.PatHome-approved {
   background-color: #d4edda;
   color: #155724;
 }
 
 /* Pending */
-.status.pending {
+.PatHome-status.PatHome-pending {
   background-color: #fff3cd;
   color: #856404;
 }
 
 /* Cancelled */
-.status.cancelled {
+.PatHome-status.PatHome-cancelled {
   background-color: #f8d7da;
   color: #721c24;
 }
 /* Card Header with Status */
-.card-header-flex {
+.PatHome-card-header-flex {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -719,39 +719,39 @@ html, body {
 }
 
 /* Modern Status Pills */
-.status-pill {
+.PatHome-status-pill {
   padding: 4px 12px;
   border-radius: 20px;
   font-size: 12px;
   font-weight: 600;
   text-transform: capitalize;
 }
-.status-pill.accepted,
-.status-pill.approved {
+.PatHome-status-pill.PatHome-accepted,
+.PatHome-status-pill.PatHome-approved {
   background: #d4edda;
   color: #155724;
 }
 
 /* ✅ Rejected / Cancelled → Red */
-.status-pill.rejected,
-.status-pill.cancelled {
+.PatHome-status-pill.PatHome-rejected,
+.PatHome-status-pill.PatHome-cancelled {
   background: #f8d7da;
   color: #721c24;
 }
-.status-pill.pending {
+.PatHome-status-pill.PatHome-pending {
   background: #fff3cd;
   color: #856404;
 }
 
 
 /* Layout Fixes */
-.appointment-body {
+.PatHome-appointment-body {
   display: flex;
   gap: 24px;
   align-items: flex-start;
 }
 
-.dr-image {
+.PatHome-dr-image {
   width: 70px;
   height: 70px;
   border-radius: 16px; /* Squircle looks more modern than a circle here */
@@ -759,20 +759,20 @@ html, body {
   border: 2px solid #f1f5f9;
 }
 
-.dr-name {
+.PatHome-dr-name {
   font-size: 18px;
   color: #1e293b;
   margin: 0 0 4px 0;
 }
 
-.dr-specialty {
+.PatHome-dr-specialty {
   color: #64748b;
   font-size: 14px;
   margin: 0;
 }
 
 /* Date and Time Row */
-.datetime-row {
+.PatHome-datetime-row {
   display: flex;
   gap: 20px;
   margin: 18px 0;
@@ -781,7 +781,7 @@ html, body {
   border-radius: 12px;
 }
 
-.info-item {
+.PatHome-info-item {
   display: flex;
   align-items: center;
   gap: 8px;
@@ -789,17 +789,17 @@ html, body {
   color: #475569;
 }
 
-.info-item i {
+.PatHome-info-item i {
   color: #0AA5A5; /* Your brand teal */
 }
 
 /* Button Styling */
-.action-buttons {
+.PatHome-action-buttons {
   display: flex;
   gap: 12px;
 }
 
-.btn-outline {
+.PatHome-btn-outline {
   background: white;
   border: 1px solid #e2e8f0;
   padding: 8px 16px;
@@ -810,12 +810,12 @@ html, body {
   transition: 0.2s;
 }
 
-.btn-outline:hover {
+.PatHome-btn-outline:hover {
   background: #f8fafc;
   border-color: #cbd5e1;
 }
 
-.btn-danger-outline {
+.PatHome-btn-danger-outline {
   background: white;
   border: 1px solid #fee2e2;
   color: #ef4444;
@@ -825,10 +825,10 @@ html, body {
   cursor: pointer;
 }
 
-.btn-danger-outline:hover {
+.PatHome-btn-danger-outline:hover {
   background: #fef2f2;
 }
-.btn-primary {
+.PatHome-btn-primary {
   background: #2563eb;
   color: white;
   padding: 8px 14px;
@@ -837,7 +837,7 @@ html, body {
   cursor: pointer;
 }
 
-.btn-disabled {
+.PatHome-btn-disabled {
   background: #ccc;
   color: #666;
   padding: 8px 14px;
@@ -846,18 +846,18 @@ html, body {
 }
 /* ===== Review Timeline Card ===== */
 
-.review-timeline-card {
+.PatHome-review-timeline-card {
   background: #ffffff;
 }
 
-.review-header {
+.PatHome-review-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 20px;
 }
 
-.write-review-btn {
+.PatHome-write-review-btn {
   background: #0AA5A5;
   color: white;
   border: none;
@@ -867,13 +867,13 @@ html, body {
   cursor: pointer;
 }
 
-.timeline {
+.PatHome-timeline {
   position: relative;
   padding-left: 25px;
 }
 
 /* vertical line */
-.timeline::before {
+.PatHome-timeline::before {
   content: "";
   position: absolute;
   left: 8px;
@@ -883,13 +883,13 @@ html, body {
   background: #e2e8f0;
 }
 
-.timeline-item {
+.PatHome-timeline-item {
   position: relative;
   margin-bottom: 20px;
   display: flex;
 }
 
-.timeline-dot {
+.PatHome-timeline-dot {
   width: 12px;
   height: 12px;
   background: #0AA5A5;
@@ -900,7 +900,7 @@ html, body {
   z-index: 2;
 }
 
-.timeline-content {
+.PatHome-timeline-content {
   background: #f8fafc;
   padding: 12px 15px;
   border-radius: 12px;
@@ -909,34 +909,34 @@ html, body {
   border: 1px solid #eef2f7;
 }
 
-.review-top {
+.PatHome-review-top {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.review-name {
+.PatHome-review-name {
   font-size: 14px;
   font-weight: 700;
   margin: 0;
 }
 
-.review-date {
+.PatHome-review-date {
   font-size: 11px;
   color: #94a3b8;
 }
 
-.review-text {
+.PatHome-review-text {
   font-size: 13px;
   margin-top: 8px;
   color: #475569;
 }
 
-.review-stars {
+.PatHome-review-stars {
   font-size: 12px;
 }
 
-.view-all {
+.PatHome-view-all {
   text-align: center;
   margin-top: 10px;
   font-size: 13px;

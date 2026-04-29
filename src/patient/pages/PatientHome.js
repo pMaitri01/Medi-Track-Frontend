@@ -238,24 +238,24 @@ const PatientHome = () => {
 
       {/* MODAL OVERLAY - This is what opens when you click Book Appointment */}
       {isBookingOpen && (
-        <div className="booking-modal-overlay">
-          <div className="booking-modal-content">
+        <div className="PatHome-booking-modal-overlay">
+          <div className="PatHome-booking-modal-content">
             <BookAppointment onClose={() => setIsBookingOpen(false)} />
           </div>
         </div>
       )}
       {isUploadOpen && (
-        <div className="booking-modal-overlay">
-          <div className="booking-modal-content">
+        <div className="PatHome-booking-modal-overlay">
+          <div className="PatHome-booking-modal-content">
             <UploadMedicalRecord onClose={() => setIsUploadOpen(false)} />
           </div>
         </div>
       )}
-      <div className={`patient-home-wrapper ${isBookingOpen ? 'prevent-scroll' : ''}`}>
-        <div className="dashboard-grid">
+      <div className={`PatHome-patient-home-wrapper ${isBookingOpen ? 'prevent-scroll' : ''}`}>
+        <div className="PatHome-dashboard-grid">
 
           {/* LEFT COLUMN */}
-          <div className="left-column">
+          <div className="PatHome-left-column">
             {/* <section className="card card-white">
               <h2 className="card-heading">Upcoming Appointment</h2>
               <div className="appointment-body">
@@ -300,52 +300,52 @@ const PatientHome = () => {
                 </div>
               </div>
             </section> */}
-            <section className="card card-white upcoming-appt-section">
-              <div className="card-header-flex">
-                <h2 className="card-heading">Upcoming Appointment</h2>
+            <section className="PatHome-card PatHome-card-white PatHome-upcoming-appt-section">
+              <div className="PatHome-card-header-flex">
+                <h2 className="PatHome-card-heading">Upcoming Appointment</h2>
                 {upcomingAppointment && (
-                  <span className={`status-pill ${upcomingAppointment.status.toLowerCase()}`}>
+                  <span className={`PatHome-status-pill ${upcomingAppointment.status.toLowerCase()}`}>
                     {upcomingAppointment.status}
                   </span>
                 )}
               </div>
 
-              <div className="appointment-body">
-                <div className="dr-profile-aside">
-                  <img src={doctorProfile} className="dr-image" alt="Doctor" />
+              <div className="PatHome-appointment-body">
+                <div className="PatHome-dr-profile-aside">
+                  <img src={doctorProfile} className="PatHome-dr-image" alt="Doctor" />
                 </div>
 
-                <div className="appointment-main-info">
+                <div className="PatHome-appointment-main-info">
                   {loadingAppt ? (
-                    <div className="loading-state">Loading appointment...</div>
+                    <div className="PatHome-loading-state">Loading appointment...</div>
                   ) : upcomingAppointment ? (
                     <>
-                      <div className="info-group">
-                        <h3 className="dr-name">
+                      <div className="PatHome-info-group">
+                        <h3 className="PatHome-dr-name">
                           {`Dr. ${upcomingAppointment.doctor?.fullName || ""}`}
                         </h3>
-                        <p className="dr-specialty">
+                        <p className="PatHome-dr-specialty">
                           {upcomingAppointment.doctor?.specialization}
                         </p>
                       </div>
 
-                      <div className="datetime-row">
-                        <div className="info-item">
+                      <div className="PatHome-datetime-row">
+                        <div className="PatHome-info-item">
                           <i className="fa-regular fa-calendar"></i>
                           <span>{new Date(upcomingAppointment.date).toDateString()}</span>
                         </div>
-                        <div className="info-item">
+                        <div className="PatHome-info-item">
                           <i className="fa-regular fa-clock"></i>
                           <span>{upcomingAppointment.time}</span>
                         </div>
-                        <div className="type-badge-container">
-                          <span className={`type-badge ${upcomingAppointment.type}`}>
+                        <div className="PatHome-type-badge-container">
+                          <span className={`PatHome-type-badge ${upcomingAppointment.type}`}>
                             {upcomingAppointment.type === "video" ? "🎥 Video" : "🏥 In-Person"}
                           </span>
                         </div>
                       </div>
 
-                      <div className="action-buttons">
+                      <div className="PatHome-action-buttons">
 
                         {/* ✅ START CALL BUTTON */}
                         {/* {upcomingAppointment?.type === "video" && (
@@ -376,7 +376,7 @@ const PatientHome = () => {
                             // >
                             //   Join Call
                             // </button>
-                            <button className="btn-primary"
+                            <button className="PatHome-btn-primary"
                               onClick={() => navigate(`/video-call/${upcomingAppointment._id}`)}
                             >
                               Join Call
@@ -387,10 +387,10 @@ const PatientHome = () => {
                             </p>
                           )
                         )}
-                        <button className="btn-outline" onClick={handleReschedule}>Reschedule</button>
+                        <button className="PatHome-btn-outline" onClick={handleReschedule}>Reschedule</button>
 
                         <button
-                          className="btn-danger-outline"
+                          className="PatHome-btn-danger-outline"
                           onClick={() => {
                             const confirmCancel = window.confirm(
                               "Are you sure you want to cancel this appointment?"
@@ -405,9 +405,9 @@ const PatientHome = () => {
                       </div>
                     </>
                   ) : (
-                    <div className="no-appt-state">
+                    <div className="PatHome-no-appt-state">
                       <p>You have no upcoming appointments.</p>
-                      <button className="book-now-link" onClick={() => setIsBookingOpen(true)}>
+                      <button className="PatHome-book-now-link" onClick={() => setIsBookingOpen(true)}>
                         Book one now
                       </button>
                     </div>
@@ -416,54 +416,54 @@ const PatientHome = () => {
               </div>
             </section>
 
-            <div className="quick-actions-grid">
-              <div className="action-card" onClick={() => setIsBookingOpen(true)} style={{ cursor: 'pointer' }}>
-                <div className="icon-circle icon-cyan">📅</div>
+            <div className="PatHome-quick-actions-grid">
+              <div className="PatHome-action-card" onClick={() => setIsBookingOpen(true)} style={{ cursor: 'pointer' }}>
+                <div className="PatHome-icon-circle PatHome-icon-cyan">📅</div>
                 <span>Book Appointment</span>
               </div>
               <div
-                className="action-card"
+                className="PatHome-action-card"
                 onClick={() => setIsUploadOpen(true)}
                 style={{ cursor: 'pointer' }}
               >
-                <div className="icon-circle icon-orange">📄</div>
+                <div className="PatHome-icon-circle PatHome-icon-orange">📄</div>
                 <span>Upload Records</span>
-              </div>              <div className="action-card" onClick={() => setShowPrescription(true)}><div className="icon-circle icon-red">💊</div><span>Prescriptions</span></div>
+              </div>              <div className="PatHome-action-card" onClick={() => setShowPrescription(true)}><div className="PatHome-icon-circle PatHome-icon-red">💊</div><span>Prescriptions</span></div>
 
               <PrescriptionModal
   isOpen={showPrescription}
   onClose={() => setShowPrescription(false)}
 />
-              <div className="action-card"><div className="icon-circle icon-blue">📋</div><span>Lab Results</span></div>
+              <div className="PatHome-action-card"><div className="PatHome-icon-circle PatHome-icon-blue">📋</div><span>Lab Results</span></div>
             </div>
 
-            <section className="card card-white review-timeline-card">
-  <div className="review-header">
-    <h2 className="card-heading">What Patients Say</h2>
-    <button className="write-review-btn" onClick={() => setShowReview(true)}>
+            <section className="PatHome-card PatHome-card-white PatHome-review-timeline-card">
+  <div className="PatHome-review-header">
+    <h2 className="PatHome-card-heading">What Patients Say</h2>
+    <button className="PatHome-write-review-btn" onClick={() => setShowReview(true)}>
       <i className="fa-solid fa-pen"></i> Write a Review
     </button>
   </div>
 
-  <div className="timeline">
+  <div className="PatHome-timeline">
     {reviews.length > 0 ? (
   reviews.map((rev, i) => (
-    <div className="timeline-item" key={i}>
-      <div className="timeline-dot"></div>
+    <div className="PatHome-timeline-item" key={i}>
+      <div className="PatHome-timeline-dot"></div>
 
-      <div className="timeline-content">
-        <div className="review-top">
+      <div className="PatHome-timeline-content">
+        <div className="PatHome-review-top">
           <div>
-            <h4 className="review-name">{rev.name}</h4>
-            <span className="review-date">{rev.date}</span>
+            <h4 className="PatHome-review-name">{rev.name}</h4>
+            <span className="PatHome-review-date">{rev.date}</span>
           </div>
 
-          <div className="review-stars">
+          <div className="PatHome-review-stars">
             {"⭐".repeat(rev.stars)}
           </div>
         </div>
 
-        <p className="review-text">"{rev.text}"</p>
+        <p className="PatHome-review-text">"{rev.text}"</p>
       </div>
     </div>
   ))
@@ -474,81 +474,81 @@ const PatientHome = () => {
 )}
   </div>
 
-  <div className="view-all" onClick={() => navigate("/patient/reviews")}>
+  <div className="PatHome-view-all" onClick={() => navigate("/patient/reviews")}>
     <span>View all reviews →</span>
   </div>
 </section>
           </div>
 
           {/* RIGHT COLUMN - Fully Restored */}
-          <div className="right-column">
+          <div className="PatHome-right-column">
             {/* FIND DOCTOR SECTION */}
-            <section className="card card-white">
-              <div className="search-header-flex">
-                <h2 className="card-heading">Find a Doctor</h2>
+            <section className="PatHome-card PatHome-card-white">
+              <div className="PatHome-search-header-flex">
+                <h2 className="PatHome-card-heading">Find a Doctor</h2>
               </div>
-              <form className="search-filters-grid">
-                <div className="filter-group">
+              <form className="PatHome-search-filters-grid">
+                <div className="PatHome-filter-group">
                   <label>Doctor Name</label>
-                  <div className="input-with-icon">
+                  <div className="PatHome-input-with-icon">
                     <i className="fa-solid fa-magnifying-glass"></i>
-                    <input type="text" placeholder="e.g. Dr. Sarah" className="filter-input" />
+                    <input type="text" placeholder="e.g. Dr. Sarah" className="PatHome-filter-input" />
                   </div>
                 </div>
-                <div className="filter-group">
+                <div className="PatHome-filter-group">
                   <label>Location</label>
-                  <div className="input-with-icon">
+                  <div className="PatHome-input-with-icon">
                     <i className="fa-solid fa-location-dot"></i>
-                    <input type="text" placeholder="City or Zip" className="filter-input" />
+                    <input type="text" placeholder="City or Zip" className="PatHome-filter-input" />
                   </div>
                 </div>
-                <div className="filter-group">
+                <div className="PatHome-filter-group">
                   <label>Specialization</label>
-                  <select className="filter-input">
+                  <select className="PatHome-filter-input">
                     <option>All Specializations</option>
                     <option>General Practice</option>
                     <option>Cardiology</option>
                   </select>
                 </div>
-                <div className="filter-group">
+                <div className="PatHome-filter-group">
                   <label>Availability</label>
-                  <select className="filter-input">
+                  <select className="PatHome-filter-input">
                     <option>Any Day</option>
                     <option>Weekdays</option>
                   </select>
                 </div>
-                <div className="filter-group submit-group">
-                  <button type="submit" className="btn-search-apply">
+                <div className="PatHome-filter-group PatHome-submit-group">
+                  <button type="submit" className="PatHome-btn-search-apply">
                     <i className="fa-solid fa-sliders"></i> Apply Filters
                   </button>
                 </div>
               </form>
-              <div className="filtered-results-container">
-                <div className="no-results-hint">Adjust filters to see available doctors</div>
+              <div className="PatHome-filtered-results-container">
+                <div className="PatHome-no-results-hint">Adjust filters to see available doctors</div>
               </div>
             </section>
 
             {/* AI CHATBOT SECTION */}
-            <section className="card card-white ai-chatbot-container">
-              <div className="ai-text-center">
-                <h2 className="ai-title">
+            <section className="PatHome-card PatHome-card-white PatHome-ai-chatbot-container">
+              <div className="PatHome-ai-text-center">
+                <h2 className="PatHome-ai-title">
                   <i className="fa-solid fa-robot" style={{ marginRight: '10px', color: '#2563eb' }}></i>
                   Ask Medi-Track AI
                 </h2>
-                <p className="ai-subtitle">Instant symptom analysis & suggestions</p>
+                <p className="PatHome-ai-subtitle">Instant symptom analysis & suggestions</p>
               </div>
-              <div className="chat-window">
-                <div className="chat-messages-scroll">
-                  <div className="message-row bot-row">
-                    <div className="bot-icon-bg"><i className="fa-solid fa-robot"></i></div>
-                    <div className="message-bubble bot-bubble">
+              <div className="PatHome-chat-window">
+                <div className="PatHome-chat-messages-scroll">
+                  <div className="PatHome-message-row PatHome-bot-row">
+                    <div className="PatHome-bot-icon-bg"><i className="fa-solid fa-robot"></i></div>
+                    <div className="PatHome-message-bubble PatHome-bot-bubble">
                       Hello John! I'm your AI health assistant. Describe how you're feeling...
                     </div>
                   </div>
                 </div>
-                <div className="chat-input-container">
-                  <input type="text" placeholder="Type your symptoms here..." className="chat-input-field" />
-                  <button className="chat-submit-btn"><i className="fa-solid fa-paper-plane"></i></button>
+                <div className="PatHome-chat-input-container">
+                  <input type="text" placeholder="Type your symptoms here..." className="PatHome-chat-input-field" />
+                  <button className="PatHome-chat-submit-btn"><i className="fa-solid fa-paper-plane"></i></button>
                 </div>
               </div>
             </section>
@@ -557,8 +557,8 @@ const PatientHome = () => {
         </div>
       </div>
       {showReview && (
-  <div className="booking-modal-overlay">
-    <div className="booking-modal-content">
+  <div className="PatHome-booking-modal-overlay">
+    <div className="PatHome-booking-modal-content">
       <Review onClose={() => setShowReview(false)} />
     </div>
   </div>
@@ -566,11 +566,11 @@ const PatientHome = () => {
 
 {showReschedule && selectedAppointment && (
   <div
-    className="booking-modal-overlay"
+    className="PatHome-booking-modal-overlay"
     onClick={() => setShowReschedule(false)}
   >
     <div
-      className="booking-modal-content"
+      className="PatHome-booking-modal-content"
       onClick={(e) => e.stopPropagation()}
       style={{ maxWidth: "900px", width: "95%" }}
     >
