@@ -35,24 +35,78 @@ export default function PatientOtp() {
     }
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const enteredOtp = otp.join("");
+  const handleSubmit = async (e) => {
+  e.preventDefault();
 
-    if (enteredOtp.length < 4) {
-      setError("Please enter complete 4-digit OTP");
+  const enteredOtp = otp.join("");
+
+  if (enteredOtp.length < 4) {
+    setError("Please enter complete 4-digit OTP");
+    return;
+  }
+
+  const email = localStorage.getItem("resetEmail");
+
+  try {
+    const res = await fetch(
+      `${process.env.REACT_APP_API_URL}/api/patient/verify-otp`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email,
+          otp: enteredOtp,
+        }),
+      }
+    );
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      setError(data.message);
       return;
     }
 
-    if (enteredOtp === "1234") {
-      navigate("/PatientResetPwd");
+    // ✅ store OTP for next step
+    localStorage.setItem("resetOtp", enteredOtp);
+
+    navigate("/PatientResetPwd");
+
+  } catch (err) {
+    console.error(err);
+    setError("Something went wrong");
+  }
+};
+ const handleResend = async () => {
+  const email = localStorage.getItem("resetEmail");
+
+  try {
+    const res = await fetch(
+      `${process.env.REACT_APP_API_URL}/api/patient/send-otp`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({ email }),
+      }
+    );
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      setError(data.message);
     } else {
-      setError("Invalid OTP");
+      alert("OTP resent successfully");
     }
-  };
-  const handleResend = () => {
-  console.log("Resend OTP clicked");
-  // Call API here
+
+  } catch (err) {
+    console.error(err);
+    setError("Error resending OTP");
+  }
 };
 
 

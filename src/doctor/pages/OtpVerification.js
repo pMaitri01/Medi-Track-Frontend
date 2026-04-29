@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import "../css/OtpVerification.css";
 
-const DUMMY_OTP = "1234";
 const TIMER_SEC = 30;
 
 const OtpVerification = ({ email, onBack, onSuccess }) => {
@@ -45,19 +44,44 @@ const OtpVerification = ({ email, onBack, onSuccess }) => {
 
   const otpValue = otp.join("");
 
-  const handleVerify = () => {
-    if (!otpValue)           { setError("OTP is required."); return; }
-    if (otpValue.length < 4) { setError("Enter valid 4-digit OTP."); return; }
-    setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-      if (otpValue === DUMMY_OTP) {
-        onSuccess();
-      } else {
-        setError("Invalid OTP. Please try again.");
+const handleVerify = async () => {
+  const otpValue = otp.join("");
+  const email = localStorage.getItem("resetEmail");
+
+  if (otpValue.length < 4) {
+    setError("Enter valid OTP");
+    return;
+  }
+
+  setLoading(true);
+
+  try {
+    const res = await fetch(
+      `${process.env.REACT_APP_API_URL}/api/doctor/verify-otp`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, otp: otpValue }),
       }
-    }, 1200);
-  };
+    );
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      setError(data.message);
+      setLoading(false);
+      return;
+    }
+
+    localStorage.setItem("resetOtp", otpValue);
+
+    onSuccess();
+  } catch (err) {
+    setError("Something went wrong");
+  }
+
+  setLoading(false);
+};
 
   const handleResend = () => {
     setOtp(["", "", "", "", "", ""]);
@@ -73,7 +97,7 @@ const OtpVerification = ({ email, onBack, onSuccess }) => {
         <div className="dotp-icon">📩</div>
         <h2 className="dotp-title">Verify OTP</h2>
         <p className="dotp-subtitle">
-          Enter the 6-digit OTP sent to <strong>{email}</strong>
+          Enter the 4-digit OTP sent to <strong>{email}</strong>
         </p>
 
         {/* OTP boxes */}
@@ -99,7 +123,7 @@ const OtpVerification = ({ email, onBack, onSuccess }) => {
         <button
           className="dotp-btn"
           onClick={handleVerify}
-          disabled={otpValue.length < 6 || loading}
+          disabled={otpValue.length < 4 || loading}
           style={{ marginTop: 12 }}
         >
           {loading ? "Verifying..." : "Verify OTP"}

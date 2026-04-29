@@ -12,10 +12,7 @@ export default function PatientResetPwd() {
   const [showPassword, setShowPassword] = useState(false);
 const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-
-
-
-  const handleSubmit = (e) => {
+const handleSubmit = async (e) => {
   e.preventDefault();
 
   if (!password || !confirmPassword) {
@@ -33,9 +30,45 @@ const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     return;
   }
 
-  // Password successfully reset
-  setError("");
-  navigate("/"); // redirect to login page
+  const email = localStorage.getItem("resetEmail");
+  const otp = localStorage.getItem("resetOtp");
+
+  try {
+    const res = await fetch(
+      `${process.env.REACT_APP_API_URL}/api/patient/reset-password`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials:"include",
+        body: JSON.stringify({
+          email,
+          otp,
+          password,
+        }),
+      }
+    );
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      setError(data.message);
+      return;
+    }
+
+    // ✅ clear storage
+    localStorage.removeItem("resetEmail");
+    localStorage.removeItem("resetOtp");
+
+    alert("Password reset successful");
+
+    navigate("/"); // login page
+
+  } catch (err) {
+    console.error(err);
+    setError("Something went wrong");
+  }
 };
 
 

@@ -15,25 +15,51 @@ export default function PatientForgotPwd() {
     return regex.test(value);
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+const handleSubmit = async (e) => {
+  e.preventDefault();
 
-    // Empty validation
-    if (!email) {
-      setError("Email Is Required");
+  if (!email) {
+    setError("Email Is Required");
+    return;
+  }
+
+  if (!validateEmail(email)) {
+    setError("Please Enter A Valid Email Address");
+    return;
+  }
+
+  setError("");
+
+  try {
+    console.log(process.env.REACT_APP_API_URL);
+    const res = await fetch(
+      `${process.env.REACT_APP_API_URL}/api/patient/send-otp`, 
+      {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+      body: JSON.stringify({ email }),
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      setError(data.message);
       return;
     }
 
-    // Format validation
-    if (!validateEmail(email)) {
-      setError("Please Enter A Valid Email Address");
-      return;
-    }
+    // store email for next page
+    localStorage.setItem("resetEmail", email);
 
-    // If valid
-    setError("");
     navigate("/PatientOtp");
-  };
+
+  } catch (err) {
+    console.error(err);
+    setError("Something went wrong");
+  }
+};
 
   return (
     <div className="forgot-container">

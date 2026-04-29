@@ -1,15 +1,15 @@
 import { useState } from "react";
 import "../css/ResetPassword.css";
 
-const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/;
+const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#]).{6,}$/;
 
 const getStrength = (pwd) => {
   if (!pwd) return 0;
   let score = 0;
-  if (pwd.length >= 8)          score++;
+  if (pwd.length >= 6)          score++;
   if (/[A-Z]/.test(pwd))        score++;
   if (/\d/.test(pwd))           score++;
-  if (/[@$!%*?&]/.test(pwd))    score++;
+  if (/[@$!%*?&#]/.test(pwd))    score++;
   return score;
 };
 
@@ -31,7 +31,7 @@ const ResetPassword = ({ onDone }) => {
     if (!pwd)
       e.pwd = "Password is required.";
     else if (!PWD_REGEX.test(pwd))
-      e.pwd = "Min 8 chars with uppercase, lowercase, number and special character.";
+      e.pwd = "Min 6 chars with uppercase, lowercase, number and special character.";
 
     if (!confirm)
       e.confirm = "Please confirm your password.";
@@ -41,12 +41,46 @@ const ResetPassword = ({ onDone }) => {
     return e;
   };
 
-  const handleSubmit = () => {
-    const errs = validate();
-    if (Object.keys(errs).length > 0) { setErrors(errs); return; }
-    setLoading(true);
-    setTimeout(() => { setLoading(false); setSuccess(true); }, 1200);
-  };
+const handleSubmit = async () => {
+  const errs = validate();
+  if (Object.keys(errs).length > 0) {
+    setErrors(errs);
+    return;
+  }
+
+  const email = localStorage.getItem("resetEmail");
+const otp = localStorage.getItem("resetOtp"); 
+  setLoading(true);
+
+  try {
+    const res = await fetch(
+      `${process.env.REACT_APP_API_URL}/api/doctor/reset-password`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email,
+          password: pwd,
+          otp
+        }),
+      }
+    );
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      setErrors({ pwd: data.message });
+      setLoading(false);
+      return;
+    }
+
+    setSuccess(true);
+  } catch (err) {
+    setErrors({ pwd: "Something went wrong" });
+  }
+
+  setLoading(false);
+};
 
   const toggle = (field) => setShowPwd(p => ({ ...p, [field]: !p[field] }));
 
