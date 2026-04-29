@@ -15,13 +15,39 @@ const ForgotPassword = ({ onBack, onNext }) => {
     return "";
   };
 
-  const handleSubmit = () => {
-    const err = validate();
-    if (err) { setError(err); return; }
-    setLoading(true);
-    // simulate API call
-    setTimeout(() => { setLoading(false); setDone(true); }, 1500);
-  };
+ const handleSubmit = async () => {
+  const err = validate();
+  if (err) { setError(err); return; }
+
+  setLoading(true);
+
+  try {
+    const res = await fetch(
+      `${process.env.REACT_APP_API_URL}/api/doctor/send-otp`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      }
+    );
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      setError(data.message);
+      setLoading(false);
+      return;
+    }
+
+    localStorage.setItem("resetEmail", email);
+
+    setDone(true);
+  } catch (err) {
+    setError("Something went wrong");
+  }
+
+  setLoading(false);
+};
 
   if (done) {
     return (
@@ -30,7 +56,7 @@ const ForgotPassword = ({ onBack, onNext }) => {
           <div className="fp-success-icon">📧</div>
           <h2 className="fp-title">OTP Sent!</h2>
           <p className="fp-subtitle">
-            We've sent a 6-digit OTP to <strong>{email}</strong>. Check your inbox.
+            We've sent a 4-digit OTP to <strong>{email}</strong>. Check your inbox.
           </p>
           <button className="fp-btn" onClick={() => onNext(email)}>
             Continue to Verify OTP
