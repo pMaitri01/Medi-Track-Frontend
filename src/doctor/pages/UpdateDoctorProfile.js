@@ -52,7 +52,16 @@ export default function UpdateDoctorProfile() {
     ]
   });
 
-  // ✅ FETCH PROFILE DATA
+  const getInitials = (name) => {
+    if (!name) return "DR";
+
+    const words = name.trim().split(" ");
+    if (words.length === 1) return words[0][0].toUpperCase();
+
+    return (words[0][0] + words[1][0]).toUpperCase();
+  };
+
+  // FETCH PROFILE DATA
   useEffect(() => {
     const fetchProfile = async () => {
       try {
@@ -186,7 +195,7 @@ export default function UpdateDoctorProfile() {
 
         <div className="topbar-right">
           <div className="notif-btn"><FaBell /></div>
-          <div className="avatar-header">DR</div>
+          <div className="avatar-header">{getInitials(profile.fullName)}</div>
         </div>
       </div>
 
@@ -194,7 +203,7 @@ export default function UpdateDoctorProfile() {
 
         {/* HERO */}
         <div className="profile-hero">
-          <div className="dr-avatar">DR</div>
+          <div className="dr-avatar">{getInitials(profile.fullName)}</div>
 
           <div className="hero-info">
             <div className="hero-name">Dr. {profile.fullName || "Your Name"}</div>

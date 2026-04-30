@@ -17,6 +17,16 @@ export default function DoctorDashboard() {
   const [todayAppointments, setTodayAppointments] = useState([]);
   const [hoveredId, setHoveredId] = useState(null);
   const [appointmentRequests, setAppointmentRequests] = useState([]);
+  const [nextPatient, setNextPatient] = useState(null);
+  const [nextLoading, setNextLoading] = useState(true);
+  const getInitials = (name) => {
+    if (!name) return "NA";
+
+    const words = name.trim().split(" ");
+    return words.length === 1
+      ? words[0][0].toUpperCase()
+      : (words[0][0] + words[1][0]).toUpperCase();
+  };// to get initial
   const [reviewData, setReviewData] = useState({
     avgRating: 0,
     totalReviews: 0,
@@ -63,6 +73,7 @@ export default function DoctorDashboard() {
     fetchTodayAppointments();
     fetchAppointmentRequests();
     fetchReviews();
+    fetchNextPatient();
   }, []);
   const fetchReviews = async () => {
     try {
@@ -146,6 +157,37 @@ export default function DoctorDashboard() {
     }
     catch (error) {
       console.log("Complete Error:", error);
+    }
+  };
+
+  // fetch next patient on dashboard
+  const fetchNextPatient = async () => {
+    try {
+      const res = await fetch(
+        `${process.env.REACT_APP_API_URL}/api/appointment/next`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+          credentials: "include",
+        }
+      );
+
+      const data = await res.json();
+
+      if (res.ok) {
+        setNextPatient(data);
+      } else {
+        setNextPatient(null);
+      }
+
+    } catch (error) {
+      console.log("Next Patient Error:", error);
+      setNextPatient(null);
+    } finally {
+      setNextLoading(false);
     }
   };
 
@@ -267,7 +309,9 @@ export default function DoctorDashboard() {
                   todayAppointments.map((appt) => (
                     <div key={appt._id} style={listItemStyle}>
 
-                      <div style={avatarStyle}></div>
+                      <div style={avatarStyle}>
+                        {getInitials(appt.patientName)}
+                      </div>
 
                       <div style={{ flex: 1, fontSize: "14px" }}>
                         {appt.patientName}
@@ -327,14 +371,50 @@ export default function DoctorDashboard() {
             {/* Focus Area */}
             <div style={cardStyle}>
               <h4 style={titleStyle}>Next Patient Details</h4>
+
               <div style={{ textAlign: "center", marginTop: "15px" }}>
-                <div style={{ ...avatarStyle, width: "70px", height: "70px", margin: "0 auto 10px" }}></div>
-                <h5 style={{ margin: "5px 0" }}>Loading...</h5>
+                <div
+                  style={{
+                    ...avatarStyle,
+                    width: "70px",
+                    height: "70px",
+                    fontSize: "22px",
+                    margin: "0 auto 10px",
+                  }}
+                >{getInitials(nextPatient?.name)}</div>
+
+                <h5 style={{ margin: "5px 0" }}>
+                  {nextLoading
+                    ? "Loading..."
+                    : nextPatient
+                      ? nextPatient.name
+                      : "No Patient"}
+                </h5>
+
                 <div style={infoGridStyle}>
-                  <div><small>Weight</small><p>--</p></div>
-                  <div><small>ID</small><p>--</p></div>
-                  <div><small>DOB</small><p>--</p></div>
-                  <div><small>Sex</small><p>--</p></div>
+                  <div>
+                    <small>Age</small>
+                    <p>{nextPatient?.age || "--"}</p>
+                  </div>
+
+                  <div>
+                    <small>BloodGroup</small>
+                    <p>{nextPatient?.bloodGroup || "--"}</p>
+                  </div>
+
+                  <div>
+                    <small>DOB</small>
+                    <p>
+                      {nextPatient?.dob
+                        ? new Date(nextPatient.dob).toLocaleDateString("en-IN")
+                        : "--"}
+                    </p>
+                  </div>
+
+                  <div>
+                    <small>Gender</small>
+                    <p>{nextPatient?.gender || "--"}</p>
+                  </div>
                 </div>
               </div>
             </div>
@@ -401,7 +481,13 @@ export default function DoctorDashboard() {
                 {reviewData.latestReviews && reviewData.latestReviews.length > 0 ? (
                   reviewData.latestReviews.map((r) => (
                     <div key={r._id} style={reviewItem}>
-                      <div style={avatarStyle}></div>
+                      <div style={avatarStyle}>
+                        {getInitials(
+                          r.patient
+                            ? `${r.patient.firstName} ${r.patient.lastName}`
+                            : ""
+                        )}
+                      </div>
 
                       <div>
                         <div style={{ fontWeight: "500", fontSize: "14px" }}>
@@ -429,7 +515,7 @@ export default function DoctorDashboard() {
                 )}
               </div>
 
-              <div className="review-header"  onClick={() => navigate("/doctor/reviews")} style={{marginLeft:"290px"}}>  
+              <div className="review-header" onClick={() => navigate("/doctor/reviews")} style={{ marginLeft: "200px" }}>
                 {/* <button className="view-more-btn"> </button>   */}
                 View More →
               </div>
@@ -569,7 +655,20 @@ const placeholderBox = {
 
 const listContainer = { display: "flex", flexDirection: "column", gap: "12px" };
 const listItemStyle = { display: "flex", alignItems: "center", gap: "10px" };
-const avatarStyle = { width: "35px", height: "35px", borderRadius: "50%", background: "#F1F5F9" };
+const avatarStyle = {
+  width: "38px",
+  height: "38px",
+  borderRadius: "50%",
+  background: "#0aa5a5",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  fontWeight: "500",
+  fontSize: "14px",
+  color: "#fff",
+  textTransform: "uppercase",
+  boxShadow: "0 2px 6px rgba(0,0,0,0.1)"
+};
 const badgeStyle = { background: "#E6F4F4", color: "#0AA5A5", padding: "4px 8px", borderRadius: "5px", fontSize: "11px" };
 
 const infoGridStyle = {
