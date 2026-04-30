@@ -48,7 +48,11 @@ const DoctorMedicalRecords = () => {
                 );
 
                 const data = await res.json();
-                setRecords(Array.isArray(data) ? data : data.records || []);
+                if (data && Array.isArray(data.records)) {
+                    setRecords(data.records);
+                } else {
+                    setRecords([]);
+                }
             } catch (err) {
                 console.log(err);
             }
@@ -169,7 +173,11 @@ const DoctorMedicalRecords = () => {
                                                 <td>{new Date(rec.date).toLocaleDateString()}</td>
                                                 <td>
                                                     {rec.fileUrl ? (
-                                                        <a href={rec.fileUrl} target="_blank" rel="noreferrer">
+                                                        <a
+                                                            href={getDownloadUrl(rec.fileUrl, rec.fileName)}
+                                                            target="_blank"
+                                                            rel="noreferrer"
+                                                        >
                                                             <button className="download-btn">
                                                                 Download Record
                                                             </button>
