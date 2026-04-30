@@ -115,9 +115,8 @@
   font-size: 18px;
 }
 
-.PatOtp-resend-btn {
-  background: none;
-  border: none;
+.resend-btn {
+  background: #cfe5e5 !important;
   color: #0aa5a5;
   cursor: pointer;
   font-weight: 600;
@@ -126,9 +125,9 @@
   width: 70px;
 }
 
-.PatOtp-resend-btn:hover {
+.resend-btn:hover {
+  background: #cfe5e5 !important;
   text-decoration: underline;
-  background: none;
   border-radius: 5px;
 }
 
