@@ -92,14 +92,14 @@ const UploadMedicalRecord = ({ onClose }) => {
                         <option value="prescription">Prescription</option>
                     </select>
 
-                   <select onChange={(e) => setFormData({ ...formData, doctorId: e.target.value })}>
-  <option value="">Select Doctor</option>
-  {doctors.map((doc) => (
-    <option key={doc._id} value={doc._id}>
-      {doc.fullName}
-    </option>
-  ))}
-</select>
+                    <select onChange={(e) => setFormData({ ...formData, doctorId: e.target.value })}>
+                        <option value="">Select Doctor</option>
+                        {doctors.map((doc) => (
+                            <option key={doc._id} value={doc._id}>
+                                {doc.fullName}
+                            </option>
+                        ))}
+                    </select>
 
                     {/* <input
             type="date"
