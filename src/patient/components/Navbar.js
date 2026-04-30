@@ -22,7 +22,7 @@
 //         method: "POST",
 //         credentials: "include",
 //       })
-       
+
 //       localStorage.removeItem("user");
 //       alert("logged out");
 
@@ -92,7 +92,7 @@
 //   onClick={() => setShowDropdown(!showDropdown)}
 // >
 //   <FaUserCircle className="profile-icon" />
-  
+
 //   <span className="username-text">{username}</span>
 
 //   <FaChevronDown className={`arrow-icon ${showDropdown ? "rotate" : ""}`} />
@@ -136,7 +136,7 @@ import socket from "../../socket";
 function Navbar() {
   const [showProfileDropdown, setShowProfileDropdown] = useState(false); // ✅ FIXED
   const [showNotificationDropdown, setShowNotificationDropdown] = useState(false); // ✅ NEW
-    const [notifications, setNotifications] = useState([]);
+  const [notifications, setNotifications] = useState([]);
   const dropdownRef = useRef(null);
   const [username, setUsername] = useState("");
   const unreadCount = notifications.filter((n) => !n.isRead).length;
@@ -169,9 +169,9 @@ function Navbar() {
   useEffect(() => {
     setUsername(
       user?.fullName ||
-        user?.name ||
-        `${user?.firstName || ""} ${user?.lastName || ""}`.trim() ||
-        "User"
+      user?.name ||
+      `${user?.firstName || ""} ${user?.lastName || ""}`.trim() ||
+      "User"
     );
   }, []);
 
@@ -259,7 +259,7 @@ function Navbar() {
           />
 
           {/* 🔴 COUNT */}
-          {notifications.filter((n) => !n.isRead).length > 0 && (
+          {unreadCount > 0 && (
             <span
               style={{
                 position: "absolute",
@@ -272,7 +272,7 @@ function Navbar() {
                 fontSize: "12px",
               }}
             >
-              {notifications.filter((n) => !n.isRead).length}
+              {unreadCount}
             </span>
           )}
 
@@ -293,30 +293,62 @@ function Navbar() {
               }}
             >
               {notifications.length === 0 ? (
-                <p style={{ padding: "10px" }}>No notifications</p>
+                <p style={{ padding: "15px", textAlign: "center", color: "gray" }}>
+                  🔕 No new notifications
+                </p>
               ) : (
-                notifications.map((n) => (
+                notifications.slice(0, 6).map((n) => (
                   <div
                     key={n._id}
                     style={{
                       padding: "10px",
                       borderBottom: "1px solid #eee",
-                      background: n.isRead ? "#fff" : "#e6f7ff",
-                      cursor: "pointer",
+                      background: n.isRead ? "#fff" : "#eef6ff",
+                      fontWeight: n.isRead ? "normal" : "bold", cursor: "pointer",
                     }}
-                    onClick={async () => {
-                      await fetch(
-                        `${process.env.REACT_APP_API_URL}/api/notifications/${n._id}/read`,
-                        {
-                          method: "PUT",
-                          credentials: "include",
-                        }
-                      );
+                    // onClick={async () => {
+                    //   await fetch(
+                    //     `${process.env.REACT_APP_API_URL}/api/notification/${n._id}/read`,
+                    //     {
+                    //       method: "PUT",
+                    //       credentials: "include",
+                    //     }
+                    //   );
 
-                      window.location.href = n.link;
+                    //   window.location.href = n.link;
+                    // }}
+                    onClick={async () => {
+                      try {
+                        await fetch(
+                          `${process.env.REACT_APP_API_URL}/api/notification/${n._id}/read`,
+                          {
+                            method: "PUT",
+                            credentials: "include",
+                          }
+                        );
+
+                        // ✅ Update UI instantly
+                        setNotifications((prev) =>
+                          prev.map((notif) =>
+                            notif._id === n._id ? { ...notif, isRead: true } : notif
+                          )
+                        );
+
+                        navigate(n.link);
+                      } catch (err) {
+                        console.error(err);
+                      }
                     }}
                   >
-                    {n.message}
+                    <div>
+                      <strong>{n.title}</strong>
+                      <p style={{ margin: "5px 0", fontSize: "14px" }}>
+                        {n.message}
+                      </p>
+                      <small style={{ color: "gray" }}>
+                        {new Date(n.createdAt).toLocaleString()}
+                      </small>
+                    </div>
                   </div>
                 ))
               )}

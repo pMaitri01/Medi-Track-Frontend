@@ -72,15 +72,18 @@
 //   );
 // }
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FaBell, FaChevronDown, FaChevronUp, FaUser, FaSignOutAlt } from "react-icons/fa";
 import userImg from "../images/user.png";
 import { useNavigate } from "react-router-dom";
 import { useDoctor } from "../../context/DoctorContext";
+import socket from "../../socket";
 
 export default function DoctorHeader({ open }) {
   const [showProfile, setShowProfile] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false); // New state
+  const [notifications, setNotifications] = useState([]);
+  const unreadCount = notifications.filter((n) => !n.isRead).length;
   const navigate = useNavigate();
   const { doctor } = useDoctor();
 
@@ -125,7 +128,35 @@ export default function DoctorHeader({ open }) {
     seeMore: { padding: "10px", textAlign: "center", fontSize: "13px", color: "#0AA5A5", fontWeight: "600", cursor: "pointer", display: "block", textDecoration: "none" }
   };
 
+useEffect(() => {
+  if (doctor?._id) {
+    socket.emit("join", doctor._id);
+    console.log("Doctor joined:", doctor._id);
+  }
+}, [doctor]);
 
+useEffect(() => {
+  socket.on("newNotification", (data) => {
+    console.log("🔔 Doctor Notification:", data);
+    setNotifications((prev) => [data, ...prev]);
+  });
+
+  return () => socket.off("newNotification");
+}, []);
+
+useEffect(() => {
+  const fetchNotifications = async () => {
+    const res = await fetch(
+      `${process.env.REACT_APP_API_URL}/api/notification/getnotifications`,
+      { credentials: "include" }
+    );
+
+    const data = await res.json();
+    setNotifications(data);
+  };
+
+  fetchNotifications();
+}, []);
 const handleLogout = async () => {
   try {
     await fetch(`${process.env.REACT_APP_API_URL}/api/Doctor/logout`, {
@@ -159,22 +190,78 @@ const handleLogout = async () => {
             }}
           />
           {/* Red dot badge (optional) */}
-          <span style={{ position: "absolute", top: "-2px", right: "-2px", background: "#ef4444", borderRadius: "50%", width: "8px", height: "8px", border: "2px solid white" }}></span>
-
+         {unreadCount > 0 && (
+  <span
+    style={{
+      position: "absolute",
+      top: "-5px",
+      right: "-5px",
+      background: "red",
+      color: "white",
+      borderRadius: "50%",
+      padding: "2px 6px",
+      fontSize: "12px",
+    }}
+  >
+    {unreadCount}
+  </span>
+)}
           {showNotifications && (
             <div style={styles.notificationCard}>
               <div style={styles.cardHeader}>Notifications</div>
               <div style={{ maxHeight: "250px", overflowY: "auto" }}>
-                <div style={styles.notifyItem} className="hover-gray">📅 New appointment from John Doe at 10:00 AM</div>
-                <div style={styles.notifyItem} className="hover-gray">📝 Lab report uploaded for Patient P004</div>
-                <div style={styles.notifyItem} className="hover-gray">⚠️ Surgery rescheduled for tomorrow</div>
+               {notifications.length === 0 ? (
+  <p style={{ padding: "15px", textAlign: "center", color: "gray" }}>
+    🔕 No notifications
+  </p>
+) : (
+  notifications.slice(0, 6).map((n) => (
+    <div
+      key={n._id}
+      style={{
+        ...styles.notifyItem,
+        background: n.isRead ? "#fff" : "#eef6ff",
+        fontWeight: n.isRead ? "normal" : "bold",
+      }}
+      onClick={async () => {
+        try {
+          await fetch(
+            `${process.env.REACT_APP_API_URL}/api/notification/${n._id}/read`,
+            {
+              method: "PUT",
+              credentials: "include",
+            }
+          );
+
+          setNotifications((prev) =>
+            prev.map((notif) =>
+              notif._id === n._id
+                ? { ...notif, isRead: true }
+                : notif
+            )
+          );
+
+          navigate(n.link);
+        } catch (err) {
+          console.error(err);
+        }
+      }}
+    >
+      <strong>{n.title}</strong>
+      <p style={{ margin: "5px 0" }}>{n.message}</p>
+      <small style={{ color: "gray" }}>
+        {new Date(n.createdAt).toLocaleString()}
+      </small>
+    </div>
+  ))
+)}
               </div>
-              <div 
+              {/* <div 
                 style={styles.seeMore} 
                 onClick={() => { navigate("/Notifications"); setShowNotifications(false); }}
               >
                 See all notifications
-              </div>
+              </div> */}
             </div>
           )}
         </div>
