@@ -334,7 +334,7 @@ export default function PrescriptionPage() {
           {["Active", "Past"].map((tab) => (
             <button
               key={tab}
-              className={`rx-tab ${activeTab === tab ? "rx-tab--active" : ""}`}
+              className={`PrescriptionPage-rx-tab-active-past ${activeTab === tab ? "rx-tab--active" : ""}`}
               onClick={() => setActiveTab(tab)}
             >
               {tab === "Active" ? "🟢" : "⚪"} {tab} Prescriptions

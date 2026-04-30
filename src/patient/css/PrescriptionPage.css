@@ -90,7 +90,8 @@
 }
 
 .PrescriptionPage-rx-tab {
-  padding: 9px 22px;
+  /* padding: 9px 22px; */
+  padding: 300% !important;
   border: 1px solid var(--rx-border);
   border-radius: 20px;
   background: white;
@@ -100,9 +101,13 @@
   cursor: pointer;
   transition: all 0.PrescriptionPage-2s;
 }
-.PrescriptionPage-rx-tab:hover { border-color: var(--rx-primary); color: var(--rx-primary); }
+.PrescriptionPage-rx-tab-active-past{
+  padding: 10px;
+  border-radius: 20px;
+}
+.PrescriptionPage-rx-tab-tab-active-past:hover {background: #0aa5a5 ; color: white !important; }
 .PrescriptionPage-rx-tab--active {
-  background: var(--rx-primary);
+  background: #0aa5a5;
   color: white;
   border-color: var(--rx-primary);
 }
