@@ -155,6 +155,11 @@ const BookAppointment = ({ onClose }) => {
         <h3>Booking Successful!</h3>
         <p>
           {selectedDate.toDateString()} at {selectedTime}
+          <strong>
+    {appointmentType === "physical"
+      ? "📍 Physical Visit"
+      : "🎥 Video Consultation"}
+  </strong>
         </p>
       </div>
     );
@@ -192,6 +197,9 @@ const BookAppointment = ({ onClose }) => {
             onChange={handleDateChange}
             value={selectedDate}
             minDate={new Date()}
+              view="month"
+            prev2Label={null}
+            next2Label={null}
           />
         </div>
 
@@ -202,16 +210,43 @@ const BookAppointment = ({ onClose }) => {
           <select
             className="BookApp-appointment-type-select"
             value={appointmentType}
+              disabled={!selectedDoctor}
             onChange={(e) => setAppointmentType(e.target.value)}
           >
-            <option value="physical">Physical</option>
-            <option value="videocall">Video</option>
+           {selectedDoctorData?.serviceType?.includes("physical") && (
+    <option value="physical">Physical (Clinic Visit)</option>
+  )}
+
+  {selectedDoctorData?.serviceType?.includes("videocall") && (
+    <option value="videocall">Video Consultation</option>
+  )}
           </select>
+          <p className="appointment-type-helper">
+  {!selectedDoctor && "Please select doctor first"}
+
+  {selectedDoctor && !appointmentType && "Please select appointment type"}
+
+  {appointmentType === "physical" &&
+    "📍 Visit doctor at clinic/hospital"}
+
+  {appointmentType === "videocall" &&
+    "🎥 Consult doctor via video call"}
+</p>
 
           <label className="BookApp-label-text">4. Select Time Slot</label>
 
           {selectedDate ? (
             <div className="BookApp-slots-grid">
+              {!isWorkingDay ? (
+  <div className="no-slots">
+    🚫 Doctor not available
+  </div>
+) : allSlots.length > 0 && availableSlots.length === 0 ? (
+  <div className="no-slots">
+    ❌ No slots available, try another day
+  </div>
+) : (
+  <div className="slots-grid">
 
               {allSlots.map((time) => {
                 const isBooked = bookedSlots.includes(time);
@@ -226,13 +261,14 @@ const BookAppointment = ({ onClose }) => {
                       ${isSelected ? "selected" : ""} 
                       ${isBooked ? "booked" : ""} 
                       ${isPast ? "past" : ""}`}
-                    onClick={() => toggleTimeSlot(time)}
+                    onClick={() => !isBooked && !isPast &&  toggleTimeSlot(time)}
                   >
                     {time}
                   </button>
                 );
               })}
-
+</div>
+)}
             </div>
           ) : (
             <div className="BookApp-placeholder-text">

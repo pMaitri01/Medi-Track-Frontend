@@ -180,10 +180,11 @@
   font-weight: 600;
 }
 
-.ad-badge-pending   { background: #fff7ed; color: #ea580c; }
-.ad-badge-confirmed { background: #eff6ff; color: #2563eb; }
-.ad-badge-completed { background: #f0fdf4; color: #16a34a; }
-.ad-badge-cancelled { background: #fef2f2; color: #dc2626; }
+.ad-badge-pending   { background: #f3e8ff; color: #6b21a8; }
+.ad-badge-cancelled { background: #fee2e2; color: #991b1b; }
+.ad-badge-completed { background: #dbeafe; color: #1e40af; }
+.ad-badge-rejected { background: #fef3c7; color: #92400e; }
+.ad-badge-Approved { background: #d1fae5; color: #065f46; }
 
 /* ── RESPONSIVE ── */
 @media (max-width: 1024px) {

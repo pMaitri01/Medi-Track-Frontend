@@ -7,8 +7,6 @@ const STATUS_TABS = ["All", "Pending", "Approved", "Rejected"];
 
 const statusClass = {
   pending:  "da-badge da-badge-pending",
-  approved: "da-badge da-badge-approved",
-  rejected: "da-badge da-badge-rejected",
 };
 
 const DoctorApproval = () => {

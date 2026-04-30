@@ -154,10 +154,7 @@
   font-weight: 600;
 }
 
-.da-badge-pending  { background: #fefce8; color: #ca8a04; border: 1px solid #fde68a; }
-.da-badge-approved { background: #f0fdf4; color: #16a34a; border: 1px solid #bbf7d0; }
-.da-badge-rejected { background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; }
-
+.da-badge-pending  { background: #f3e8ff; color: #6b21a8; }
 /* ── EMPTY ── */
 .da-empty { padding: 56px 24px; text-align: center; color: #94a3b8; }
 .da-empty span { font-size: 40px; display: block; margin-bottom: 10px; }
