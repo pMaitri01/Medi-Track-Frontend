@@ -1,55 +1,139 @@
-.PatResetPwdotp-container h2{
-  font-size: 25px;
+/* Container to center everything and provide the teal background */
+.PatientResetPwd-otp-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #c7ecee; /* Light teal background from image */
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  padding: 20px;
 }
 
-input{
+/* The white card wrapper */
+.PatientResetPwd-otp-wrapper {
+  display: flex;
   width: 100%;
-  padding: 10px;
-  border: 1px solid #ced4da;
-  border-radius: 8px;
-  margin-bottom: 15px;
-  outline: none;
-  transition: 0.PatResetPwd3s;
-  margin-top: 3px !important;
+  max-width: 900px;
+  background-color: #ffffff;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
 }
-input:focus {
-  border-color: #0aa5a5;
-  box-shadow: 0 0 5px rgba(10, 165, 165, 0.PatResetPwd3);
+
+/* Left side for the image */
+.PatientResetPwd-otp-left {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  background-color: #ffffff;
 }
-.PatResetPwdpassword-field {
+
+.PatientResetPwd-otp-left img {
+  width: 100%;
+  max-width: 400px;
+  height: auto;
+}
+
+/* Right side for the form */
+.PatientResetPwd-otp-right {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f1f5f9; /* Light grey/off-white section */
+  padding: 40px;
+}
+
+/* The inner card holding the actual form fields */
+.PatientResetPwd-otp-card {
+  width: 100%;
+  max-width: 350px;
+  background-color: #dbe7e9; /* The subtle blueish-grey form box */
+  padding: 30px;
+  border-radius: 15px;
+  text-align: center;
+}
+
+.PatientResetPwd-otp-card h2 {
+  color: #0aa5a5;
+  font-size: 28px;
+  margin-bottom: 10px;
+}
+
+.PatientResetPwd-otp-card p {
+  color: #555;
+  margin-bottom: 20px;
+}
+
+/* Password field styling */
+.PatientResetPwd-password-field {
   position: relative;
   width: 100%;
   margin-bottom: 15px;
 }
 
-.PatResetPwdpassword-field input {
+.PatientResetPwd-password-field input {
   width: 100%;
-  padding: 10px 40px 10px 12px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
+  padding: 12px 40px 12px 15px;
+  border: 1px solid #ffffff;
+  border-radius: 8px;
   font-size: 14px;
+  box-sizing: border-box;
+  outline: none;
+  transition: 0.3s;
 }
 
-.PatResetPwdtoggle-eye {
+.PatientResetPwd-password-field input:focus {
+  border-color: #0aa5a5;
+  box-shadow: 0 0 5px rgba(10, 165, 165, 0.3);
+}
+
+/* Eye Icon positioning */
+.PatientResetPwd-toggle-eye {
   position: absolute;
   right: 12px;
   top: 50%;
   transform: translateY(-50%);
   cursor: pointer;
-  font-size: 16px;
+  color: #666;
+  display: flex;
+  align-items: center;
 }
 
-.PatResetPwdotp-btn button {
-  width: 100%;
-  padding: 10px;
-  background-color: #0aa5a5;
-  color: #ffffff;
-  border: none;
-  margin-top: 10px !important;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: 0.PatResetPwd3s;
+/* Error Message */
+.PatientResetPwd-otp-error {
+  color: #d9534f;
+  font-size: 13px;
+  margin-bottom: 10px;
 }
-button:hover {
+
+/* Button styling */
+.PatientResetPwd-otp-btn {
+  width: 100%;
+  padding: 12px;
+  background-color: #0aa5a5;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  margin-top: 5px;
+}
+
+.PatientResetPwd-otp-btn:hover {
   background-color: #088f8f;
+}
+
+/* Responsive for mobile */
+@media (max-width: 768px) {
+  .PatientResetPwd-otp-wrapper {
+    flex-direction: column;
+  }
+  .PatientResetPwd-otp-left {
+    display: none; /* Hide image on small screens for better UX */
+  }
 }

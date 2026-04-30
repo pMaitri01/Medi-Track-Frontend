@@ -73,16 +73,16 @@ const handleSubmit = async (e) => {
 
 
   return (
-    <div className="PatResetPwd-otp-container">
-      <div className="PatResetPwd-otp-wrapper">
+    <div className="PatientResetPwd-otp-container">
+      <div className="PatientResetPwd-otp-wrapper">
         {/* Left Side */}
-        <div className="PatResetPwd-otp-left">
+        <div className="PatientResetPwd-otp-left">
           <img src={resetImage} alt="Reset Password" />
         </div>
 
         {/* Right Side */}
-        <div className="PatResetPwd-otp-right">
-          <div className="PatResetPwd-otp-card">
+        <div className="PatientResetPwd-otp-right">
+          <div className="PatientResetPwd-otp-card">
             <h2>Change Your Password</h2>
 
             <form onSubmit={handleSubmit}>
@@ -98,7 +98,7 @@ const handleSubmit = async (e) => {
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
               /> */}
-              <div className="PatResetPwd-password-field">
+              <div className="PatientResetPwd-password-field">
   <input
     type={showPassword ? "text" : "password"}
     placeholder="New Password"
@@ -106,14 +106,14 @@ const handleSubmit = async (e) => {
     onChange={(e) => setPassword(e.target.value)}
   />
   <span
-    className="PatResetPwd-toggle-eye"
+    className="PatientResetPwd-toggle-eye"
     onClick={() => setShowPassword(!showPassword)}
   >
     {showPassword ? <FaEyeSlash /> : <FaEye />}
   </span>
 </div>
 
-<div className="PatResetPwd-password-field">
+<div className="PatientResetPwd-password-field">
   <input
     type={showConfirmPassword ? "text" : "password"}
     placeholder="Confirm Password"
@@ -121,16 +121,16 @@ const handleSubmit = async (e) => {
     onChange={(e) => setConfirmPassword(e.target.value)}
   />
   <span
-    className="PatResetPwd-toggle-eye"
+    className="PatientResetPwd-toggle-eye"
     onClick={() => setShowConfirmPassword(!showConfirmPassword)}
   >
     {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
   </span>
 </div>
 
-              {error && <p className="PatResetPwd-otp-error">{error}</p>}
+              {error && <p className="PatientResetPwd-otp-error">{error}</p>}
 
-              <button type="submit" className="PatResetPwd-otp-btn">
+              <button type="submit" className="PatientResetPwd-otp-btn">
                 Reset Password
               </button>
             </form>
