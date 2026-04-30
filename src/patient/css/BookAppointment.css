@@ -101,6 +101,10 @@
   font-weight: 700;
 }
 
+.BookApp-appointment-type-select{
+  border: 1px solid #ccc;
+}
+
 .BookApp-cancel-btn {
    width: 40%;
   margin-top: 30px;
