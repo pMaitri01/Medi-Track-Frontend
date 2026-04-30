@@ -107,11 +107,17 @@ export default function MedicalRecords() {
         if (!patientId) return;
 
         const res = await fetch(
-          `${process.env.REACT_APP_API_URL}/api/record/patient/${patientId}`,
+          `${process.env.REACT_APP_API_URL}/api/record/my`,
           { credentials: "include" }
         );
         const data = await res.json();
         if (!res.ok) return;
+
+        // ✅ SAFE CHECK FIRST
+if (!data.records || !Array.isArray(data.records)) {
+  setRecords([]);
+  return;
+}
 
         const formatted = data.records.map((r) => ({
           id: r._id,
@@ -122,11 +128,16 @@ export default function MedicalRecords() {
           description: r.description,
           file: r.fileUrl || null,
         }));
+
         setRecords(formatted);
-      } catch (err) {
-        console.error("Fetch error:", err);
-      }
-    };
+        const recordsArray = data.records || data || [];
+
+    setRecords(Array.isArray(recordsArray) ? recordsArray : []);
+  } catch (error) {
+    console.error("Fetch error:", error);
+    setRecords([]);
+  }
+};
     fetchRecords();
   }, []);
 
