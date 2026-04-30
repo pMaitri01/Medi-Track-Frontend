@@ -11,7 +11,7 @@ const mapPatient = (p) => ({
   mobile:         p.phone          || "—",   // phone → mobile
   age:            p.age            || "—",
   gender:         p.gender         || "—",
-  city:           p.address        || "—",   // address used as city (adjust if backend sends separate city)
+  city:           p.city        || "—",   // address used as city (adjust if backend sends separate city)
   appointments:   p.appointments   || [],
   medicalHistory: p.medicalHistory || "Not available",
   prescriptions:  p.prescriptions  || "Not available",
