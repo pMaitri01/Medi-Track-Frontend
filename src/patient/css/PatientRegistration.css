@@ -174,6 +174,7 @@ textarea {
 /* PASSWORD FIELD */
 .PatReg-password-field-1{
   position: relative;
+  margin-left: 13px !important;
   flex: 1;
 }
 
@@ -202,8 +203,8 @@ textarea {
 }
 .PatReg-eye-icon-2{
   position: absolute;
-  right: 20px !important;
-  top: 50%;
+  right: 100px !important;
+  top: 545px;
   transform: translateY(-50%);
   cursor: pointer;
   color: gray;
