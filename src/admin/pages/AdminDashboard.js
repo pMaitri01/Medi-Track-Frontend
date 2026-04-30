@@ -12,9 +12,10 @@ const AdminDashboard = () => {
   });
   const statusClass = {
     Pending: "ad-badge ad-badge-pending",
-    Confirmed: "ad-badge ad-badge-confirmed",
-    Completed: "ad-badge ad-badge-completed",
     Cancelled: "ad-badge ad-badge-cancelled",
+    Completed: "ad-badge ad-badge-completed",
+    Rejected: "ad-badge ad-badge-rejected",
+    Approved: "ad-badge ad-badge-Approved",
   };
   // ✅ API CALL
   useEffect(() => {

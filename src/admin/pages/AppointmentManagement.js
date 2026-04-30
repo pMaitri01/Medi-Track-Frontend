@@ -4,9 +4,11 @@ import "../css/AppointmentManagement.css";
 const FILTERS = ["All", "Pending", "Accepted", "Rejected"];
 
 const statusClass = {
-  Pending: "am-badge am-badge-pending",
-  Accepted: "am-badge am-badge-accepted",
-  Rejected: "am-badge am-badge-rejected",
+  pending: "am-badge am-badge-pending",
+  approved: "am-badge am-badge-approved",
+  rejected: "am-badge am-badge-rejected",
+  completed: "am-badge am-badge-completed",
+  cancelled: "am-badge am-badge-cancelled",
 };
 
 // ── Map backend fields to UI fields ──
