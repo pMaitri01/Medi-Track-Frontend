@@ -14,7 +14,15 @@ html, body {
 .PatHome-type-badge-container {
   margin-top: 8px;
 }
-
+.PatHome-book-now-link{
+  background-color: #0AA5A5;
+  color: white;
+  font-weight: 600;
+  font-size: 12px;
+  text-decoration: none;
+  padding: 10px;
+  border-radius: 5px;
+}
 .PatHome-type-badge {
   padding: 4px 10px;
   border-radius: 20px;
