@@ -895,7 +895,7 @@ html, body {
   background: #0AA5A5;
   border-radius: 50%;
   position: absolute;
-  left: 2px;
+  left: -23px;
   top: 5px;
   z-index: 2;
 }
