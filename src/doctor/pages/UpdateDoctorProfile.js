@@ -194,7 +194,7 @@ export default function UpdateDoctorProfile() {
 
         {/* HERO */}
         <div className="profile-hero">
-          <div className="avatar">DR</div>
+          <div className="dr-avatar">DR</div>
 
           <div className="hero-info">
             <div className="hero-name">Dr. {profile.fullName || "Your Name"}</div>
