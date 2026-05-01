@@ -189,7 +189,7 @@ const PatientProfileSetup = () => {
       isProfileComplete: true, // ✅ IMPORTANT
     };
 
-    const res = await fetch("http://localhost:5000/api/patient/complete-profile", {
+    const res = await fetch(`${process.env.REACT_APP_API_URL}/api/patient/complete-profile`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
