@@ -96,7 +96,7 @@ const UploadMedicalRecord = ({ onClose }) => {
                         <option value="">Select Doctor</option>
                         {doctors.map((doc) => (
                             <option key={doc._id} value={doc._id}>
-                                {doc.fullName}
+                                Dr. {doc.fullName}
                             </option>
                         ))}
                     </select>
