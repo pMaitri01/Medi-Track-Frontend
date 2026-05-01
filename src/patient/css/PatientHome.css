@@ -600,7 +600,46 @@ html, body {
   font-size: 14px;
   flex-shrink: 0;
 }
+.PatHome-table-wrapper {
+  margin-top: 15px;
+  overflow-x: auto;
+}
 
+.PatHome-doctor-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.PatHome-doctor-table th {
+  background-color: #f5f7fa;
+  text-align: left;
+  padding: 10px;
+  font-weight: 600;
+}
+
+.PatHome-doctor-table td {
+  padding: 10px;
+  border-top: 1px solid #eee;
+}
+
+.PatHome-doctor-table tr:hover {
+  background-color: #fafafa;
+}
+
+.PatHome-view-btn {
+  padding: 6px 12px;
+  background-color: #0aa5a5;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.PatHome-view-btn:hover {
+  background-color: #088c8c;
+}
 .PatHome-message-bubble {
   padding: 12px 16px;
   font-size: 13px;

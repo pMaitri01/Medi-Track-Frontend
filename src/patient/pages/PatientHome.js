@@ -27,7 +27,29 @@ const PatientHome = () => {
   const [messages, setMessages] = useState([
     { role: 'bot', text: "Hello John! I'm your AI health assistant. Describe how you're feeling..." }
   ]);
+  const [filters, setFilters] = useState({
+    specialization: "",
+    serviceType: "",
+    experience: "",
+    availability: "",
+    rating: ""
+  });
+  const [filterOptions, setFilterOptions] = useState({
+    specializations: [],
+    serviceTypes: [],
+    availability: []
+  });
+  const [doctors, setDoctors] = useState([]);
+  const [loadingDoctors, setLoadingDoctors] = useState(false);
 
+  const handleFilterChange = (e) => {
+    const { name, value } = e.target;
+
+    setFilters(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
   // Function to handle sending messages
   const handleSendMessage = (e) => {
     e.preventDefault();
@@ -46,6 +68,27 @@ const PatientHome = () => {
       }]);
     }, 1000);
   };
+
+  useEffect(() => {
+    const fetchFilters = async () => {
+      try {
+        const res = await fetch(
+          `${process.env.REACT_APP_API_URL}/api/doctor/filters`
+        );
+
+        const data = await res.json();
+
+        if (!res.ok) throw new Error();
+
+        setFilterOptions(data);
+
+      } catch (err) {
+        console.error("Error loading filters", err);
+      }
+    };
+
+    fetchFilters();
+  }, []);
   useEffect(() => {
     const fetchAppointments = async () => {
       try {
@@ -197,6 +240,29 @@ const PatientHome = () => {
     } catch (err) {
       console.error(err);
       alert("Failed to cancel appointment");
+    }
+  };
+  const handleApplyFilters = async (e) => {
+    e.preventDefault();
+
+    try {
+      setLoadingDoctors(true);
+
+      const query = new URLSearchParams(filters).toString();
+
+      const res = await fetch(
+        `${process.env.REACT_APP_API_URL}/api/doctor/filtered?${query}`
+      );
+
+      const data = await res.json();
+
+      if (!res.ok) throw new Error("Failed to fetch doctors");
+
+      setDoctors(data);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoadingDoctors(false);
     }
   };
   useEffect(() => {
@@ -519,34 +585,74 @@ const PatientHome = () => {
               <div className="PatHome-search-header-flex">
                 <h2 className="PatHome-card-heading">Find a Doctor</h2>
               </div>
-              <form className="PatHome-search-filters-grid">
+              <form className="PatHome-search-filters-grid" onSubmit={handleApplyFilters}>
                 <div className="PatHome-filter-group">
+                  <label>Specialization</label>
+                  <select
+                    name="specialization"
+                    className="PatHome-filter-input"
+                    onChange={handleFilterChange}
+                  >
+                    <option value="">All Specializations</option>
+
+                    {filterOptions.specializations.map((spec, i) => (
+                      <option key={i} value={spec}>
+                        {spec}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div className="PatHome-filter-group">
+                  <label>Appointment Type</label>
+                  <select name="serviceType" onChange={handleFilterChange} className="PatHome-filter-input">
+                    <option value="">All Types</option>
+                    <option value="videocall">Video Call</option>
+                    <option value="physical">Physical Visit</option>
+                  </select>
+                </div>
+                {/* <div className="PatHome-filter-group">
                   <label>Doctor Name</label>
                   <div className="PatHome-input-with-icon">
                     <i className="fa-solid fa-magnifying-glass"></i>
                     <input type="text" placeholder="e.g. Dr. Sarah" className="PatHome-filter-input" />
                   </div>
-                </div>
+                </div> */}
                 <div className="PatHome-filter-group">
-                  <label>Location</label>
-                  <div className="PatHome-input-with-icon">
-                    <i className="fa-solid fa-location-dot"></i>
-                    <input type="text" placeholder="City or Zip" className="PatHome-filter-input" />
-                  </div>
+                  <label>Experience</label>
+                  <select className="PatHome-filter-input" onChange={handleFilterChange}
+                    name="experience">
+                    <option>Any</option>
+                    <option value="">Any</option>
+                    <option value="0-5">0-5 years</option>
+                    <option value="5-10">5-10 years</option>
+                    <option value="10+">10+ years</option>
+                  </select>
                 </div>
+
                 <div className="PatHome-filter-group">
-                  <label>Specialization</label>
-                  <select className="PatHome-filter-input">
-                    <option>All Specializations</option>
-                    <option>General Practice</option>
-                    <option>Cardiology</option>
+                  <label>Availability</label>
+                  <select name="availability" className="PatHome-filter-input" onChange={handleFilterChange}>
+                    <option value="">Any Day</option>
+
+                    {filterOptions.availability.map((day, i) => (
+                      <option key={i} value={day}>
+                        {day}
+                      </option>
+                    ))}
                   </select>
                 </div>
                 <div className="PatHome-filter-group">
-                  <label>Availability</label>
-                  <select className="PatHome-filter-input">
-                    <option>Any Day</option>
-                    <option>Weekdays</option>
+                  <label>Rating</label>
+                  <select
+                    name="rating"
+                    className="PatHome-filter-input"
+                    onChange={handleFilterChange}
+                  >                    
+                    <option value="">Any Rating</option>
+                    <option value="1">1+</option>
+                    <option value="2">2+</option>
+                    <option value="3">3+</option>
+                    <option value="4">4+</option>
                   </select>
                 </div>
                 <div className="PatHome-filter-group PatHome-submit-group">
@@ -556,8 +662,44 @@ const PatientHome = () => {
                 </div>
               </form>
               <div className="PatHome-filtered-results-container">
-                <div className="PatHome-no-results-hint">Adjust filters to see available doctors</div>
-              </div>
+                <div className="PatHome-no-results-hint">
+                 {loadingDoctors ? (
+  <p>Loading doctors...</p>
+) : doctors.length > 0 ? (
+  <div className="PatHome-table-wrapper">
+    <table className="PatHome-doctor-table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Specialization</th>
+          <th>Experience</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        {doctors.map((doc) => (
+          <tr key={doc._id}>
+            <td>Dr. {doc.fullName}</td>
+            <td>{doc.specialization}</td>
+            <td>{doc.experience} yrs</td>
+            <td>
+              <button
+                className="PatHome-view-btn"
+                onClick={() => navigate(`/doctor/${doc._id}`)}
+              >
+                View Details
+              </button>
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+) : (
+  <p>No doctors found</p>
+)}
+                </div>                </div>
             </section>
 
             {/* AI CHATBOT SECTION */}
