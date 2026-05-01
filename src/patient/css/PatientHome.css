@@ -714,7 +714,91 @@ html, body {
   align-items: center;
   z-index: 1000; /* Ensure it's on top */
 }
+/* Modal container */
+.PatHome-doctor-modal {
+  max-height: 80vh;
+  overflow-y: auto;
+  padding: 20px;
+}
 
+/* Header */
+.PatHome-doctor-header {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.PatHome-doctor-header img {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+}
+
+.PatHome-specialization {
+  color: #0AA5A5;
+  font-weight: 600;
+}
+
+.PatHome-qualification {
+  font-size: 13px;
+  color: #777;
+}
+
+/* GRID */
+.PatHome-doctor-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+}
+
+/* Card boxes */
+.PatHome-doctor-card-box {
+  background: #f8fafc;
+  padding: 15px;
+  border-radius: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #eee;
+}
+
+.PatHome-doctor-card-box h4 {
+  margin-bottom: 10px;
+  color: #333;
+}
+
+/* Text styling */
+.PatHome-doctor-card-box p {
+  margin: 5px 0;
+  font-size: 14px;
+}
+
+.PatHome-doctor-card-box span {
+  font-weight: 600;
+  color: #475569;
+}
+
+/* Map link */
+.PatHome-doctor-card-box a {
+  display: inline-block;
+  margin-top: 8px;
+  color: #0AA5A5;
+  font-weight: 500;
+}
+
+/* Button spacing */
+.PatHome-doctor-modal .PatHome-btn-primary {
+  width: 100%;
+  margin-top: 10px;
+}
+.PatHome-btn-bookapp{
+  background-color: #0AA5A5;
+  color: white;
+  font-weight: 600;
+  font-size: 12px;
+  text-decoration: none;
+  padding: 10px;
+  border-radius: 5px;
+}
 /* The box containing your BookAppointment component */
 .PatHome-booking-modal-content {
   background: white;

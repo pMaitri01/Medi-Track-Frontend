@@ -34,6 +34,8 @@ const PatientHome = () => {
     availability: "",
     rating: ""
   });
+  const [selectedDoctor, setSelectedDoctor] = useState(null);
+const [showDoctorModal, setShowDoctorModal] = useState(false);
   const [filterOptions, setFilterOptions] = useState({
     specializations: [],
     serviceTypes: [],
@@ -647,7 +649,7 @@ const PatientHome = () => {
                     name="rating"
                     className="PatHome-filter-input"
                     onChange={handleFilterChange}
-                  >                    
+                  >
                     <option value="">Any Rating</option>
                     <option value="1">1+</option>
                     <option value="2">2+</option>
@@ -663,42 +665,45 @@ const PatientHome = () => {
               </form>
               <div className="PatHome-filtered-results-container">
                 <div className="PatHome-no-results-hint">
-                 {loadingDoctors ? (
-  <p>Loading doctors...</p>
-) : doctors.length > 0 ? (
-  <div className="PatHome-table-wrapper">
-    <table className="PatHome-doctor-table">
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Specialization</th>
-          <th>Experience</th>
-          <th>Action</th>
-        </tr>
-      </thead>
+                  {loadingDoctors ? (
+                    <p>Loading doctors...</p>
+                  ) : doctors.length > 0 ? (
+                    <div className="PatHome-table-wrapper">
+                      <table className="PatHome-doctor-table">
+                        <thead>
+                          <tr>
+                            <th>Name</th>
+                            <th>Specialization</th>
+                            <th>Experience</th>
+                            <th>Action</th>
+                          </tr>
+                        </thead>
 
-      <tbody>
-        {doctors.map((doc) => (
-          <tr key={doc._id}>
-            <td>Dr. {doc.fullName}</td>
-            <td>{doc.specialization}</td>
-            <td>{doc.experience} yrs</td>
-            <td>
-              <button
-                className="PatHome-view-btn"
-                onClick={() => navigate(`/doctor/${doc._id}`)}
-              >
-                View Details
-              </button>
-            </td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
-  </div>
-) : (
-  <p>No doctors found</p>
-)}
+                        <tbody>
+                          {doctors.map((doc) => (
+                            <tr key={doc._id}>
+                              <td>Dr. {doc.fullName}</td>
+                              <td>{doc.specialization}</td>
+                              <td>{doc.experience} yrs</td>
+                              <td>
+                                <button
+                                  className="PatHome-view-btn"
+                                  onClick={() => {
+  setSelectedDoctor(doc);
+  setShowDoctorModal(true);
+}}
+                                >
+                                  View Details
+                                </button>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  ) : (
+                    <p>No doctors found</p>
+                  )}
                 </div>                </div>
             </section>
 
@@ -769,7 +774,98 @@ const PatientHome = () => {
           </div>
         </div>
       )}
+      {showDoctorModal && selectedDoctor && (
+  <div
+    className="PatHome-booking-modal-overlay"
+    onClick={() => setShowDoctorModal(false)}
+  >
+    <div
+      className="PatHome-booking-modal-content"
+      onClick={(e) => e.stopPropagation()}
+      style={{ maxWidth: "700px", width: "95%" }}
+    >
+     <div className="PatHome-doctor-modal">
 
+  {/* HEADER */}
+  <div className="PatHome-doctor-header">
+    <img src={doctorProfile} alt="Doctor" />
+
+    <div>
+      <h2>Dr. {selectedDoctor.fullName}</h2>
+      <p className="PatHome-specialization">{selectedDoctor.specialization}</p>
+      <p className="PatHome-qualification">{selectedDoctor.qualification}</p>
+    </div>
+  </div>
+
+  {/* GRID INFO */}
+  <div className="PatHome-doctor-grid">
+
+    {/* LEFT */}
+    <div className="PatHome-doctor-card-box">
+      <h4>Basic Info</h4>
+      <p><span>Gender:</span> {selectedDoctor.gender || "N/A"}</p>
+      <p><span>DOB:</span> {selectedDoctor.dob?.slice(0, 10)}</p>
+      <p><span>Experience:</span> {selectedDoctor.experience} years</p>
+    </div>
+
+    {/* RIGHT */}
+    <div className="PatHome-doctor-card-box">
+      <h4>Contact</h4>
+      <p><span>Email:</span> {selectedDoctor.email}</p>
+      <p><span>Mobile:</span> {selectedDoctor.mobile}</p>
+      <p><span>Emergency:</span> {selectedDoctor.emergencyContact}</p>
+    </div>
+
+  </div>
+
+  {/* CLINIC */}
+  <div className="PatHome-doctor-card-box">
+    <h4>Clinic Details</h4>
+    <p><span>Clinic:</span> {selectedDoctor.clinicName}</p>
+    <p><span>Address:</span> {selectedDoctor.clinicAddress}</p>
+    <p><span>City:</span> {selectedDoctor.city}, {selectedDoctor.state}</p>
+
+    <a href={selectedDoctor.mapLink} target="_blank" rel="noreferrer">
+      📍 View on Map
+    </a>
+  </div>
+
+  {/* AVAILABILITY */}
+  <div className="PatHome-doctor-card-box">
+    <h4>Availability</h4>
+    <p><span>Type:</span> {selectedDoctor.serviceType}</p>
+    <p><span>Days:</span> {selectedDoctor.workingDays?.join(", ")}</p>
+<p>
+  <strong>Hours:</strong>{" "}
+  {Array.isArray(selectedDoctor.workingHours)
+    ? selectedDoctor.workingHours
+        .map(w => `${w.start} - ${w.end}`)
+        .join(", ")
+    : "Not available"}
+</p>
+  </div>
+
+  {/* ABOUT */}
+  <div className="PatHome-doctor-card-box">
+    <h4>About</h4>
+    <p>{selectedDoctor.about}</p>
+  </div>
+
+  {/* BUTTON */}
+  <button
+    className="PatHome-btn-bookapp"
+    onClick={() => {
+      setShowDoctorModal(false);
+      setIsBookingOpen(true);
+    }}
+  >
+    Book Appointment
+  </button>
+
+</div>
+    </div>
+  </div>
+)}
     </>
   );
 };
