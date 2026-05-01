@@ -50,7 +50,7 @@ const ReviewSection = () => {
             {/* Content */}
             <div className="ReviewSec-timeline-content">
               <div className="ReviewSec-top-row">
-                <h3>{r.doctor?.fullName}</h3>
+                <h3>Dr.{r.doctor?.fullName}</h3>
                 <span className="ReviewSec-date">
                   {new Date(r.createdAt).toLocaleDateString()}
                 </span>

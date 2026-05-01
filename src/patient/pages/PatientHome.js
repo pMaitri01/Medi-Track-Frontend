@@ -20,7 +20,7 @@ const PatientHome = () => {
   const [isUploadOpen, setIsUploadOpen] = useState(false);
   const [isBookingOpen, setIsBookingOpen] = useState(false);
   const [showReschedule, setShowReschedule] = useState(false);
-  const [selectedAppointment,setSelectedAppointment] = useState(null);
+  const [selectedAppointment, setSelectedAppointment] = useState(null);
   const [showPrescription, setShowPrescription] = useState(false);
   const navigate = useNavigate();
   useEffect(() => {
@@ -73,20 +73,20 @@ const PatientHome = () => {
   }, []);
 
   const handleReschedule = () => {
-  if (!upcomingAppointment) return;
+    if (!upcomingAppointment) return;
 
-  setSelectedAppointment({
-    id: upcomingAppointment._id,
-    doctorId: upcomingAppointment.doctor?._id,
-    doctorName: `Dr. ${upcomingAppointment.doctor?.fullName}`,
-    specialization: upcomingAppointment.doctor?.specialization,
-    date: upcomingAppointment.date,
-    time: upcomingAppointment.time,
-    type: (upcomingAppointment.type || "").toLowerCase(),
-  });
+    setSelectedAppointment({
+      id: upcomingAppointment._id,
+      doctorId: upcomingAppointment.doctor?._id,
+      doctorName: `Dr. ${upcomingAppointment.doctor?.fullName}`,
+      specialization: upcomingAppointment.doctor?.specialization,
+      date: upcomingAppointment.date,
+      time: upcomingAppointment.time,
+      type: (upcomingAppointment.type || "").toLowerCase(),
+    });
 
-  setShowReschedule(true);
-};
+    setShowReschedule(true);
+  };
 
   const parseDateTime = (date, time) => {
     const d = new Date(date);
@@ -177,43 +177,45 @@ const PatientHome = () => {
     }
   };
   useEffect(() => {
-  const fetchReviews = async () => {
-    try {
-      const res = await fetch(
-        `${process.env.REACT_APP_API_URL}/api/review/publicreview`,
-        { credentials: "include" }
-      );
+    const fetchReviews = async () => {
+      try {
+        const res = await fetch(
+          `${process.env.REACT_APP_API_URL}/api/review/publicreview`,
+          { credentials: "include" }
+        );
 
-      const data = await res.json();
+        const data = await res.json();
 
-      if (!res.ok) {
-        console.error("Backend error:", data);
+        if (!res.ok) {
+          console.error("Backend error:", data);
+          setReviews([]);
+          return;
+        }
+
+        const latestTwo = data
+          .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+          .slice(0, 2)
+          .map((rev) => ({
+            doctorName: rev.doctor?.fullName,
+            specialization: rev.doctor?.specialization,
+            name: `${rev.patient?.firstName || ""} ${rev.patient?.lastName || ""}`.trim(),
+            date: new Date(rev.createdAt).toLocaleDateString("en-US", {
+              month: "short",
+              day: "2-digit",
+            }),
+            text: rev.comment,
+            stars: rev.rating,
+          }));
+
+        setReviews(latestTwo);
+      } catch (err) {
+        console.error("Error fetching reviews:", err);
         setReviews([]);
-        return;
       }
+    };
 
-      const latestTwo = data
-        .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
-        .slice(0, 2)
-        .map((rev) => ({
-          name: `${rev.patient?.firstName || ""} ${rev.patient?.lastName || ""}`.trim(),
-          date: new Date(rev.createdAt).toLocaleDateString("en-US", {
-            month: "short",
-            day: "2-digit",
-          }),
-          text: rev.comment,
-          stars: rev.rating,
-        }));
-
-      setReviews(latestTwo);
-    } catch (err) {
-      console.error("Error fetching reviews:", err);
-      setReviews([]);
-    }
-  };
-
-  fetchReviews();
-}, []);
+    fetchReviews();
+  }, []);
 
   const handlePostReview = (e) => {
     e.preventDefault();
@@ -431,53 +433,60 @@ const PatientHome = () => {
               </div>              <div className="PatHome-action-card" onClick={() => setShowPrescription(true)}><div className="PatHome-icon-circle PatHome-icon-red">💊</div><span>Prescriptions</span></div>
 
               <PrescriptionModal
-  isOpen={showPrescription}
-  onClose={() => setShowPrescription(false)}
-/>
+                isOpen={showPrescription}
+                onClose={() => setShowPrescription(false)}
+              />
               <div className="PatHome-action-card"><div className="PatHome-icon-circle PatHome-icon-blue">📋</div><span>Lab Results</span></div>
             </div>
 
             <section className="PatHome-card PatHome-card-white PatHome-review-timeline-card">
-  <div className="PatHome-review-header">
-    <h2 className="PatHome-card-heading">What Patients Say</h2>
-    <button className="PatHome-write-review-btn" onClick={() => setShowReview(true)}>
-      <i className="fa-solid fa-pen"></i> Write a Review
-    </button>
-  </div>
+              <div className="PatHome-review-header">
+                <h2 className="PatHome-card-heading">What Patients Say</h2>
+                <button className="PatHome-write-review-btn" onClick={() => setShowReview(true)}>
+                  <i className="fa-solid fa-pen"></i> Write a Review
+                </button>
+              </div>
 
-  <div className="PatHome-timeline">
-    {reviews.length > 0 ? (
-  reviews.map((rev, i) => (
-    <div className="PatHome-timeline-item" key={i}>
-      <div className="PatHome-timeline-dot"></div>
+              <div className="PatHome-timeline">
+                {reviews.length > 0 ? (
+                  reviews.map((rev, i) => (
+                    <div className="PatHome-timeline-item" key={i}>
+                      <div className="PatHome-timeline-dot"></div>
 
-      <div className="PatHome-timeline-content">
-        <div className="PatHome-review-top">
-          <div>
-            <h4 className="PatHome-review-name">{rev.name}</h4>
-            <span className="PatHome-review-date">{rev.date}</span>
-          </div>
+                      <div className="PatHome-timeline-content">
+                        <div className="PatHome-review-top">
+                          <div>
+                            <h4 className="PatHome-review-name">
+                              Dr. {rev.doctorName}
+                            </h4>
 
-          <div className="PatHome-review-stars">
-            {"⭐".repeat(rev.stars)}
-          </div>
-        </div>
+                            <span className="PatHome-review-specialty">
+                              {rev.specialization}
+                            </span>
+                            <p>-{rev.name}</p>
+                            <span className="PatHome-review-date">{rev.date}</span>
+                          </div>
 
-        <p className="PatHome-review-text">"{rev.text}"</p>
-      </div>
-    </div>
-  ))
-) : (
-  <p style={{ padding: "10px", color: "#777" }}>
-    No reviews yet
-  </p>
-)}
-  </div>
+                          <div className="PatHome-review-stars">
+                            {"⭐".repeat(rev.stars)}
+                          </div>
+                        </div>
 
-  <div className="PatHome-view-all" onClick={() => navigate("/patient/reviews")}>
-    <span>View all reviews →</span>
-  </div>
-</section>
+                        <p className="PatHome-review-text">"{rev.text}"</p>
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <p style={{ padding: "10px", color: "#777" }}>
+                    No reviews yet
+                  </p>
+                )}
+              </div>
+
+              <div className="PatHome-view-all" onClick={() => navigate("/patient/reviews")}>
+                <span>View all reviews →</span>
+              </div>
+            </section>
           </div>
 
           {/* RIGHT COLUMN - Fully Restored */}
@@ -557,30 +566,30 @@ const PatientHome = () => {
         </div>
       </div>
       {showReview && (
-  <div className="PatHome-booking-modal-overlay">
-    <div className="PatHome-booking-modal-content">
-      <Review onClose={() => setShowReview(false)} />
-    </div>
-  </div>
-)}
+        <div className="PatHome-booking-modal-overlay">
+          <div className="PatHome-booking-modal-content">
+            <Review onClose={() => setShowReview(false)} />
+          </div>
+        </div>
+      )}
 
-{showReschedule && selectedAppointment && (
-  <div
-    className="PatHome-booking-modal-overlay"
-    onClick={() => setShowReschedule(false)}
-  >
-    <div
-      className="PatHome-booking-modal-content"
-      onClick={(e) => e.stopPropagation()}
-      style={{ maxWidth: "900px", width: "95%" }}
-    >
-      <RescheduleAppointment
-        appointment={selectedAppointment}
-        onClose={() => setShowReschedule(false)}
-      />
-    </div>
-  </div>
-)}
+      {showReschedule && selectedAppointment && (
+        <div
+          className="PatHome-booking-modal-overlay"
+          onClick={() => setShowReschedule(false)}
+        >
+          <div
+            className="PatHome-booking-modal-content"
+            onClick={(e) => e.stopPropagation()}
+            style={{ maxWidth: "900px", width: "95%" }}
+          >
+            <RescheduleAppointment
+              appointment={selectedAppointment}
+              onClose={() => setShowReschedule(false)}
+            />
+          </div>
+        </div>
+      )}
 
     </>
   );
