@@ -342,7 +342,7 @@ const PatientHome = () => {
                         </div>
                         <div className="PatHome-type-badge-container">
                           <span className={`PatHome-type-badge PatHome-${upcomingAppointment.type}`}>
-                            {upcomingAppointment.type === "video" ? "🎥 Video" : "🏥 In-Person"}
+                            {upcomingAppointment.type === "videocall" ? "🎥 Video Call" : "🏥 Physical Visit"}
                           </span>
                         </div>
                       </div>
@@ -350,7 +350,7 @@ const PatientHome = () => {
                       <div className="PatHome-action-buttons">
 
                         {/* ✅ START CALL BUTTON */}
-                        {/* {upcomingAppointment?.type === "video" && (
+                        {/* {upcomingAppointment?.type === "videocall" && (
     canStartCall ? (
       <button
         className="PatHome-btn-primary"
@@ -368,7 +368,7 @@ const PatientHome = () => {
       </button>
     )
   )} */}
-                        {upcomingAppointment?.type === "video" && (
+                        {upcomingAppointment?.type === "videocall" && (
                           canStartCall ? (
                             // <button
                             //   className="PatHome-btn-primary"
