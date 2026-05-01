@@ -125,6 +125,8 @@ const BookAppointment = ({ onClose }) => {
       const res = await fetch(`${process.env.REACT_APP_API_URL}/api/appointment`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        // Authorization: `Bearer ${user.token}`,
+        credentials:"include",
         body: JSON.stringify({
           doctor: selectedDoctor,
           patient: patientId,
