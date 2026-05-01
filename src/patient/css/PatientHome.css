@@ -591,7 +591,7 @@ html, body {
 .PatHome-bot-icon-bg {
   width: 32px;
   height: 32px;
-  background: #2563eb;
+  background: #0AA5A5;
   color: white;
   border-radius: 8px;
   display: flex;
@@ -837,7 +837,7 @@ html, body {
   background: #fef2f2;
 }
 .PatHome-btn-primary {
-  background: #2563eb;
+  background: #0AA5A5;
   color: white;
   padding: 8px 14px;
   border-radius: 6px;

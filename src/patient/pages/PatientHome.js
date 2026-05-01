@@ -23,6 +23,29 @@ const PatientHome = () => {
   const [selectedAppointment, setSelectedAppointment] = useState(null);
   const [showPrescription, setShowPrescription] = useState(false);
   const navigate = useNavigate();
+  const [chatInput, setChatInput] = useState("");
+  const [messages, setMessages] = useState([
+    { role: 'bot', text: "Hello John! I'm your AI health assistant. Describe how you're feeling..." }
+  ]);
+
+  // Function to handle sending messages
+  const handleSendMessage = (e) => {
+    e.preventDefault();
+    if (!chatInput.trim()) return;
+
+    // Add user message
+    const newMessages = [...messages, { role: 'user', text: chatInput }];
+    setMessages(newMessages);
+    setChatInput("");
+
+    // Simple Mock AI Response
+    setTimeout(() => {
+      setMessages(prev => [...prev, {
+        role: 'bot',
+        text: "I've noted your symptoms. Please remember I'm an AI, not a doctor. Based on what you said, you might want to consult a General Physician. Would you like to see available slots?"
+      }]);
+    }, 1000);
+  };
   useEffect(() => {
     const fetchAppointments = async () => {
       try {
@@ -541,24 +564,38 @@ const PatientHome = () => {
             <section className="PatHome-card PatHome-card-white PatHome-ai-chatbot-container">
               <div className="PatHome-ai-text-center">
                 <h2 className="PatHome-ai-title">
-                  <i className="fa-solid fa-robot" style={{ marginRight: '10px', color: '#2563eb' }}></i>
+                  <i className="fa-solid fa-robot" style={{ marginRight: '10px', color: '#0AA5A5' }}></i>
                   Ask Medi-Track AI
                 </h2>
                 <p className="PatHome-ai-subtitle">Instant symptom analysis & suggestions</p>
               </div>
+
               <div className="PatHome-chat-window">
                 <div className="PatHome-chat-messages-scroll">
-                  <div className="PatHome-message-row PatHome-bot-row">
-                    <div className="PatHome-bot-icon-bg"><i className="fa-solid fa-robot"></i></div>
-                    <div className="PatHome-message-bubble PatHome-bot-bubble">
-                      Hello John! I'm your AI health assistant. Describe how you're feeling...
+                  {messages.map((msg, index) => (
+                    <div key={index} className={`PatHome-message-row ${msg.role === 'bot' ? 'PatHome-bot-row' : 'PatHome-user-row'}`}>
+                      {msg.role === 'bot' && (
+                        <div className="PatHome-bot-icon-bg"><i className="fa-solid fa-robot"></i></div>
+                      )}
+                      <div className={`PatHome-message-bubble ${msg.role === 'bot' ? 'PatHome-bot-bubble' : 'PatHome-user-bubble'}`}>
+                        {msg.text}
+                      </div>
                     </div>
-                  </div>
+                  ))}
                 </div>
-                <div className="PatHome-chat-input-container">
-                  <input type="text" placeholder="Type your symptoms here..." className="PatHome-chat-input-field" />
-                  <button className="PatHome-chat-submit-btn"><i className="fa-solid fa-paper-plane"></i></button>
-                </div>
+
+                <form className="PatHome-chat-input-container" onSubmit={handleSendMessage}>
+                  <input
+                    type="text"
+                    placeholder="Type your symptoms here..."
+                    className="PatHome-chat-input-field"
+                    value={chatInput}
+                    onChange={(e) => setChatInput(e.target.value)}
+                  />
+                  <button type="submit" className="PatHome-chat-submit-btn">
+                    <i className="fa-solid fa-paper-plane"></i>
+                  </button>
+                </form>
               </div>
             </section>
           </div>
