@@ -9,6 +9,7 @@ import UploadMedicalRecord from './UploadMedicalRecord';
 import PrescriptionModal from './PrescriptionModal';
 import Review from "./Review";
 import RescheduleAppointment from './RescheduleAppointment';
+import DoctorBookingModal from "./DoctorBookingModal";
 
 const PatientHome = () => {
   const [reviews, setReviews] = useState([]);
@@ -22,6 +23,8 @@ const PatientHome = () => {
   const [showReschedule, setShowReschedule] = useState(false);
   const [selectedAppointment, setSelectedAppointment] = useState(null);
   const [showPrescription, setShowPrescription] = useState(false);
+  const [selectedDoctorForBooking, setSelectedDoctorForBooking] = useState(null);
+  const [isBookingOpenSelected, setIsBookingOpenSelected] = useState(false);
   const navigate = useNavigate();
   const [chatInput, setChatInput] = useState("");
   const [messages, setMessages] = useState([
@@ -35,7 +38,7 @@ const PatientHome = () => {
     rating: ""
   });
   const [selectedDoctor, setSelectedDoctor] = useState(null);
-const [showDoctorModal, setShowDoctorModal] = useState(false);
+  const [showDoctorModal, setShowDoctorModal] = useState(false);
   const [filterOptions, setFilterOptions] = useState({
     specializations: [],
     serviceTypes: [],
@@ -689,9 +692,9 @@ const [showDoctorModal, setShowDoctorModal] = useState(false);
                                 <button
                                   className="PatHome-view-btn"
                                   onClick={() => {
-  setSelectedDoctor(doc);
-  setShowDoctorModal(true);
-}}
+                                    setSelectedDoctor(doc);
+                                    setShowDoctorModal(true);
+                                  }}
                                 >
                                   View Details
                                 </button>
@@ -775,84 +778,84 @@ const [showDoctorModal, setShowDoctorModal] = useState(false);
         </div>
       )}
       {showDoctorModal && selectedDoctor && (
-  <div
-    className="PatHome-booking-modal-overlay"
-    onClick={() => setShowDoctorModal(false)}
-  >
-    <div
-      className="PatHome-booking-modal-content"
-      onClick={(e) => e.stopPropagation()}
-      style={{ maxWidth: "700px", width: "95%" }}
-    >
-     <div className="PatHome-doctor-modal">
+        <div
+          className="PatHome-booking-modal-overlay"
+          onClick={() => setShowDoctorModal(false)}
+        >
+          <div
+            className="PatHome-booking-modal-content"
+            onClick={(e) => e.stopPropagation()}
+            style={{ maxWidth: "700px", width: "95%" }}
+          >
+            <div className="PatHome-doctor-modal">
 
-  {/* HEADER */}
-  <div className="PatHome-doctor-header">
-    <img src={doctorProfile} alt="Doctor" />
+              {/* HEADER */}
+              <div className="PatHome-doctor-header">
+                <img src={doctorProfile} alt="Doctor" />
 
-    <div>
-      <h2>Dr. {selectedDoctor.fullName}</h2>
-      <p className="PatHome-specialization">{selectedDoctor.specialization}</p>
-      <p className="PatHome-qualification">{selectedDoctor.qualification}</p>
-    </div>
-  </div>
+                <div>
+                  <h2>Dr. {selectedDoctor.fullName}</h2>
+                  <p className="PatHome-specialization">{selectedDoctor.specialization}</p>
+                  <p className="PatHome-qualification">{selectedDoctor.qualification}</p>
+                </div>
+              </div>
 
-  {/* GRID INFO */}
-  <div className="PatHome-doctor-grid">
+              {/* GRID INFO */}
+              <div className="PatHome-doctor-grid">
 
-    {/* LEFT */}
-    <div className="PatHome-doctor-card-box">
-      <h4>Basic Info</h4>
-      <p><span>Gender:</span> {selectedDoctor.gender || "N/A"}</p>
-      <p><span>DOB:</span> {selectedDoctor.dob?.slice(0, 10)}</p>
-      <p><span>Experience:</span> {selectedDoctor.experience} years</p>
-    </div>
+                {/* LEFT */}
+                <div className="PatHome-doctor-card-box">
+                  <h4>Basic Info</h4>
+                  <p><span>Gender:</span> {selectedDoctor.gender || "N/A"}</p>
+                  <p><span>DOB:</span> {selectedDoctor.dob?.slice(0, 10)}</p>
+                  <p><span>Experience:</span> {selectedDoctor.experience} years</p>
+                </div>
 
-    {/* RIGHT */}
-    <div className="PatHome-doctor-card-box">
-      <h4>Contact</h4>
-      <p><span>Email:</span> {selectedDoctor.email}</p>
-      <p><span>Mobile:</span> {selectedDoctor.mobile}</p>
-      <p><span>Emergency:</span> {selectedDoctor.emergencyContact}</p>
-    </div>
+                {/* RIGHT */}
+                <div className="PatHome-doctor-card-box">
+                  <h4>Contact</h4>
+                  <p><span>Email:</span> {selectedDoctor.email}</p>
+                  <p><span>Mobile:</span> {selectedDoctor.mobile}</p>
+                  <p><span>Emergency:</span> {selectedDoctor.emergencyContact}</p>
+                </div>
 
-  </div>
+              </div>
 
-  {/* CLINIC */}
-  <div className="PatHome-doctor-card-box">
-    <h4>Clinic Details</h4>
-    <p><span>Clinic:</span> {selectedDoctor.clinicName}</p>
-    <p><span>Address:</span> {selectedDoctor.clinicAddress}</p>
-    <p><span>City:</span> {selectedDoctor.city}, {selectedDoctor.state}</p>
+              {/* CLINIC */}
+              <div className="PatHome-doctor-card-box">
+                <h4>Clinic Details</h4>
+                <p><span>Clinic:</span> {selectedDoctor.clinicName}</p>
+                <p><span>Address:</span> {selectedDoctor.clinicAddress}</p>
+                <p><span>City:</span> {selectedDoctor.city}, {selectedDoctor.state}</p>
 
-    <a href={selectedDoctor.mapLink} target="_blank" rel="noreferrer">
-      📍 View on Map
-    </a>
-  </div>
+                <a href={selectedDoctor.mapLink} target="_blank" rel="noreferrer">
+                  📍 View on Map
+                </a>
+              </div>
 
-  {/* AVAILABILITY */}
-  <div className="PatHome-doctor-card-box">
-    <h4>Availability</h4>
-    <p><span>Type:</span> {selectedDoctor.serviceType}</p>
-    <p><span>Days:</span> {selectedDoctor.workingDays?.join(", ")}</p>
-<p>
-  <strong>Hours:</strong>{" "}
-  {Array.isArray(selectedDoctor.workingHours)
-    ? selectedDoctor.workingHours
-        .map(w => `${w.start} - ${w.end}`)
-        .join(", ")
-    : "Not available"}
-</p>
-  </div>
+              {/* AVAILABILITY */}
+              <div className="PatHome-doctor-card-box">
+                <h4>Availability</h4>
+                <p><span>Type:</span> {selectedDoctor.serviceType}</p>
+                <p><span>Days:</span> {selectedDoctor.workingDays?.join(", ")}</p>
+                <p>
+                  <strong>Hours:</strong>{" "}
+                  {Array.isArray(selectedDoctor.workingHours)
+                    ? selectedDoctor.workingHours
+                      .map(w => `${w.start} - ${w.end}`)
+                      .join(", ")
+                    : "Not available"}
+                </p>
+              </div>
 
-  {/* ABOUT */}
-  <div className="PatHome-doctor-card-box">
-    <h4>About</h4>
-    <p>{selectedDoctor.about}</p>
-  </div>
+              {/* ABOUT */}
+              <div className="PatHome-doctor-card-box">
+                <h4>About</h4>
+                <p>{selectedDoctor.about}</p>
+              </div>
 
-  {/* BUTTON */}
-  <button
+              {/* BUTTON */}
+              {/* <button
     className="PatHome-btn-bookapp"
     onClick={() => {
       setShowDoctorModal(false);
@@ -860,11 +863,26 @@ const [showDoctorModal, setShowDoctorModal] = useState(false);
     }}
   >
     Book Appointment
-  </button>
+  </button> */}
+              <button
+                className="PatHome-btn-primary"
+                onClick={() => {
+                  setSelectedDoctorForBooking(selectedDoctor); // ✅ set doctor
+                  setIsBookingOpenSelected(true);           // ✅ open modal
+                }}
+              >
+                Book Appointment
+              </button>
 
-</div>
-    </div>
-  </div>
+            </div>
+          </div>
+        </div>
+      )}
+    {isBookingOpenSelected && selectedDoctorForBooking && (
+  <DoctorBookingModal
+    onClose={() => setIsBookingOpenSelected(false)}
+    doctor={selectedDoctorForBooking}
+  />
 )}
     </>
   );
