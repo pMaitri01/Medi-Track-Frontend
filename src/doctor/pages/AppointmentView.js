@@ -267,7 +267,7 @@ setAppointments(sorted);
 {/* ✅ If time reached → show Start Call button */}
 {
   selectedAppointment.status?.toLowerCase() === "approved" &&
-  selectedAppointment.type?.toLowerCase() === "video" && (
+  selectedAppointment.type?.toLowerCase() === "videocall" && (
     // <button
     //   className="dappv-btn-startcall"
     //   onClick={() => startVideoCall(selectedAppointment)}
