@@ -81,7 +81,7 @@ function TimelineItem({ record }) {
           <span className="MedRec-mr-timeline-date">{formatDate(record.date)}</span>
         </div>
         <h4>{record.title}</h4>
-        <p className="MedRec-mr-timeline-doctor">👨‍⚕️ {record.doctor}</p>
+        <p className="MedRec-mr-timeline-doctor">👨‍⚕️{record.doctor}</p>
         <p className="MedRec-mr-card-desc">{record.description}</p>
         <div className="MedRec-mr-card-actions">
           <button className="MedRec-mr-btn MedRec-mr-btn--download">⬇ Download</button>
@@ -124,15 +124,15 @@ if (!data.records || !Array.isArray(data.records)) {
           title: r.title,
           type: capitalizeType(r.type),
           date: r.date,
-          doctor: r.doctorName || "Unknown",
+          doctor: r.doctor?.fullName ? `Dr. ${r.doctor.fullName}` : "Unknown",
           description: r.description,
           file: r.fileUrl || null,
         }));
 
         setRecords(formatted);
-        const recordsArray = data.records || data || [];
+    //     const recordsArray = data.records || data || [];
 
-    setRecords(Array.isArray(recordsArray) ? recordsArray : []);
+    // setRecords(Array.isArray(recordsArray) ? recordsArray : []);
   } catch (error) {
     console.error("Fetch error:", error);
     setRecords([]);
