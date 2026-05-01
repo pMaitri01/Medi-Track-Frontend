@@ -2,10 +2,12 @@ import React, { useState, useEffect } from 'react';
 import '../css/DoctorList.css';
 import Navbar from '../components/Navbar';
 import defaultDoctorImg from '../images/user.png';
+import DoctorBookingModal from "./DoctorBookingModal";
 
 // ── Map backend doctor object to UI format ──
 const mapDoctor = (doc) => ({
   id: doc._id,
+  _id: doc._id,
 name: `Dr. ${doc.fullName}`,
   spec: doc.specialization,
   city: doc.city,
@@ -302,89 +304,14 @@ const handleConfirmBooking = async () => {
 
       {/* Booking Modal */}
       {showBooking && selectedDoctor && (
-  <div className="DocList-modal-overlay">
-    <div className="DocList-booking-modal">
-
-      {/* HEADER */}
-      <div className="DocList-booking-header">
-        <div className="DocList-doctor-summary">
-          <img src={defaultDoctorImg} alt="doc" />
-          <div className="DocList-doctor-name">
-            <h3>{selectedDoctor.name}</h3>
-            <p>{selectedDoctor.spec} • {selectedDoctor.city}</p>
-          </div>
-        </div>
-        <button className="DocList-close-btn" onClick={() => setShowBooking(false)}>✖</button>
-      </div>
-
-      {/* BODY */}
-      <div className="DocList-booking-body">
-
-        {/* STEP 1 - DATE */}
-        <div className="DocList-booking-step">
-          <h4>📅 Select Date</h4>
-          <input
-            type="date"
-            min={today}
-            value={bookingDate}
-            onChange={(e) => {
-              setBookingDate(e.target.value);
-              setSelectedSlot("");
-              setErrors({ ...errors, date: "" }); // clear error
-            }}
-          />
-
-        {errors.date && <p className="DocList-error-text">{errors.date}</p>}
-        </div>
-
-        {/* STEP 2 - TIME */}
-        <div className="DocList-booking-step">
-          <h4>⏰ Select Time</h4>
-
-          {bookingDate ? (
-          <>
-            <div className="DocList-slots-grid">
-              {timeSlots.map((slot) => (
-                <button
-                  key={slot}
-                  className={`DocList-slot-btn ${selectedSlot === slot ? "active" : ""}`}
-                  onClick={() => {
-                    setSelectedSlot(slot);
-                    setErrors({ ...errors, slot: "" }); // clear error
-                  }}
-                >
-                  {slot}
-                </button>
-              ))}
-            </div>
-
-            {errors.slot && <p className="DocList-error-text">{errors.slot}</p>}
-          </>
-        ) : (
-          <p className="DocList-placeholder">Select date first</p>
-        )}
-        </div>
-
-      </div>
-
-      {/* FOOTER */}
-      <div className="DocList-booking-footer">
-        <button
-          className={`DocList-confirm-btn ${
-            (!bookingDate || !selectedSlot) ? "disabled" : ""
-          }`}
-          disabled={!bookingDate || !selectedSlot}
-          onClick={handleConfirmBooking}
-        >
-          Confirm Appointment
-        </button>
-        <button className="DocList-cancel-btn" onClick={() => setShowBooking(false)}>
-          Cancel
-        </button>
-      </div>
-
-    </div>
-  </div>
+  <DoctorBookingModal
+    doctor={selectedDoctor}
+    onClose={() => setShowBooking(false)}
+    onConfirm={() => {
+      setShowBooking(false);
+      setShowSuccess(true);
+    }}
+  />
 )}
 
   {showSuccess && (
