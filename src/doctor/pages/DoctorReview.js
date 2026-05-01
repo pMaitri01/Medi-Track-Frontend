@@ -5,7 +5,11 @@ import DoctorHeader from "../components/DoctorHeader";
 import DoctorNavbar from "../components/DoctorNavbar";
 
 const DoctorReview = () => {
-  const { doctorId } = useParams();
+  // const { doctorId } = useParams();
+  const params = useParams();
+  const doctorId =
+    params.doctorId ||
+    JSON.parse(localStorage.getItem("user"))?._id;
 
   const [open, setOpen] = useState(true);
 
@@ -32,39 +36,32 @@ const DoctorReview = () => {
     backgroundColor: "#f8fafc",
   };
 
-  // ✅ FETCH REVIEWS
- useEffect(() => {
-  if (!doctorId) return; // 👈 IMPORTANT
+  useEffect(() => {
+    const fetchReviews = async () => {
+      try {
+        const res = await fetch(
+          `${process.env.REACT_APP_API_URL}/api/review/alldoctorreview`,
+          { credentials: "include" }
+        );
 
- const fetchReviews = async () => {
-  try {
-    const res = await fetch(
-      `http://localhost:5000/api/review/alldoctorreview/${doctorId}`,
-      { credentials: "include" }
-    );
+        const data = await res.json();
 
-    const data = await res.json();
+        if (!res.ok) return;
 
-    if (!res.ok) {
-      console.error(data);
-      return;
-    }
+        setReviewData({
+          avgRating: data.avgRating || 0,
+          totalReviews: data.totalReviews || 0,
+          ratingCount: data.ratingCount || {},
+        });
 
-    setReviewData({
-      avgRating: data.avgRating,
-      totalReviews: data.totalReviews,
-      ratingCount: data.ratingCount,
-    });
+        setReviews(data.allReviews || []); // ✅ SAFE
+      } catch (err) {
+        console.error("Error:", err);
+      }
+    };
 
-    setReviews(data.allReviews);
-
-  } catch (err) {
-    console.error("Error:", err);
-  }
-};
-
-  fetchReviews();
-}, [doctorId]);
+    fetchReviews();
+  }, [doctorId]);
 
   // ✅ FILTER REVIEWS
   const filteredReviews = reviews.filter((r) =>
@@ -125,10 +122,13 @@ const DoctorReview = () => {
             {currentReviews.length > 0 ? (
               currentReviews.map((r) => (
                 <div className="review-card" key={r._id}>
-                  
+
                   <div className="review-top">
                     <div className="review-user">
-                      {r.patient?.firstName} {r.patient?.lastName}
+                      {/* {r.patient?.firstName} {r.patient?.lastName} */}
+                      {r.patient
+                        ? `${r.patient.firstName} ${r.patient.lastName}`
+                        : "Unknown Patient"}
                     </div>
 
                     <div className="review-stars">
