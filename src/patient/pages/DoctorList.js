@@ -5,11 +5,41 @@ import defaultDoctorImg from '../images/user.png';
 import DoctorBookingModal from "./DoctorBookingModal";
 
 // ── Map backend doctor object to UI format ──
+// const mapDoctor = (doc) => ({
+//   id: doc._id,
+//   _id: doc._id,
+// name: `Dr. ${doc.fullName}`,
+//   spec: doc.specialization,
+//   city: doc.city,
+//   state: doc.state,
+//   gender: doc.gender,
+//   about: doc.about,
+//   rank: doc.designation,
+//   exp: doc.experience,
+//   qualification: doc.qualification,
+//   email: doc.email,
+//   mobile: doc.mobile,
+//   clinicName: doc.clinicName,
+//   clinicAddress: doc.clinicAddress,
+//   workingDays: doc.workingDays,
+//   workingHours: doc.workingHours,
+//   licenseNumber: doc.licenseNumber,
+//   emergencyContact: doc.emergencyContact,
+
+//   status: doc.status, // ✅ ADD THIS
+// });
 const mapDoctor = (doc) => ({
   id: doc._id,
   _id: doc._id,
-name: `Dr. ${doc.fullName}`,
+
+  // ✅ KEEP BOTH (important)
+  fullName: doc.fullName,
+  specialization: doc.specialization,
+
+  // Your UI fields
+  name: `Dr. ${doc.fullName}`,
   spec: doc.specialization,
+
   city: doc.city,
   state: doc.state,
   gender: doc.gender,
@@ -25,8 +55,10 @@ name: `Dr. ${doc.fullName}`,
   workingHours: doc.workingHours,
   licenseNumber: doc.licenseNumber,
   emergencyContact: doc.emergencyContact,
+  status: doc.status,
 
-  status: doc.status, // ✅ ADD THIS
+  // (optional but useful for modal)
+  serviceType: doc.serviceType,
 });
 
 const DoctorList = () => {
