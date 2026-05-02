@@ -1,32 +1,20 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import "../css/PatientList.css"; // reuse same styling
+import "../css/DoctorReview.css"; 
 import DoctorHeader from "../components/DoctorHeader";
 import DoctorNavbar from "../components/DoctorNavbar";
 
 const DoctorReview = () => {
-  // const { doctorId } = useParams();
   const params = useParams();
-  const doctorId =
-    params.doctorId ||
-    JSON.parse(localStorage.getItem("user"))?._id;
+  const doctorId = params.doctorId || JSON.parse(localStorage.getItem("user"))?._id;
 
   const [open, setOpen] = useState(true);
-
   const [searchTerm, setSearchTerm] = useState("");
-  const [isFilterOpen, setIsFilterOpen] = useState(false);
-
   const [reviews, setReviews] = useState([]);
   const [reviewData, setReviewData] = useState({
     avgRating: 0,
     totalReviews: 0,
-    ratingCount: {},
   });
-
-  const [currentPage, setCurrentPage] = useState(1);
-  const reviewsPerPage = 5;
-
-  const toggleFilter = () => setIsFilterOpen(!isFilterOpen);
 
   const contentStyle = {
     marginLeft: open ? "250px" : "100px",
@@ -39,41 +27,29 @@ const DoctorReview = () => {
   useEffect(() => {
     const fetchReviews = async () => {
       try {
-        const res = await fetch(
-          `${process.env.REACT_APP_API_URL}/api/review/alldoctorreview`,
-          { credentials: "include" }
-        );
-
-        const data = await res.json();
-
-        if (!res.ok) return;
-
-        setReviewData({
-          avgRating: data.avgRating || 0,
-          totalReviews: data.totalReviews || 0,
-          ratingCount: data.ratingCount || {},
+        const res = await fetch(`${process.env.REACT_APP_API_URL}/api/review/alldoctorreview`, {
+          credentials: "include"
         });
-
-        setReviews(data.allReviews || []); // ✅ SAFE
+        const data = await res.json();
+        if (res.ok) {
+          setReviewData({
+            avgRating: data.avgRating || 0,
+            totalReviews: data.totalReviews || 0,
+          });
+          setReviews(data.allReviews || []);
+        }
       } catch (err) {
-        console.error("Error:", err);
+        console.error("Error fetching reviews:", err);
       }
     };
-
     fetchReviews();
   }, [doctorId]);
 
-  // ✅ FILTER REVIEWS
   const filteredReviews = reviews.filter((r) =>
     `${r.patient?.firstName || ""} ${r.patient?.lastName || ""}`
       .toLowerCase()
       .includes(searchTerm.toLowerCase())
   );
-
-  // ✅ PAGINATION
-  const indexOfLast = currentPage * reviewsPerPage;
-  const indexOfFirst = indexOfLast - reviewsPerPage;
-  const currentReviews = filteredReviews.slice(indexOfFirst, indexOfLast);
 
   return (
     <>
@@ -83,85 +59,90 @@ const DoctorReview = () => {
         <DoctorHeader open={open} />
 
         <div className="dplist-container">
-
-          {/* Header */}
+          {/* Header Bar */}
           <div className="dplist-header">
             <div className="dplist-title-section">
-              <span>⭐</span>
-              <h2>Doctor Reviews</h2>
+              <h2>📅 Doctor Reviews</h2>
             </div>
           </div>
 
-          {/* Search + Filter */}
-          <div className="dplist-filter-bar-container">
-            <div className="dplist-filter-bar">
-              <input
-                type="text"
-                placeholder="Search by patient name"
-                className="dplist-search-input"
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
+          {/* Search Bar */}
+          <div className="dplist-filter-bar">
+            <input
+              type="text"
+              placeholder="Search by patient name..."
+              className="dplist-search-input"
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+          </div>
 
-              <button
-                className={`dplist-filter-toggle-btn ${isFilterOpen ? "active" : ""}`}
-                onClick={toggleFilter}
-              >
-                Filter {isFilterOpen ? "▲" : "▼"}
-              </button>
+          {/* Summary Stat Card */}
+          <div className="review-summary-card">
+            <h2>{reviewData.avgRating} <span style={{ color: '#facc15' }}>★</span></h2>
+            <div>
+              <p style={{ margin: 0, fontWeight: '700', color: '#64748b', fontSize: '12px', textTransform: 'uppercase' }}>
+                Average Rating
+              </p>
+              <span style={{ fontSize: '13px', color: '#94a3b8' }}>
+                Based on {reviewData.totalReviews} total reviews
+              </span>
             </div>
           </div>
 
-          {/* ⭐ Summary */}
-          <div className="review-summary">
-            <h2>{reviewData.avgRating} ⭐</h2>
-            <p>{reviewData.totalReviews} Reviews</p>
-          </div>
+          {/* Timeline Wrapper Container */}
+          <div className="review-timeline-wrapper">
+            {filteredReviews.length > 0 ? (
+              filteredReviews.map((r) => {
+                // Generate initials like "MA" or "VY"
+                const initials = r.patient 
+                  ? `${r.patient.firstName?.charAt(0)}${r.patient.lastName?.charAt(0)}`.toUpperCase() 
+                  : "??";
 
-          {/* Reviews */}
-          <div className="review-list">
-            {currentReviews.length > 0 ? (
-              currentReviews.map((r) => (
-                <div className="review-card" key={r._id}>
+                return (
+                  <div className="timeline-item" key={r._id}>
+                    <div className="timeline-dot"></div>
+                    
+                    {/* Circle Avatar matching Appointment View */}
+                    <div className="patient-initials">{initials}</div>
 
-                  <div className="review-top">
-                    <div className="review-user">
-                      {/* {r.patient?.firstName} {r.patient?.lastName} */}
-                      {r.patient
-                        ? `${r.patient.firstName} ${r.patient.lastName}`
-                        : "Unknown Patient"}
-                    </div>
-
-                    <div className="review-stars">
-                      {[...Array(5)].map((_, i) => (
-                        <span key={i}>
-                          {i < r.rating ? "⭐" : "☆"}
+                    <div className="review-bubble">
+                      <div className="review-bubble-header">
+                        <span className="review-patient-name">
+                          {r.patient ? `${r.patient.firstName} ${r.patient.lastName}` : "Anonymous Patient"}
                         </span>
-                      ))}
+                        <div className="review-stars">
+                          {[...Array(5)].map((_, i) => (
+                            <span key={i} style={{ color: i < r.rating ? "#facc15" : "#e2e8f0" }}>
+                              ★
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+
+                      <p className="review-text">"{r.comment}"</p>
+
+                      <span className="review-date-stamp">
+                        {new Date(r.createdAt).toLocaleDateString('en-US', {
+                          year: 'numeric',
+                          month: 'short',
+                          day: 'numeric'
+                        })}
+                      </span>
                     </div>
                   </div>
-
-                  <p className="review-comment">{r.comment}</p>
-
-                  <span className="review-date">
-                    {new Date(r.createdAt).toLocaleDateString()}
-                  </span>
-
-                </div>
-              ))
+                );
+              })
             ) : (
-              <p style={{ textAlign: "center", padding: "30px", color: "#94a3b8" }}>
-                No Reviews Found
-              </p>
+              <div style={{ textAlign: "center", paddingTop: "40px" }}>
+                <p style={{ color: "#94a3b8" }}>No reviews found for this search.</p>
+              </div>
             )}
           </div>
 
-          {/* Pagination */}
-          <div className="dplist-footer-pagination">
-            <span>
-              Showing {currentReviews.length} of {filteredReviews.length}
-            </span>
+          {/* Pagination Footer Styling */}
+          <div style={{ marginTop: '20px', fontSize: '13px', color: '#64748b' }}>
+            Showing {filteredReviews.length} reviews
           </div>
-
         </div>
       </div>
     </>
