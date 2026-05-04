@@ -1,55 +1,3 @@
-.review-summary {
-  background: white;
-  padding: 20px;
-  border-radius: 12px;
-  border: 1px solid var(--dplist-border);
-  margin-bottom: 20px;
-  text-align: center;
-}
-
-.review-summary h2 {
-  font-size: 32px;
-  color: var(--dplist-teal);
-}
-
-.review-list {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-.review-card {
-  background: white;
-  border: 1px solid var(--dplist-border);
-  border-radius: 12px;
-  padding: 16px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-}
-
-.review-top {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.review-user {
-  font-weight: 600;
-  color: var(--dplist-text-dark);
-}
-
-.review-stars {
-  color: #facc15;
-}
-
-.review-comment {
-  margin: 10px 0;
-  color: var(--dplist-text-mid);
-}
-
-.review-date {
-  font-size: 12px;
-  color: var(--dplist-text-light);
-}
 /* ── Variables ───────────────────────────────────────────────────────────── */
 :root {
   --dplist-teal:        #0aa5a5;
@@ -61,11 +9,9 @@
   --dplist-text-light:  #64748b;
   --dplist-view-bg:     #e0f2fe;
   --dplist-view-color:  #0369a1;
-  --dplist-del-bg:      #fee2e2;
-  --dplist-del-color:   #991b1b;
 }
 
-/* ── Page container ─────────────────────────────────────────────────────── */
+/* ── Container ──────────────────────────────────────────────────────────── */
 .dplist-container {
   padding: 0 24px 60px;
   background-color: transparent;
@@ -73,7 +19,7 @@
   box-sizing: border-box;
 }
 
-/* ── Page heading bar ───────────────────────────────────────────────────── */
+/* ── Header Bar ─────────────────────────────────────────────────────────── */
 .dplist-header {
   display: flex;
   align-items: center;
@@ -84,28 +30,17 @@
   padding: 20px 24px;
   margin-top: 20px;
   margin-bottom: 24px;
-  min-height: 80px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
 }
 
-.dplist-title-section {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
 .dplist-title-section h2 {
-  font-size: 28px;
+  font-size: 24px;
   font-weight: 700;
   color: var(--dplist-text-dark);
   margin: 0;
 }
 
-/* ── Filter bar container ───────────────────────────────────────────────── */
-.dplist-filter-bar-container {
-  margin-bottom: 20px;
-}
-
+/* ── Search Bar ─────────────────────────────────────────────────────────── */
 .dplist-filter-bar {
   display: flex;
   justify-content: space-between;
@@ -115,6 +50,7 @@
   border-radius: 12px;
   border: 1px solid var(--dplist-border);
   padding: 14px 20px;
+  margin-bottom: 20px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
 }
 
@@ -126,216 +62,128 @@
   font-size: 13px;
   background: var(--dplist-bg);
   outline: none;
-  transition: border-color 0.2s;
 }
-.dplist-search-input:focus { border-color: var(--dplist-teal); }
 
-.dplist-filter-toggle-btn {
-  padding: 9px 18px;
-  border: 1px solid var(--dplist-border);
+/* ── Summary Stat ───────────────────────────────────────────────────────── */
+.review-summary-card {
   background: white;
-  border-radius: 8px;
-  color: var(--dplist-text-light);
-  font-size: 13px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-.dplist-filter-toggle-btn:hover,
-.dplist-filter-toggle-btn.active {
-  background: var(--dplist-teal);
-  color: white;
-  border-color: var(--dplist-teal);
+  padding: 20px 24px;
+  border-radius: 12px;
+  border: 1px solid var(--dplist-border);
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.06);
 }
 
-/* ── Filter drawer ──────────────────────────────────────────────────────── */
-.dplist-filter-drawer {
+.review-summary-card h2 {
+  font-size: 32px;
+  margin: 0;
+  color: var(--dplist-text-dark);
+}
+
+/* ── Timeline Theme Container (Matches Appointment View Container) ──────── */
+.review-timeline-wrapper {
   background: white;
   border-radius: 12px;
   border: 1px solid var(--dplist-border);
-  padding: 20px;
-  margin-top: 10px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
+  padding: 40px 30px;
+  position: relative;
+  min-height: 400px;
 }
 
-.dplist-filter-grid {
-  display: flex;
-  gap: 24px;
-  flex-wrap: wrap;
-  justify-content: center;
-}
-
-.dplist-filter-group {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-  width: 160px;
-}
-
-.dplist-filter-group label {
-  font-size: 11px;
-  font-weight: 700;
-  color: var(--dplist-text-light);
-  text-transform: uppercase;
-  letter-spacing: 0.4px;
-}
-
-.dplist-filter-group select,
-.dplist-filter-group input[type="date"] {
-  height: 42px;
-  padding: 0 12px;
-  border: 1px solid #cbd5e1;
-  border-radius: 8px;
-  background-color: white;
-  font-size: 13px;
-  color: var(--dplist-text-mid);
-  cursor: pointer;
-  outline: none;
-  transition: border-color 0.2s;
-  appearance: none;
-  width: 100%;
-}
-.dplist-filter-group select:hover,
-.dplist-filter-group input[type="date"]:hover { border-color: var(--dplist-teal); }
-.dplist-filter-group select:focus,
-.dplist-filter-group input[type="date"]:focus {
-  border-color: var(--dplist-teal);
-  box-shadow: 0 0 0 3px rgba(10, 165, 165, 0.12);
-}
-
-.dplist-filter-footer {
-  display: flex;
-  justify-content: center;
-  gap: 12px;
-  margin-top: 20px;
-  padding-top: 15px;
-  border-top: 1px dashed var(--dplist-border);
-}
-
-.dplist-apply-btn,
-.dplist-reset-btn {
-  padding: 9px 24px;
-  border: none;
-  border-radius: 8px;
-  font-size: 13px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: opacity 0.2s;
-}
-.dplist-apply-btn {
-  background: var(--dplist-teal);
-  color: white;
-}
-.dplist-apply-btn:hover { opacity: 0.85; }
-
-.dplist-reset-btn {
+/* Vertical Timeline Line */
+.review-timeline-wrapper::before {
+  content: '';
+  position: absolute;
+  left: 50px; 
+  top: 40px;
+  bottom: 40px;
+  width: 2px;
   background: #f1f5f9;
-  color: #475569;
-}
-.dplist-reset-btn:hover { background: #e2e8f0; }
-
-/* ── Table wrapper ──────────────────────────────────────────────────────── */
-.dplist-table-wrapper {
-  background: white;
-  border-radius: 12px;
-  border: 1px solid var(--dplist-border);
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
-  overflow: hidden;
 }
 
-.dplist-table {
-  width: 100%;
-  border-collapse: collapse;
-  text-align: left;
+.timeline-item {
+  position: relative;
+  margin-bottom: 40px;
+  padding-left: 70px;
 }
 
-.dplist-table th {
-  background-color: var(--dplist-bg);
-  padding: 12px 16px;
-  font-size: 11px;
-  font-weight: 700;
-  color: var(--dplist-text-light);
-  text-transform: uppercase;
-  letter-spacing: 0.4px;
-  border-bottom: 1px solid var(--dplist-border);
+.timeline-item:last-child {
+  margin-bottom: 0;
 }
 
-.dplist-table td {
-  padding: 12px 16px;
-  border-bottom: 1px solid var(--dplist-border);
-  font-size: 13px;
-  color: var(--dplist-text-mid);
-  vertical-align: middle;
+/* Vertical Line Dot */
+.timeline-dot {
+  position: absolute;
+  left: 15px;
+  top: 12px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--dplist-teal);
+  border: 3px solid white;
+  box-shadow: 0 0 0 1px var(--dplist-teal);
+  z-index: 2;
 }
 
-.dplist-table tr:hover td { background: var(--dplist-bg); }
-
-/* ── Action buttons ─────────────────────────────────────────────────────── */
-.dplist-view-btn,
-.dplist-delete-btn {
-  padding: 6px 10px;
-  border-radius: 8px;
-  border: none;
-  font-size: 15px;
-  cursor: pointer;
-  display: inline-flex;
+/* Patient Initials Circle (Matches Appointment View) */
+.patient-initials {
+  width: 42px;
+  height: 42px;
+  background-color: #f1f5f9;
+  color: var(--dplist-text-dark);
+  border-radius: 50%;
+  display: flex;
   align-items: center;
   justify-content: center;
-  transition: opacity 0.2s;
-  min-width: 36px;
-  height: 34px;
-}
-.dplist-view-btn:hover,
-.dplist-delete-btn:hover { opacity: 0.75; }
-
-.dplist-view-btn {
-  background-color: var(--dplist-view-bg);
-  color: var(--dplist-view-color);
-}
-.dplist-delete-btn {
-  background-color: var(--dplist-del-bg);
-  color: var(--dplist-del-color);
-  margin-left: 6px;
+  font-weight: 700;
+  font-size: 13px;
+  margin-bottom: 12px;
+  border: 1px solid var(--dplist-border);
 }
 
-/* ── Pagination footer ──────────────────────────────────────────────────── */
-.dplist-footer-pagination {
-  margin-top: 20px;
+/* The Bubble for the Review */
+.review-bubble {
+  background: #f8fafc;
+  border: 1px solid var(--dplist-border);
+  border-radius: 12px;
+  padding: 16px;
+  position: relative;
+}
+
+.review-bubble-header {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  margin-bottom: 8px;
+}
+
+.review-patient-name {
+  font-weight: 600;
+  color: var(--dplist-text-dark);
+  font-size: 15px;
+}
+
+.review-stars {
+  color: #facc15;
+  font-size: 14px;
+}
+
+.review-text {
+  color: var(--dplist-text-mid);
+  font-size: 14px;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.review-date-stamp {
+  display: block;
+  font-size: 11px;
   color: var(--dplist-text-light);
-  font-size: 13px;
+  margin-top: 10px;
+  text-align: right;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
-
-.dplist-pagination-controls { display: flex; gap: 5px; }
-
-.dplist-page-num {
-  width: 32px;
-  height: 32px;
-  border-radius: 6px;
-  border: 1px solid var(--dplist-border);
-  cursor: pointer;
-  background: white;
-  font-size: 13px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.dplist-page-num.active {
-  background-color: var(--dplist-teal);
-  color: white;
-  border-color: var(--dplist-teal);
-}
-
-.dplist-page-nav {
-  padding: 0 12px;
-  height: 32px;
-  background: var(--dplist-teal);
-  color: white;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 13px;
-}
-.dplist-page-nav:hover { opacity: 0.85; }

@@ -1,0 +1,112 @@
+.DBM-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.55);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.DBM-modal {
+  width: 850px;
+  background: #fff;
+  border-radius: 12px;
+  padding: 25px;
+}
+
+.DBM-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #eee;
+  margin-bottom: 15px;
+}
+
+.DBM-body {
+  display: flex;
+  gap: 40px;
+}
+
+.DBM-left, .DBM-right {
+  flex: 1;
+}
+
+.DBM-section {
+  margin-bottom: 20px;
+}
+
+.DBM-section label {
+  font-weight: 600;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.DBM-doctor {
+  padding: 10px;
+  background: #f8f9fa;
+  border-radius: 6px;
+}
+
+.DBM-section select,
+.DBM-section input {
+  width: 100%;
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+.DBM-footer {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.DBM-confirm {
+  flex: 2;
+  background: #10b981;
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.DBM-cancel {
+  flex: 1;
+  background: #eee;
+  border: none;
+  padding: 12px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.DBM-close {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.DBM-slots {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.DBM-slot {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background: white;
+  cursor: pointer;
+}
+
+.DBM-slot.active {
+  background: #10b981;
+  color: white;
+  border-color: #10b981;
+}
