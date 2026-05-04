@@ -53,7 +53,7 @@ const [showDoctorModal, setShowDoctorModal] = useState(false);
     }));
   };
   // Function to handle sending messages
-  const handleSendMessage = (e) => {
+  /* const handleSendMessage = (e) => {
     e.preventDefault();
     if (!chatInput.trim()) return;
 
@@ -69,7 +69,48 @@ const [showDoctorModal, setShowDoctorModal] = useState(false);
         text: "I've noted your symptoms. Please remember I'm an AI, not a doctor. Based on what you said, you might want to consult a General Physician. Would you like to see available slots?"
       }]);
     }, 1000);
-  };
+  }; */
+
+  const handleSendMessage = async (e) => {
+  e.preventDefault();
+  if (!chatInput.trim()) return;
+
+  const userMessage = chatInput;
+
+  // ✅ Add user message
+  setMessages(prev => [...prev, { role: 'user', text: userMessage }]);
+  setChatInput("");
+
+  try {
+    const res = await fetch(
+      `${process.env.REACT_APP_API_URL}/api/chatbot/chat`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials:"include",
+        body: JSON.stringify({ message: userMessage }),
+      }
+    );
+
+    const data = await res.json();
+
+    // ✅ Add bot reply
+    setMessages(prev => [
+      ...prev,
+      { role: 'bot', text: data.reply }
+    ]);
+
+  } catch (error) {
+    console.error(error);
+
+    setMessages(prev => [
+      ...prev,
+      { role: 'bot', text: "Something went wrong. Please try again." }
+    ]);
+  }
+};
 
   useEffect(() => {
     const fetchFilters = async () => {
