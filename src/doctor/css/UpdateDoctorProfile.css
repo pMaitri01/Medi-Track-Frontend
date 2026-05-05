@@ -244,6 +244,14 @@
   margin-bottom: 20px;
 }
 
+.full-card textarea {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  resize: vertical;
+  overflow: auto;
+}
+
 /* ── Section Title ── */
 .section-title {
   font-size: 12px;
@@ -283,10 +291,9 @@
 }
 
 .field label {
-  font-size: 11px;
-  color: #888;
-  font-weight: 500;
-  letter-spacing: 0.04em;
+  font-size: 12px;
+  color: #6b7280;
+  font-weight: 600;
 }
 
 .fval {
@@ -316,7 +323,6 @@
   padding: 9px 12px;
   border-radius: 8px;
   background: #f7fdfc;
-  border: 0.5px solid #00a99d;
   outline: none;
   font-family: inherit;
   width: 100%;
@@ -400,4 +406,75 @@
   border-top: 0.5px solid #d4ede8;
   background: white;
   margin-top: 8px;
+}
+
+/* ── Working Hours delete button ── */
+.field-row button {
+  background: #fff;
+  border: 0.5px solid #f1c2c2;
+  color: #e11d48;
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: 0.2s;
+}
+
+.field-row button:hover {
+  background: #ffe4e6;
+}
+
+/* ── Add Slot button ── */
+.add-slot-btn {
+  margin-top: 10px;
+  padding: 8px 14px;
+  border-radius: 8px;
+  background: #e1f5ee;
+  color: #0f6e56;
+  border: 0.5px solid #b2d8d2;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  font-family: inherit;
+  transition: 0.2s;
+}
+
+.add-slot-btn:hover {
+  background: #d2f0e8;
+}
+
+/* ── Working hours row alignment ── */
+.time-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* make inputs equal width */
+.time-row input {
+  flex: 1;
+}
+
+/* delete button inline */
+.time-row button {
+  background: #fff;
+  border: 0.5px solid #f1c2c2;
+  color: #e11d48;
+  width: 38px;
+  height: 38px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: 0.2s;
+}
+
+.time-row button:hover {
+  background: #ffe4e6;
 }

@@ -236,14 +236,28 @@ export default function UpdateDoctorProfile() {
             <SectionTitle icon={<FaUser />}>Personal Info</SectionTitle>
 
             <div className="field-row">
-              <input name="gender" value={profile.gender || ""} disabled={!isEditing} onChange={handleChange} />
-              <input name="dob" type="date" value={profile.dob || ""} disabled={!isEditing} onChange={handleChange} />
-            </div>
+  <div className="field">
+    <label>Gender</label>
+    <input name="gender" value={profile.gender || ""} disabled={!isEditing} onChange={handleChange} />
+  </div>
 
-            <div className="field-row">
-              <input name="mobile" value={profile.mobile || ""} disabled={!isEditing} onChange={handleChange} />
-              <input name="emergencyContact" value={profile.emergencyContact || ""} disabled={!isEditing} onChange={handleChange} />
-            </div>
+  <div className="field">
+    <label>Date of Birth</label>
+    <input name="dob" type="date" value={profile.dob || ""} disabled={!isEditing} onChange={handleChange} />
+  </div>
+</div>
+
+<div className="field-row">
+  <div className="field">
+    <label>Mobile Number</label>
+    <input name="mobile" value={profile.mobile || ""} disabled={!isEditing} onChange={handleChange} />
+  </div>
+
+  <div className="field">
+    <label>Emergency Contact</label>
+    <input name="emergencyContact" value={profile.emergencyContact || ""} disabled={!isEditing} onChange={handleChange} />
+  </div>
+</div>
           </div>
 
           {/* PROFESSIONAL */}
@@ -251,14 +265,28 @@ export default function UpdateDoctorProfile() {
             <SectionTitle icon={<FaGraduationCap />}>Professional Info</SectionTitle>
 
             <div className="field-row">
-              <input name="specialization" value={profile.specialization || ""} disabled={!isEditing} onChange={handleChange} />
-              <input name="qualification" value={profile.qualification || ""} disabled={!isEditing} onChange={handleChange} />
-            </div>
+  <div className="field">
+    <label>Specialization</label>
+    <input name="specialization" value={profile.specialization || ""} disabled={!isEditing} onChange={handleChange} />
+  </div>
 
-            <div className="field-row">
-              <input name="experience" value={profile.experience || ""} disabled={!isEditing} onChange={handleChange} />
-              <input name="licenseNumber" value={profile.licenseNumber || ""} disabled={!isEditing} onChange={handleChange} />
-            </div>
+  <div className="field">
+    <label>Qualification</label>
+    <input name="qualification" value={profile.qualification || ""} disabled={!isEditing} onChange={handleChange} />
+  </div>
+</div>
+
+<div className="field-row">
+  <div className="field">
+    <label>Experience</label>
+    <input name="experience" value={profile.experience || ""} disabled={!isEditing} onChange={handleChange} />
+  </div>
+
+  <div className="field">
+    <label>License Number</label>
+    <input name="licenseNumber" value={profile.licenseNumber || ""} disabled={!isEditing} onChange={handleChange} />
+  </div>
+</div>
           </div>
         </div>
 
@@ -266,16 +294,34 @@ export default function UpdateDoctorProfile() {
         <div className="full-card">
           <SectionTitle icon={<FaMapMarkerAlt />}>Clinic Info</SectionTitle>
 
-          <div className="field-row">
-            <input name="clinicName" value={profile.clinicName || ""} disabled={!isEditing} onChange={handleChange} />
-            <input name="clinicAddress" value={profile.clinicAddress || ""} disabled={!isEditing} onChange={handleChange} />
-          </div>
+         <div className="field-row">
+  <div className="field">
+    <label>Clinic Name</label>
+    <input name="clinicName" value={profile.clinicName || ""} disabled={!isEditing} onChange={handleChange} />
+  </div>
 
-          <div className="field-row triple">
-            <input name="city" value={profile.city || ""} disabled={!isEditing} onChange={handleChange} />
-            <input name="state" value={profile.state || ""} disabled={!isEditing} onChange={handleChange} />
-            <input name="mapLink" value={profile.mapLink || ""} disabled={!isEditing} onChange={handleChange} />
-          </div>
+  <div className="field">
+    <label>Clinic Address</label>
+    <input name="clinicAddress" value={profile.clinicAddress || ""} disabled={!isEditing} onChange={handleChange} />
+  </div>
+</div>
+
+<div className="field-row triple">
+  <div className="field">
+    <label>City</label>
+    <input name="city" value={profile.city || ""} disabled={!isEditing} onChange={handleChange} />
+  </div>
+
+  <div className="field">
+    <label>State</label>
+    <input name="state" value={profile.state || ""} disabled={!isEditing} onChange={handleChange} />
+  </div>
+
+  <div className="field">
+    <label>Map Link</label>
+    <input name="mapLink" value={profile.mapLink || ""} disabled={!isEditing} onChange={handleChange} />
+  </div>
+</div>
         </div>
 
         {/* SCHEDULE */}
@@ -300,7 +346,7 @@ export default function UpdateDoctorProfile() {
             <SectionTitle icon={<FaClock />}>Working Hours</SectionTitle>
 
             {profile.workingHours.map((slot, index) => (
-              <div key={index} className="field-row">
+              <div key={index} className="field-row time-row">
 
                 <input
                   type="time"
