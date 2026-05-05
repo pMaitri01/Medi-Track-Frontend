@@ -11,9 +11,7 @@ html, body {
   color: #334155;
   height: 100%;   /* full screen height */
 }
-.PatHome-type-badge-container {
-  margin-top: 8px;
-}
+
 .PatHome-book-now-link{
   background-color: #0AA5A5;
   color: white;
@@ -910,6 +908,7 @@ html, body {
   padding: 12px;
   background: #f8fafc;
   border-radius: 12px;
+  width: max-content;
 }
 
 .PatHome-info-item {

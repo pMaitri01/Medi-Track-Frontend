@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import '../css/PatientHome.css';
 import doctorProfile from '../images/profile.png';
 import '@fortawesome/fontawesome-free/css/all.min.css';
@@ -28,7 +28,7 @@ const PatientHome = () => {
   const navigate = useNavigate();
   const [chatInput, setChatInput] = useState("");
   const [messages, setMessages] = useState([
-    { role: 'bot', text: "Hello John! I'm your AI health assistant. Describe how you're feeling..." }
+    { role: 'bot', text: "Hello! I'm your AI health assistant. Describe how you're feeling..." }
   ]);
   const [filters, setFilters] = useState({
     specialization: "",
@@ -46,6 +46,7 @@ const PatientHome = () => {
   });
   const [doctors, setDoctors] = useState([]);
   const [loadingDoctors, setLoadingDoctors] = useState(false);
+  const chatBottomRef = useRef(null);
 
   const handleFilterChange = (e) => {
     const { name, value } = e.target;
@@ -115,6 +116,36 @@ const PatientHome = () => {
   }
 };
 
+// ✅ Load chat history on mount
+useEffect(() => {
+  const fetchChatHistory = async () => {
+    try {
+      const res = await fetch(
+        `${process.env.REACT_APP_API_URL}/api/chatbot/history`,
+        { credentials: "include" }
+      );
+      const data = await res.json();
+
+      if (data.messages && data.messages.length > 0) {
+        setMessages(
+          data.messages.map((msg) => ({
+            role: msg.role,
+            text: msg.text,
+          }))
+        );
+      }
+    } catch (err) {
+      console.error("Failed to load chat history", err);
+    }
+  };
+
+  fetchChatHistory();
+}, []);
+
+useEffect(() => {
+  chatBottomRef.current?.scrollIntoView({ behavior: "smooth" });
+}, [messages]);
+
   useEffect(() => {
     const fetchFilters = async () => {
       try {
@@ -183,6 +214,21 @@ const PatientHome = () => {
 
     fetchAppointments();
   }, []);
+
+  // ✅ Clear history
+const handleClearHistory = async () => {
+  try {
+    await fetch(`${process.env.REACT_APP_API_URL}/api/chatbot/clear`, {
+      method: "DELETE",
+      credentials: "include",
+    });
+    setMessages([
+      { role: "bot", text: "Hello! I'm your AI health assistant. Describe how you're feeling..." }
+    ]);
+  } catch (err) {
+    console.error("Failed to clear history", err);
+  }
+};
 
   const handleReschedule = () => {
     if (!upcomingAppointment) return;
@@ -759,6 +805,20 @@ const PatientHome = () => {
                   Ask Medi-Track AI
                 </h2>
                 <p className="PatHome-ai-subtitle">Instant symptom analysis & suggestions</p>
+                {/* ✅ Add this */}
+<button
+  onClick={handleClearHistory}
+  style={{
+    fontSize: "13px",
+    color: "#888",
+    background: "none",
+    border: "none",
+    cursor: "pointer",
+    marginTop: "4px"
+  }}
+>
+  🗑️ Clear History
+</button>
               </div>
 
               <div className="PatHome-chat-window">
@@ -773,6 +833,7 @@ const PatientHome = () => {
                       </div>
                     </div>
                   ))}
+                  <div ref={chatBottomRef} /> {/* ✅ scroll target */}
                 </div>
 
                 <form className="PatHome-chat-input-container" onSubmit={handleSendMessage}>
