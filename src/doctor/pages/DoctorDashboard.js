@@ -19,6 +19,7 @@ export default function DoctorDashboard() {
   const [appointmentRequests, setAppointmentRequests] = useState([]);
   const [nextPatient, setNextPatient] = useState(null);
   const [nextLoading, setNextLoading] = useState(true);
+  const [doctorName, setDoctorName] = useState("");
   const getInitials = (name) => {
     if (!name) return "NA";
 
@@ -39,6 +40,14 @@ export default function DoctorDashboard() {
   const sidebarWidth = open ? "250px" : "100px";
 
   useEffect(() => {
+
+     // GET doctor name from localStorage
+  const storedDoctor = JSON.parse(localStorage.getItem("doctor") || "{}");
+
+  if (storedDoctor?.fullName) {
+    setDoctorName(storedDoctor.fullName);
+  }
+
     const fetchDashboard = async () => {
       try {
         const res = await fetch(
@@ -253,7 +262,7 @@ export default function DoctorDashboard() {
         overflowY: "auto",  // 🔥 THIS ENABLES THE SCROLL
         overflowX: "hidden"
       }}>
-        <DoctorHeader open={open} />
+        <DoctorHeader open={open} doctorName={doctorName} />
 
         <main style={{ padding: "30px", flex: 1, paddingBottom: "100px" }}>
 
