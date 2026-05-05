@@ -1074,3 +1074,27 @@ html, body {
   font-weight: 600;
   cursor: pointer;
 }
+
+/* ✅ Markdown inside bot bubble */
+.PatHome-bot-bubble p {
+  margin: 4px 0;
+}
+
+.PatHome-bot-bubble strong {
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+.PatHome-bot-bubble ul {
+  padding-left: 18px;
+  margin: 6px 0;
+}
+
+.PatHome-bot-bubble ul li {
+  margin-bottom: 4px;
+  line-height: 1.5;
+}
+
+.PatHome-bot-bubble p:last-child {
+  margin-bottom: 0;
+}

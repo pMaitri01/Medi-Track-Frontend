@@ -10,6 +10,7 @@ import PrescriptionModal from './PrescriptionModal';
 import Review from "./Review";
 import RescheduleAppointment from './RescheduleAppointment';
 import DoctorBookingModal from "./DoctorBookingModal";
+import ReactMarkdown from 'react-markdown';
 
 const PatientHome = () => {
   const [reviews, setReviews] = useState([]);
@@ -216,19 +217,19 @@ useEffect(() => {
   }, []);
 
   // ✅ Clear history
-const handleClearHistory = async () => {
-  try {
-    await fetch(`${process.env.REACT_APP_API_URL}/api/chatbot/clear`, {
-      method: "DELETE",
-      credentials: "include",
-    });
-    setMessages([
-      { role: "bot", text: "Hello! I'm your AI health assistant. Describe how you're feeling..." }
-    ]);
-  } catch (err) {
-    console.error("Failed to clear history", err);
-  }
-};
+// const handleClearHistory = async () => {
+//   try {
+//     await fetch(`${process.env.REACT_APP_API_URL}/api/chatbot/clear`, {
+//       method: "DELETE",
+//       credentials: "include",
+//     });
+//     setMessages([
+//       { role: "bot", text: "Hello! I'm your AI health assistant. Describe how you're feeling..." }
+//     ]);
+//   } catch (err) {
+//     console.error("Failed to clear history", err);
+//   }
+// };
 
   const handleReschedule = () => {
     if (!upcomingAppointment) return;
@@ -806,7 +807,7 @@ const handleClearHistory = async () => {
                 </h2>
                 <p className="PatHome-ai-subtitle">Instant symptom analysis & suggestions</p>
                 {/* ✅ Add this */}
-<button
+{/* <button
   onClick={handleClearHistory}
   style={{
     fontSize: "13px",
@@ -818,7 +819,7 @@ const handleClearHistory = async () => {
   }}
 >
   🗑️ Clear History
-</button>
+</button> */}
               </div>
 
               <div className="PatHome-chat-window">
@@ -829,8 +830,12 @@ const handleClearHistory = async () => {
                         <div className="PatHome-bot-icon-bg"><i className="fa-solid fa-robot"></i></div>
                       )}
                       <div className={`PatHome-message-bubble ${msg.role === 'bot' ? 'PatHome-bot-bubble' : 'PatHome-user-bubble'}`}>
-                        {msg.text}
-                      </div>
+                        {msg.role === 'bot' ? (
+                            <ReactMarkdown>{msg.text}</ReactMarkdown>
+                              ) : (
+                                msg.text
+                              )}
+                    </div>
                     </div>
                   ))}
                   <div ref={chatBottomRef} /> {/* ✅ scroll target */}

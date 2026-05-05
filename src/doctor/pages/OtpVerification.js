@@ -62,6 +62,7 @@ const handleVerify = async () => {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, otp: otpValue }),
+        credentials:"include",
       }
     );
 
@@ -83,12 +84,35 @@ const handleVerify = async () => {
   setLoading(false);
 };
 
-  const handleResend = () => {
-    setOtp(["", "", "", "", "", ""]);
+  const handleResend = async () => {
+    setOtp(["", "", "", ""]);
     setError("");
     setTimer(TIMER_SEC);
     setCanResend(false);
     inputs.current[0]?.focus();
+
+     try {
+    const res = await fetch(
+      `${process.env.REACT_APP_API_URL}/api/doctor/send-otp`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+        credentials: "include",
+      }
+    );
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      setError(data.message);
+      return;
+    }
+
+    console.log("OTP resent");
+  } catch (err) {
+    setError("Failed to resend OTP");
+  }
   };
 
   return (
