@@ -9,18 +9,18 @@ const getInitials = (d) =>
 const formatDob = (dob) =>
   dob
     ? new Date(dob).toLocaleDateString("en-IN", {
-        day: "2-digit",
-        month: "short",
-        year: "numeric",
-      })
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+    })
     : "—";
 
 const calcAge = (dob) =>
   dob
     ? Math.floor(
-        (Date.now() - new Date(dob).getTime()) /
-          (365.25 * 24 * 60 * 60 * 1000)
-      )
+      (Date.now() - new Date(dob).getTime()) /
+      (365.25 * 24 * 60 * 60 * 1000)
+    )
     : null;
 
 // Components
@@ -56,7 +56,7 @@ const TagRow = ({ text, name, isEditing, onChange, color }) => {
     if (isEditing) {
       setRawInput(values.join(", "));
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isEditing]);
 
   if (isEditing) {
@@ -282,36 +282,15 @@ function UpdatePatientProfile() {
 
         {/* Content — same layout as Code 1 */}
         <div className="cols">
+
           {/* Row 1 */}
-          <div className="row side-by-side card-in card-in--d1">
+          <div className="row card-in card-in--d1">
             <SectionCard icon="👤" title="Personal Info" flex>
               <div className="two-col">
-                <Field
-                  label="Gender"
-                  name="gender"
-                  value={formData.gender}
-                  isEditing={isEditing}
-                  onChange={handleChange}
-                />
-                <Field
-                  label="Date of Birth"
-                  name="dob"
-                  value={isEditing ? formData.dob : formatDob(formData.dob)}
-                  isEditing={isEditing}
-                  onChange={handleChange}
-                />
-                <Field
-                  label="Mobile"
-                  name="mobile"
-                  value={formData.mobile}
-                  isEditing={isEditing}
-                  onChange={handleChange}
-                />
-                <Field
-                  label="Emergency Contact"
-                  name="emergencyMobile"
-                  value={formData.emergencyContact?.mobile}
-                  isEditing={isEditing}
+                <Field label="Gender" name="gender" value={formData.gender} isEditing={isEditing} onChange={handleChange} />
+                <Field label="Date of Birth" name="dob" value={isEditing ? formData.dob : formatDob(formData.dob)} isEditing={isEditing} onChange={handleChange} />
+                <Field label="Mobile" name="mobile" value={formData.mobile} isEditing={isEditing} onChange={handleChange} />
+                <Field label="Emergency Contact" name="emergencyMobile" value={formData.emergencyContact?.mobile} isEditing={isEditing}
                   onChange={(e) =>
                     setFormData({
                       ...formData,
@@ -322,23 +301,9 @@ function UpdatePatientProfile() {
                     })
                   }
                 />
-                <Field
-                  label="Blood Group"
-                  name="bloodGroup"
-                  value={formData.bloodGroup}
-                  isEditing={isEditing}
-                  onChange={handleChange}
-                />
-                <Field
-                  label="Weight"
-                  name="weight"
-                  value={
-                    isEditing
-                      ? formData.weight
-                      : formData.weight
-                      ? `${formData.weight} kg`
-                      : null
-                  }
+                <Field label="Blood Group" name="bloodGroup" value={formData.bloodGroup} isEditing={isEditing} onChange={handleChange} />
+                <Field label="Weight" name="weight"
+                  value={isEditing ? formData.weight : formData.weight ? `${formData.weight} kg` : null}
                   isEditing={isEditing}
                   onChange={handleChange}
                 />
@@ -347,25 +312,9 @@ function UpdatePatientProfile() {
 
             <SectionCard icon="📧" title="Contact Info" flex>
               <div className="stack">
-                <Field
-                  label="Email Address"
-                  name="email"
-                  value={formData.email}
-                  isEditing={isEditing}
-                  onChange={handleChange}
-                />
-                <Field
-                  label="Mobile Number"
-                  name="mobile"
-                  value={formData.mobile}
-                  isEditing={isEditing}
-                  onChange={handleChange}
-                />
-                <Field
-                  label="Emergency Name"
-                  name="emergencyName"
-                  value={formData.emergencyContact?.name}
-                  isEditing={isEditing}
+                <Field label="Email Address" name="email" value={formData.email} isEditing={isEditing} onChange={handleChange} />
+                <Field label="Mobile Number" name="mobile" value={formData.mobile} isEditing={isEditing} onChange={handleChange} />
+                <Field label="Emergency Name" name="emergencyName" value={formData.emergencyContact?.name} isEditing={isEditing}
                   onChange={(e) =>
                     setFormData({
                       ...formData,
@@ -380,82 +329,42 @@ function UpdatePatientProfile() {
             </SectionCard>
           </div>
 
-          {/* Row 2 */}
-          <div className="card-in card-in--d2">
+          {/* Row 2 - FULL WIDTH */}
+          <div className="row single card-in card-in--d2">
             <SectionCard icon="📍" title="Address Info">
               <div className="stack">
-                <Field
-                  label="Street / Locality"
-                  name="address"
-                  value={formData.address}
-                  isEditing={isEditing}
-                  onChange={handleChange}
-                />
+                <Field label="Street / Locality" name="address" value={formData.address} isEditing={isEditing} onChange={handleChange} />
                 <div className="three-col">
-                  <Field
-                    label="City"
-                    name="city"
-                    value={formData.city}
-                    isEditing={isEditing}
-                    onChange={handleChange}
-                  />
-                  <Field
-                    label="State"
-                    name="state"
-                    value={formData.state}
-                    isEditing={isEditing}
-                    onChange={handleChange}
-                  />
-                  <Field
-                    label="Pincode"
-                    name="pincode"
-                    value={formData.pincode}
-                    isEditing={isEditing}
-                    onChange={handleChange}
-                  />
+                  <Field label="City" name="city" value={formData.city} isEditing={isEditing} onChange={handleChange} />
+                  <Field label="State" name="state" value={formData.state} isEditing={isEditing} onChange={handleChange} />
+                  <Field label="Pincode" name="pincode" value={formData.pincode} isEditing={isEditing} onChange={handleChange} />
                 </div>
               </div>
             </SectionCard>
           </div>
 
           {/* Row 3 */}
-          <div className="row side-by-side card-in card-in--d3">
+          <div className="row card-in card-in--d3">
             <SectionCard icon="⚠️" title="Allergies" flex>
-              <TagRow
-                text={formData.allergies}
-                name="allergies"
-                isEditing={isEditing}
-                onChange={handleChange}
-                color="#EF4444"
-              />
+              <TagRow text={formData.allergies} name="allergies" isEditing={isEditing} onChange={handleChange} color="#EF4444" />
             </SectionCard>
 
             <SectionCard icon="🫀" title="Conditions / Diseases" flex>
-              <TagRow
-                text={formData.diseases}
-                name="diseases"
-                isEditing={isEditing}
-                onChange={handleChange}
-                color="#8B5CF6"
-              />
+              <TagRow text={formData.diseases} name="diseases" isEditing={isEditing} onChange={handleChange} color="#8B5CF6" />
             </SectionCard>
           </div>
 
-          {/* Row 4 */}
-          <div className="card-in card-in--d4">
+          {/* Row 4 - FULL WIDTH */}
+          <div className="row single card-in card-in--d4">
             <SectionCard icon="💊" title="Current Medications">
-              <TagRow
-                text={formData.medications}
-                name="medications"
-                isEditing={isEditing}
-                onChange={handleChange}
-                color="#0EA5E9"
-              />
+              <TagRow text={formData.medications} name="medications" isEditing={isEditing} onChange={handleChange} color="#0EA5E9" />
             </SectionCard>
           </div>
+
         </div>
 
-        <div className="footer">© 2026 MediTrack. All rights reserved.</div>
+
+        <div className="Pfooter">© 2026 MediTrack. All rights reserved.</div>
       </div>
     </div>
   );
