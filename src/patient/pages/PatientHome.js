@@ -77,75 +77,75 @@ const PatientHome = () => {
   }; */
 
   const handleSendMessage = async (e) => {
-  e.preventDefault();
-  if (!chatInput.trim()) return;
+    e.preventDefault();
+    if (!chatInput.trim()) return;
 
-  const userMessage = chatInput;
+    const userMessage = chatInput;
 
-  // ✅ Add user message
-  setMessages(prev => [...prev, { role: 'user', text: userMessage }]);
-  setChatInput("");
+    // ✅ Add user message
+    setMessages(prev => [...prev, { role: 'user', text: userMessage }]);
+    setChatInput("");
 
-  try {
-    const res = await fetch(
-      `${process.env.REACT_APP_API_URL}/api/chatbot/chat`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials:"include",
-        body: JSON.stringify({ message: userMessage }),
-      }
-    );
-
-    const data = await res.json();
-
-    // ✅ Add bot reply
-    setMessages(prev => [
-      ...prev,
-      { role: 'bot', text: data.reply }
-    ]);
-
-  } catch (error) {
-    console.error(error);
-
-    setMessages(prev => [
-      ...prev,
-      { role: 'bot', text: "Something went wrong. Please try again." }
-    ]);
-  }
-};
-
-// ✅ Load chat history on mount
-useEffect(() => {
-  const fetchChatHistory = async () => {
     try {
       const res = await fetch(
-        `${process.env.REACT_APP_API_URL}/api/chatbot/history`,
-        { credentials: "include" }
+        `${process.env.REACT_APP_API_URL}/api/chatbot/chat`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+          body: JSON.stringify({ message: userMessage }),
+        }
       );
+
       const data = await res.json();
 
-      if (data.messages && data.messages.length > 0) {
-        setMessages(
-          data.messages.map((msg) => ({
-            role: msg.role,
-            text: msg.text,
-          }))
-        );
-      }
-    } catch (err) {
-      console.error("Failed to load chat history", err);
+      // ✅ Add bot reply
+      setMessages(prev => [
+        ...prev,
+        { role: 'bot', text: data.reply }
+      ]);
+
+    } catch (error) {
+      console.error(error);
+
+      setMessages(prev => [
+        ...prev,
+        { role: 'bot', text: "Something went wrong. Please try again." }
+      ]);
     }
   };
 
-  fetchChatHistory();
-}, []);
+  // ✅ Load chat history on mount
+  useEffect(() => {
+    const fetchChatHistory = async () => {
+      try {
+        const res = await fetch(
+          `${process.env.REACT_APP_API_URL}/api/chatbot/history`,
+          { credentials: "include" }
+        );
+        const data = await res.json();
 
-useEffect(() => {
-  chatBottomRef.current?.scrollIntoView({ behavior: "smooth" });
-}, [messages]);
+        if (data.messages && data.messages.length > 0) {
+          setMessages(
+            data.messages.map((msg) => ({
+              role: msg.role,
+              text: msg.text,
+            }))
+          );
+        }
+      } catch (err) {
+        console.error("Failed to load chat history", err);
+      }
+    };
+
+    fetchChatHistory();
+  }, []);
+
+  useEffect(() => {
+    chatBottomRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
 
   useEffect(() => {
     const fetchFilters = async () => {
@@ -216,20 +216,22 @@ useEffect(() => {
     fetchAppointments();
   }, []);
 
+
+
   // ✅ Clear history
-// const handleClearHistory = async () => {
-//   try {
-//     await fetch(`${process.env.REACT_APP_API_URL}/api/chatbot/clear`, {
-//       method: "DELETE",
-//       credentials: "include",
-//     });
-//     setMessages([
-//       { role: "bot", text: "Hello! I'm your AI health assistant. Describe how you're feeling..." }
-//     ]);
-//   } catch (err) {
-//     console.error("Failed to clear history", err);
-//   }
-// };
+  // const handleClearHistory = async () => {
+  //   try {
+  //     await fetch(`${process.env.REACT_APP_API_URL}/api/chatbot/clear`, {
+  //       method: "DELETE",
+  //       credentials: "include",
+  //     });
+  //     setMessages([
+  //       { role: "bot", text: "Hello! I'm your AI health assistant. Describe how you're feeling..." }
+  //     ]);
+  //   } catch (err) {
+  //     console.error("Failed to clear history", err);
+  //   }
+  // };
 
   const handleReschedule = () => {
     if (!upcomingAppointment) return;
@@ -335,21 +337,52 @@ useEffect(() => {
       alert("Failed to cancel appointment");
     }
   };
+  // const handleApplyFilters = async (e) => {
+  //   e.preventDefault();
+
+  //   try {
+  //     setLoadingDoctors(true);
+
+  //      // ✅ Remove empty filters
+  //   const cleanedFilters = Object.fromEntries(
+  //     Object.entries(filters).filter(([_, value]) => value !== "")
+  //   );
+
+  //     const query = new URLSearchParams(cleanedFilters).toString();
+
+  //     const res = await fetch(
+  //       `${process.env.REACT_APP_API_URL}/api/doctor/filtered?${query}`
+  //     );
+
+  //     const data = await res.json();
+
+  //     if (!res.ok) throw new Error("Failed to fetch doctors");
+
+  //     setDoctors(data);
+  //   } catch (err) {
+  //     console.error(err);
+  //   } finally {
+  //     setLoadingDoctors(false);
+  //   }
+  // };
+
   const handleApplyFilters = async (e) => {
     e.preventDefault();
 
     try {
       setLoadingDoctors(true);
 
-      const query = new URLSearchParams(filters).toString();
+      const cleanedFilters = Object.fromEntries(
+        Object.entries(filters).filter(([_, value]) => value !== "")
+      );
+
+      const query = new URLSearchParams(cleanedFilters).toString();
 
       const res = await fetch(
         `${process.env.REACT_APP_API_URL}/api/doctor/filtered?${query}`
       );
 
       const data = await res.json();
-
-      if (!res.ok) throw new Error("Failed to fetch doctors");
 
       setDoctors(data);
     } catch (err) {
@@ -358,6 +391,7 @@ useEffect(() => {
       setLoadingDoctors(false);
     }
   };
+
   useEffect(() => {
     const fetchReviews = async () => {
       try {
@@ -712,9 +746,10 @@ useEffect(() => {
                 </div> */}
                 <div className="PatHome-filter-group">
                   <label>Experience</label>
-                  <select className="PatHome-filter-input" onChange={handleFilterChange}
-                    name="experience">
-                    <option>Any</option>
+                  <select className="PatHome-filter-input"
+                    name="experience"
+                    onChange={handleFilterChange}>
+                    {/* <option>Any</option> */}
                     <option value="">Any</option>
                     <option value="0-5">0-5 years</option>
                     <option value="5-10">5-10 years</option>
@@ -807,7 +842,7 @@ useEffect(() => {
                 </h2>
                 <p className="PatHome-ai-subtitle">Instant symptom analysis & suggestions</p>
                 {/* ✅ Add this */}
-{/* <button
+                {/* <button
   onClick={handleClearHistory}
   style={{
     fontSize: "13px",
@@ -831,11 +866,11 @@ useEffect(() => {
                       )}
                       <div className={`PatHome-message-bubble ${msg.role === 'bot' ? 'PatHome-bot-bubble' : 'PatHome-user-bubble'}`}>
                         {msg.role === 'bot' ? (
-                            <ReactMarkdown>{msg.text}</ReactMarkdown>
-                              ) : (
-                                msg.text
-                              )}
-                    </div>
+                          <ReactMarkdown>{msg.text}</ReactMarkdown>
+                        ) : (
+                          msg.text
+                        )}
+                      </div>
                     </div>
                   ))}
                   <div ref={chatBottomRef} /> {/* ✅ scroll target */}
@@ -985,12 +1020,12 @@ useEffect(() => {
           </div>
         </div>
       )}
-    {isBookingOpenSelected && selectedDoctorForBooking && (
-  <DoctorBookingModal
-    onClose={() => setIsBookingOpenSelected(false)}
-    doctor={selectedDoctorForBooking}
-  />
-)}
+      {isBookingOpenSelected && selectedDoctorForBooking && (
+        <DoctorBookingModal
+          onClose={() => setIsBookingOpenSelected(false)}
+          doctor={selectedDoctorForBooking}
+        />
+      )}
     </>
   );
 };
