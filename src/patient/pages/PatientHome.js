@@ -29,7 +29,7 @@ const PatientHome = () => {
   const navigate = useNavigate();
   const [chatInput, setChatInput] = useState("");
   const [messages, setMessages] = useState([
-    { role: 'bot', text: "Hello! I'm your AI health assistant. Describe how you're feeling..." }
+    { role: 'bot', text: "Hello! I'm Medi-Track AI Assistant. How can I help you today? Are you looking for health advice or assistance with the Medi-Track platform? 🏥🤖" }
   ]);
   const [filters, setFilters] = useState({
     specialization: "",
