@@ -9,6 +9,14 @@ export default function AppointmentHistory() {
   const [loading, setLoading] = useState(true);
   const [selectedAppointment, setSelectedAppointment] = useState(null);
 
+  const getInitials = (name) => {
+    if (!name) return "U";
+    const parts = name.trim().split(" ");
+    return parts.length === 1
+      ? parts[0][0].toUpperCase()
+      : (parts[0][0] + parts[1][0]).toUpperCase();
+  };
+
   useEffect(() => {
     fetchAppointments();
   }, []);
@@ -117,8 +125,24 @@ export default function AppointmentHistory() {
                     onClick={() => setSelectedAppointment(item)}
                     style={{ cursor: "pointer" }}
                   >
-                    <td className="dhist-name-cell">
-                      <img src={item.img} alt="" />
+                    <td className="dhist-name-cell" style={{ display: "flex", alignItems: "center" }}>
+                      <div
+                        style={{
+                          width: "32px",
+                          height: "32px",
+                          borderRadius: "50%",
+                          backgroundColor: "#0AA5A5",
+                          color: "#fff",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          fontSize: "12px",
+                          fontWeight: "bold",
+                          marginRight: "10px"
+                        }}
+                      >
+                        {getInitials(item.name)}
+                      </div>
                       {item.name}
                     </td>
                     <td>{item.time}</td>

@@ -31,6 +31,14 @@ export default function DoctorAppointmentView() {
   return date;
 };
 
+const getInitials = (name) => {
+  if (!name) return "U";
+  const parts = name.trim().split(" ");
+  return parts.length === 1
+    ? parts[0][0].toUpperCase()
+    : (parts[0][0] + parts[1][0]).toUpperCase();
+};
+
   useEffect(() => {
     fetchAppointments();
   }, []);
@@ -172,13 +180,25 @@ setAppointments(sorted);
                     style={{ cursor: "pointer" }}
                   >
                     <td className="dappv-name-cell">
-                      <img
-                        src={item.img}
-                        alt=""
-                        style={{ width: "30px", borderRadius: "50%", marginRight: "10px" }}
-                      />
-                      {item.name}
-                    </td>
+  <div
+    style={{
+      width: "35px",
+      height: "35px",
+      borderRadius: "50%",
+      backgroundColor: "#0AA5A5",
+      color: "#fff",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      fontSize: "14px",
+      fontWeight: "bold",
+      marginRight: "10px"
+    }}
+  >
+    {getInitials(item.name)}
+  </div>
+  {item.name}
+</td>
                     <td>{item.time}</td>
                     <td>{item.date}</td>
                     <td>

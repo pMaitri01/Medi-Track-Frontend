@@ -560,13 +560,12 @@ export default function DoctorDashboard() {
                         {/* ✅ ICONS BESIDE NAME */}
                         <div style={{ display: "flex", gap: "12px" }}>
 
-                          <FaCheck
+                          <FaCheckCircle
                             onClick={() => updateStatus(req._id, "approved")}
                             style={{
                               color: "#22c55e",
                               cursor: "pointer",
-                              fontSize: "26px",
-                              marginTop: "10px"
+                              fontSize: "29px",
                             }}
                             title="Accept"
                           />

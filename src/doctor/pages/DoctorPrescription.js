@@ -11,6 +11,16 @@ const BLANK_FORM = () => ({
   diagnosis: "", notes: "", medicines: [BLANK_MEDICINE()],
 });
 
+const getInitials = (name) => {
+  if (!name) return "U";
+
+  const parts = name.trim().split(" ");
+
+  return parts.length === 1
+    ? parts[0][0].toUpperCase()
+    : (parts[0][0] + parts[1][0]).toUpperCase();
+};
+
 const TIMINGS = ["Morning", "Afternoon", "Night"];
 const TIMING_ICON = { Morning: "🌅", Afternoon: "🌇", Night: "🌙" };
 const FOOD_OPTS = ["Before Food", "After Food"];
@@ -499,7 +509,7 @@ export default function DoctorPrescription() {
 
         return medObj;
       });
-      
+
       const res = await fetch(url, {
         method,
         headers: { "Content-Type": "application/json" },
@@ -592,8 +602,8 @@ export default function DoctorPrescription() {
   return (
     <>
       <DoctorNavbar open={open} setOpen={setOpen} />
-<div style={{ marginLeft: open ? "250px" : "100px", transition: "0.3s" }}>
-         <DoctorHeader open={open} />
+      <div style={{ marginLeft: open ? "250px" : "100px", transition: "0.3s" }}>
+        <DoctorHeader open={open} />
       </div>
       <div
         className="dpresc-page"
@@ -649,7 +659,7 @@ export default function DoctorPrescription() {
               <div key={rx.id} className="dpresc-rx-card">
                 <div className="dpresc-rx-card-left">
                   <div className="dpresc-rx-avatar">
-                    {rx.patientName.charAt(0).toUpperCase()}
+                    {getInitials(rx.patientName)}
                   </div>
                   <div className="dpresc-rx-info">
                     <h4>{rx.patientName}</h4>
