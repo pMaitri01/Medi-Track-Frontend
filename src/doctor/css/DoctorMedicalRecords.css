@@ -4,18 +4,38 @@
 }
 
 /* Header */
-.dmr-header {
+/* .dmr-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 20px;
-}
+} */
 
-.dmr-header h2 {
+/* .dmr-header h2 {
   font-size: 22px;
   font-weight: 600;
   color: #1e293b;
+} */
+ .dmr-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: white;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  padding: 20px 24px;
+  margin-bottom: 24px;
+  min-height: 80px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
 }
+
+.dmr-header h2 {
+  font-size: 28px;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0; 
+}
+
 .download-btn{
   background-color: #0aa5a5 !important; 
   color: #fff;
@@ -257,4 +277,13 @@
 .dmr-dropdown select option:hover {
   background-color: #0aa5a5 !important;
   color: #fff;
+}
+.dmr-no-data {
+  margin-top: 20px;
+  padding: 20px;
+  text-align: center;
+  background: #f1f5f9;
+  border-radius: 10px;
+  font-weight: 500;
+  color: #64748b;
 }

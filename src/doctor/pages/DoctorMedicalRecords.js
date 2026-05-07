@@ -91,6 +91,7 @@ const DoctorMedicalRecords = () => {
                     <div className="dmr-header">
                         <h2>📂 Medical Records</h2>
                     </div>
+               
 
                     {/* Search */}
                     <div className="dmr-search-bar">
@@ -126,7 +127,7 @@ const DoctorMedicalRecords = () => {
                         </div>
 
                         {/* Patient Info */}
-                        <div className="dmr-patient-info">
+                        {/* <div className="dmr-patient-info">
                             <h3>{selectedPatientData?.name || "Select Patient"}</h3>
 
                             <p>
@@ -136,7 +137,7 @@ const DoctorMedicalRecords = () => {
                         </div>
 
                         {/* Stats */}
-                        <div className="dmr-stats">
+                        {/* <div className="dmr-stats">
                             <div className="dmr-card">Total Records: {records.length}</div>
                             <div className="dmr-card">
                                 Reports: {records.filter(r => r.type === "lab").length}
@@ -147,10 +148,10 @@ const DoctorMedicalRecords = () => {
                             <div className="dmr-card">
                                 Prescriptions: {records.filter(r => r.type === "prescription").length}
                             </div>
-                        </div>
+                        </div> */}
 
                         {/* Records Table */}
-                        <div className="dmr-table-wrapper">
+                        {/* <div className="dmr-table-wrapper">
                             <table className="dmr-table">
                                 <thead>
                                     <tr>
@@ -191,7 +192,79 @@ const DoctorMedicalRecords = () => {
                                     )}
                                 </tbody>
                             </table>
-                        </div>
+                        </div> */}
+                        {/* SHOW ONLY AFTER PATIENT SELECTED */}
+{selectedPatient && (
+    <>
+        {/* Patient Info */}
+        <div className="dmr-patient-info">
+            <h3>{selectedPatientData?.name || "Select Patient"}</h3>
+
+            <p>
+                Age: {selectedPatientData?.age || "--"} |{" "}
+                {selectedPatientData?.gender || "--"}
+            </p>
+        </div>
+
+        {/* Stats */}
+        <div className="dmr-stats">
+            <div className="dmr-card">Total Records: {records.length}</div>
+            <div className="dmr-card">
+                Reports: {records.filter(r => r.type === "lab").length}
+            </div>
+            <div className="dmr-card">
+                Scans: {records.filter(r => r.type === "scan").length}
+            </div>
+            <div className="dmr-card">
+                Prescriptions: {records.filter(r => r.type === "prescription").length}
+            </div>
+        </div>
+
+        {/* IF NO DATA */}
+        {records.length === 0 ? (
+            <div className="dmr-no-data">
+                No data found for this patient
+            </div>
+        ) : (
+            <div className="dmr-table-wrapper">
+                <table className="dmr-table">
+                    <thead>
+                        <tr>
+                            <th>File</th>
+                            <th>Type</th>
+                            <th>Date</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {records.map((rec) => (
+                            <tr key={rec._id}>
+                                <td>{rec.title}</td>
+                                <td>{rec.type}</td>
+                                <td>{new Date(rec.date).toLocaleDateString()}</td>
+                                <td>
+                                    {rec.fileUrl ? (
+                                        <a
+                                            href={getDownloadUrl(rec.fileUrl, rec.fileName)}
+                                            target="_blank"
+                                            rel="noreferrer"
+                                        >
+                                            <button className="download-btn">
+                                                Download Record
+                                            </button>
+                                        </a>
+                                    ) : (
+                                        <span>No file</span>
+                                    )}
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
+        )}
+    </>
+)}
                     </div>
                 </div>
             </div>
