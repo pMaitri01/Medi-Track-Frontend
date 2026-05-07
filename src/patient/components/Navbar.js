@@ -192,21 +192,47 @@ function Navbar() {
 
   // 🔥 SOCKET JOIN
   useEffect(() => {
-    if (user?._id) {
-      socket.emit("join", user._id);
-      console.log("Joined:", user._id);
-    }
-  }, [user]);
+  if (user?._id) {
 
-  // 🔔 REAL-TIME LISTENER
-  useEffect(() => {
-    socket.on("newNotification", (data) => {
-      console.log("🔔 New Notification:", data);
-      setNotifications((prev) => [data, ...prev]);
+    // connect socket manually
+    socket.connect();
+
+    console.log("FRONTEND USER ID:", user._id);
+
+    socket.emit("join", user._id);
+
+    console.log("JOIN EVENT SENT");
+
+    socket.on("connect", () => {
+      console.log("✅ SOCKET CONNECTED:", socket.id);
     });
+  }
 
-    return () => socket.off("newNotification");
-  }, []);
+  return () => {
+    socket.off("connect");
+  };
+
+}, [user]);
+  // 🔔 REAL-TIME LISTENER
+  // useEffect(() => {
+  //   socket.on("newNotification", (data) => {
+  //     console.log("🔔 New Notification:", data);
+  //     setNotifications((prev) => [data, ...prev]);
+  //   });
+
+  //   return () => socket.off("newNotification");
+  // }, []);
+  useEffect(() => {
+  socket.on("newNotification", (data) => {
+    console.log("🔥 REALTIME RECEIVED:", data);
+
+    setNotifications((prev) => [data, ...prev]);
+  });
+
+  return () => {
+    socket.off("newNotification");
+  };
+}, []);
 
   // 📥 FETCH OLD NOTIFICATIONS
   useEffect(() => {

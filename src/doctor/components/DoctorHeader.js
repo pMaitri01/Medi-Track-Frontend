@@ -55,11 +55,30 @@ export default function DoctorHeader({ open }) {
   };
 
 useEffect(() => {
-  if (doctor?._id) {
-    socket.emit("join", doctor._id);
-    console.log("Doctor joined:", doctor._id);
+
+  console.log("DOCTOR CONTEXT:", doctor);
+
+  if (!doctor?.id) return;
+
+  if (!socket.connected) {
+    socket.connect();
   }
-}, [doctor]);
+
+  console.log("DOCTOR ID:", doctor.id);
+
+  socket.emit("join", doctor.id);
+
+  console.log("✅ DOCTOR JOIN SENT");
+
+  socket.on("connect", () => {
+    console.log("✅ DOCTOR SOCKET CONNECTED:", socket.id);
+  });
+
+  return () => {
+    socket.off("connect");
+  };
+
+}, [doctor?.id]);
 
 useEffect(() => {
   socket.on("newNotification", (data) => {
