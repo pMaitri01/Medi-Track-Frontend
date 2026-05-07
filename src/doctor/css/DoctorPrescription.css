@@ -1,6 +1,6 @@
 /* ── Page shell ─────────────────────────────────────────────────────────── */
 .dpresc-page {
-  padding: 80px 40px 40px;
+  padding: 30px 40px 40px;
   min-height: 100vh;
   font-family: sans-serif;
   max-width: 1600px;
@@ -70,6 +70,22 @@
 .dpresc-textarea { resize: vertical; }
 
 /* ── Shared buttons ─────────────────────────────────────────────────────── */
+/* .dpresc-btn {
+  padding: 9px 20px;
+  border: none;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s;
+  float: right;
+} */
+.dpresc-btn-container {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 20px;
+}
+
 .dpresc-btn {
   padding: 9px 20px;
   border: none;
@@ -358,7 +374,7 @@
 
 .dpresc-search {
   flex: 1;
-  min-width: 200px;
+  width: 50%;
   padding: 9px 14px;
   border: 1px solid #d1d5db;
   border-radius: 8px;
@@ -369,6 +385,7 @@
 .dpresc-search:focus { border-color: #0aa5a5; }
 
 .dpresc-select {
+  width: 50%;
   padding: 9px 14px;
   border: 1px solid #d1d5db;
   border-radius: 8px;
@@ -656,4 +673,28 @@
   .dpresc-rx-card { flex-direction: column; align-items: flex-start; }
   .dpresc-rx-card-right { width: 100%; justify-content: space-between; }
   .dpresc-filter-bar { flex-direction: column; }
+}
+
+
+
+/* ── Prescription Header (Same as Appointment) ─────────────────────────── */
+
+.dpresc-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: white;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  padding: 20px 24px;
+  margin-bottom: 24px;
+  min-height: 80px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
+}
+
+.dpresc-header h2 {
+  font-size: 28px;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0;
 }

@@ -609,28 +609,9 @@ export default function DoctorPrescription() {
         className="dpresc-page"
         style={{ marginLeft: open ? "250px" : "100px", transition: "0.3s" }}
       >
-        <div className="dpresc-page-header">
-          <div className="dpresc-header-left">
-            <span className="dpresc-page-icon">💊</span>
-            <h2>Prescription Management</h2>
-          </div>
-          {!showForm && (
-            <button className="dpresc-btn dpresc-btn--save" onClick={() => setShowForm(true)}>
-              ➕ New Prescription
-            </button>
-          )}
+        <div className="dpresc-header">
+          <h2>📄 Prescription View</h2>
         </div>
-
-        {showForm && (
-          <PrescriptionForm
-            form={form}
-            setForm={setForm}
-            onSave={handleSave}
-            onCancel={handleCancel}
-            isEdit={!!form.id}
-            patients={patients}
-          />
-        )}
 
         <div className="dpresc-filter-bar">
           <input
@@ -650,6 +631,24 @@ export default function DoctorPrescription() {
             <option>Completed</option>
           </select>
         </div>
+
+        <div className="dpresc-btn-container">
+          {!showForm && (
+            <button className="dpresc-btn dpresc-btn--save" onClick={() => setShowForm(true)}>
+              ➕ New Prescription
+            </button>
+          )}
+        </div>
+        {showForm && (
+          <PrescriptionForm
+            form={form}
+            setForm={setForm}
+            onSave={handleSave}
+            onCancel={handleCancel}
+            isEdit={!!form.id}
+            patients={patients}
+          />
+        )}
 
         <div className="dpresc-list">
           {filtered.length === 0 ? (
