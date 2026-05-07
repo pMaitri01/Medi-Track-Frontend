@@ -1,6 +1,6 @@
 /* ===== PAGE ===== */
 * { box-sizing: border-box; }
-body { overflow-y: scroll; }
+/* body { overflow-y: scroll; } */
 
 .dprof-page {
   max-width: 780px;
