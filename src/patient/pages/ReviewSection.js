@@ -67,7 +67,7 @@ const ReviewSection = () => {
               <p className="ReviewSec-comment">"{r.comment}"</p>
 
               <small className="ReviewSec-patient">
-                — {r.patient?.name}
+                — {r.patient?.firstName} {r.patient?.lastName}
               </small>
             </div>
 
