@@ -90,7 +90,7 @@ const Review = ({ onClose }) => {
 
                     {doctors.map((doc) => (
                         <option key={doc._id} value={doc._id}>
-                            {doc.fullName} {`(${doc.specialization})`}
+                            Dr. {doc.fullName} {`(${doc.specialization})`}
                         </option>
                     ))}
                 </select>
