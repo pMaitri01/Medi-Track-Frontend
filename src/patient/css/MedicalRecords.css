@@ -116,7 +116,7 @@
 
 .MedRec-mr-search {
   flex: 1;
-  min-width: 200px;
+  width: 50%;
   padding: 10px 14px;
   border: 1px solid var(--mr-border);
   border-radius: 8px;
@@ -127,6 +127,7 @@
 .MedRec-mr-search:focus { border-color: var(--mr-primary); }
 
 .MedRec-mr-select {
+  width: 50%;
   padding: 10px 14px;
   border: 1px solid var(--mr-border);
   border-radius: 8px;
