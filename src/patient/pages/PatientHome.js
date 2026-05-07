@@ -143,9 +143,13 @@ const PatientHome = () => {
     fetchChatHistory();
   }, []);
 
+  const chatScrollRef = useRef(null);
+
   useEffect(() => {
-    chatBottomRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
+  if (chatScrollRef.current) {
+    chatScrollRef.current.scrollTop = chatScrollRef.current.scrollHeight;
+  }
+}, [messages]);
 
   useEffect(() => {
     const fetchFilters = async () => {
@@ -858,7 +862,7 @@ const PatientHome = () => {
               </div>
 
               <div className="PatHome-chat-window">
-                <div className="PatHome-chat-messages-scroll">
+                <div className="PatHome-chat-messages-scroll" ref={chatScrollRef}>
                   {messages.map((msg, index) => (
                     <div key={index} className={`PatHome-message-row ${msg.role === 'bot' ? 'PatHome-bot-row' : 'PatHome-user-row'}`}>
                       {msg.role === 'bot' && (
@@ -873,7 +877,6 @@ const PatientHome = () => {
                       </div>
                     </div>
                   ))}
-                  <div ref={chatBottomRef} /> {/* ✅ scroll target */}
                 </div>
 
                 <form className="PatHome-chat-input-container" onSubmit={handleSendMessage}>
