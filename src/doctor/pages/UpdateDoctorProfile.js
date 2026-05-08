@@ -28,7 +28,7 @@ export default function UpdateDoctorProfile() {
   const ALL_DAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 
   const [isEditing, setIsEditing] = useState(false);
-
+  const [originalProfile, setOriginalProfile] = useState(null);
   const [profile, setProfile] = useState({
     fullName: "",
     gender: "",
@@ -74,7 +74,7 @@ export default function UpdateDoctorProfile() {
         if (res.ok) {
           const d = data.user;
 
-          setProfile({
+          const profileData = {
             fullName: d.fullName || "",
             gender: d.gender || "",
             dob: d.dob ? d.dob.split("T")[0] : "",
@@ -95,7 +95,10 @@ export default function UpdateDoctorProfile() {
             workingHours: d.workingHours?.length
               ? d.workingHours
               : [{ start: "", end: "" }]
-          });
+          };
+
+          setProfile(profileData);
+          setOriginalProfile(profileData);
         }
       } catch (err) {
         console.log(err);
@@ -150,7 +153,7 @@ export default function UpdateDoctorProfile() {
     setProfile({ ...profile, workingDays: days });
   };
 
-  // ✅ SAVE API
+  // SAVE API
   const handleSave = async () => {
     try {
       const res = await fetch(`${process.env.REACT_APP_API_URL}/api/doctor/complete-profile`, {
@@ -170,6 +173,7 @@ export default function UpdateDoctorProfile() {
 
       if (res.ok) {
         alert("Profile Updated ✅");
+        setOriginalProfile(JSON.parse(JSON.stringify(profile)));
         setIsEditing(false);
       } else {
         alert(data.message || "Error");
@@ -194,7 +198,6 @@ export default function UpdateDoctorProfile() {
         </div>
 
         <div className="topbar-right">
-          <div className="notif-btn"><FaBell /></div>
           <div className="avatar-header">{getInitials(profile.fullName)}</div>
         </div>
       </div>
@@ -222,7 +225,16 @@ export default function UpdateDoctorProfile() {
                 <button className="edit-btn save" onClick={handleSave}>
                   Save
                 </button>
-                <button className="cancel-btn" onClick={() => setIsEditing(false)}>
+                {/* <button className="cancel-btn" onClick={() => setIsEditing(false)}>
+                  Cancel
+                </button> */}
+                <button
+                  className="cancel-btn"
+                  onClick={() => {
+                    setProfile(originalProfile);
+                    setIsEditing(false);
+                  }}
+                >
                   Cancel
                 </button>
               </>
@@ -236,28 +248,28 @@ export default function UpdateDoctorProfile() {
             <SectionTitle icon={<FaUser />}>Personal Info</SectionTitle>
 
             <div className="field-row">
-  <div className="field">
-    <label>Gender</label>
-    <input name="gender" value={profile.gender || ""} disabled={!isEditing} onChange={handleChange} />
-  </div>
+              <div className="field">
+                <label>Gender</label>
+                <input name="gender" value={profile.gender || ""} disabled={!isEditing} onChange={handleChange} />
+              </div>
 
-  <div className="field">
-    <label>Date of Birth</label>
-    <input name="dob" type="date" value={profile.dob || ""} disabled={!isEditing} onChange={handleChange} />
-  </div>
-</div>
+              <div className="field">
+                <label>Date of Birth</label>
+                <input name="dob" type="date" value={profile.dob || ""} disabled={!isEditing} onChange={handleChange} />
+              </div>
+            </div>
 
-<div className="field-row">
-  <div className="field">
-    <label>Mobile Number</label>
-    <input name="mobile" value={profile.mobile || ""} disabled={!isEditing} onChange={handleChange} />
-  </div>
+            <div className="field-row">
+              <div className="field">
+                <label>Mobile Number</label>
+                <input name="mobile" value={profile.mobile || ""} disabled={!isEditing} onChange={handleChange} />
+              </div>
 
-  <div className="field">
-    <label>Emergency Contact</label>
-    <input name="emergencyContact" value={profile.emergencyContact || ""} disabled={!isEditing} onChange={handleChange} />
-  </div>
-</div>
+              <div className="field">
+                <label>Emergency Contact</label>
+                <input name="emergencyContact" value={profile.emergencyContact || ""} disabled={!isEditing} onChange={handleChange} />
+              </div>
+            </div>
           </div>
 
           {/* PROFESSIONAL */}
@@ -265,28 +277,28 @@ export default function UpdateDoctorProfile() {
             <SectionTitle icon={<FaGraduationCap />}>Professional Info</SectionTitle>
 
             <div className="field-row">
-  <div className="field">
-    <label>Specialization</label>
-    <input name="specialization" value={profile.specialization || ""} disabled={!isEditing} onChange={handleChange} />
-  </div>
+              <div className="field">
+                <label>Specialization</label>
+                <input name="specialization" value={profile.specialization || ""} disabled={!isEditing} onChange={handleChange} />
+              </div>
 
-  <div className="field">
-    <label>Qualification</label>
-    <input name="qualification" value={profile.qualification || ""} disabled={!isEditing} onChange={handleChange} />
-  </div>
-</div>
+              <div className="field">
+                <label>Qualification</label>
+                <input name="qualification" value={profile.qualification || ""} disabled={!isEditing} onChange={handleChange} />
+              </div>
+            </div>
 
-<div className="field-row">
-  <div className="field">
-    <label>Experience</label>
-    <input name="experience" value={profile.experience || ""} disabled={!isEditing} onChange={handleChange} />
-  </div>
+            <div className="field-row">
+              <div className="field">
+                <label>Experience</label>
+                <input name="experience" value={profile.experience || ""} disabled={!isEditing} onChange={handleChange} />
+              </div>
 
-  <div className="field">
-    <label>License Number</label>
-    <input name="licenseNumber" value={profile.licenseNumber || ""} disabled={!isEditing} onChange={handleChange} />
-  </div>
-</div>
+              <div className="field">
+                <label>License Number</label>
+                <input name="licenseNumber" value={profile.licenseNumber || ""} disabled={!isEditing} onChange={handleChange} />
+              </div>
+            </div>
           </div>
         </div>
 
@@ -294,34 +306,34 @@ export default function UpdateDoctorProfile() {
         <div className="full-card">
           <SectionTitle icon={<FaMapMarkerAlt />}>Clinic Info</SectionTitle>
 
-         <div className="field-row">
-  <div className="field">
-    <label>Clinic Name</label>
-    <input name="clinicName" value={profile.clinicName || ""} disabled={!isEditing} onChange={handleChange} />
-  </div>
+          <div className="field-row">
+            <div className="field">
+              <label>Clinic Name</label>
+              <input name="clinicName" value={profile.clinicName || ""} disabled={!isEditing} onChange={handleChange} />
+            </div>
 
-  <div className="field">
-    <label>Clinic Address</label>
-    <input name="clinicAddress" value={profile.clinicAddress || ""} disabled={!isEditing} onChange={handleChange} />
-  </div>
-</div>
+            <div className="field">
+              <label>Clinic Address</label>
+              <input name="clinicAddress" value={profile.clinicAddress || ""} disabled={!isEditing} onChange={handleChange} />
+            </div>
+          </div>
 
-<div className="field-row triple">
-  <div className="field">
-    <label>City</label>
-    <input name="city" value={profile.city || ""} disabled={!isEditing} onChange={handleChange} />
-  </div>
+          <div className="field-row triple">
+            <div className="field">
+              <label>City</label>
+              <input name="city" value={profile.city || ""} disabled={!isEditing} onChange={handleChange} />
+            </div>
 
-  <div className="field">
-    <label>State</label>
-    <input name="state" value={profile.state || ""} disabled={!isEditing} onChange={handleChange} />
-  </div>
+            <div className="field">
+              <label>State</label>
+              <input name="state" value={profile.state || ""} disabled={!isEditing} onChange={handleChange} />
+            </div>
 
-  <div className="field">
-    <label>Map Link</label>
-    <input name="mapLink" value={profile.mapLink || ""} disabled={!isEditing} onChange={handleChange} />
-  </div>
-</div>
+            <div className="field">
+              <label>Map Link</label>
+              <input name="mapLink" value={profile.mapLink || ""} disabled={!isEditing} onChange={handleChange} />
+            </div>
+          </div>
         </div>
 
         {/* SCHEDULE */}
