@@ -9,7 +9,7 @@ const mapPatient = (p) => ({
   name:           p.name           || "—",
   email:          p.email          || "—",
   mobile:         p.phone          || "—",   // phone → mobile
-  age:            p.age            || "—",
+  age:            p.age   !== undefined ? p.age :  "—",
   gender:         p.gender         || "—",
   city:           p.city        || "—",   // address used as city (adjust if backend sends separate city)
   appointments:   p.appointments   || [],
@@ -51,7 +51,8 @@ const PatientManagement = () => {
         throw new Error(data.message || "Failed to fetch patients");
       }
         // Map backend fields to UI-expected fields
-        setPatients(data.map(mapPatient));
+        // setPatients(data.map(mapPatient));
+        setPatients((data.patients || data).map(mapPatient));
       } catch (err) {
         console.error("Error fetching patients:", err);
         setFetchError(err.message);
