@@ -3,12 +3,12 @@ import { useNavigate } from "react-router-dom";
 import "../css/PatientProfileSetup.css";
 
 const BLOOD_GROUPS = ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"];
-const DISEASES     = ["Diabetes", "Blood Pressure", "Asthma", "None"];
+const DISEASES = ["Diabetes", "Blood Pressure", "Asthma", "None"];
 
 const STEPS = [
-  { label: "Basic Info",        icon: "👤" },
-  { label: "Address",           icon: "🏠" },
-  { label: "Medical Info",      icon: "🏥" },
+  { label: "Basic Info", icon: "👤" },
+  { label: "Address", icon: "🏠" },
+  { label: "Medical Info", icon: "🏥" },
   { label: "Emergency Contact", icon: "📞" },
 ];
 
@@ -16,19 +16,27 @@ const initialForm = {
   // Step 1
   // firstName: "", lastName: "", dob: "", age: "", gender: "", bloodGroup: "", mobile: "",
   firstName: "",
-lastName: "",
-dob: "",
-age: "",
-gender: "",
-bloodGroup: "",
-mobile: "",
-email: "",
+  lastName: "",
+  dob: "",
+  age: "",
+  gender: "",
+  bloodGroup: "",
+  mobile: "",
+  email: "",
+  address: "",
   // Step 2
-  address: "", city: "", state: "", pincode: "",
+  city: "",
+  state: "",
+  pincode: "",
   // Step 3
-  allergies: "", diseases: [], medications: "", weight: "",
+  allergies: "",
+  diseases: [],
+  medications: "",
+  weight: "",
   // Step 4
-  emergencyName: "", relationship: "", emergencyMobile: "",
+  emergencyName: "",
+  relationship: "",
+  emergencyMobile: "",
   // photo: null, photoPreview: "",
 };
 
@@ -46,21 +54,31 @@ const calcAge = (dob) => {
 // ── Completion % ──
 const calcCompletion = (form) => {
   const fields = [
-    form.firstName, form.lastName, form.dob, form.gender, form.bloodGroup,
-    form.address, form.city, form.state, form.pincode,
-    form.emergencyName, form.relationship, form.emergencyMobile,
+    form.firstName,
+    form.lastName,
+    form.dob,
+    form.gender,
+    form.bloodGroup,
+    form.address,
+    form.city,
+    form.state,
+    form.pincode,
+    form.emergencyName,
+    form.relationship,
+    form.emergencyMobile,
   ];
-  const filled = fields.filter(f => f && String(f).trim() !== "").length;
+  const filled = fields.filter((f) => f && String(f).trim() !== "").length;
   return Math.round((filled / fields.length) * 100);
 };
 
 const PatientProfileSetup = () => {
-  const [step, setStep]       = useState(0);
-  const [form, setForm]       = useState(initialForm);
-  const [errors, setErrors]   = useState({});
+  const [step, setStep] = useState(0);
+  const [form, setForm] = useState(initialForm);
+  const [errors, setErrors] = useState({});
   const [submitted, setSubmitted] = useState(false);
   const fileRef = useRef(null);
   const navigate = useNavigate();
+  const [pincodeLoading, setPincodeLoading] = useState(false);
 
   //   useEffect(() => {
   //   const user = JSON.parse(localStorage.getItem("user"));
@@ -71,70 +89,65 @@ const PatientProfileSetup = () => {
   // }, []);
 
   useEffect(() => {
-  const user = JSON.parse(localStorage.getItem("user"));
+    const user = JSON.parse(localStorage.getItem("user"));
 
-  if (user?.isProfileComplete) {
-    navigate("/PatientHome");
-  }
-
-  fetchPatientProfile();
-}, []);
-
-const fetchPatientProfile = async () => {
-  try {
-    const res = await fetch(
-      `${process.env.REACT_APP_API_URL}/api/patient/get-profile`,
-      {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-        credentials: "include",
-      }
-    );
-
-    const data = await res.json();
-
-    if (res.ok) {
-      setForm((prev) => ({
-        ...prev,
-
-        // Registered data
-        firstName: data.user.firstName || "",
-        lastName: data.user.lastName || "",
-        dob: data.user.dob
-          ? data.user.dob.split("T")[0]
-          : "",
-        age: calcAge(data.user.dob),
-        gender: data.user.gender || "",
-        mobile: data.user.mobile || "",
-        email: data.user.email || "",
-        address: data.user.address || "",
-
-        // Existing profile data
-        city: data.user.city || "",
-        state: data.user.state || "",
-        pincode: data.user.pincode || "",
-        bloodGroup: data.user.bloodGroup || "",
-        allergies: data.user.allergies || "",
-        diseases: data.user.diseases || [],
-        medications: data.user.medications || "",
-        weight: data.user.weight || "",
-
-        emergencyName:
-          data.user.emergencyContact?.name || "",
-
-        emergencyMobile:
-          data.user.emergencyContact?.mobile || "",
-
-        relationship:
-          data.user.emergencyContact?.relationship || "",
-      }));
+    if (user?.isProfileComplete) {
+      navigate("/PatientHome");
     }
-  } catch (error) {
-    // console.log(error);
-  }
-};
+
+    fetchPatientProfile();
+  }, []);
+
+  const fetchPatientProfile = async () => {
+    try {
+      const res = await fetch(
+        `${process.env.REACT_APP_API_URL}/api/patient/get-profile`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+          credentials: "include",
+        },
+      );
+
+      const data = await res.json();
+
+      if (res.ok) {
+        setForm((prev) => ({
+          ...prev,
+
+          // Registered data
+          firstName: data.user.firstName || "",
+          lastName: data.user.lastName || "",
+          dob: data.user.dob ? data.user.dob.split("T")[0] : "",
+          age: calcAge(data.user.dob),
+          gender: data.user.gender || "",
+          mobile: data.user.mobile || "",
+          email: data.user.email || "",
+          address: data.user.address || "",
+
+          // Existing profile data
+          city: data.user.city || "",
+          state: data.user.state || "",
+          pincode: data.user.pincode || "",
+          bloodGroup: data.user.bloodGroup || "",
+          allergies: data.user.allergies || "",
+          diseases: data.user.diseases || [],
+          medications: data.user.medications || "",
+          weight: data.user.weight || "",
+
+          emergencyName: data.user.emergencyContact?.name || "",
+
+          emergencyMobile: data.user.emergencyContact?.mobile || "",
+
+          relationship: data.user.emergencyContact?.relationship || "",
+        }));
+      }
+    } catch (error) {
+      // console.log(error);
+    }
+  };
 
   const completion = calcCompletion(form);
 
@@ -142,8 +155,18 @@ const fetchPatientProfile = async () => {
     const { name, value } = e.target;
     const updated = { ...form, [name]: value };
     if (name === "dob") updated.age = calcAge(value);
+
+    // ✅ Clear city & state if pincode is incomplete
+    if (name === "pincode") {
+      if (value.length === 6) {
+        fetchCityState(value);
+      } else {
+        updated.city = "";
+        updated.state = "";
+      }
+    }
     setForm(updated);
-    if (errors[name]) setErrors(p => ({ ...p, [name]: "" }));
+    if (errors[name]) setErrors((p) => ({ ...p, [name]: "" }));
   };
 
   const handleDisease = (disease) => {
@@ -151,16 +174,50 @@ const fetchPatientProfile = async () => {
     if (disease === "None") {
       list = list.includes("None") ? [] : ["None"];
     } else {
-      list = list.filter(d => d !== "None");
-      list.includes(disease) ? list.splice(list.indexOf(disease), 1) : list.push(disease);
+      list = list.filter((d) => d !== "None");
+      list.includes(disease)
+        ? list.splice(list.indexOf(disease), 1)
+        : list.push(disease);
     }
-    setForm(p => ({ ...p, diseases: list }));
+    setForm((p) => ({ ...p, diseases: list }));
+  };
+
+  const fetchCityState = async (pincode) => {
+    if (pincode.length !== 6) return;
+
+    setPincodeLoading(true);
+    try {
+      const res = await fetch(
+        `https://api.postalpincode.in/pincode/${pincode}`,
+      );
+      const data = await res.json();
+
+      if (data[0].Status === "Success") {
+        const postOffice = data[0].PostOffice[0];
+        setForm((prev) => ({
+          ...prev,
+          city: postOffice.District,
+          state: postOffice.State,
+        }));
+      } else {
+        setForm((prev) => ({ ...prev, city: "", state: "" }));
+        alert("Invalid pincode. City and State not found.");
+      }
+    } catch (err) {
+      alert("Failed to fetch location details.");
+    } finally {
+      setPincodeLoading(false);
+    }
   };
 
   const handlePhoto = (e) => {
     const file = e.target.files[0];
     if (!file) return;
-    setForm(p => ({ ...p, photo: file, photoPreview: URL.createObjectURL(file) }));
+    setForm((p) => ({
+      ...p,
+      photo: file,
+      photoPreview: URL.createObjectURL(file),
+    }));
   };
 
   // ── Per-step validation ──
@@ -169,44 +226,50 @@ const fetchPatientProfile = async () => {
     const t = (f) => (form[f] ? String(form[f]).trim() : "");
 
     if (s === 0) {
-  // First Name
-  if (!t("firstName")) {
-    e.firstName = "First name is required.";
-  } else if (!/^[a-zA-Z\s]+$/.test(t("firstName"))) {
-    e.firstName = "Only alphabets allowed.";
-  }
+      // First Name
+      if (!t("firstName")) {
+        e.firstName = "First name is required.";
+      } else if (!/^[a-zA-Z\s]+$/.test(t("firstName"))) {
+        e.firstName = "Only alphabets allowed.";
+      }
 
-  // Last Name
-  if (!t("lastName")) {
-    e.lastName = "Last name is required.";
-  } else if (!/^[a-zA-Z\s]+$/.test(t("lastName"))) {
-    e.lastName = "Only alphabets allowed.";
-  }
-      if (!t("dob"))
-        e.dob = "Date of birth is required.";
+      // Last Name
+      if (!t("lastName")) {
+        e.lastName = "Last name is required.";
+      } else if (!/^[a-zA-Z\s]+$/.test(t("lastName"))) {
+        e.lastName = "Only alphabets allowed.";
+      }
+      if (!t("dob")) e.dob = "Date of birth is required.";
       else if (new Date(form.dob) >= new Date())
         e.dob = "Date of birth cannot be a future date.";
 
-      if (!form.gender)   e.gender     = "Please select a gender.";
+      if (!form.gender) e.gender = "Please select a gender.";
       if (!t("bloodGroup")) e.bloodGroup = "Please select blood group.";
-      if (!/^\d{10}$/.test(t("mobile"))) e.mobile = "Enter valid 10-digit mobile number.";
+      if (!/^\d{10}$/.test(t("mobile")))
+        e.mobile = "Enter valid 10-digit mobile number.";
     }
 
     if (s === 1) {
       if (!t("address")) e.address = "Address is required.";
-      if (!t("city"))    e.city    = "City is required.";
-      else if (!/^[a-zA-Z\s]+$/.test(t("city"))) e.city = "Only alphabets allowed.";
-      if (!t("state"))   e.state   = "State is required.";
-      else if (!/^[a-zA-Z\s]+$/.test(t("state"))) e.state = "Only alphabets allowed.";
-      if (!t("pincode"))           e.pincode = "Pincode is required.";
-      else if (!/^\d{6}$/.test(t("pincode"))) e.pincode = "Pincode must be 6 digits.";
+      if (!t("city")) e.city = "City is required.";
+      else if (!/^[a-zA-Z\s]+$/.test(t("city")))
+        e.city = "Only alphabets allowed.";
+      if (!t("state")) e.state = "State is required.";
+      else if (!/^[a-zA-Z\s]+$/.test(t("state")))
+        e.state = "Only alphabets allowed.";
+      if (!t("pincode")) e.pincode = "Pincode is required.";
+      else if (!/^\d{6}$/.test(t("pincode")))
+        e.pincode = "Pincode must be 6 digits.";
     }
 
     if (s === 3) {
-      if (!t("emergencyName"))   e.emergencyName   = "Emergency contact name is required.";
-      if (!t("relationship"))    e.relationship    = "Relationship is required.";
-      if (!t("emergencyMobile")) e.emergencyMobile = "Emergency contact number is required.";
-      else if (!/^\d{10}$/.test(t("emergencyMobile"))) e.emergencyMobile = "Must be 10 digits.";
+      if (!t("emergencyName"))
+        e.emergencyName = "Emergency contact name is required.";
+      if (!t("relationship")) e.relationship = "Relationship is required.";
+      if (!t("emergencyMobile"))
+        e.emergencyMobile = "Emergency contact number is required.";
+      else if (!/^\d{10}$/.test(t("emergencyMobile")))
+        e.emergencyMobile = "Must be 10 digits.";
     }
 
     return e;
@@ -214,12 +277,18 @@ const fetchPatientProfile = async () => {
 
   const handleNext = () => {
     const errs = validate(step);
-    if (Object.keys(errs).length > 0) { setErrors(errs); return; }
+    if (Object.keys(errs).length > 0) {
+      setErrors(errs);
+      return;
+    }
     setErrors({});
-    setStep(s => s + 1);
+    setStep((s) => s + 1);
   };
 
-  const handleBack = () => { setErrors({}); setStep(s => s - 1); };
+  const handleBack = () => {
+    setErrors({});
+    setStep((s) => s - 1);
+  };
 
   // const handleSubmit = () => {
   //   const errs = validate(3);
@@ -229,66 +298,68 @@ const fetchPatientProfile = async () => {
   // };
 
   const handleSubmit = async () => {
-  const errs = validate(3);
-  if (Object.keys(errs).length > 0) {
-    setErrors(errs);
-    return;
-  }
+    const errs = validate(3);
+    if (Object.keys(errs).length > 0) {
+      setErrors(errs);
+      return;
+    }
 
-  try {
-    const payload = {
-      // firstName: form.firstName,
-      // lastName: form.lastName,
-      // dob: form.dob,
-      // gender: form.gender,
-      // mobile: form.mobile,
-      bloodGroup: form.bloodGroup,
+    try {
+      const payload = {
+        // firstName: form.firstName,
+        // lastName: form.lastName,
+        // dob: form.dob,
+        // gender: form.gender,
+        // mobile: form.mobile,
+        bloodGroup: form.bloodGroup,
 
-      address: form.address,
-      city: form.city,
-      state: form.state,
-      pincode: form.pincode,
+        address: form.address,
+        city: form.city,
+        state: form.state,
+        pincode: form.pincode,
 
-      allergies: form.allergies,
-      diseases: form.diseases,
-      medications: form.medications,
-      weight: form.weight,
+        allergies: form.allergies,
+        diseases: form.diseases,
+        medications: form.medications,
+        weight: form.weight,
 
-      emergencyContact: {
-        name: form.emergencyName,
-        mobile: form.emergencyMobile,
-        relationship: form.relationship,
-      },
+        emergencyContact: {
+          name: form.emergencyName,
+          mobile: form.emergencyMobile,
+          relationship: form.relationship,
+        },
 
-      isProfileComplete: true, // ✅ IMPORTANT
-    };
+        isProfileComplete: true, // ✅ IMPORTANT
+      };
 
-    const res = await fetch(`${process.env.REACT_APP_API_URL}/api/patient/complete-profile`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-      credentials: "include",
-      body: JSON.stringify(payload),
-    });
+      const res = await fetch(
+        `${process.env.REACT_APP_API_URL}/api/patient/complete-profile`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+          credentials: "include",
+          body: JSON.stringify(payload),
+        },
+      );
 
-    const data = await res.json();
+      const data = await res.json();
 
-    if (!res.ok) throw new Error(data.message);
+      if (!res.ok) throw new Error(data.message);
 
-    const updatedUser = {
-  ...JSON.parse(localStorage.getItem("user")),
-  isProfileComplete: true,
-};
+      const updatedUser = {
+        ...JSON.parse(localStorage.getItem("user")),
+        isProfileComplete: true,
+      };
 
-localStorage.setItem("user", JSON.stringify(updatedUser));
-    setSubmitted(true);
-
-  } catch (err) {
-    alert(err.message);
-  }
-};
+      localStorage.setItem("user", JSON.stringify(updatedUser));
+      setSubmitted(true);
+    } catch (err) {
+      alert(err.message);
+    }
+  };
 
   const f = (name) => ({
     name,
@@ -305,8 +376,14 @@ localStorage.setItem("user", JSON.stringify(updatedUser));
           <div className="pps-success">
             <div className="pps-success-icon">🎉</div>
             <h2>Profile Complete!</h2>
-            <p>Your profile has been set up successfully. You're all set to use MediTrack.</p>
-            <button className="pps-btn pps-btn-submit" onClick={() => navigate("/PatientHome")}>
+            <p>
+              Your profile has been set up successfully. You're all set to use
+              MediTrack.
+            </p>
+            <button
+              className="pps-btn pps-btn-submit"
+              onClick={() => navigate("/PatientHome")}
+            >
               Go to Dashboard →
             </button>
           </div>
@@ -317,33 +394,49 @@ localStorage.setItem("user", JSON.stringify(updatedUser));
 
   return (
     <div className="pps-page">
-
       {/* Banner */}
       <div className="pps-banner">
         ℹ️ Complete your profile to continue using MediTrack
       </div>
 
       <div className="pps-card">
-
         {/* ── PROGRESS HEADER ── */}
         <div className="pps-header">
           <div className="pps-step-info">
             <span className="pps-step-label">{STEPS[step].label}</span>
-            <span className="pps-step-count">Step {step + 1} of {STEPS.length}</span>
+            <span className="pps-step-count">
+              Step {step + 1} of {STEPS.length}
+            </span>
           </div>
           <div className="pps-progress-bar">
-            <div className="pps-progress-fill" style={{ width: `${((step + 1) / STEPS.length) * 100}%` }} />
+            <div
+              className="pps-progress-fill"
+              style={{ width: `${((step + 1) / STEPS.length) * 100}%` }}
+            />
           </div>
-          <div className="pps-progress-pct">{((step + 1) / STEPS.length) * 100}% complete</div>
+          <div className="pps-progress-pct">
+            {((step + 1) / STEPS.length) * 100}% complete
+          </div>
 
           {/* Step dots */}
           <div className="pps-dots">
             {STEPS.map((s, i) => (
               <>
-                <div key={i} className={"pps-dot" + (i < step ? " done" : i === step ? " active" : "")}>
+                <div
+                  key={i}
+                  className={
+                    "pps-dot" +
+                    (i < step ? " done" : i === step ? " active" : "")
+                  }
+                >
                   {i < step ? "✓" : i + 1}
                 </div>
-                {i < STEPS.length - 1 && <div key={`line-${i}`} className={"pps-dot-line" + (i < step ? " done" : "")} />}
+                {i < STEPS.length - 1 && (
+                  <div
+                    key={`line-${i}`}
+                    className={"pps-dot-line" + (i < step ? " done" : "")}
+                  />
+                )}
               </>
             ))}
           </div>
@@ -366,39 +459,79 @@ localStorage.setItem("user", JSON.stringify(updatedUser));
 
         {/* ── STEP CONTENT ── */}
         <div className="pps-body">
-
           {/* STEP 1 — Basic Info */}
           {step === 0 && (
             <>
               <div className="pps-grid-2">
                 <div className="pps-field">
-                  <label className="pps-label">Full Name <span className="pps-req">*</span></label>
-                  <input {...f("firstName")} placeholder="First Name" readOnly className="pps-input pps-readonly" />
-                  <input {...f("lastName")} placeholder="Last Name" readOnly className="pps-input pps-readonly"/>
-                  {errors.firstName && <span className="pps-error">{errors.firstName}</span>}
-                  {errors.lastName && <span className="pps-error">{errors.lastName}</span>}
+                  <label className="pps-label">
+                    Full Name <span className="pps-req">*</span>
+                  </label>
+                  <input
+                    {...f("firstName")}
+                    placeholder="First Name"
+                    readOnly
+                    className="pps-input pps-readonly"
+                  />
+                  <input
+                    {...f("lastName")}
+                    placeholder="Last Name"
+                    readOnly
+                    className="pps-input pps-readonly"
+                  />
+                  {errors.firstName && (
+                    <span className="pps-error">{errors.firstName}</span>
+                  )}
+                  {errors.lastName && (
+                    <span className="pps-error">{errors.lastName}</span>
+                  )}
                 </div>
 
                 <div className="pps-field">
-                  <label className="pps-label">Date of Birth <span className="pps-req">*</span></label>
-                  <input {...f("dob")} type="date" readOnly className="pps-input pps-readonly"
-                   /> 
-                  {errors.dob && <span className="pps-error">{errors.dob}</span>}
+                  <label className="pps-label">
+                    Date of Birth <span className="pps-req">*</span>
+                  </label>
+                  <input
+                    {...f("dob")}
+                    type="date"
+                    readOnly
+                    className="pps-input pps-readonly"
+                  />
+                  {errors.dob && (
+                    <span className="pps-error">{errors.dob}</span>
+                  )}
                 </div>
 
                 <div className="pps-field">
                   <label className="pps-label">Age (auto-calculated)</label>
-                  <input className="pps-input" value={form.age} readOnly placeholder="Auto-filled" />
+                  <input
+                    className="pps-input"
+                    value={form.age}
+                    readOnly
+                    placeholder="Auto-filled"
+                  />
                 </div>
 
                 <div className="pps-field">
-                  <label className="pps-label">Blood Group <span className="pps-req">*</span></label>
-                  <select name="bloodGroup" value={form.bloodGroup} onChange={handleChange}
-                    className={"pps-select" + (errors.bloodGroup ? " err" : "")}>
+                  <label className="pps-label">
+                    Blood Group <span className="pps-req">*</span>
+                  </label>
+                  <select
+                    name="bloodGroup"
+                    value={form.bloodGroup}
+                    onChange={handleChange}
+                    className={"pps-select" + (errors.bloodGroup ? " err" : "")}
+                  >
                     <option value="">Select</option>
-                    {BLOOD_GROUPS.map(b => <option key={b} value={b}>{b}</option>)}
+                    {BLOOD_GROUPS.map((b) => (
+                      <option key={b} value={b}>
+                        {b}
+                      </option>
+                    ))}
                   </select>
-                  {errors.bloodGroup && <span className="pps-error">{errors.bloodGroup}</span>}
+                  {errors.bloodGroup && (
+                    <span className="pps-error">{errors.bloodGroup}</span>
+                  )}
                 </div>
               </div>
 
@@ -417,14 +550,14 @@ localStorage.setItem("user", JSON.stringify(updatedUser));
               </div> */}
 
               <div className="pps-field">
-  <label className="pps-label">Gender</label>
+                <label className="pps-label">Gender</label>
 
-  <input
-    value={form.gender}
-    readOnly
-    className="pps-input pps-readonly"
-  />
-</div>
+                <input
+                  value={form.gender}
+                  readOnly
+                  className="pps-input pps-readonly"
+                />
+              </div>
 
               {/* <div className="pps-field">
                 <label className="pps-label">Mobile Number <span className="pps-req">*</span></label>
@@ -433,38 +566,32 @@ localStorage.setItem("user", JSON.stringify(updatedUser));
               </div> */}
 
               <div className="pps-grid-2">
+                <div className="pps-field">
+                  <label className="pps-label">Mobile Number</label>
 
-  <div className="pps-field">
-    <label className="pps-label">
-      Mobile Number
-    </label>
+                  <input
+                    {...f("mobile")}
+                    type="tel"
+                    readOnly
+                    className="pps-input pps-readonly"
+                  />
 
-    <input
-      {...f("mobile")}
-      type="tel"
-      readOnly
-      className="pps-input pps-readonly"
-    />
+                  {errors.mobile && (
+                    <span className="pps-error">{errors.mobile}</span>
+                  )}
+                </div>
 
-    {errors.mobile && (
-      <span className="pps-error">{errors.mobile}</span>
-    )}
-  </div>
+                <div className="pps-field">
+                  <label className="pps-label">Email Address</label>
 
-  <div className="pps-field">
-    <label className="pps-label">
-      Email Address
-    </label>
-
-    <input
-      {...f("email")}
-      type="email"
-      readOnly
-      className="pps-input pps-readonly"
-    />
-  </div>
-
-</div>
+                  <input
+                    {...f("email")}
+                    type="email"
+                    readOnly
+                    className="pps-input pps-readonly"
+                  />
+                </div>
+              </div>
             </>
           )}
 
@@ -472,25 +599,96 @@ localStorage.setItem("user", JSON.stringify(updatedUser));
           {step === 1 && (
             <>
               <div className="pps-field">
-                <label className="pps-label">Address Line <span className="pps-req">*</span></label>
-                <input {...f("address")} type="text" readOnly className="pps-input pps-readonly" />
-                {errors.address && <span className="pps-error">{errors.address}</span>}
+                <label className="pps-label">
+                  Address Line <span className="pps-req">*</span>
+                </label>
+                <input
+                  {...f("address")}
+                  type="text"
+                  readOnly
+                  className="pps-input pps-readonly"
+                />
+                {errors.address && (
+                  <span className="pps-error">{errors.address}</span>
+                )}
               </div>
+
               <div className="pps-grid-2">
+                {/* Pincode FIRST so city/state auto-fill */}
                 <div className="pps-field">
-                  <label className="pps-label">City <span className="pps-req">*</span></label>
-                  <input {...f("city")} type="text" placeholder="City" />
-                  {errors.city && <span className="pps-error">{errors.city}</span>}
+                  <label className="pps-label">
+                    Pincode <span className="pps-req">*</span>
+                  </label>
+                  <input
+                    {...f("pincode")}
+                    type="text"
+                    placeholder="6-digit pincode"
+                    maxLength={6}
+                  />
+                  {pincodeLoading && (
+                    <span style={{ fontSize: "12px", color: "#888" }}>
+                      📍 Fetching location...
+                    </span>
+                  )}
+                  {errors.pincode && (
+                    <span className="pps-error">{errors.pincode}</span>
+                  )}
                 </div>
+
                 <div className="pps-field">
-                  <label className="pps-label">State <span className="pps-req">*</span></label>
-                  <input {...f("state")} type="text" placeholder="State" />
-                  {errors.state && <span className="pps-error">{errors.state}</span>}
+                  <label className="pps-label">
+                    City <span className="pps-req">*</span>
+                  </label>
+                  <input
+                    {...f("city")}
+                    type="text"
+                    placeholder={
+                      pincodeLoading ? "Auto-filling..." : "Enter pincode first"
+                    }
+                    readOnly={form.pincode.length !== 6 || !!form.city}
+                    style={
+                      form.pincode.length !== 6
+                        ? {
+                            backgroundColor: "#f0f0f0",
+                            color: "#aaa",
+                            cursor: "not-allowed",
+                          }
+                        : form.city
+                          ? { backgroundColor: "#f0f9f0", color: "#333" }
+                          : {}
+                    }
+                  />
+                  {errors.city && (
+                    <span className="pps-error">{errors.city}</span>
+                  )}
                 </div>
+
                 <div className="pps-field">
-                  <label className="pps-label">Pincode <span className="pps-req">*</span></label>
-                  <input {...f("pincode")} type="text" placeholder="6-digit pincode" maxLength={6} />
-                  {errors.pincode && <span className="pps-error">{errors.pincode}</span>}
+                  <label className="pps-label">
+                    State <span className="pps-req">*</span>
+                  </label>
+                  <input
+                    {...f("state")}
+                    type="text"
+                    placeholder={
+                      pincodeLoading ? "Auto-filling..." : "Enter pincode first"
+                    }
+                    readOnly={form.pincode.length !== 6 || !!form.state}
+                    style={
+                      form.pincode.length !== 6
+                        ? {
+                            backgroundColor: "#f0f0f0",
+                            color: "#aaa",
+                            cursor: "not-allowed",
+                          }
+                        : form.state
+                          ? { backgroundColor: "#f0f9f0", color: "#333" }
+                          : {}
+                    }
+                  />
+                  {errors.state && (
+                    <span className="pps-error">{errors.state}</span>
+                  )}
                 </div>
               </div>
             </>
@@ -501,17 +699,25 @@ localStorage.setItem("user", JSON.stringify(updatedUser));
             <>
               <div className="pps-field">
                 <label className="pps-label">Known Allergies</label>
-                <textarea name="allergies" value={form.allergies} onChange={handleChange}
-                  className="pps-textarea" placeholder="e.g. Penicillin, Pollen (leave blank if none)" />
+                <textarea
+                  name="allergies"
+                  value={form.allergies}
+                  onChange={handleChange}
+                  className="pps-textarea"
+                  placeholder="e.g. Penicillin, Pollen (leave blank if none)"
+                />
               </div>
 
               <div className="pps-field">
                 <label className="pps-label">Existing Diseases</label>
                 <div className="pps-checkbox-group">
-                  {DISEASES.map(d => (
+                  {DISEASES.map((d) => (
                     <label key={d} className="pps-checkbox-label">
-                      <input type="checkbox" checked={form.diseases.includes(d)}
-                        onChange={() => handleDisease(d)} />
+                      <input
+                        type="checkbox"
+                        checked={form.diseases.includes(d)}
+                        onChange={() => handleDisease(d)}
+                      />
                       {d}
                     </label>
                   ))}
@@ -520,17 +726,22 @@ localStorage.setItem("user", JSON.stringify(updatedUser));
 
               <div className="pps-field">
                 <label className="pps-label">Current Medications</label>
-                <textarea name="medications" value={form.medications} onChange={handleChange}
-                  className="pps-textarea" placeholder="List any medications you are currently taking" />
+                <textarea
+                  name="medications"
+                  value={form.medications}
+                  onChange={handleChange}
+                  className="pps-textarea"
+                  placeholder="List any medications you are currently taking"
+                />
               </div>
 
               <div className="pps-field">
                 <label className="pps-label">Weight (kg)</label>
-                  <input
-                    {...f("weight")}
-                      type="string"
-                      placeholder="Enter weight"
-                    />
+                <input
+                  {...f("weight")}
+                  type="string"
+                  placeholder="Enter weight"
+                />
               </div>
             </>
           )}
@@ -540,38 +751,69 @@ localStorage.setItem("user", JSON.stringify(updatedUser));
             <>
               <div className="pps-grid-2">
                 <div className="pps-field">
-                  <label className="pps-label">Contact Name <span className="pps-req">*</span></label>
-                  <input {...f("emergencyName")} type="text" placeholder="Full name" />
-                  {errors.emergencyName && <span className="pps-error">{errors.emergencyName}</span>}
+                  <label className="pps-label">
+                    Contact Name <span className="pps-req">*</span>
+                  </label>
+                  <input
+                    {...f("emergencyName")}
+                    type="text"
+                    placeholder="Full name"
+                  />
+                  {errors.emergencyName && (
+                    <span className="pps-error">{errors.emergencyName}</span>
+                  )}
                 </div>
                 <div className="pps-field">
-                  <label className="pps-label">Relationship <span className="pps-req">*</span></label>
-                  <input {...f("relationship")} type="text" placeholder="e.g. Father, Spouse" />
-                  {errors.relationship && <span className="pps-error">{errors.relationship}</span>}
+                  <label className="pps-label">
+                    Relationship <span className="pps-req">*</span>
+                  </label>
+                  <input
+                    {...f("relationship")}
+                    type="text"
+                    placeholder="e.g. Father, Spouse"
+                  />
+                  {errors.relationship && (
+                    <span className="pps-error">{errors.relationship}</span>
+                  )}
                 </div>
                 <div className="pps-field">
-                  <label className="pps-label">Contact Number <span className="pps-req">*</span></label>
-                  <input {...f("emergencyMobile")} type="tel" placeholder="10-digit number" />
-                  {errors.emergencyMobile && <span className="pps-error">{errors.emergencyMobile}</span>}
+                  <label className="pps-label">
+                    Contact Number <span className="pps-req">*</span>
+                  </label>
+                  <input
+                    {...f("emergencyMobile")}
+                    type="tel"
+                    placeholder="10-digit number"
+                  />
+                  {errors.emergencyMobile && (
+                    <span className="pps-error">{errors.emergencyMobile}</span>
+                  )}
                 </div>
               </div>
-
             </>
           )}
-
         </div>
 
         {/* ── FOOTER ── */}
         <div className="pps-footer">
-          {step > 0
-            ? <button className="pps-btn pps-btn-back" onClick={handleBack}>← Back</button>
-            : <span />}
+          {step > 0 ? (
+            <button className="pps-btn pps-btn-back" onClick={handleBack}>
+              ← Back
+            </button>
+          ) : (
+            <span />
+          )}
 
-          {step < STEPS.length - 1
-            ? <button className="pps-btn pps-btn-next" onClick={handleNext}>Next →</button>
-            : <button className="pps-btn pps-btn-submit" onClick={handleSubmit}>✅ Save & Continue</button>}
+          {step < STEPS.length - 1 ? (
+            <button className="pps-btn pps-btn-next" onClick={handleNext}>
+              Next →
+            </button>
+          ) : (
+            <button className="pps-btn pps-btn-submit" onClick={handleSubmit}>
+              ✅ Save & Continue
+            </button>
+          )}
         </div>
-
       </div>
     </div>
   );
