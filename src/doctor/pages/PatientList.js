@@ -214,9 +214,8 @@ const PatientList = () => {
                   <th>Age / Gender</th>
                   <th>Contact</th>
                   <th>Email</th>
-                  <th>Patient ID</th>
+                  <th>City</th>
                   <th>Registered Date</th>
-                  <th>Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -227,17 +226,8 @@ const PatientList = () => {
                       <td>{patient.age} / {patient.gender}</td>
                       <td>📞 {patient.phone}</td>
                       <td>{patient.email}</td>
-                      <td>{patient._id}</td>
+                      <td>{patient.city}</td>
                       <td>{new Date(patient.createdAt).toLocaleDateString()}</td>
-                      <td>
-                        <button className="dplist-view-btn">👁</button>
-                        <button
-                          className="dplist-delete-btn"
-                          onClick={() => handleDelete(patient._id)}
-                        >
-                          🗑
-                        </button>
-                      </td>
                     </tr>
                   ))
                 ) : (
