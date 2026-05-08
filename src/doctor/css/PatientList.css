@@ -312,16 +312,16 @@
 .dp-modal-new {
   width: 750px;
   max-width: 95%;
-  height: 85vh;              /* 👈 important */
+  height: 85vh;              
   background: #ffffff;
   border-radius: 16px;
   display: flex;
-  flex-direction: column;    /* 👈 important */
-  overflow: hidden;          /* 👈 prevents outer scroll */
+  flex-direction: column;   
+  overflow: hidden;          
 }
 .dp-modal-grid {
-  flex: 1;                   /* 👈 take remaining space */
-  overflow-y: auto;          /* 👈 enable scroll */
+  flex: 1;                  
+  overflow-y: auto;          
   padding: 20px;
 }
 
