@@ -14,7 +14,15 @@ const STEPS = [
 
 const initialForm = {
   // Step 1
-  firstName: "", lastName: "", dob: "", age: "", gender: "", bloodGroup: "", mobile: "",
+  // firstName: "", lastName: "", dob: "", age: "", gender: "", bloodGroup: "", mobile: "",
+  firstName: "",
+lastName: "",
+dob: "",
+age: "",
+gender: "",
+bloodGroup: "",
+mobile: "",
+email: "",
   // Step 2
   address: "", city: "", state: "", pincode: "",
   // Step 3
@@ -54,13 +62,79 @@ const PatientProfileSetup = () => {
   const fileRef = useRef(null);
   const navigate = useNavigate();
 
-    useEffect(() => {
-    const user = JSON.parse(localStorage.getItem("user"));
+  //   useEffect(() => {
+  //   const user = JSON.parse(localStorage.getItem("user"));
 
-    if (user?.isProfileComplete) {
-      navigate("/PatientHome");
+  //   if (user?.isProfileComplete) {
+  //     navigate("/PatientHome");
+  //   }
+  // }, []);
+
+  useEffect(() => {
+  const user = JSON.parse(localStorage.getItem("user"));
+
+  if (user?.isProfileComplete) {
+    navigate("/PatientHome");
+  }
+
+  fetchPatientProfile();
+}, []);
+
+const fetchPatientProfile = async () => {
+  try {
+    const res = await fetch(
+      `${process.env.REACT_APP_API_URL}/api/patient/get-profile`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+        credentials: "include",
+      }
+    );
+
+    const data = await res.json();
+
+    if (res.ok) {
+      setForm((prev) => ({
+        ...prev,
+
+        // Registered data
+        firstName: data.user.firstName || "",
+        lastName: data.user.lastName || "",
+        dob: data.user.dob
+          ? data.user.dob.split("T")[0]
+          : "",
+        age: calcAge(data.user.dob),
+        gender: data.user.gender || "",
+        mobile: data.user.mobile || "",
+        email: data.user.email || "",
+        address: data.user.address || "",
+
+        // Existing profile data
+        city: data.user.city || "",
+        state: data.user.state || "",
+        pincode: data.user.pincode || "",
+        bloodGroup: data.user.bloodGroup || "",
+        allergies: data.user.allergies || "",
+        diseases: data.user.diseases || [],
+        medications: data.user.medications || "",
+        weight: data.user.weight || "",
+
+        emergencyName:
+          data.user.emergencyContact?.name || "",
+
+        emergencyMobile:
+          data.user.emergencyContact?.mobile || "",
+
+        relationship:
+          data.user.emergencyContact?.relationship || "",
+      }));
     }
-  }, []);
+  } catch (error) {
+    // console.log(error);
+  }
+};
 
   const completion = calcCompletion(form);
 
@@ -163,11 +237,11 @@ const PatientProfileSetup = () => {
 
   try {
     const payload = {
-      firstName: form.firstName,
-      lastName: form.lastName,
-      dob: form.dob,
-      gender: form.gender,
-      mobile: form.mobile,
+      // firstName: form.firstName,
+      // lastName: form.lastName,
+      // dob: form.dob,
+      // gender: form.gender,
+      // mobile: form.mobile,
       bloodGroup: form.bloodGroup,
 
       address: form.address,
@@ -299,15 +373,16 @@ localStorage.setItem("user", JSON.stringify(updatedUser));
               <div className="pps-grid-2">
                 <div className="pps-field">
                   <label className="pps-label">Full Name <span className="pps-req">*</span></label>
-                  <input {...f("firstName")} placeholder="First Name" />
-                  <input {...f("lastName")} placeholder="Last Name" />
+                  <input {...f("firstName")} placeholder="First Name" readOnly className="pps-input pps-readonly" />
+                  <input {...f("lastName")} placeholder="Last Name" readOnly className="pps-input pps-readonly"/>
                   {errors.firstName && <span className="pps-error">{errors.firstName}</span>}
                   {errors.lastName && <span className="pps-error">{errors.lastName}</span>}
                 </div>
 
                 <div className="pps-field">
                   <label className="pps-label">Date of Birth <span className="pps-req">*</span></label>
-                  <input {...f("dob")} type="date" max={new Date().toISOString().split("T")[0]} />
+                  <input {...f("dob")} type="date" readOnly className="pps-input pps-readonly"
+                   /> 
                   {errors.dob && <span className="pps-error">{errors.dob}</span>}
                 </div>
 
@@ -327,7 +402,7 @@ localStorage.setItem("user", JSON.stringify(updatedUser));
                 </div>
               </div>
 
-              <div className="pps-field">
+              {/* <div className="pps-field">
                 <label className="pps-label">Gender <span className="pps-req">*</span></label>
                 <div className="pps-radio-group">
                   {["Male", "Female", "Other"].map(g => (
@@ -339,13 +414,57 @@ localStorage.setItem("user", JSON.stringify(updatedUser));
                   ))}
                 </div>
                 {errors.gender && <span className="pps-error">{errors.gender}</span>}
-              </div>
+              </div> */}
 
               <div className="pps-field">
+  <label className="pps-label">Gender</label>
+
+  <input
+    value={form.gender}
+    readOnly
+    className="pps-input pps-readonly"
+  />
+</div>
+
+              {/* <div className="pps-field">
                 <label className="pps-label">Mobile Number <span className="pps-req">*</span></label>
                 <input {...f("mobile")} type="tel" placeholder="10-digit mobile" />
                 {errors.mobile && <span className="pps-error">{errors.mobile}</span>}
-              </div>
+              </div> */}
+
+              <div className="pps-grid-2">
+
+  <div className="pps-field">
+    <label className="pps-label">
+      Mobile Number
+    </label>
+
+    <input
+      {...f("mobile")}
+      type="tel"
+      readOnly
+      className="pps-input pps-readonly"
+    />
+
+    {errors.mobile && (
+      <span className="pps-error">{errors.mobile}</span>
+    )}
+  </div>
+
+  <div className="pps-field">
+    <label className="pps-label">
+      Email Address
+    </label>
+
+    <input
+      {...f("email")}
+      type="email"
+      readOnly
+      className="pps-input pps-readonly"
+    />
+  </div>
+
+</div>
             </>
           )}
 
@@ -354,7 +473,7 @@ localStorage.setItem("user", JSON.stringify(updatedUser));
             <>
               <div className="pps-field">
                 <label className="pps-label">Address Line <span className="pps-req">*</span></label>
-                <input {...f("address")} type="text" placeholder="House no, Street, Area" />
+                <input {...f("address")} type="text" readOnly className="pps-input pps-readonly" />
                 {errors.address && <span className="pps-error">{errors.address}</span>}
               </div>
               <div className="pps-grid-2">
