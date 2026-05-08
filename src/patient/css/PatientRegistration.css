@@ -24,7 +24,7 @@
 
 /* ── Left image ─────────────────────────────────────────────────────────── */
 .PatReg-left {
-  width: 45%;
+  width: 50%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -40,11 +40,12 @@
 
 /* ── Right form area ────────────────────────────────────────────────────── */
 .PatReg-right {
+  width: 50%;
   flex: 1;
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 24px 20px;
+  padding: 10px 15px;
   background-color: #f2f2f2;
   overflow-y: auto;
 }
@@ -52,10 +53,10 @@
 /* ── Form box ───────────────────────────────────────────────────────────── */
 .PatReg-form-box {
   background-color: #cfe5e5;
-  padding: 24px 22px;
+  padding: 10px 15px;
   border-radius: 12px;
   width: 100%;
-  max-width: 440px;
+  max-width: 95%;
 }
 
 .PatReg-heading {
