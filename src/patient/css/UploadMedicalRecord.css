@@ -150,7 +150,6 @@ UploadMedRec-upload-btn-cancel:hover {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.5); /* Fixed typo */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -231,7 +230,7 @@ UploadMedRec-upload-btn-cancel:hover {
 
 .UploadMedRec-upload-btn-primary {
   padding: 10px 24px;
-  background: #2563eb;
+  background: #0aa5a5;
   color: white;
   border: none;
   border-radius: 6px;
