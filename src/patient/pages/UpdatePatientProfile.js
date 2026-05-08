@@ -225,7 +225,6 @@ function UpdatePatientProfile() {
           </span>
         </div>
         <div className="topbar__right">
-          <span className="topbar__bell">🔔</span>
           <div className="avatar avatar--sm">{getInitials(formData)}</div>
         </div>
       </nav>
