@@ -135,6 +135,7 @@
   background: #f8fafc;
   cursor: pointer;
   outline: none;
+  height: 43px;
 }
 
 /* ── Tabs row ───────────────────────────────────────────────────────────── */
