@@ -7,7 +7,7 @@ import registerImage from "../images/register.jpeg";
 
 export default function PatientRegistration() {
   const [formData, setFormData] = useState({
-    fisrtName: "",
+    firstName: "",
     lastName: "",
     gender: "",
     dob: "",
@@ -146,6 +146,7 @@ const handleBlur = (e) => {
       headers: {
         "Content-Type": "application/json"
       },
+      credentials: "include",
       body: JSON.stringify(dataToSend)
     });
 
@@ -255,7 +256,7 @@ const handleBlur = (e) => {
     {errors.email && <p className="PatReg-error">{errors.email}</p>}
   </div>
 
-  <textarea name="address1" className="PatReg-address1" placeholder="Full Address" onChange={handleChange} required />
+  <textarea name="address" className="PatReg-address1" placeholder="Full Address" onChange={handleChange} required />
 
   {/* LOGIN CREDENTIALS */}
   <h3 className="PatReg-section-title">Login Credentials</h3>
