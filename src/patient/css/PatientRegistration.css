@@ -1,228 +1,229 @@
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+/* ── Page ───────────────────────────────────────────────────────────────── */
+.PatReg-container {
+  min-height: 100vh;
+  background-color: #bfeaea;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 24px 16px;
   font-family: "Poppins", sans-serif;
+  box-sizing: border-box;
 }
 
-/* BACKGROUND */
-.PatReg-register-container {
-  height: 100vh;
-  background-color:#BFEAEA;
+/* ── Card ───────────────────────────────────────────────────────────────── */
+.PatReg-card {
   display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-/* MAIN CARD */
-.PatReg-register-card {
-  display: flex;
-  width: 1000px;
-  height: 600px;
-  /* background: #e6e6e6; */
-    background-color: #F2F2F2;
-  border-radius: 15px;
+  width: 100%;
+  max-width: 1000px;
+  min-height: 580px;
+  background-color: #f2f2f2;
+  border-radius: 16px;
   overflow: hidden;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.PatReg-15);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
 }
 
-/* LEFT IMAGE */
-.PatReg-left-section {
-  width: 50%;
+/* ── Left image ─────────────────────────────────────────────────────────── */
+.PatReg-left {
+  width: 45%;
   display: flex;
   justify-content: center;
   align-items: center;
-  background: #F2F2F2 !important;
+  background: #f2f2f2;
+  flex-shrink: 0;
 }
 
-.PatReg-left-section img {
+.PatReg-left img {
   width: 100%;
   height: 100%;
-  position:cover;
+  object-fit: cover;
 }
 
-/* RIGHT SIDE */
-.PatReg-right-section {
-  width: 50%;
+/* ── Right form area ────────────────────────────────────────────────────── */
+.PatReg-right {
+  flex: 1;
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #f2f2f2 !important;
+  padding: 24px 20px;
+  background-color: #f2f2f2;
+  overflow-y: auto;
 }
 
-/* FORM BOX */
+/* ── Form box ───────────────────────────────────────────────────────────── */
 .PatReg-form-box {
-  /* background: #b7d3d3; */
-  background-color: #CFE5E5;
-  padding: 20px;
+  background-color: #cfe5e5;
+  padding: 24px 22px;
   border-radius: 12px;
-  width: 95%;
-  max-height: 100%;
-  overflow-y: hidden;
+  width: 100%;
+  max-width: 440px;
 }
 
-.PatReg-form-box h2 {
+.PatReg-heading {
   text-align: center;
-  margin-bottom: 10px;
+  font-size: 20px;
+  font-weight: 700;
   color: #0a8f8f;
+  margin-bottom: 12px;
 }
 
-/* SECTION TITLE */
+/* ── Section title ──────────────────────────────────────────────────────── */
 .PatReg-section-title {
-  font-size: 15px;
-  font-weight: 600;
-  margin: 12px 0 6px;
+  font-size: 13px;
+  font-weight: 700;
   color: #0a8f8f;
   border-left: 3px solid #0a8f8f;
   padding-left: 8px;
+  margin: 14px 0 8px;
 }
 
-/* ROW ALIGNMENT */
+/* ── Row ────────────────────────────────────────────────────────────────── */
 .PatReg-row {
   display: flex;
   gap: 10px;
-  margin-bottom: 8px;
+  margin-bottom: 4px;
+  align-items: flex-start;
 }
 
-.PatReg-row input,
-.PatReg-row select {
+/* ── Field wrapper (holds input + error) ────────────────────────────────── */
+.PatReg-field {
   flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
 }
 
-/* INPUTS */
-input,
-select,
-textarea {
+.PatReg-field--full {
   width: 100%;
-  padding: 9px;
-  border-radius: 6px;
-  border: none;
-  outline: none;
+  margin-bottom: 4px;
+}
+
+/* ── Shared input / select ──────────────────────────────────────────────── */
+.PatReg-input {
+  width: 100%;
+  padding: 9px 12px;
+  border-radius: 7px;
+  border: 1.5px solid #b2d8d8;
+  background: #fff;
   font-size: 13px;
+  font-family: inherit;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  box-sizing: border-box;
 }
 
-/* ADDRESS FULL WIDTH */
-textarea {
+.PatReg-input:focus {
+  border-color: #0a8f8f;
+  box-shadow: 0 0 0 3px rgba(10, 143, 143, 0.12);
+}
+
+.PatReg-input:hover:not(:focus) {
+  border-color: #0a8f8f;
+}
+
+.PatReg-input--error {
+  border-color: #ef4444 !important;
+  box-shadow: none;
+}
+
+/* ── Textarea ───────────────────────────────────────────────────────────── */
+.PatReg-textarea {
+  width: 100%;
+  padding: 9px 12px;
+  border-radius: 7px;
+  border: 1.5px solid #b2d8d8;
+  background: #fff;
+  font-size: 13px;
+  font-family: inherit;
+  outline: none;
   resize: none;
-  height: 55px;
-  margin-bottom: 8px;
-  width: 105%;
-  margin-left: -10px !important;
+  height: 60px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  box-sizing: border-box;
 }
 
-/* BUTTON */
-.PatReg-PReg-btn {
+.PatReg-textarea:focus {
+  border-color: #0a8f8f;
+  box-shadow: 0 0 0 3px rgba(10, 143, 143, 0.12);
+}
+
+/* ── Password wrapper ───────────────────────────────────────────────────── */
+.PatReg-pwd-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.PatReg-pwd-wrap .PatReg-input {
+  padding-right: 38px;
+}
+
+.PatReg-eye {
+  position: absolute;
+  right: 10px;
+  cursor: pointer;
+  color: #64748b;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  transition: color 0.2s;
+}
+.PatReg-eye:hover { color: #0a8f8f; }
+
+/* ── Inline error message ───────────────────────────────────────────────── */
+.PatReg-error {
+  font-size: 11px;
+  color: #ef4444;
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* ── Submit button ──────────────────────────────────────────────────────── */
+.PatReg-btn {
   width: 100%;
   padding: 10px;
   background-color: #0a8f8f;
   color: white;
   border: none;
-  border-radius: 6px;
-  margin-top: 3px !important;
-  cursor: pointer;
+  border-radius: 8px;
   font-size: 14px;
-  border-radius: 10px !important;
-
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  margin-top: 14px;
+  transition: background-color 0.2s, opacity 0.2s;
 }
 
-.PatReg-PReg-btn:hover {
-  background-color: #086f6f;
-}
+.PatReg-btn:hover:not(:disabled) { background-color: #086f6f; }
+.PatReg-btn:disabled { opacity: 0.6; cursor: not-allowed; }
 
-/* LOGIN LINK */
+/* ── Login link ─────────────────────────────────────────────────────────── */
 .PatReg-login-link {
   text-align: center;
   font-size: 12px;
-  margin-top: 8px;
+  color: #475569;
+  margin-top: 10px;
 }
 
-.PatReg-login-link span {
+.PatReg-link {
   color: #0a8f8f;
-  font-weight: bold;
-  cursor: pointer;
+  font-weight: 600;
+  text-decoration: none;
+  margin-left: 4px;
+}
+.PatReg-link:hover { text-decoration: underline; }
+
+/* ── Scrollbar ──────────────────────────────────────────────────────────── */
+.PatReg-form-box::-webkit-scrollbar { width: 4px; }
+.PatReg-form-box::-webkit-scrollbar-thumb { background: #0a8f8f; border-radius: 10px; }
+
+/* ── Responsive ─────────────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .PatReg-card { flex-direction: column; max-width: 480px; }
+  .PatReg-left { display: none; }
+  .PatReg-right { padding: 20px 16px; }
 }
 
-/* SCROLLBAR (optional nice UI) */
-.PatReg-form-box::-webkit-scrollbar {
-  width: 5px;
-}
-
-.PatReg-form-box::-webkit-scrollbar-thumb {
-  background: #0a8f8f;
-  border-radius: 10px;
-}
-.PatReg-log{
-  text-align: center !important;
-  margin-top: 5px !important;
-}
-.PatReg-text-primary{
-  margin-left: 3px;
-}
-
-.PatReg-row{
-  display: flex;
-  gap: 10px;
-  margin-bottom: 8px;
-  align-items: flex-start;
-}
-.PatReg-address1{
-  resize: none;
-  height: 55px;
-  margin-bottom: 8px;
-  width: 100%;
-}
-/* PASSWORD FIELD */
-.PatReg-password-field-1{
-  position: relative;
-  margin-left: 13px !important;
-  flex: 1;
-}
-
-/* INPUT */
-.PatReg-password-field-1 input{
-  padding-right: 35px;
-  border: none;
-  outline: none;
-}
-#pwd{
-  left: -12px;
-}
-#pwd input{
-  width: 100% !important;
-}
-
-.PatReg-eye-icon-1{
-  position: absolute;
-  right: 20px !important;
-  top: 50%;
-  transform: translateY(-50%);
-  cursor: pointer;
-  color: gray;
-  font-size: 18px;
-  margin-left: 300px !important;
-}
-.PatReg-eye-icon-2{
-  position: absolute;
-  right: 100px !important;
-  top: 545px;
-  transform: translateY(-50%);
-  cursor: pointer;
-  color: gray;
-  font-size: 18px;
-}
-.PatReg-error{
-  position: inherit;
-  font-size: 12px;
-  color: red;
-  /* margin-top: 4px; */
-}
-p.PatReg-error{
-    margin-bottom: 0rem !important;
-}
-
-.PatReg-row{
-  display: flex;
-  gap: 10px;
-  margin-bottom: 8px;
-  align-items: center;
+@media (max-width: 480px) {
+  .PatReg-row { flex-direction: column; gap: 4px; }
 }

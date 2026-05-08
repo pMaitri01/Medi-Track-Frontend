@@ -1,320 +1,257 @@
- import React, { useState } from "react";
- import { useNavigate } from "react-router-dom";
- import { Link } from "react-router-dom";
+import { useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { toast } from "react-toastify";
 import "../css/PatientRegistration.css";
 import registerImage from "../images/register.jpeg";
 
+// ── Validation helpers ────────────────────────────────────────────────────────
+const ALPHA_RE = /^[A-Za-z]+$/;
+const EMAIL_RE = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+const PHONE_RE = /^\d{10}$/;
+const PASS_RE = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{6,}$/;
+
+function validate(formData) {
+  const e = {};
+
+  if (!ALPHA_RE.test(formData.firstName))
+    e.firstName = "First name must contain only alphabets.";
+
+  if (!ALPHA_RE.test(formData.lastName))
+    e.lastName = "Last name must contain only alphabets.";
+
+  if (!formData.gender)
+    e.gender = "Please select a gender.";
+
+  if (!formData.dob)
+    e.dob = "Date of birth is required.";
+
+  if (!PHONE_RE.test(formData.mobile))
+    e.mobile = "Mobile number must be exactly 10 digits.";
+
+  if (!EMAIL_RE.test(formData.email))
+    e.email = "Enter a valid email address (e.g. abc@gmail.com).";
+
+  if (!formData.address.trim())
+    e.address = "Address is required.";
+
+  if (!PASS_RE.test(formData.password))
+    e.password = "Password must be 6+ chars with uppercase, lowercase, number & special character.";
+
+  if (formData.password !== formData.confirmPassword)
+    e.confirmPassword = "Passwords do not match.";
+
+  return e;
+}
+
+// ── Component ─────────────────────────────────────────────────────────────────
 export default function PatientRegistration() {
   const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    gender: "",
-    dob: "",
-    mobile: "",
-    email: "",
-    address: "",
-    password: "",
-    confirmPassword: ""
+    firstName: "", lastName: "", gender: "", dob: "",
+    mobile: "", email: "", address: "", password: "", confirmPassword: "",
   });
   const [errors, setErrors] = useState({});
   const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-     const navigate = useNavigate();
-const handleChange = (e) => {
-  const { name, value } = e.target;
-  let newErrors = { ...errors };
+  const [showConfirm, setShowConfirm] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const navigate = useNavigate();
 
-  // First Name / Last Name
-  if (name === "firstName" || name === "lastName") {
-    if (!/^[A-Za-z]*$/.test(value)) {
-      newErrors[name] = "Only alphabets allowed";
-    } else {
-      delete newErrors[name];
-    }
-  }
-// email
-if (name === "email") {
-  const emailRegex =
-    /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  // Clear field error as user types
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((p) => ({ ...p, [name]: value }));
+    if (errors[name]) setErrors((p) => ({ ...p, [name]: "" }));
+  };
 
-  // If user already had error, remove it when valid
-  if (errors.email) {
-    if (emailRegex.test(value)) {
-      delete newErrors.email;
-    }
-  }
-}
-  // Password
-  if (name === "password") {
-    const passRegex =
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{6,}$/;
+  // Validate email on blur
+  const handleEmailBlur = () => {
+    if (formData.email && !EMAIL_RE.test(formData.email))
+      setErrors((p) => ({ ...p, email: "Enter a valid email address (e.g. abc@gmail.com)." }));
+    else
+      setErrors((p) => ({ ...p, email: "" }));
+  };
 
-    if (!passRegex.test(value)) {
-      newErrors.password =
-        "Password must contain uppercase, lowercase, number & special character";
-    } else {
-      delete newErrors.password;
-    }
-  }
-
-  // Confirm Password
-  if (name === "confirmPassword") {
-    if (value !== formData.password) {
-      newErrors.confirmPassword = "Passwords do not match";
-    } else {
-      delete newErrors.confirmPassword;
-    }
-  }
-
-  setErrors(newErrors);
-
-  setFormData((prev) => ({
-    ...prev,
-    [name]: value
-  }));
-};
-//handle blur function
-
-const handleBlur = (e) => {
-  const { name, value } = e.target;
-  let newErrors = { ...errors };
-
-  if (name === "email") {
-    const emailRegex =
-      /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-
-    if (!emailRegex.test(value)) {
-      newErrors.email = "Enter valid email (example: abc@gmail.com)";
-    } else {
-      delete newErrors.email;
-    }
-  }
-
-  setErrors(newErrors);
-};
-//handle subit function
   const handleSubmit = async (e) => {
-    
-  e.preventDefault();
-   let newErrors = {};
+    e.preventDefault();
+    const errs = validate(formData);
+    if (Object.keys(errs).length > 0) { setErrors(errs); return; }
 
-   // First Name
-  if (!/^[A-Za-z]+$/.test(formData.firstName)) {
-    newErrors.firstName = "Only alphabets allowed";
-  }
+    setSubmitting(true);
+    try {
+      const { confirmPassword, ...payload } = formData;
+      const res = await fetch(`${process.env.REACT_APP_API_URL}/api/patient/register`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify(payload),
+      });
+      const data = await res.json();
 
-  // Last Name
-  if (!/^[A-Za-z]+$/.test(formData.lastName)) {
-    newErrors.lastName = "Only alphabets allowed";
-  }
-
-  // Email
-  const emailRegex =
-    /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-
-  if (!emailRegex.test(formData.email)) {
-    newErrors.email = "Enter valid email";
-  }
-
-  // Password
-  const passRegex =
-    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{6,}$/;
-
-  if (!passRegex.test(formData.password)) {
-    newErrors.password =
-      "Password must contain uppercase, lowercase, number & special character";
-  }
-
-  // Confirm Password
-  if (formData.password !== formData.confirmPassword) {
-    newErrors.confirmPassword = "Passwords do not match";
-  }
-
-  setErrors(newErrors);
-
-  // ❌ Stop form submission if errors exist
-  if (Object.keys(newErrors).length > 0) {
-    return;
-  }
-
-  try {
-    const { confirmPassword, ...dataToSend } = formData;
-
-    const response = await fetch(`${process.env.REACT_APP_API_URL}/api/patient/register`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      credentials: "include",
-      body: JSON.stringify(dataToSend)
-    });
-
-    const data = await response.json();
-    console.log(data);
-
-    if (response.ok) {
-      alert(data.msg);
-      navigate("/patient/login");
-
-    } else {
-        setErrors({ server: data.msg });
-        // alert(data.error || "Registration Failed");
+      if (res.ok) {
+        toast.success(data.msg || "Registration successful!", {
+          autoClose: 5000,
+        });
+        navigate("/patient/login");
+      } else {
+        toast.error(data.msg || "Registration failed. Please try again.",{
+          autoClose: 5000, // 4 seconds (default is ~3s)
+        });
+      }
+    } catch {
+      toast.error("Server error. Please try again later.");
+    } finally {
+      setSubmitting(false);
     }
+  };
 
-  } catch (error) {
-    console.error("Error:", error);
-    setErrors({ server: "Server error" });
-    // alert("Server Error");
-  }
-};
+  // Helper: render inline error
+  const Err = ({ field }) =>
+    errors[field] ? <p className="PatReg-error">{errors[field]}</p> : null;
 
   return (
-    <div className="PatReg-register-container">
+    <div className="PatReg-container">
+      <div className="PatReg-card">
 
-      <div className="PatReg-register-card">
-
-        {/* LEFT IMAGE */}
-        <div className="PatReg-left-section">
-          <img src={registerImage} alt="register" />
+        {/* Left image */}
+        <div className="PatReg-left">
+          <img src={registerImage} alt="Register" />
         </div>
 
-        {/* RIGHT FORM BOX */}
-        <div className="PatReg-right-section">
-
+        {/* Right form */}
+        <div className="PatReg-right">
           <div className="PatReg-form-box">
-            <h2>Patient Registration</h2>
+            <h2 className="PatReg-heading">Patient Registration</h2>
 
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit} noValidate>
 
-  {/* BASIC INFO */}
-  <h3 className="PatReg-section-title">Basic Information</h3>
+              {/* ── Basic Information ── */}
+              <h3 className="PatReg-section-title">Basic Information</h3>
 
-  <div className="PatReg-row">
-    <input type="text" name="firstName" placeholder="First Name" onChange={handleChange} onKeyPress={(e) => {
-    if (!/[A-Za-z ]/.test(e.key)) {
-      e.preventDefault(); // ❌ blocks numbers & symbols
-    }
-  }}required />
-    <input type="text" name="lastName" placeholder="Last Name" onChange={handleChange} onKeyPress={(e) => {
-    if (!/[A-Za-z ]/.test(e.key)) {
-      e.preventDefault(); // ❌ blocks numbers & symbols
-    }
-  }}required />
-  </div>
+              <div className="PatReg-row">
+                <div className="PatReg-field">
+                  <input
+                    className={`PatReg-input${errors.firstName ? " PatReg-input--error" : ""}`}
+                    type="text" name="firstName" placeholder="First Name"
+                    value={formData.firstName} onChange={handleChange}
+                  />
+                  <Err field="firstName" />
+                </div>
+                <div className="PatReg-field">
+                  <input
+                    className={`PatReg-input${errors.lastName ? " PatReg-input--error" : ""}`}
+                    type="text" name="lastName" placeholder="Last Name"
+                    value={formData.lastName} onChange={handleChange}
+                  />
+                  <Err field="lastName" />
+                </div>
+              </div>
 
-  <div className="PatReg-row">
-    <select name="gender" onChange={handleChange} required>
-      <option value="">Gender</option>
-      <option>Male</option>
-      <option>Female</option>
-      <option>Other</option>
-    </select>
-    <input
-      type="text"
-      name="dob"
-      placeholder="DOB"
-      onFocus={(e) => (e.target.type = "date")}
-      onBlur={(e) => {
-        if (!e.target.value) e.target.type = "text";
-      }}
-      max={new Date().toISOString().split("T")[0]}
-      onChange={handleChange}
-      required
-    />
+              <div className="PatReg-row">
+                <div className="PatReg-field">
+                  <select
+                    className={`PatReg-input${errors.gender ? " PatReg-input--error" : ""}`}
+                    name="gender" value={formData.gender} onChange={handleChange}
+                  >
+                    <option value="">Gender</option>
+                    <option>Male</option>
+                    <option>Female</option>
+                    <option>Other</option>
+                  </select>
+                  <Err field="gender" />
+                </div>
+                <div className="PatReg-field">
+                  <input
+                    className={`PatReg-input${errors.dob ? " PatReg-input--error" : ""}`}
+                    type="date" name="dob"
+                    max={new Date().toISOString().split("T")[0]}
+                    value={formData.dob} onChange={handleChange}
+                  />
+                  <Err field="dob" />
+                </div>
+              </div>
 
-  </div>
+              {/* ── Contact Details ── */}
+              <h3 className="PatReg-section-title">Contact Details</h3>
 
-  {/* CONTACT DETAILS */}
-  <h3 className="PatReg-section-title">Contact Details</h3>
+              <div className="PatReg-row">
+                <div className="PatReg-field">
+                  <input
+                    className={`PatReg-input${errors.mobile ? " PatReg-input--error" : ""}`}
+                    type="text" name="mobile" placeholder="Mobile Number"
+                    value={formData.mobile} onChange={handleChange} maxLength={10}
+                  />
+                  <Err field="mobile" />
+                </div>
+                <div className="PatReg-field">
+                  <input
+                    className={`PatReg-input${errors.email ? " PatReg-input--error" : ""}`}
+                    type="email" name="email" placeholder="Email Address"
+                    value={formData.email} onChange={handleChange} onBlur={handleEmailBlur}
+                  />
+                  <Err field="email" />
+                </div>
+              </div>
 
-  <div className="PatReg-row">
-    <input
-      type="text"
-      name="mobile"
-      placeholder="Mobile Number"
-      value={formData.mobile}
-      onChange={handleChange}
-      onKeyPress={(e) => {
-        if (!/[0-9]/.test(e.key)) {
-          e.preventDefault(); 
-        }
-      }}
-      maxLength="10"
-      required
-    />
-    <input 
-      type="email"
-      name="email"
-      placeholder="Email Address"
-      value={formData.email}
-      onChange={handleChange}
-      onBlur={handleBlur}
-      title="Enter valid email (example: abc@gmail.com)"
-      required
-    />
-    {errors.email && <p className="PatReg-error">{errors.email}</p>}
-  </div>
+              <div className="PatReg-field PatReg-field--full">
+                <textarea
+                  className={`PatReg-textarea${errors.address ? " PatReg-input--error" : ""}`}
+                  name="address" placeholder="Full Address"
+                  value={formData.address} onChange={handleChange}
+                />
+                <Err field="address" />
+              </div>
 
-  <textarea name="address" className="PatReg-address1" placeholder="Full Address" onChange={handleChange} required />
+              {/* ── Login Credentials ── */}
+              <h3 className="PatReg-section-title">Login Credentials</h3>
 
-  {/* LOGIN CREDENTIALS */}
-  <h3 className="PatReg-section-title">Login Credentials</h3>
+              <div className="PatReg-row">
+                <div className="PatReg-field">
+                  <div className="PatReg-pwd-wrap">
+                    <input
+                      className={`PatReg-input${errors.password ? " PatReg-input--error" : ""}`}
+                      type={showPassword ? "text" : "password"}
+                      name="password" placeholder="Password"
+                      value={formData.password} onChange={handleChange}
+                    />
+                    <span className="PatReg-eye" onClick={() => setShowPassword((p) => !p)}>
+                      {showPassword ? <FaEyeSlash /> : <FaEye />}
+                    </span>
+                  </div>
+                  <Err field="password" />
+                </div>
+                <div className="PatReg-field">
+                  <div className="PatReg-pwd-wrap">
+                    <input
+                      className={`PatReg-input${errors.confirmPassword ? " PatReg-input--error" : ""}`}
+                      type={showConfirm ? "text" : "password"}
+                      name="confirmPassword" placeholder="Confirm Password"
+                      value={formData.confirmPassword} onChange={handleChange}
+                    />
+                    <span className="PatReg-eye" onClick={() => setShowConfirm((p) => !p)}>
+                      {showConfirm ? <FaEyeSlash /> : <FaEye />}
+                    </span>
+                  </div>
+                  <Err field="confirmPassword" />
+                </div>
+              </div>
 
-  <div className="PatReg-row">
-    <div className="PatReg-password-field-1" id="pwd">
-      <input
-        type={showPassword ? "text" : "password"}
-        name="password"
-        placeholder="Password"
-        onChange={handleChange}
-        required
-      />
+              <button
+                type="submit"
+                className="PatReg-btn"
+                disabled={submitting}
+              >
+                {submitting ? "Registering..." : "Register"}
+              </button>
 
-      <span
-        className="PatReg-eye-icon-1"
-        onClick={() => setShowPassword(!showPassword)}
-      >
-        {showPassword ? <FaEyeSlash /> : <FaEye />}
-      </span>
-    </div>
-    <div className="PatReg-password-field-2" id="pwd">
-      <input
-        type={showConfirmPassword ? "text" : "password"}
-        name="confirmPassword"
-        placeholder="Confirm Password"
-        onChange={handleChange}
-        required
-      />
+              <p className="PatReg-login-link">
+                Already have an account?{" "}
+                <Link to="/patient/login" className="PatReg-link">Login</Link>
+              </p>
 
-      <span
-        className="PatReg-eye-icon-2"
-        onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-      >
-        {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
-      </span>
-    </div>
-    {/* <div className="PatReg-errormsg"> */}
-      {errors.password && <p className="PatReg-error">{errors.password}</p>}
-      {errors.confirmPassword && <p className="PatReg-error">{errors.confirmPassword}</p>}
-      {errors.server && <p className="PatReg-error">{errors.server}</p>}
-    {/* </div> */}
-  </div>
-
-      <button type="submit" className="PatReg-PReg-btn">Register</button>
-      <div className="PatReg-log">
-        <small className="PatReg-txtlog">
-          Already have account?
-          <Link to="/patient/login" className="PatReg-text-primary">
-            Login
-          </Link>
-        </small>
-</div>
-
-</form>
+            </form>
           </div>
-
         </div>
+
       </div>
     </div>
   );
