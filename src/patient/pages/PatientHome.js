@@ -146,10 +146,10 @@ const PatientHome = () => {
   const chatScrollRef = useRef(null);
 
   useEffect(() => {
-  if (chatScrollRef.current) {
-    chatScrollRef.current.scrollTop = chatScrollRef.current.scrollHeight;
-  }
-}, [messages]);
+    if (chatScrollRef.current) {
+      chatScrollRef.current.scrollTop = chatScrollRef.current.scrollHeight;
+    }
+  }, [messages]);
 
   useEffect(() => {
     const fetchFilters = async () => {
@@ -650,13 +650,16 @@ const PatientHome = () => {
               >
                 <div className="PatHome-icon-circle PatHome-icon-orange">📄</div>
                 <span>Upload Records</span>
-              </div>              <div className="PatHome-action-card" onClick={() => setShowPrescription(true)}><div className="PatHome-icon-circle PatHome-icon-red">💊</div><span>Prescriptions</span></div>
+              </div>              
+              <div className="PatHome-action-card" onClick={() => setShowPrescription(true)}>
+                <div className="PatHome-icon-circle PatHome-icon-red">💊</div> <span>Prescriptions</span>
+              </div>
 
               <PrescriptionModal
                 isOpen={showPrescription}
                 onClose={() => setShowPrescription(false)}
               />
-              <div className="PatHome-action-card"><div className="PatHome-icon-circle PatHome-icon-blue">📋</div><span>Lab Results</span></div>
+              {/* <div className="PatHome-action-card"><div className="PatHome-icon-circle PatHome-icon-blue">📋</div><span>Lab Results</span></div> */}
             </div>
 
             <section className="PatHome-card PatHome-card-white PatHome-review-timeline-card">
