@@ -4,6 +4,7 @@ import Navbar from "../components/Navbar";
 import "../css/PatientAppointment.css";
 import RescheduleAppointment from "./RescheduleAppointment";
 import defaultDoctorImg from "../images/user.png";
+import { toast } from "react-toastify";
 
 const TODAY = new Date();
 TODAY.setHours(0, 0, 0, 0);
@@ -146,8 +147,9 @@ function AppointmentCard({ appt, onCancel, onStartConsultation, isNext, onViewDe
               className="PatApp-pa-btn-cancel"
               onClick={(e) => {
                 e.stopPropagation();
-                const confirmCancel = window.confirm("Are you sure you want to cancel this appointment?");
-                if (confirmCancel) onCancel(appt.id);
+                if (window.confirm("Are you sure you want to cancel this appointment?")) {
+                  onCancel(appt.id);
+                }
               }}
             >
               ✖ Cancel
@@ -275,9 +277,9 @@ export default function PatientAppointment() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.message || "Failed to cancel appointment");
       setAppointments((prev) => prev.map((appt) => appt.id === appointmentId ? { ...appt, status: "cancelled" } : appt));
-      alert("Appointment cancelled successfully");
+      toast.success("Appointment cancelled successfully");
     } catch (error) {
-      alert(error.message);
+      toast.error(error.message || "Failed to cancel appointment");
     }
   };
 
