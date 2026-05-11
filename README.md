@@ -7,3 +7,5 @@ Runs the app in development mode at http://localhost:3000
 PatientHome- pending 
 
 PrescriptionModal - pending 
+
+PrescriptionPage - Pending
