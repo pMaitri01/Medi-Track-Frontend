@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import resetImage from "../images/ResetPwd-1.jpeg"; // add a relevant image
-import "../css/PatientResetPwd.css"; 
+import "../css/PatientResetPwd.css";
+import { toast } from "react-toastify";
 
 export default function PatientResetPwd() {
   const navigate = useNavigate();
@@ -10,66 +11,66 @@ export default function PatientResetPwd() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-const handleSubmit = async (e) => {
-  e.preventDefault();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-  if (!password || !confirmPassword) {
-    setError("Please fill all fields");
-    return;
-  }
-
-  if (password.length < 6) {
-    setError("Password must be at least 6 characters long");
-    return;
-  }
-
-  if (password !== confirmPassword) {
-    setError("Passwords do not match");
-    return;
-  }
-
-  const email = localStorage.getItem("resetEmail");
-  const otp = localStorage.getItem("resetOtp");
-
-  try {
-    const res = await fetch(
-      `${process.env.REACT_APP_API_URL}/api/patient/reset-password`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials:"include",
-        body: JSON.stringify({
-          email,
-          otp,
-          password,
-        }),
-      }
-    );
-
-    const data = await res.json();
-
-    if (!res.ok) {
-      setError(data.message);
+    if (!password || !confirmPassword) {
+      setError("Please fill all fields");
       return;
     }
 
-    // ✅ clear storage
-    localStorage.removeItem("resetEmail");
-    localStorage.removeItem("resetOtp");
+    if (password.length < 6) {
+      setError("Password must be at least 6 characters long");
+      return;
+    }
 
-    alert("Password reset successful");
+    if (password !== confirmPassword) {
+      setError("Passwords do not match");
+      return;
+    }
 
-    navigate("/"); // login page
+    const email = localStorage.getItem("resetEmail");
+    const otp = localStorage.getItem("resetOtp");
 
-  } catch (err) {
-    console.error(err);
-    setError("Something went wrong");
-  }
-};
+    try {
+      const res = await fetch(
+        `${process.env.REACT_APP_API_URL}/api/patient/reset-password`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+          body: JSON.stringify({
+            email,
+            otp,
+            password,
+          }),
+        }
+      );
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        toast.error(data.message || "Failed to reset password");
+        return;
+      }
+
+      // ✅ clear storage
+      localStorage.removeItem("resetEmail");
+      localStorage.removeItem("resetOtp");
+
+      toast.success("Password reset successful");
+      setTimeout(() => {
+        navigate("/");
+      }, 1500);
+    } catch (err) {
+      console.error(err);
+      toast.error("Something went wrong");
+    }
+  };
 
 
   return (
@@ -99,34 +100,34 @@ const handleSubmit = async (e) => {
                 onChange={(e) => setConfirmPassword(e.target.value)}
               /> */}
               <div className="PatientResetPwd-password-field">
-  <input
-    type={showPassword ? "text" : "password"}
-    placeholder="New Password"
-    value={password}
-    onChange={(e) => setPassword(e.target.value)}
-  />
-  <span
-    className="PatientResetPwd-toggle-eye"
-    onClick={() => setShowPassword(!showPassword)}
-  >
-    {showPassword ? <FaEyeSlash /> : <FaEye />}
-  </span>
-</div>
+                <input
+                  type={showPassword ? "text" : "password"}
+                  placeholder="New Password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+                <span
+                  className="PatientResetPwd-toggle-eye"
+                  onClick={() => setShowPassword(!showPassword)}
+                >
+                  {showPassword ? <FaEyeSlash /> : <FaEye />}
+                </span>
+              </div>
 
-<div className="PatientResetPwd-password-field">
-  <input
-    type={showConfirmPassword ? "text" : "password"}
-    placeholder="Confirm Password"
-    value={confirmPassword}
-    onChange={(e) => setConfirmPassword(e.target.value)}
-  />
-  <span
-    className="PatientResetPwd-toggle-eye"
-    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-  >
-    {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
-  </span>
-</div>
+              <div className="PatientResetPwd-password-field">
+                <input
+                  type={showConfirmPassword ? "text" : "password"}
+                  placeholder="Confirm Password"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                />
+                <span
+                  className="PatientResetPwd-toggle-eye"
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                >
+                  {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
+                </span>
+              </div>
 
               {error && <p className="PatientResetPwd-otp-error">{error}</p>}
 
