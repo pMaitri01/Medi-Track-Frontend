@@ -101,80 +101,88 @@
   background: white;
   border-radius: 12px;
   border: 1px solid var(--dplist-border);
-  padding: 20px;
+  padding: 24px;
   margin-top: 10px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
+  width: 100%;
 }
 
 .dplist-filter-grid {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
   gap: 24px;
-  flex-wrap: wrap;
-  justify-content: center;
+  width: 100%;
+  align-items: end;
 }
 
 .dplist-filter-group {
   display: flex;
   flex-direction: column;
-  gap: 5px;
-  width: 160px;
+  gap: 8px;
+  width: 100%;
 }
 
 .dplist-filter-group label {
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 700;
   color: var(--dplist-text-light);
   text-transform: uppercase;
-  letter-spacing: 0.4px;
+  letter-spacing: 0.5px;
 }
 
 .dplist-filter-group select,
 .dplist-filter-group input[type="date"] {
   height: 42px;
-  padding: 0 12px;
+  padding: 0 16px;
   border: 1px solid #cbd5e1;
-  border-radius: 8px;
+  border-radius: 10px;
   background-color: white;
-  font-size: 13px;
+  font-size: 15px;
   color: var(--dplist-text-mid);
-  cursor: pointer;
   outline: none;
-  transition: border-color 0.2s;
-  appearance: none;
+  transition: all 0.2s ease;
   width: 100%;
 }
+
 .dplist-filter-group select:hover,
-.dplist-filter-group input[type="date"]:hover { border-color: var(--dplist-teal); }
+.dplist-filter-group input[type="date"]:hover {
+  border-color: var(--dplist-teal);
+}
+
 .dplist-filter-group select:focus,
 .dplist-filter-group input[type="date"]:focus {
   border-color: var(--dplist-teal);
-  box-shadow: 0 0 0 3px rgba(10, 165, 165, 0.12);
+  box-shadow: 0 0 0 4px rgba(10, 165, 165, 0.12);
 }
 
-.dplist-filter-footer {
+.dplist-filter-actions {
   display: flex;
-  justify-content: center;
   gap: 12px;
-  margin-top: 20px;
-  padding-top: 15px;
-  border-top: 1px dashed var(--dplist-border);
+  align-items: center;
+  width: 100%;
 }
 
 .dplist-apply-btn,
 .dplist-reset-btn {
-  padding: 9px 24px;
+  flex: 1;
+  height: 42px;
   border: none;
-  border-radius: 8px;
-  font-size: 13px;
+  border-radius: 10px;
+  font-size: 14px;
   font-weight: 600;
   cursor: pointer;
-  transition: opacity 0.2s;
+  transition: 0.2s;
+  padding: 9px 18px;
 }
+
 .dplist-apply-btn {
   background: var(--dplist-teal);
   color: white;
 }
-.dplist-apply-btn:hover { opacity: 0.85; }
+
+.dplist-apply-btn:hover {
+  opacity: 0.9;
+}
 
 .dplist-reset-btn {
   background: #f1f5f9;
