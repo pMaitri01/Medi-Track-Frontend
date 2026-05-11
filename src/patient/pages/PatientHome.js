@@ -58,24 +58,6 @@ const PatientHome = () => {
       [name]: value
     }));
   };
-  // Function to handle sending messages
-  /* const handleSendMessage = (e) => {
-    e.preventDefault();
-    if (!chatInput.trim()) return;
-
-    // Add user message
-    const newMessages = [...messages, { role: 'user', text: chatInput }];
-    setMessages(newMessages);
-    setChatInput("");
-
-    // Simple Mock AI Response
-    setTimeout(() => {
-      setMessages(prev => [...prev, {
-        role: 'bot',
-        text: "I've noted your symptoms. Please remember I'm an AI, not a doctor. Based on what you said, you might want to consult a General Physician. Would you like to see available slots?"
-      }]);
-    }, 1000);
-  }; */
 
   const handleSendMessage = async (e) => {
     e.preventDefault();
@@ -83,7 +65,7 @@ const PatientHome = () => {
 
     const userMessage = chatInput;
 
-    // ✅ Add user message
+    // Add user message
     setMessages(prev => [...prev, { role: 'user', text: userMessage }]);
     setChatInput("");
 
@@ -102,7 +84,7 @@ const PatientHome = () => {
 
       const data = await res.json();
 
-      // ✅ Add bot reply
+      // Add bot reply
       setMessages(prev => [
         ...prev,
         { role: 'bot', text: data.reply }
@@ -119,7 +101,7 @@ const PatientHome = () => {
     }
   };
 
-  // ✅ Load chat history on mount
+  // Load chat history on mount
   useEffect(() => {
     const fetchChatHistory = async () => {
       try {
@@ -187,7 +169,7 @@ const PatientHome = () => {
 
         const user = JSON.parse(localStorage.getItem("user") || "{}");
 
-        // ✅ Filter logged-in patient's upcoming appointments
+        // Filter logged-in patient's upcoming appointments
         const now = new Date();
 
         const upcoming = data
@@ -221,23 +203,6 @@ const PatientHome = () => {
 
     fetchAppointments();
   }, []);
-
-
-
-  // ✅ Clear history
-  // const handleClearHistory = async () => {
-  //   try {
-  //     await fetch(`${process.env.REACT_APP_API_URL}/api/chatbot/clear`, {
-  //       method: "DELETE",
-  //       credentials: "include",
-  //     });
-  //     setMessages([
-  //       { role: "bot", text: "Hello! I'm your AI health assistant. Describe how you're feeling..." }
-  //     ]);
-  //   } catch (err) {
-  //     console.error("Failed to clear history", err);
-  //   }
-  // };
 
   const handleReschedule = () => {
     if (!upcomingAppointment) return;
@@ -283,7 +248,8 @@ const PatientHome = () => {
 
     return end;
   };
-  // ✅ Check if today
+
+  // Check if today
   const isToday = (date) => {
     const today = new Date();
     const appDate = new Date(date);
@@ -295,7 +261,7 @@ const PatientHome = () => {
     );
   };
 
-  // ✅ Check call time window
+  // Check call time window
   const isCallTime = (date, time) => {
     if (!isToday(date)) return false;
 
@@ -333,7 +299,7 @@ const PatientHome = () => {
 
       if (!res.ok) throw new Error(data.message || "Cancel failed");
 
-      // ✅ Remove appointment from UI
+      // Remove appointment from UI
       setUpcomingAppointment(null);
 
       toast.success("Appointment cancelled successfully");
@@ -343,34 +309,6 @@ const PatientHome = () => {
       toast.error("Failed to cancel appointment");
     }
   };
-  // const handleApplyFilters = async (e) => {
-  //   e.preventDefault();
-
-  //   try {
-  //     setLoadingDoctors(true);
-
-  //      // ✅ Remove empty filters
-  //   const cleanedFilters = Object.fromEntries(
-  //     Object.entries(filters).filter(([_, value]) => value !== "")
-  //   );
-
-  //     const query = new URLSearchParams(cleanedFilters).toString();
-
-  //     const res = await fetch(
-  //       `${process.env.REACT_APP_API_URL}/api/doctor/filtered?${query}`
-  //     );
-
-  //     const data = await res.json();
-
-  //     if (!res.ok) throw new Error("Failed to fetch doctors");
-
-  //     setDoctors(data);
-  //   } catch (err) {
-  //     console.error(err);
-  //   } finally {
-  //     setLoadingDoctors(false);
-  //   }
-  // };
 
   const handleApplyFilters = async (e) => {
     e.preventDefault();
@@ -459,7 +397,6 @@ const PatientHome = () => {
     <>
       <Navbar />
 
-
       {/* MODAL OVERLAY - This is what opens when you click Book Appointment */}
       {isBookingOpen && (
         <div className="PatHome-booking-modal-overlay">
@@ -480,50 +417,6 @@ const PatientHome = () => {
 
           {/* LEFT COLUMN */}
           <div className="PatHome-left-column">
-            {/* <section className="PatHome-card PatHome-card-white">
-              <h2 className="PatHome-card-heading">Upcoming Appointment</h2>
-              <div className="PatHome-appointment-body">
-                <div className="PatHome-profile-image-wrapper">
-                  <img src={doctorProfile} className="PatHome-profile-image" alt="Profile" />
-                </div>
-                <div className="PatHome-appointment-details">
-                  <div className="PatHome-dr-header-row">
-                    <div>
-                      {loadingAppt ? (
-                        <p>Loading appointment...</p>
-                      ) : upcomingAppointment ? (
-                        <>
-                          <h3 className="PatHome-dr-name">
-                            {upcomingAppointment.doctor?.fullName || "Doctor"}
-                          </h3>
-
-                          <p className="PatHome-appt-time">
-                            {new Date(upcomingAppointment.date).toDateString()} at{" "}
-                            {upcomingAppointment.time}
-                          </p>
-
-                          <p className="PatHome-dr-specialty">
-                            {upcomingAppointment.doctor?.specialization}
-                          </p>
-
-                          <p className={`PatHome-status PatHome-${upcomingAppointment.status.toLowerCase()}`}>
-                            {upcomingAppointment.status}
-                          </p>
-                        </>
-                      ) : (
-                        <p>No upcoming appointments</p>
-                      )}
-                    </div>
-                  </div>
-                  {upcomingAppointment && (
-                    <div className="PatHome-action-buttons">
-                      <button className="PatHome-reviewbtn">Reschedule</button>
-                      <button className="PatHome-reviewbtn">Cancel</button>
-                    </div>
-                  )}
-                </div>
-              </div>
-            </section> */}
             <section className="PatHome-card PatHome-card-white PatHome-upcoming-appt-section">
               <div className="PatHome-card-header-flex">
                 <h2 className="PatHome-card-heading">Upcoming Appointment</h2>
@@ -571,35 +464,9 @@ const PatientHome = () => {
 
                       <div className="PatHome-action-buttons">
 
-                        {/* ✅ START CALL BUTTON */}
-                        {/* {upcomingAppointment?.type === "videocall" && (
-    canStartCall ? (
-      <button
-        className="PatHome-btn-primary"
-        onClick={() =>
-  navigate(`/video-call/${upcomingAppointment._id}`, {
-    state: { isDoctor: false } // patient side
-  })
-}
-      >
-        Start Call
-      </button>
-    ) : (
-      <button className="PatHome-btn-disabled" disabled>
-        Call not available
-      </button>
-    )
-  )} */}
+                        {/* START CALL BUTTON */}
                         {upcomingAppointment?.type === "videocall" && (
                           canStartCall ? (
-                            // <button
-                            //   className="PatHome-btn-primary"
-                            //   onClick={() => {
-                            //     navigate(`/video-call/${upcomingAppointment._id}?role=patient`);
-                            //   }}
-                            // >
-                            //   Join Call
-                            // </button>
                             <button className="PatHome-btn-primary"
                               onClick={() => navigate(`/video-call/${upcomingAppointment._id}`)}
                             >
@@ -615,40 +482,32 @@ const PatientHome = () => {
 
                         <button
                           className="PatHome-btn-danger-outline"
-                          // onClick={() => {
-                          //   const confirmCancel = window.confirm(
-                          //     "Are you sure you want to cancel this appointment?"
-                          //   );
-                          //   if (confirmCancel) {
-                          //     handleCancelAppointment();
-                          //   }
-                          // }}
                           onClick={() => {
-  toast(
-    ({ closeToast }) => (
-      <div className="toast-box">
-        <p><strong>Are You Sure You Want to Cancel This Appointment?</strong></p>
+                            toast(
+                              ({ closeToast }) => (
+                                <div className="toast-box">
+                                  <p><strong>Are You Sure You Want to Cancel This Appointment?</strong></p>
 
-        <div className="toast-btns">
-          <button
-            className="yes"
-            onClick={() => {
-              handleCancelAppointment();
-              closeToast();
-            }}
-          >
-            Yes
-          </button>
+                                  <div className="toast-btns">
+                                    <button
+                                      className="yes"
+                                      onClick={() => {
+                                        handleCancelAppointment();
+                                        closeToast();
+                                      }}
+                                    >
+                                      Yes
+                                    </button>
 
-          <button className="no" onClick={closeToast}>
-            No
-          </button>
-        </div>
-      </div>
-    ),
-    { autoClose: false }
-  );
-}}
+                                    <button className="no" onClick={closeToast}>
+                                      No
+                                    </button>
+                                  </div>
+                                </div>
+                              ),
+                              { autoClose: false }
+                            );
+                          }}
                         >
                           Cancel
                         </button>
@@ -678,7 +537,7 @@ const PatientHome = () => {
               >
                 <div className="PatHome-icon-circle PatHome-icon-orange">📄</div>
                 <span>Upload Records</span>
-              </div>              
+              </div>
               <div className="PatHome-action-card" onClick={() => setShowPrescription(true)}>
                 <div className="PatHome-icon-circle PatHome-icon-red">💊</div> <span>Prescriptions</span>
               </div>
@@ -687,7 +546,6 @@ const PatientHome = () => {
                 isOpen={showPrescription}
                 onClose={() => setShowPrescription(false)}
               />
-              {/* <div className="PatHome-action-card"><div className="PatHome-icon-circle PatHome-icon-blue">📋</div><span>Lab Results</span></div> */}
             </div>
 
             <section className="PatHome-card PatHome-card-white PatHome-review-timeline-card">
@@ -772,13 +630,6 @@ const PatientHome = () => {
                     <option value="physical">Physical Visit</option>
                   </select>
                 </div>
-                {/* <div className="PatHome-filter-group">
-                  <label>Doctor Name</label>
-                  <div className="PatHome-input-with-icon">
-                    <i className="fa-solid fa-magnifying-glass"></i>
-                    <input type="text" placeholder="e.g. Dr. Sarah" className="PatHome-filter-input" />
-                  </div>
-                </div> */}
                 <div className="PatHome-filter-group">
                   <label>Experience</label>
                   <select className="PatHome-filter-input"
@@ -836,6 +687,7 @@ const PatientHome = () => {
                             <th>Name</th>
                             <th>Specialization</th>
                             <th>Experience</th>
+                            <th>Rating</th>
                             <th>Action</th>
                           </tr>
                         </thead>
@@ -846,6 +698,9 @@ const PatientHome = () => {
                               <td>Dr. {doc.fullName}</td>
                               <td>{doc.specialization}</td>
                               <td>{doc.experience} yrs</td>
+                              <td>
+                                ⭐ {doc.averageRating ? doc.averageRating.toFixed(1) : ""}
+                              </td>
                               <td>
                                 <button
                                   className="PatHome-view-btn"
@@ -865,7 +720,8 @@ const PatientHome = () => {
                   ) : (
                     <p>No doctors found</p>
                   )}
-                </div>                </div>
+                </div>
+              </div>
             </section>
 
             {/* AI CHATBOT SECTION */}
@@ -876,20 +732,6 @@ const PatientHome = () => {
                   Ask Medi-Track AI
                 </h2>
                 <p className="PatHome-ai-subtitle">Instant symptom analysis & suggestions</p>
-                {/* ✅ Add this */}
-                {/* <button
-  onClick={handleClearHistory}
-  style={{
-    fontSize: "13px",
-    color: "#888",
-    background: "none",
-    border: "none",
-    cursor: "pointer",
-    marginTop: "4px"
-  }}
->
-  🗑️ Clear History
-</button> */}
               </div>
 
               <div className="PatHome-chat-window">
@@ -985,6 +827,10 @@ const PatientHome = () => {
                   <p><span>Gender:</span> {selectedDoctor.gender || "N/A"}</p>
                   <p><span>DOB:</span> {selectedDoctor.dob?.slice(0, 10)}</p>
                   <p><span>Experience:</span> {selectedDoctor.experience} years</p>
+                  <p>
+                    <span>Rating:</span>{" "}
+                    ⭐ {selectedDoctor.averageRating ? selectedDoctor.averageRating.toFixed(1) : ""} / 5
+                  </p>
                 </div>
 
                 {/* RIGHT */}
@@ -1031,20 +877,11 @@ const PatientHome = () => {
               </div>
 
               {/* BUTTON */}
-              {/* <button
-    className="PatHome-btn-bookapp"
-    onClick={() => {
-      setShowDoctorModal(false);
-      setIsBookingOpen(true);
-    }}
-  >
-    Book Appointment
-  </button> */}
               <button
                 className="PatHome-btn-primary"
                 onClick={() => {
-                  setSelectedDoctorForBooking(selectedDoctor); // ✅ set doctor
-                  setIsBookingOpenSelected(true);           // ✅ open modal
+                  setSelectedDoctorForBooking(selectedDoctor); // set doctor
+                  setIsBookingOpenSelected(true);           // open modal
                 }}
               >
                 Book Appointment
