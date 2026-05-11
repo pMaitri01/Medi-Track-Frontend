@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "../css/PatientProfileSetup.css";
+import { toast } from "react-toastify";
 
 const BLOOD_GROUPS = ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"];
 const DISEASES = ["Diabetes", "Blood Pressure", "Asthma", "None"];
@@ -201,10 +202,10 @@ const PatientProfileSetup = () => {
         }));
       } else {
         setForm((prev) => ({ ...prev, city: "", state: "" }));
-        alert("Invalid pincode. City and State not found.");
+        toast.error("Invalid pincode. City and State not found.");
       }
     } catch (err) {
-      alert("Failed to fetch location details.");
+      toast.error("Failed to fetch location details.");
     } finally {
       setPincodeLoading(false);
     }
@@ -356,9 +357,10 @@ const PatientProfileSetup = () => {
 
       localStorage.setItem("user", JSON.stringify(updatedUser));
       setSubmitted(true);
+      toast.success("Profile completed successfully 🎉");
     } catch (err) {
-      alert(err.message);
-    }
+      toast.error(err.message || "Something went wrong");
+   }
   };
 
   const f = (name) => ({

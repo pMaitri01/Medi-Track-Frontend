@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "../css/UpdatePatientProfile.css";
 import { useNavigate } from "react-router-dom";
-
+import { toast } from "react-toastify";
 // Helpers
 const getInitials = (d) =>
   ((d.firstName?.[0] ?? "") + (d.lastName?.[0] ?? "")).toUpperCase();
@@ -155,6 +155,7 @@ function UpdatePatientProfile() {
         }
       } catch (err) {
         console.error(err);
+        toast.error("Failed to fetch profile");
       }
     };
     fetchProfile();
@@ -192,11 +193,11 @@ function UpdatePatientProfile() {
       );
       const data = await res.json();
       if (res.ok) {
-        alert("Profile Updated ✅");
+        toast.success("Profile updated successfully");
         setIsEditing(false);
         setOriginalData(formData);
       } else {
-        alert(data.message);
+        toast.error(data.message || "Failed to update profile");
       }
     } catch (err) {
       console.error(err);

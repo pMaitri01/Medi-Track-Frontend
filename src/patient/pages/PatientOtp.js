@@ -2,6 +2,7 @@ import React, { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import forgotImage from "../images/Otp.jpg";
 import "../css/PatientOtp.css";
+import { toast } from "react-toastify";
 
 export default function PatientOtp() {
   const navigate = useNavigate();
@@ -65,7 +66,7 @@ export default function PatientOtp() {
     const data = await res.json();
 
     if (!res.ok) {
-      setError(data.message);
+      toast.error(data.message || "Invalid OTP");
       return;
     }
 
@@ -76,7 +77,7 @@ export default function PatientOtp() {
 
   } catch (err) {
     console.error(err);
-    setError("Something went wrong");
+    toast.error("Something went wrong");
   }
 };
  const handleResend = async () => {
@@ -98,14 +99,14 @@ export default function PatientOtp() {
     const data = await res.json();
 
     if (!res.ok) {
-      setError(data.message);
+      toast.error(data.message || "Failed to resend OTP");
     } else {
-      alert("OTP resent successfully");
+      toast.success("OTP resent successfully");
     }
 
   } catch (err) {
     console.error(err);
-    setError("Error resending OTP");
+    toast.error("Error resending OTP");
   }
 };
 
@@ -146,9 +147,9 @@ export default function PatientOtp() {
                       Resend 
                 </a>
               </small> */}
-              <div class="resend-container">
+              <div className="resend-container">
                 <span>Didn't receive code?</span>
-                <button class="resend-btn" onClick={handleResend}>Resend</button>
+                <button className="resend-btn" onClick={handleResend}>Resend</button>
               </div>
 
               <button type="submit" className="PatOtp-otp-btn">

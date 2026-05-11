@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "../css/Review.css";
+import { toast } from "react-toastify";
 
 const Review = ({ onClose }) => {
     const [selectedRating, setSelectedRating] = useState(0);
@@ -22,6 +23,8 @@ const Review = ({ onClose }) => {
                 setDoctors(data); // store in state
             } catch (error) {
                 console.error("Error fetching doctors:", error);
+                    toast.error("Failed to load doctors");
+
             }
         };
 
@@ -30,7 +33,7 @@ const Review = ({ onClose }) => {
 
   const submitReview = async () => {
     if (!selectedDoctor || selectedRating === 0 || reviewText.trim() === "") {
-        alert("Please fill all fields");
+        toast.error("Please fill all fields");
         return;
     }
 
@@ -54,7 +57,7 @@ const Review = ({ onClose }) => {
             throw new Error(data.message || "Failed to submit review");
         }
 
-        alert("Review submitted successfully!");
+        toast.success("Review submitted successfully!");
         console.log("Saved Review:", data);
 
         // reset form
@@ -66,7 +69,7 @@ const Review = ({ onClose }) => {
 
     } catch (error) {
         console.error("Review error:", error.message);
-        alert(error.message);
+        toast.error(error.message || "Failed to submit review");
     }
 };
 

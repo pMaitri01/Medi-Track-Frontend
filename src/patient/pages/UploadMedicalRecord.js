@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import "../css/UploadMedicalRecord.css";
+import { toast } from "react-toastify";
 
 const UploadMedicalRecord = ({ onClose }) => {
     const [formData, setFormData] = useState({
@@ -59,12 +60,12 @@ const UploadMedicalRecord = ({ onClose }) => {
 
             if (!res.ok) throw new Error(result.message);
 
-            alert("Record uploaded successfully ✅");
+            toast.success("Record uploaded successfully");
             onClose();
 
         } catch (err) {
             console.error(err);
-            alert("Upload failed ❌");
+            toast.error(err.message || "Upload failed");
         }
     };
 
