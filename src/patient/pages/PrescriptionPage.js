@@ -3,12 +3,13 @@ import Navbar from "../components/Navbar";
 import "../css/PrescriptionPage.css";
 import defaultDoctorImg from "../images/user.png";
 import { generatePrescriptionPDF } from "../utils/generatePrescriptionPDF";
+import { toast } from "react-toastify";
 
 const TIMING_ORDER = ["Morning", "Afternoon", "Night"];
 const TIMING_ICON = { Morning: "🌅", Afternoon: "🌇", Night: "🌙" };
 
 const DATES = ["All Time", "Last 7 Days", "Last Month"];
- 
+
 const formatDate = (d) =>
   new Date(d).toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric" });
 
@@ -50,9 +51,12 @@ function PrescriptionCard({ rx, onView }) {
           👁 View Full Prescription
         </button>
         {/* <button className="PrescriptionPage-rx-btn rx-btn--download">⬇ Download</button> */}
-          <button className="PrescriptionPage-rx-btn rx-btn--download" onClick={() => generatePrescriptionPDF(rx)}>
-  Download
-</button>
+        <button className="PrescriptionPage-rx-btn rx-btn--download" onClick={() => {
+          generatePrescriptionPDF(rx);
+          toast.success("Prescription downloaded");
+        }}>
+          Download
+        </button>
       </div>
     </div>
   );
@@ -167,13 +171,14 @@ function PrescriptionModal({ rx, onClose }) {
 
   const handleDownload = () => {
     generatePrescriptionPDF(rx);
+    toast.success("Prescription downloaded");
   };
 
   const isActive = rx.pStatus === "active";
   return (
     <div className="PrescriptionPage-rx-overlay" onClick={onClose}>
       <div className="PrescriptionPage-rx-modal" onClick={(e) => e.stopPropagation()}>
-       
+
         {/* Header */}
         <div className="PrescriptionPage-rx-modal-header">
           <div className="PrescriptionPage-rx-modal-header-left">
