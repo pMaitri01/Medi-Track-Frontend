@@ -1,323 +1,9 @@
-// import { useState } from "react";
-// import { useNavigate, useLocation } from "react-router-dom";
-// import "../css/RescheduleAppointment.css";
-
-// export default function RescheduleAppointment() {
-//   const navigate = useNavigate();
-//   const { state } = useLocation();
-
-//   const appointment = state?.appointment;
-
-//   const [open, setOpen] = useState(true);
-//   const [doctor, setDoctor] = useState(appointment?.doctor?._id || "");
-//   const [date, setDate] = useState(appointment?.date || "");
-//   const [time, setTime] = useState(appointment?.time || "");
-//   const [type, setType] = useState(appointment?.type || "");
-
-//   const closeModal = () => {
-//     setOpen(false);
-//     navigate(-1);
-//   };
-
-//   const handleReschedule = async () => {
-//     if (!appointment?._id) {
-//       alert("Invalid appointment");
-//       return;
-//     }
-
-//     if (!doctor || !date || !time || !type) {
-//       alert("Please fill all fields");
-//       return;
-//     }
-
-//     try {
-//       const res = await fetch(
-//         `${process.env.REACT_APP_API_URL}/api/appointment/reschedule/${appointment._id}`,
-//         {
-//           method: "PUT",
-//           headers: { "Content-Type": "application/json" },
-//           body: JSON.stringify({ doctor, date, time, type }),
-//         }
-//       );
-
-//       const data = await res.json();
-
-//       if (!res.ok) throw new Error(data.message);
-
-//       alert("Appointment rescheduled successfully");
-//       navigate("/patient/appointments");
-//     } catch (err) {
-//       console.error(err);
-//       alert(err.message);
-//     }
-//   };
-
-//   if (!open) return null;
-
-//   return (
-//     <div className="RescheduleApp-ba-overlay">
-//       <div className="RescheduleApp-ba-modal">
-
-//         {/* HEADER */}
-//         <div className="RescheduleApp-ba-header">
-//           <h2>Reschedule Your Visit</h2>
-//           <button className="RescheduleApp-ba-close" onClick={closeModal}>×</button>
-//         </div>
-
-//         <div className="RescheduleApp-ba-body">
-
-//           {/* LEFT SIDE */}
-//           <div className="RescheduleApp-ba-left">
-
-//             {/* 1. Doctor */}
-//             <div className="RescheduleApp-ba-section">
-//               <h4>1. Select Doctor</h4>
-//               <select
-//                 value={doctor}
-//                 onChange={(e) => setDoctor(e.target.value)}
-//               >
-//                 <option value="">-- Choose Doctor --</option>
-//                 <option value={appointment?.doctor?._id}>
-//                   {appointment?.doctor?.name}
-//                 </option>
-//               </select>
-//             </div>
-
-//             {/* 2. Date */}
-//             <div className="RescheduleApp-ba-section">
-//               <h4>2. Select Date</h4>
-//               <input
-//                 type="date"
-//                 value={date}
-//                 onChange={(e) => setDate(e.target.value)}
-//               />
-//             </div>
-//           </div>
-
-//           {/* RIGHT SIDE */}
-//           <div className="RescheduleApp-ba-right">
-
-//             {/* 3. Type */}
-//             <div className="RescheduleApp-ba-section">
-//               <h4>3. Appointment Type</h4>
-//               <select value={type} onChange={(e) => setType(e.target.value)}>
-//                 <option value="">-- Select Type --</option>
-//                 <option value="clinic">Clinic Visit</option>
-//                 <option value="video">Video Consultation</option>
-//               </select>
-
-//               <p className="RescheduleApp-ba-note">📍 Visit doctor at clinic/hospital</p>
-//             </div>
-
-//             {/* 4. Time */}
-//             <div className="RescheduleApp-ba-section">
-//               <h4>4. Select Time Slot</h4>
-
-//               <input
-//                 type="time"
-//                 value={time}
-//                 onChange={(e) => setTime(e.target.value)}
-//               />
-//             </div>
-//           </div>
-//         </div>
-
-//         {/* FOOTER */}
-//         <div className="RescheduleApp-ba-footer">
-//           <button className="RescheduleApp-ba-cancel" onClick={closeModal}>
-//             Cancel
-//           </button>
-
-//           <button className="RescheduleApp-ba-confirm" onClick={handleReschedule}>
-//             Confirm Reschedule
-//           </button>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// }
-
-// import { useState,useEffect } from "react";
-// // import { useLocation, useNavigate } from "react-router-dom";
-// import "../css/RescheduleAppointment.css";
-
-// export default function RescheduleAppointment({ appointment, onClose }) {
-
-
-//   const [doctor, setDoctor] = useState(appointment?.doctor?._id || "");
-//   const [date, setDate] = useState("");
-//   const [type, setType] = useState("");
-//   const [time, setTime] = useState("");
-//   const [loading, setLoading] = useState(false);
-//   const [selectedSlot, setSelectedSlot] = useState("");
-// const [availableSlots, setAvailableSlots] = useState([]);
-//   const closeModal = () => onClose(); 
-//   // if (!appointment) {
-//   //   return (
-//   //     <div className="RescheduleApp-rs-overlay">
-//   //       <div className="RescheduleApp-rs-modal">
-//   //         <p>❌ No appointment data found</p>
-//   //         <button onClick={() => navigate("/PatientAppointment")}>
-//   //           Go Back
-//   //         </button>
-//   //       </div>
-//   //     </div>
-//   //   );
-//   // }
-
-//   useEffect(() => {
-//   if (!doctor || !date) return;
-
-//   const fetchSlots = async () => {
-//     try {
-//       const res = await fetch(
-//         `${process.env.REACT_APP_API_URL}/api/appointment/slots?doctorId=${doctor}&date=${date}`,
-//         { credentials: "include" }
-//       );
-
-//       const data = await res.json();
-
-//       console.log("Slots API:", data);
-
-//       setAvailableSlots(data.slots || []);
-//     } catch (err) {
-//       console.error("Failed to fetch slots:", err);
-//       setAvailableSlots([]);
-//     }
-//   };
-
-//   fetchSlots();
-// }, [doctor, date]);
-
-//   const handleReschedule = async () => {
-//     if (!appointment?.id) return alert("Invalid appointment");
-
-//     try {
-//       setLoading(true);
-
-//       const res = await fetch(
-//         `${process.env.REACT_APP_API_URL}/api/appointment/${appointment.id}/reschedule`,       
-//       {
-//         method: "PUT",
-//         headers: { "Content-Type": "application/json" },  credentials: "include", 
-//         body: JSON.stringify({ doctor, date, time, type }),
-//       }
-//       );
-
-//       const data = await res.json();
-
-//       if (!res.ok) throw new Error(data.message || "Failed");
-
-//       alert("Appointment Rescheduled Successfully");
-//       // navigate("/PatientAppointment");
-//       onClose();
-//     } catch (err) {
-//       alert(err.message);
-//     } finally {
-//       setLoading(false);
-//     }
-//   };
-
-//   return (
-//     <div className="RescheduleApp-rs-overlay">
-//       <div className="RescheduleApp-rs-modal">
-
-//         {/* HEADER */}
-//         <div className="RescheduleApp-rs-header">
-//           <h2>Reschedule Your Visit</h2>
-//           <button className="RescheduleApp-rs-close" onClick={closeModal}>×</button>
-//         </div>
-
-//         <div className="RescheduleApp-rs-body">
-
-//           {/* LEFT SIDE */}
-//           <div className="RescheduleApp-rs-left">
-
-//             {/* 1 DOCTOR */}
-//             <div className="RescheduleApp-rs-section">
-//               <div className="RescheduleApp-doctor-info">
-//                 {appointment?.doctorName} ({appointment?.specialization})
-//               </div>
-//             </div>
-
-//             {/* 2 DATE */}
-//             <div className="RescheduleApp-rs-section">
-//               <label>2. Select Date</label>
-//               <input
-//                 type="date"
-//                 value={date}
-//                 onChange={(e) => setDate(e.target.value)}
-//               />
-//             </div>
-
-//           </div>
-
-//           {/* RIGHT SIDE */}
-//           <div className="RescheduleApp-rs-right">
-
-//             {/* 3 TYPE */}
-//             <div className="RescheduleApp-rs-section">
-//               <label>3. Appointment Type</label>
-//               <select value={type} onChange={(e) => setType(e.target.value)}>
-//                 <option value="">Select Type</option>
-//                 <option value="clinic">Visit doctor at clinic/hospital</option>
-//                 <option value="online">Online Consultation</option>
-//               </select>
-//             </div>
-
-//             {/* 4 TIME */}
-//            <div className="RescheduleApp-rs-section">
-//   <label>4. Select Time Slot</label>
-
-//   {date ? (
-//     availableSlots.length > 0 ? (
-//       <div className="RescheduleApp-rs-slots">
-//         {availableSlots.map((slot, index) => (
-//           <button
-//             key={index}
-//             className={`rs-slot ${
-//               selectedSlot === slot ? "active" : ""
-//             }`}
-//             onClick={() => {
-//               setSelectedSlot(slot);
-//               setTime(slot);
-//             }}
-//           >
-//             {slot}
-//           </button>
-//         ))}
-//       </div>
-//     ) : (
-//       <p className="RescheduleApp-rs-hint">No slots available</p>
-//     )
-//   ) : (
-//     <p className="RescheduleApp-rs-hint">Please select a date first</p>
-//   )}
-// </div>
-//           </div>
-//         </div>
-
-//         {/* FOOTER */}
-//         <div className="RescheduleApp-rs-footer">
-//           <button className="RescheduleApp-rs-confirm" onClick={handleReschedule} disabled={loading}>
-//             {loading ? "Rescheduling..." : "Reschedule Appointment"}
-//           </button>
-
-//           <button className="RescheduleApp-rs-cancel" onClick={closeModal}>
-//             Cancel
-//           </button>
-//         </div>
-
-//       </div>
-//     </div>
-//   );
-// }
-
 import React, { useState, useEffect } from 'react';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import '../css/RescheduleAppointment.css';
 import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const RescheduleAppointment = ({ onClose, appointment }) => {
   const { state } = useLocation(); // 👈 appointment data
@@ -380,6 +66,7 @@ const [appointmentType, setAppointmentType] = useState("");
         setDoctors(filteredDoctors);
       } catch (err) {
         console.error("Failed to load doctors:", err);
+          toast.error("Failed to load doctors");
         setDoctors([]);
       }
     };
@@ -422,6 +109,8 @@ useEffect(() => {
 
       } catch (err) {
         console.error("Failed to fetch slots:", err);
+          toast.error("Failed to load time slots");
+
       }
     };
 
@@ -440,11 +129,14 @@ useEffect(() => {
   // 🔥 RESCHEDULE API
   const handleReschedule = async () => {
     if (!selectedDoctor || !selectedDate || !selectedTime) return;
+      toast.error("Please select doctor, date and time");
     if (
     selectedDoctorData &&
     !selectedDoctorData.serviceType.includes(appointmentType)
   ) {
-    setError("Selected doctor does not support this appointment type");
+    const msg = "Selected doctor does not support this appointment type";
+setError(msg);
+toast.error(msg);
     return;
   }
 
@@ -474,13 +166,15 @@ useEffect(() => {
       }
 
       setIsBooked(true);
-
+toast.success("Appointment rescheduled successfully");
       setTimeout(() => {
         navigate("/PatientAppointment");
       }, 2000);
 
     } catch (err) {
       setError(err.message);
+        toast.error(err.message || "Reschedule failed");
+
     } finally {
       setLoading(false);
     }
