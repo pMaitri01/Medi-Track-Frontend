@@ -147,62 +147,120 @@ const PatientList = () => {
             </div>
 
             {isFilterOpen && (
+              // <div className="dplist-filter-drawer">
+              //   <div className="dplist-filter-grid">
+              //     <div className="dplist-filter-group">
+              //       <label>Age</label>
+              //       <select
+              //         value={filters.age}
+              //         onChange={(e) => setFilters({ ...filters, age: e.target.value })}
+              //       >
+              //         <option value="All">Any Age</option>
+              //         <option value="0-18">0–18</option>
+              //         <option value="19-45">19–45</option>
+              //         <option value="45+">45+</option>
+              //       </select>
+              //     </div>
+
+              //     <div className="dplist-filter-group">
+              //       <label>Date</label>
+              //       <input
+              //         type="date"
+              //         value={filters.date}
+              //         onChange={(e) => setFilters({ ...filters, date: e.target.value })}
+              //       />
+              //     </div>
+
+              //     <div className="dplist-filter-group">
+              //       <label>Gender</label>
+              //       <select
+              //         value={filters.gender}
+              //         onChange={(e) => setFilters({ ...filters, gender: e.target.value })}
+              //       >
+              //         <option value="All">All</option>
+              //         <option value="Male">Male</option>
+              //         <option value="Female">Female</option>
+              //       </select>
+              //     </div>
+              //   </div>
+
+              //   <div className="dplist-filter-footer">
+              //     <button
+              //       className="dplist-apply-btn"
+              //       onClick={() => setAppliedFilters(filters)}
+              //     >
+              //       Apply
+              //     </button>
+              //     <button
+              //       className="dplist-reset-btn"
+              //       onClick={() => {
+              //         const reset = { age: "All", date: "", gender: "All" };
+              //         setFilters(reset);
+              //         setAppliedFilters(reset);
+              //       }}
+              //     >
+              //       Reset
+              //     </button>
+              //   </div>
+              // </div>
               <div className="dplist-filter-drawer">
-                <div className="dplist-filter-grid">
-                  <div className="dplist-filter-group">
-                    <label>Age</label>
-                    <select
-                      value={filters.age}
-                      onChange={(e) => setFilters({ ...filters, age: e.target.value })}
-                    >
-                      <option value="All">Any Age</option>
-                      <option value="0-18">0–18</option>
-                      <option value="19-45">19–45</option>
-                      <option value="45+">45+</option>
-                    </select>
-                  </div>
+  <div className="dplist-filter-grid">
+    <div className="dplist-filter-group">
+      <label>Age</label>
+      <select
+        value={filters.age}
+        onChange={(e) => setFilters({ ...filters, age: e.target.value })}
+      >
+        <option value="All">Any Age</option>
+        <option value="0-18">0–18</option>
+        <option value="19-45">19–45</option>
+        <option value="45+">45+</option>
+      </select>
+    </div>
 
-                  <div className="dplist-filter-group">
-                    <label>Date</label>
-                    <input
-                      type="date"
-                      value={filters.date}
-                      onChange={(e) => setFilters({ ...filters, date: e.target.value })}
-                    />
-                  </div>
+    <div className="dplist-filter-group">
+      <label>Date</label>
+      <input
+        type="date"
+        value={filters.date}
+        onChange={(e) => setFilters({ ...filters, date: e.target.value })}
+      />
+    </div>
 
-                  <div className="dplist-filter-group">
-                    <label>Gender</label>
-                    <select
-                      value={filters.gender}
-                      onChange={(e) => setFilters({ ...filters, gender: e.target.value })}
-                    >
-                      <option value="All">All</option>
-                      <option value="Male">Male</option>
-                      <option value="Female">Female</option>
-                    </select>
-                  </div>
-                </div>
+    <div className="dplist-filter-group">
+      <label>Gender</label>
+      <select
+        value={filters.gender}
+        onChange={(e) => setFilters({ ...filters, gender: e.target.value })}
+      >
+        <option value="All">All</option>
+        <option value="Male">Male</option>
+        <option value="Female">Female</option>
+      </select>
+    </div>
 
-                <div className="dplist-filter-footer">
-                  <button
-                    className="dplist-apply-btn"
-                    onClick={() => setAppliedFilters(filters)}
-                  >
-                    Apply
-                  </button>
-                  <button
-                    className="dplist-reset-btn"
-                    onClick={() => {
-                      const reset = { age: "All", date: "", gender: "All" };
-                      setFilters(reset);
-                      setAppliedFilters(reset);
-                    }}
-                  >
-                    Reset
-                  </button>
-                </div>
-              </div>
+    {/* Buttons beside fields */}
+    <div className="dplist-filter-actions">
+      <button
+        className="dplist-apply-btn"
+        onClick={() => setAppliedFilters(filters)}
+      >
+        Apply
+      </button>
+
+      <button
+        className="dplist-reset-btn"
+        onClick={() => {
+          const reset = { age: "All", date: "", gender: "All" };
+          setFilters(reset);
+          setAppliedFilters(reset);
+        }}
+      >
+        Reset
+      </button>
+    </div>
+  </div>
+</div>
             )}
           </div>
 
