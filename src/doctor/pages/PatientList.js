@@ -227,7 +227,7 @@ const PatientList = () => {
                         setSelectedPatient(patient);
                         setIsModalOpen(true);
                       }}>
-                      <td>{patient.firstName} {patient.lastName}</td>
+                      <td>{patient.name}</td>
                       <td>
                         {
                           patient.age ||
@@ -236,7 +236,7 @@ const PatientList = () => {
                             : "N/A")
                         } / {patient.gender}
                       </td>
-                      <td>📞 {patient.mobile}</td>
+                      <td>📞 {patient.phone}</td>
                       <td>{patient.email}</td>
                       <td>{patient.city}</td>
                       <td>{new Date(patient.createdAt).toLocaleDateString()}</td>
