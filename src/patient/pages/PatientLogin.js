@@ -4,6 +4,7 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import "../css/PatientLogin.css";
 import patientImage from "../images/patient-1.jpg";
 import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
 
 export default function PatientLogin() {
   const [formData, setFormData] = useState({
@@ -96,7 +97,7 @@ export default function PatientLogin() {
         const data = await response.json();
 
         if (response.ok) {
-          alert(data.message);//print login successfull msg in alart
+          toast.success(data.message || "Login successful");//print login successfull msg in alart
 
           // ✅ store token separately
           localStorage.setItem("token", data.token);
@@ -107,11 +108,13 @@ export default function PatientLogin() {
           } else {
             navigate("/PatientHome");
           }
-        }
+        }else {
+  toast.error(data.message || "Invalid email or password");
+}
 
       } catch (error) {
         console.error(error);
-        alert("Server Error");
+        toast.error("Server Error");
       }
     }
   };

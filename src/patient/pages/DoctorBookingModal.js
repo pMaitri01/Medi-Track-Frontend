@@ -2,13 +2,14 @@ import React, { useState, useEffect } from "react";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import "../css/RescheduleAppointment.css";
+import { toast } from "react-toastify";
 
 const DoctorBookingModal = ({ doctor, onClose, onConfirm }) => {
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedTime, setSelectedTime] = useState(null);
   const [appointmentType, setAppointmentType] = useState("");
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+  // const [error, setError] = useState("");
 
   const [allSlots, setAllSlots] = useState([]);
   const [bookedSlots, setBookedSlots] = useState([]);
@@ -64,7 +65,7 @@ const DoctorBookingModal = ({ doctor, onClose, onConfirm }) => {
   // ✅ BOOK HANDLER (simple)
 const handleBook = async () => {
   if (!selectedDate || !selectedTime || !appointmentType) {
-    alert("Please fill all fields");
+    toast.warning("Please select date, time and appointment type");
     return;
   }
   const user = JSON.parse(localStorage.getItem("user") || "{}");
@@ -96,12 +97,12 @@ console.log("👤 USER ID:", user?._id);
       throw new Error(data.message);
     }
 
-    alert("✅ Appointment booked successfully");
+    toast.success("Appointment booked successfully!");
     onClose();
 
   } catch (err) {
     console.error(err);
-    alert(err.message);
+    toast.error(err.message || "Something went wrong");
   } finally {
     setLoading(false);
   }

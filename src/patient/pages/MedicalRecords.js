@@ -3,6 +3,7 @@ import Navbar from "../components/Navbar";
 import "../css/MedicalRecords.css";
 import UploadMedicalRecord from "./UploadMedicalRecord";
 import defaultDoctorImg from "../images/user.png";
+import { toast } from "react-toastify";
 
 const TABS = ["All Records", "Lab", "Scan", "Visit"];
 const DATES = ["All Time", "Last 7 Days", "Last Month"];
@@ -57,7 +58,7 @@ function RecordCard({ record }) {
             if (record.file) {
               window.open(record.file, "_blank");
             } else {
-              alert("No file available");
+              toast.info("No file available for this record");
             }
           }}
         >
