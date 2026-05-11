@@ -207,7 +207,7 @@ const AdminProfile = () => {
       </div>
 
       {/* ── CHANGE PASSWORD CARD ── */}
-      <div className="ap-card">
+      {/* <div className="ap-card">
         <h3 className="ap-section-title">🔒 Change Password</h3>
         <p className="ap-section-sub">Use a strong password to keep your account secure.</p>
 
@@ -278,7 +278,7 @@ const AdminProfile = () => {
             🔑 Update Password
           </button>
         </div>
-      </div>
+      </div> */}
 
     </div>
   );
