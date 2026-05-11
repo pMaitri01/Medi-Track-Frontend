@@ -11,6 +11,7 @@ import Review from "./Review";
 import RescheduleAppointment from './RescheduleAppointment';
 import DoctorBookingModal from "./DoctorBookingModal";
 import ReactMarkdown from 'react-markdown';
+import { toast } from "react-toastify";
 
 const PatientHome = () => {
   const [reviews, setReviews] = useState([]);
@@ -114,6 +115,7 @@ const PatientHome = () => {
         ...prev,
         { role: 'bot', text: "Something went wrong. Please try again." }
       ]);
+      toast.error("Chatbot failed. Try again.");
     }
   };
 
@@ -334,11 +336,11 @@ const PatientHome = () => {
       // ✅ Remove appointment from UI
       setUpcomingAppointment(null);
 
-      alert("Appointment cancelled successfully");
+      toast.success("Appointment cancelled successfully");
 
     } catch (err) {
       console.error(err);
-      alert("Failed to cancel appointment");
+      toast.error("Failed to cancel appointment");
     }
   };
   // const handleApplyFilters = async (e) => {
@@ -613,14 +615,40 @@ const PatientHome = () => {
 
                         <button
                           className="PatHome-btn-danger-outline"
+                          // onClick={() => {
+                          //   const confirmCancel = window.confirm(
+                          //     "Are you sure you want to cancel this appointment?"
+                          //   );
+                          //   if (confirmCancel) {
+                          //     handleCancelAppointment();
+                          //   }
+                          // }}
                           onClick={() => {
-                            const confirmCancel = window.confirm(
-                              "Are you sure you want to cancel this appointment?"
-                            );
-                            if (confirmCancel) {
-                              handleCancelAppointment();
-                            }
-                          }}
+  toast(
+    ({ closeToast }) => (
+      <div className="toast-box">
+        <p><strong>Are You Sure You Want to Cancel This Appointment?</strong></p>
+
+        <div className="toast-btns">
+          <button
+            className="yes"
+            onClick={() => {
+              handleCancelAppointment();
+              closeToast();
+            }}
+          >
+            Yes
+          </button>
+
+          <button className="no" onClick={closeToast}>
+            No
+          </button>
+        </div>
+      </div>
+    ),
+    { autoClose: false }
+  );
+}}
                         >
                           Cancel
                         </button>

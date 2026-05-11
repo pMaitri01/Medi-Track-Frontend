@@ -1102,3 +1102,29 @@ html, body {
 .PatHome-bot-bubble p:last-child {
   margin-bottom: 0;
 }
+.toast-box {
+  font-size: 14px;
+}
+
+.toast-btns {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.toast-btns button {
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.yes {
+  background: #e74c3c;
+  color: #fff;
+}
+
+.no {
+  background: #eee;
+}
