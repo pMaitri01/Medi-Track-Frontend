@@ -175,6 +175,7 @@ html, body {
   border-radius: 15px;
   padding: 15px 5px;
   text-align: center;
+  cursor: pointer;
 }
 
 .PatHome-action-card span {
