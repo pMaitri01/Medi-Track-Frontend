@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import "../css/AppointmentManagement.css";
 
-const FILTERS = ["All", "Pending", "Accepted", "Rejected"];
+const FILTERS = ["All", "pending", "approved", "rejected", "completed", "cancelled"];
 
 const statusClass = {
   pending: "am-badge am-badge-pending",
@@ -63,12 +63,16 @@ const AppointmentManagement = () => {
 
   const filtered = filter === "All"
     ? appointments
-    : appointments.filter(a => a.status === filter);
+    : appointments.filter(a =>
+      (a.status || "").toLowerCase() === filter.toLowerCase()
+    );
 
   const counts = FILTERS.reduce((acc, f) => {
     acc[f] = f === "All"
       ? appointments.length
-      : appointments.filter(a => a.status === f).length;
+      : appointments.filter(a =>
+        (a.status || "").toLowerCase() === f.toLowerCase()
+      ).length;
     return acc;
   }, {});
 
