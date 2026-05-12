@@ -99,9 +99,9 @@ const AdminHeader = ({ pageTitle, onHamburger }) => {
               </div>
               <hr className="ah-profile-divider" />
               <ul className="ah-profile-menu">
-                <li onClick={() => goTo("/admin/profile")}>
+                {/* <li onClick={() => goTo("/admin/profile")}>
                   <span>👤</span> My Profile
-                </li>
+                </li> */}
                 <li
                   className="ah-profile-logout"
                   onClick={async () => {
