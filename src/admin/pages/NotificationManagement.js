@@ -1,22 +1,17 @@
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import "../css/NotificationManagement.css";
-
-const dummyNotifications = [
-  { id: 1, target: "All",     message: "System maintenance scheduled on 30 Mar 2026 from 2 AM to 4 AM.", time: "27 Mar 2026, 10:00 AM" },
-  { id: 2, target: "Doctor",  message: "Please update your availability schedule for April 2026.",        time: "26 Mar 2026, 03:30 PM" },
-  { id: 3, target: "Patient", message: "Your appointment reminder: Visit scheduled for tomorrow.",        time: "25 Mar 2026, 09:00 AM" },
-  { id: 4, target: "Doctor",  message: "New patient registration guidelines have been updated.",          time: "24 Mar 2026, 11:15 AM" },
-  { id: 5, target: "All",     message: "MediTrack app will be updated to v2.0 this weekend.",            time: "23 Mar 2026, 05:00 PM" },
-];
+import { io } from "socket.io-client";
 
 const targetIcon  = { All: "📢", Doctor: "🧑‍⚕️", Patient: "🧑‍🤝‍🧑" };
 const targetClass = { All: "nm-tag nm-tag-all", Doctor: "nm-tag nm-tag-doctor", Patient: "nm-tag nm-tag-patient" };
-
+const socket = io(process.env.REACT_APP_API_URL, {
+  withCredentials: true,
+});
 const NotificationManagement = () => {
   const [target, setTarget]   = useState("");
   const [message, setMessage] = useState("");
   const [errors, setErrors]   = useState({});
-  const [list, setList]       = useState(dummyNotifications);
+  const [list, setList]       = useState([]);
   const [toast, setToast]     = useState(false);
   const [deleteId, setDeleteId] = useState(null);
 
@@ -59,7 +54,7 @@ const NotificationManagement = () => {
   }
 
   try {
-    const res = await fetch("http://localhost:5000/api/notification/sendAdminNotification", {
+    const res = await fetch(`${process.env.REACT_APP_API_URL}/api/notification/sendAdminNotification`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -80,11 +75,6 @@ const NotificationManagement = () => {
         hour12: true,
       });
 
-      setList(prev => [
-        { id: Date.now(), target, message, time },
-        ...prev,
-      ]);
-
       setToast(true);
       setTimeout(() => setToast(false), 3000);
 
@@ -97,13 +87,69 @@ const NotificationManagement = () => {
     console.log(err);
   }
 };
+useEffect(() => {
+  fetchNotifications();
+}, []);
 
+const fetchNotifications = async () => {
+  try {
+    const res = await fetch(
+     `${process.env.REACT_APP_API_URL}/api/notification/admin-notifications`,
+      {
+        credentials: "include",
+      }
+    );
+
+    const data = await res.json();
+
+    // 🔥 map backend data to UI format
+    const formatted = data.map((n) => ({
+      id: n._id,
+      target: n.role === "ALL" ? "All" : n.role,
+      message: n.message,
+      time: new Date(n.createdAt).toLocaleString("en-IN", {
+        day: "2-digit",
+        month: "short",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: true,
+      }),
+    }));
+
+    setList(formatted);
+
+  } catch (err) {
+    console.log(err);
+  }
+};
   const handleDelete = (id) => setDeleteId(id);
 
-  const confirmDelete = () => {
-    setList(prev => prev.filter(n => n.id !== deleteId));
-    setDeleteId(null);
-  };
+  const confirmDelete = async () => {
+  try {
+    const res = await fetch(
+      `${process.env.REACT_APP_API_URL}/api/notification/delete/${deleteId}`,
+      {
+        method: "DELETE",
+        credentials: "include",
+      }
+    );
+
+    const data = await res.json(); // 🔥 ADD THIS
+
+    console.log("DELETE RESPONSE:", data); // 🔥 DEBUG
+
+    if (res.ok) {
+      await fetchNotifications();
+      setDeleteId(null);
+    } else {
+      console.log("Delete failed");
+    }
+
+  } catch (err) {
+    console.log(err);
+  }
+};
 
   return (
     <div className="nm-page">
