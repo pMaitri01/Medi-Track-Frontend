@@ -131,7 +131,7 @@ const NotificationManagement = () => {
               onChange={(e) => { setTarget(e.target.value); setErrors(p => ({ ...p, target: "" })); }}
             >
               <option value="">Select user type</option>
-              <option value="All">📢 All Users</option>
+              <option value="ALL">📢 All Users</option>
               <option value="Doctor">🧑‍⚕️ Doctors Only</option>
               <option value="Patient">🧑‍🤝‍🧑 Patients Only</option>
             </select>

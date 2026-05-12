@@ -89,11 +89,14 @@ useEffect(() => {
 
   console.log("DOCTOR ID:", doctor.id);
 
-  // ✅ Join personal room
+  // Join personal room
   socket.emit("join", doctor.id);
 
-  // ✅ Join role room (IMPORTANT)
+  //  Join role room (IMPORTANT)
   socket.emit("joinRole", "Doctor");
+
+  // Join global room for all users
+  socket.emit("joinAll");
 
   console.log("✅ DOCTOR JOIN + ROLE JOIN SENT");
 

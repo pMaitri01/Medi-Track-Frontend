@@ -113,7 +113,8 @@ useEffect(() => {
 
   socket.emit("join", user._id);
   socket.emit("joinRole", role);
-
+  socket.emit("joinAll");
+  
   console.log("JOIN EVENT SENT");
 
   socket.on("connect", () => {
