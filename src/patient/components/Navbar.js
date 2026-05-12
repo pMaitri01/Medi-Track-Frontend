@@ -144,7 +144,8 @@ function Navbar() {
 
 
   const user = JSON.parse(localStorage.getItem("user") || "{}");
-
+  console.log("USER FROM LOCALSTORAGE:", user);
+  console.log("LOCAL USER:", user);
   const goToProfile = () => {
     navigate("/UpdatePatientProfile");
   };
@@ -191,28 +192,66 @@ function Navbar() {
   }, []);
 
   // 🔥 SOCKET JOIN
-  useEffect(() => {
-  if (user?._id) {
+//   useEffect(() => {
+//   if (user?._id) {
 
-    // connect socket manually
-    socket.connect();
+//     // connect socket manually
+//     socket.connect();
 
-    console.log("FRONTEND USER ID:", user._id);
+//     console.log("FRONTEND USER ID:", user._id);
 
-    socket.emit("join", user._id);
+//     socket.emit("join", user._id);
+//     const role =
+//   user.role ||
+//   user.userRole ||
+//   user.userType ||
+//   user.accountType;
 
-    console.log("JOIN EVENT SENT");
+// console.log("DETECTED ROLE:", role);
+//     socket.emit("joinRole", user.role);
 
-    socket.on("connect", () => {
-      console.log("✅ SOCKET CONNECTED:", socket.id);
-    });
+//     console.log("JOIN EVENT SENT");
+
+//     socket.on("connect", () => {
+//       console.log("✅ SOCKET CONNECTED:", socket.id);
+//     });
+//   }
+
+//   return () => {
+//     socket.off("connect");
+//   };
+
+// }, [user]);
+
+useEffect(() => {
+  if (!user || !user._id) return;
+
+  const role = user.role;
+
+  if (!role) {
+    console.warn("⛔ Skipping socket join: role missing");
+    return;
   }
+
+  socket.connect();
+
+  console.log("FRONTEND USER ID:", user._id);
+  console.log("DETECTED ROLE:", role);
+
+  socket.emit("join", user._id);
+  socket.emit("joinRole", role);
+
+  console.log("JOIN EVENT SENT");
+
+  socket.on("connect", () => {
+    console.log("✅ SOCKET CONNECTED:", socket.id);
+  });
 
   return () => {
     socket.off("connect");
   };
-
 }, [user]);
+
   // 🔔 REAL-TIME LISTENER
   // useEffect(() => {
   //   socket.on("newNotification", (data) => {

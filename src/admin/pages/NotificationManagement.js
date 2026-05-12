@@ -28,27 +28,75 @@ const NotificationManagement = () => {
     return e;
   };
 
-  const handleSend = () => {
-    const errs = validate();
-    if (Object.keys(errs).length > 0) { setErrors(errs); return; }
+  // const handleSend = () => {
+  //   const errs = validate();
+  //   if (Object.keys(errs).length > 0) { setErrors(errs); return; }
 
-    const time = new Date().toLocaleString("en-IN", {
-      day: "2-digit", month: "short", year: "numeric",
-      hour: "2-digit", minute: "2-digit", hour12: true,
+  //   const time = new Date().toLocaleString("en-IN", {
+  //     day: "2-digit", month: "short", year: "numeric",
+  //     hour: "2-digit", minute: "2-digit", hour12: true,
+  //   });
+
+  //   // add to list
+  //   setList(prev => [{ id: Date.now(), target, message: message.trim(), time }, ...prev]);
+
+  //   // clear form
+  //   setTarget("");
+  //   setMessage("");
+  //   setErrors({});
+
+  //   // show toast for 3 seconds
+  //   setToast(true);
+  //   setTimeout(() => setToast(false), 3000);
+  // };
+
+
+  const handleSend = async () => {
+  const errs = validate();
+  if (Object.keys(errs).length > 0) {
+    setErrors(errs);
+    return;
+  }
+
+  try {
+    const res = await fetch("http://localhost:5000/api/notification/sendAdminNotification", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },credentials: "include",
+      body: JSON.stringify({
+        target,
+        message,
+      }),
     });
 
-    // add to list
-    setList(prev => [{ id: Date.now(), target, message: message.trim(), time }, ...prev]);
+    if (res.ok) {
+      const time = new Date().toLocaleString("en-IN", {
+        day: "2-digit",
+        month: "short",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: true,
+      });
 
-    // clear form
-    setTarget("");
-    setMessage("");
-    setErrors({});
+      setList(prev => [
+        { id: Date.now(), target, message, time },
+        ...prev,
+      ]);
 
-    // show toast for 3 seconds
-    setToast(true);
-    setTimeout(() => setToast(false), 3000);
-  };
+      setToast(true);
+      setTimeout(() => setToast(false), 3000);
+
+      setTarget("");
+      setMessage("");
+      setErrors({});
+    }
+
+  } catch (err) {
+    console.log(err);
+  }
+};
 
   const handleDelete = (id) => setDeleteId(id);
 
