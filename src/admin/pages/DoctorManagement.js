@@ -12,16 +12,13 @@ const matchExp = (exp, range) => {
 };
 const DoctorManagement = () => {
   const [doctors, setDoctors] = useState([]);
-  const [showFilters, setShowFilters] = useState(false);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [specFilter, setSpecFilter] = useState("All");
   const [expFilter, setExpFilter] = useState("all");
   const [viewDoc, setViewDoc] = useState(null);
-  const [deleteId, setDeleteId] = useState(null);
   const [filters, setFilters] = useState({
     specializations: [],
-    experienceRanges: [],
     statuses: []
   });
 
@@ -112,11 +109,6 @@ const DoctorManagement = () => {
       matchStatus
     );
   });
-
-  const handleDelete = () => {
-    setDoctors(prev => prev.filter(d => d.id !== deleteId));
-    setDeleteId(null);
-  };
 
   return (
     <div className="dm-page">
