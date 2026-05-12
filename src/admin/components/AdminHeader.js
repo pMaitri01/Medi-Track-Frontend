@@ -1,24 +1,101 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import "../css/AdminHeader.css";
-
-const dummyNotifications = [
-  { id: 1, message: "Dr. Rahul Mehta submitted a new registration.", time: "2 min ago" },
-  { id: 2, message: "Patient Ravi Shah booked an appointment.", time: "15 min ago" },
-  { id: 3, message: "System maintenance scheduled for 30 Mar 2026.", time: "1 hr ago" },
-  { id: 4, message: "Dr. Priya Patel updated her profile.", time: "3 hr ago" },
-  { id: 5, message: "New patient registration: Kavita Mishra.", time: "Yesterday" },
-];
+import { io } from "socket.io-client";
+import socket from "../../socket";
 
 const AdminHeader = ({ pageTitle, onHamburger }) => {
   const [bellOpen, setBellOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
-  const [notifications, setNotifications] = useState(dummyNotifications);
+  const [notifications, setNotifications] = useState([]);
   const bellRef = useRef(null);
   const profileRef = useRef(null);
   const navigate = useNavigate();
+ const adminData = JSON.parse(localStorage.getItem("adminData"));
 
+const adminId =
+  adminData?.id ||
+  adminData?._id ||
+  adminData?.admin?._id;
   const unread = notifications.length;
+//   useEffect(() => {
+//   socket.connect();
+
+//   socket.on("connect", () => {
+//     console.log("✅ Socket Connected:", socket.id);
+//   });
+
+//   return () => {
+//     socket.disconnect();
+//   };
+// }, []);
+
+useEffect(() => {
+   const adminData = JSON.parse(localStorage.getItem("adminData"));
+
+  const adminId =
+    adminData?.id ||
+    adminData?._id ||
+    adminData?.admin?._id;
+
+  if (!adminId) {
+    console.log("❌ Admin ID not found");
+    return;
+  }
+
+  if (!socket.connected) {
+    socket.connect();
+  }
+
+  const onConnect = () => {
+    console.log("✅ Socket Connected:", socket.id);
+
+    socket.emit("join", adminId);
+    console.log("📦 Joined room:", adminId);
+  };
+
+  socket.on("connect", onConnect);
+
+  return () => {
+    socket.off("connect", onConnect);
+  };
+}, []);
+
+useEffect(() => {
+  const fetchNotifications = async () => {
+    try {
+      const res = await fetch(
+        `${process.env.REACT_APP_API_URL}/api/notification/getnotifications`,
+        {
+          credentials: "include",
+        }
+      );
+
+      const data = await res.json();
+      console.log("📩 ADMIN NOTIFICATIONS:", data);
+
+      setNotifications(data);
+    } catch (err) {
+      console.error("Error fetching notifications", err);
+    }
+  };
+
+  fetchNotifications();
+}, []);
+
+useEffect(() => {
+  const handleNotification = (data) => {
+    console.log("📩 NEW NOTIFICATION:", data);
+
+    setNotifications((prev) => [data, ...prev]);
+  };
+
+  socket.on("newNotification", handleNotification);
+
+  return () => {
+    socket.off("newNotification", handleNotification);
+  };
+}, []);
 
   // close dropdowns on outside click
   useEffect(() => {
@@ -31,7 +108,7 @@ const AdminHeader = ({ pageTitle, onHamburger }) => {
   }, []);
 
   const clearAll = () => setNotifications([]);
-  const dismiss = (id) => setNotifications(prev => prev.filter(n => n.id !== id));
+  const dismiss = (id) => setNotifications(prev => prev.filter(n => n._id !== id));
 
   const goTo = (path) => { setProfileOpen(false); navigate(path); };
 
@@ -67,13 +144,13 @@ const AdminHeader = ({ pageTitle, onHamburger }) => {
                   <li className="ah-notif-empty"><span>🎉</span> All caught up!</li>
                 ) : (
                   notifications.map(n => (
-                    <li key={n.id} className="ah-notif-item">
+                    <li key={n._id} className="ah-notif-item">
                       <div className="ah-notif-dot" />
                       <div className="ah-notif-body">
                         <p className="ah-notif-msg">{n.message}</p>
                         <span className="ah-notif-time">{n.time}</span>
                       </div>
-                      <button className="ah-notif-dismiss" onClick={() => dismiss(n.id)}>✕</button>
+                      <button className="ah-notif-dismiss" onClick={() => dismiss(n._id)}>✕</button>
                     </li>
                   ))
                 )}
