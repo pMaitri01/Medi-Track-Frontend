@@ -93,7 +93,7 @@ const AdminHeader = ({ pageTitle, onHamburger }) => {
               <div className="ah-profile-info">
                 <div className="ah-profile-avatar-lg">A</div>
                 <div>
-                  <p className="ah-profile-name">Admin User</p>
+                  <p className="ah-profile-name">Admin</p>
                   <p className="ah-profile-email">admin04@gmail.com</p>
                 </div>
               </div>
