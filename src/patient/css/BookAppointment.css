@@ -23,7 +23,7 @@
 
 .BookApp-close-modal:hover {
   color: white;
-  background-color: #0AA5A5;
+  background-color: #0aa5a5;
 }
 
 .BookApp-appointment-grid {
@@ -31,28 +31,27 @@
   grid-template-columns: 1.2fr 0.8fr;
   gap: 40px;
 }
-.BookApp-calendar-container{
+.BookApp-calendar-container {
   width: 80%;
 }
-.react-calendar__tile.react-calendar__tile--now.react-calendar__month-view__days__day{
-  background:#0AA5A5;
+.react-calendar__tile.react-calendar__tile--now.react-calendar__month-view__days__day {
+  background: #0aa5a5;
   color: white;
   border-radius: 50%;
-  border: 5px solid #0AA5A5;
+  border: 5px solid #0aa5a5;
 }
 .react-calendar__tile.react-calendar__tile--active.react-calendar__tile--range.react-calendar__tile--rangeStart.react-calendar__tile--rangeEnd.react-calendar__tile--rangeBothEnds.react-calendar__month-view__days__day {
-  background:white;
-  color: #0AA5A5;
+  background: white;
+  color: #0aa5a5;
   border-radius: 50%;
-  border: 2px solid #0AA5A5;
+  border: 2px solid #0aa5a5;
 }
 .BookApp-slots-container {
   margin-left: -100px;
- 
 }
-.BookApp-doctor-dropdown{
-  width: 70%;
-  padding: 10px;
+.BookApp-doctor-dropdown {
+  width: 100%;
+  padding: 7px;
   border: 1px solid #ccc;
   border-radius: 8px;
 }
@@ -94,19 +93,22 @@
   width: 40%;
   margin-top: 30px;
   padding: 10px;
-  background: #0AA5A5;
+  background: #0aa5a5;
   color: #fff;
   border: none;
   border-radius: 8px;
   font-weight: 700;
 }
 
-.BookApp-appointment-type-select{
+.BookApp-appointment-type-select {
   border: 1px solid #ccc;
+  width: 87%;
+  border-radius: 7px;
+  padding: 5px;
 }
 
 .BookApp-cancel-btn {
-   width: 40%;
+  width: 40%;
   margin-top: 30px;
   padding: 10px;
   border: none;

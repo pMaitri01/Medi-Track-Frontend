@@ -3,7 +3,7 @@ import "../css/DoctorApproval.css";
 import userpic from "../../doctor/images/user.png"
 
 const PER_PAGE    = 5;
-const STATUS_TABS = ["All", "Pending", "Approved", "Rejected"];
+// const STATUS_TABS = ["All", "Pending", "Approved", "Rejected"];
 
 const statusClass = {
   pending:  "da-badge da-badge-pending",
@@ -191,7 +191,7 @@ const DoctorApproval = () => {
       )}
 
       {/* ── STAT CARDS ── */}
-      <div className="da-stats">
+      {/* <div className="da-stats">
         <div className="da-stat-card">
           <div className="da-stat-icon" style={{ background: "#eff6ff", color: "#2563eb" }}>🧑‍⚕️</div>
           <div className="da-stat-info">
@@ -213,10 +213,10 @@ const DoctorApproval = () => {
             <span className="da-stat-label">Approved Doctors</span>
           </div>
         </div>
-      </div>
+      </div> */}
 
       {/* ── STATUS TABS ── */}
-      <div className="da-status-tabs">
+      {/* <div className="da-status-tabs">
         {STATUS_TABS.map(tab => (
           <button
             key={tab}
@@ -229,7 +229,7 @@ const DoctorApproval = () => {
             </span>
           </button>
         ))}
-      </div>
+      </div> */}
 
       {/* ── TABLE ── */}
       <div className="da-table-card">

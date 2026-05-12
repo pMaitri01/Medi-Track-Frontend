@@ -4,10 +4,9 @@ This project is a React-based frontend for MediTrack system.
 ### npm start
 Runs the app in development mode at http://localhost:3000
 
-PatientHome- pending 
-
-PrescriptionModal - pending 
-
-PrescriptionPage - Pending
-
-BookAppointment.css - Done
+1. PatientHome- Done 
+2. PrescriptionModal - pending 
+3. PrescriptionPage - Pending
+4. BookAppointment.css - Done
+5. DoctorManagement.js - Done (Admin side)
+6. DoctorManagement.css - Done (Admin side)

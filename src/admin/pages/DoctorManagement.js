@@ -3,124 +3,115 @@ import "../css/DoctorManagement.css";
 import userpic from "../../doctor/images/user.png";
 
 const matchExp = (exp, range) => {
+  const experience = Number(exp);
   if (range === "all") return true;
-  if (range === "0-5") return exp <= 5;
-  if (range === "6-10") return exp <= 10;
-  if (range === "10+") return exp > 10;
+  if (range === "0-5") return experience >= 0 && experience <= 5;
+  if (range === "6-10") return experience >= 6 && experience <= 10;
+  if (range === "10+") return experience > 10;
   return true;
 };
 const DoctorManagement = () => {
-  const [doctors, setDoctors]     = useState([]);
+  const [doctors, setDoctors] = useState([]);
   const [showFilters, setShowFilters] = useState(false);
-  const [loading, setLoading]     = useState(true);
-  const [search, setSearch]       = useState("");
+  const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState("");
   const [specFilter, setSpecFilter] = useState("All");
-  const [expFilter, setExpFilter]   = useState("all");
-  const [viewDoc, setViewDoc]     = useState(null);
-  const [deleteId, setDeleteId]   = useState(null);
+  const [expFilter, setExpFilter] = useState("all");
+  const [viewDoc, setViewDoc] = useState(null);
+  const [deleteId, setDeleteId] = useState(null);
   const [filters, setFilters] = useState({
     specializations: [],
     experienceRanges: [],
     statuses: []
   });
+
   // simulate fetch
   useEffect(() => {
-  const fetchDoctors = async () => {
-    try {
-      setLoading(true);
+    const fetchDoctors = async () => {
+      try {
+        setLoading(true);
 
-      const res = await fetch(`${process.env.REACT_APP_API_URL}/api/doctor/all`, {
-        method: "GET",
-        credentials: "include", // IMPORTANT (for cookies/auth)
-      });
+        const res = await fetch(`${process.env.REACT_APP_API_URL}/api/doctor/all`, {
+          method: "GET",
+          credentials: "include", // IMPORTANT (for cookies/auth)
+        });
 
-      const data = await res.json();
+        const data = await res.json();
 
-  if (data.success) {
-    const formatted = data.doctors.map((doc) => ({
-  id: doc._id,
-  fullname: `Dr. ${doc.fullName || ""}`,
-  email: doc.email,
-  phone: doc.mobile,
-  gender: doc.gender,
-  dob: doc.dob,
-  specialization: doc.specialization,
-  experience: doc.experience,
-  qualification: doc.qualification,
-  licenseNumber: doc.licenseNumber,
-  workingDays: doc.workingDays,
-  workingHours: doc.workingHours,
-  clinicName: doc.clinicName,
-  clinicAddress: doc.clinicAddress,
-  city: doc.city,
-  state: doc.state,
-  mapLink: doc.mapLink,
-  about: doc.about,
-  emergencyContact: doc.emergencyContact,
-  status: doc.status || "pending",
-  photo:  `${userpic}`,
-}));
-    setDoctors(formatted);        
-    setFilters(data.filters || {
-        specializations: [],
-        experienceRanges: [],
-        statuses: []
-      }); // 
-      } else {
-        console.error("Failed to fetch doctors");
+        if (data.success) {
+          const formatted = data.doctors.map((doc) => ({
+            id: doc._id,
+            fullname: `Dr. ${doc.fullName || ""}`,
+            email: doc.email,
+            phone: doc.mobile,
+            gender: doc.gender,
+            dob: doc.dob,
+            specialization: doc.specialization,
+            experience: doc.experience,
+            qualification: doc.qualification,
+            licenseNumber: doc.licenseNumber,
+            workingDays: doc.workingDays,
+            workingHours: doc.workingHours,
+            clinicName: doc.clinicName,
+            clinicAddress: doc.clinicAddress,
+            city: doc.city,
+            state: doc.state,
+            mapLink: doc.mapLink,
+            about: doc.about,
+            emergencyContact: doc.emergencyContact,
+            status: doc.status || "pending",
+            photo: `${userpic}`,
+          }));
+          setDoctors(formatted);
+          setFilters(data.filters || {
+            specializations: [],
+            experienceRanges: [],
+            statuses: []
+          }); // 
+        } else {
+          console.error("Failed to fetch doctors");
+        }
+
+      } catch (err) {
+        console.error("Error:", err);
+      } finally {
+        setLoading(false);
       }
+    };
 
-    } catch (err) {
-      console.error("Error:", err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  fetchDoctors();
-}, []);
-// const handleSuspend = async (id) => {
-//   try {
-//     const res = await fetch(`${process.env.REACT_APP_API_URL}/api/doctor/${id}/suspend`, {
-//       method: "PUT",
-//       credentials: "include",
-//     });
-
-//     if (res.ok) {
-//       setDoctors((prev) =>
-//         prev.map((doc) =>
-//           doc.id === id ? { ...doc, status: "Suspended" } : doc
-//         )
-//       );
-
-//       setViewDoc(null); // close modal
-//     }
-//   } catch (err) {
-//     console.error(err);
-//   }
-// };
+    fetchDoctors();
+  }, []);
   const handleReset = () => { setSearch(""); setSpecFilter("All"); setExpFilter("all"); };
 
-  const filtered = doctors.filter(d => {
-  const q = search.toLowerCase();
+  const filtered = doctors.filter((d) => {
+    const q = search.toLowerCase().trim();
 
-  const matchSearch =
-    !q ||
-    d.fullname.toLowerCase().includes(q) ||
-    d.email.toLowerCase().includes(q) ||
-    d.phone.includes(q);
+    // SEARCH
+    const matchSearch =
+      !q ||
+      d.fullname.toLowerCase().includes(q) ||
+      d.email.toLowerCase().includes(q) ||
+      d.phone?.includes(q);
 
-  const matchSpec =
-    specFilter === "All" || d.specialization === specFilter;
+    // SPECIALIZATION
+    const matchSpec =
+      specFilter === "All" ||
+      d.specialization?.toLowerCase() === specFilter.toLowerCase();
 
-  const matchExpRange =
-    matchExp(d.experience, expFilter);
+    // EXPERIENCE
+    const matchExpRange = matchExp(d.experience, expFilter);
 
-  // ✅ ADD THIS LINE (important)
-  const matchStatus = d.status.toLowerCase() === "approved";
+    // STATUS
+    const matchStatus =
+      d.status?.toLowerCase() === "approved";
 
-  return matchSearch && matchSpec && matchExpRange && matchStatus;
-});
+    return (
+      matchSearch &&
+      matchSpec &&
+      matchExpRange &&
+      matchStatus
+    );
+  });
 
   const handleDelete = () => {
     setDoctors(prev => prev.filter(d => d.id !== deleteId));
@@ -159,23 +150,32 @@ const DoctorManagement = () => {
           onChange={(e) => setSpecFilter(e.target.value)}
         >
           <option value="All">All Specializations</option>
-          {filters.specializations?.map(s => (
-            <option key={s} value={s}>{s}</option>
-          ))}
+
+          {filters.specializations?.length > 0 &&
+            filters.specializations.map((s, index) => (
+              <option key={index} value={s}>
+                {s}
+              </option>
+            ))}
         </select>
 
-        <select className="dm-filter-select" value={expFilter}
-          onChange={e => setExpFilter(e.target.value)}>
-          {filters.experienceRanges.map(r => (
-          <option key={r.value} value={r.value}>
-            {r.label}
-          </option>
-        ))}
+        <select
+          className="dm-filter-select"
+          value={expFilter}
+          onChange={(e) => setExpFilter(e.target.value)}
+        >
+          <option value="all">Experience</option>
+
+          {filters.experienceRanges?.map((r) => (
+            <option key={r.value} value={r.value}>
+              {r.label}
+            </option>
+          ))}
         </select>
 
         <button className="dm-reset-btn" onClick={handleReset}>Reset</button>
       </div>
-      
+
       {/* ── TABLE ── */}
       <div className="dm-table-card">
         <div className="dm-table-header">
@@ -208,9 +208,9 @@ const DoctorManagement = () => {
               </thead>
               <tbody>
                 {filtered.map((doc, i) => (
-                  <tr key={doc.id} 
-                      onClick={() => setViewDoc(doc)} 
-                      className="dm-clickable-row">
+                  <tr key={doc.id}
+                    onClick={() => setViewDoc(doc)}
+                    className="dm-clickable-row">
                     <td>{i + 1}</td>
                     <td>
                       <div className="dm-doc-cell">
@@ -224,8 +224,8 @@ const DoctorManagement = () => {
                     <td>{doc.specialization}</td>
                     <td>{doc.experience} yrs</td>
                     <td><span className={`dm-status ${doc.status.toLowerCase()}`}>
-                    {doc.status}
-                  </span></td>
+                      {doc.status}
+                    </span></td>
                   </tr>
                 ))}
               </tbody>
@@ -242,7 +242,7 @@ const DoctorManagement = () => {
               <h3>Doctor Details</h3>
               <button className="dm-modal-close" onClick={() => setViewDoc(null)}>✕</button>
             </div>
-                {/* ── VIEW MODAL ── */}
+            {/* ── VIEW MODAL ── */}
             {viewDoc && (
               <div className="dm-overlay" onClick={() => setViewDoc(null)}>
                 <div className="dm-modal" onClick={e => e.stopPropagation()}>
@@ -311,14 +311,14 @@ const DoctorManagement = () => {
 
                   <div className="dm-modal-footer">
                     <button className="dm-footer-btn btn-cancel" onClick={() => setViewDoc(null)}>
-                       Cancel
+                      Cancel
                     </button>
                   </div>
                 </div>
               </div>
             )}
             <div className="dm-modal-footer">
-             <button
+              <button
                 className="dm-btn dm-btn-cancel"
                 onClick={() => setViewDoc(null)}
               >
