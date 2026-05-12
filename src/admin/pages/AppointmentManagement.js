@@ -1,7 +1,14 @@
 import { useState, useEffect } from "react";
 import "../css/AppointmentManagement.css";
 
-const FILTERS = ["All", "pending", "approved", "rejected", "completed", "cancelled"];
+const FILTERS = [
+  "All",
+  "pending",
+  "approved",
+  "rejected",
+  "completed",
+  "cancelled",
+];
 
 const statusClass = {
   pending: "am-badge am-badge-pending",
@@ -15,11 +22,14 @@ const statusClass = {
 const mapAppointment = (a, i) => ({
   id: a._id || i,
   patient: a.patient || "—",
-  doctor: typeof a.doctor === "object" ? `Dr. ${a.doctor?.fullName || "—"}` : `Dr. ${a.doctor || "—"}`,
+  doctor:
+    typeof a.doctor === "object"
+      ? `Dr. ${a.doctor?.fullName || "—"}`
+      : `Dr. ${a.doctor || "—"}`,
   date: a.date || "—",
   time: a.time || "—",
   type: a.type || "N/A",
-  status: a.status || "Pending",   // default to Pending if not set
+  status: a.status || "Pending", // default to Pending if not set
 });
 
 const AppointmentManagement = () => {
@@ -41,7 +51,7 @@ const AppointmentManagement = () => {
               // Authorization: `Bearer ${token}`,
             },
             credentials: "include",
-          }
+          },
         );
 
         if (!res.ok) {
@@ -61,18 +71,20 @@ const AppointmentManagement = () => {
     fetchAppointments();
   }, []);
 
-  const filtered = filter === "All"
-    ? appointments
-    : appointments.filter(a =>
-      (a.status || "").toLowerCase() === filter.toLowerCase()
-    );
+  const filtered =
+    filter === "All"
+      ? appointments
+      : appointments.filter(
+          (a) => (a.status || "").toLowerCase() === filter.toLowerCase(),
+        );
 
   const counts = FILTERS.reduce((acc, f) => {
-    acc[f] = f === "All"
-      ? appointments.length
-      : appointments.filter(a =>
-        (a.status || "").toLowerCase() === f.toLowerCase()
-      ).length;
+    acc[f] =
+      f === "All"
+        ? appointments.length
+        : appointments.filter(
+            (a) => (a.status || "").toLowerCase() === f.toLowerCase(),
+          ).length;
     return acc;
   }, {});
 
@@ -99,24 +111,23 @@ const AppointmentManagement = () => {
 
   return (
     <div className="am-page">
-
       {/* ── HEADER ── */}
       <div className="am-header">
         <div>
           <h2 className="am-title">Appointment Management</h2>
           <p className="am-subtitle">View all appointment records</p>
         </div>
-        <div className="am-total-badge">
-          Total: {appointments.length}
-        </div>
+        <div className="am-total-badge">Total: {appointments.length}</div>
       </div>
 
       {/* ── FILTER TABS ── */}
       <div className="am-filters">
-        {FILTERS.map(f => (
+        {FILTERS.map((f) => (
           <button
             key={f}
-            className={"am-filter-btn" + (filter === f ? " am-filter-active" : "")}
+            className={
+              "am-filter-btn" + (filter === f ? " am-filter-active" : "")
+            }
             onClick={() => setFilter(f)}
           >
             {f}
@@ -130,7 +141,9 @@ const AppointmentManagement = () => {
         {filtered.length === 0 ? (
           <div className="am-empty">
             <span>📭</span>
-            <p>No appointments found for "<strong>{filter}</strong>"</p>
+            <p>
+              No appointments found for "<strong>{filter}</strong>"
+            </p>
           </div>
         ) : (
           <table className="am-table">
@@ -149,27 +162,34 @@ const AppointmentManagement = () => {
               {filtered.map((a, i) => (
                 <tr key={a._id}>
                   <td>{i + 1}</td>
-                  <td className="am-patient">{a.patient?.firstName} {a.patient?.lastName}</td>
+                  <td className="am-patient">
+                    {a.patient?.firstName} {a.patient?.lastName}
+                  </td>
                   <td className="am-doctor">{a.doctor}</td>
-                  <td>{new Date(a.date).toLocaleDateString("en-IN", {
-                    day: "2-digit",
-                    month: "short",
-                    year: "numeric",
-                  })}</td>
+                  <td>
+                    {new Date(a.date).toLocaleDateString("en-IN", {
+                      day: "2-digit",
+                      month: "short",
+                      year: "numeric",
+                    })}
+                  </td>
                   <td>{a.time}</td>
                   <td>
-                    <span className={`dappv-type ${a.type ? a.type.toLowerCase() : "default"}`}>
+                    <span
+                      className={`dappv-type ${a.type ? a.type.toLowerCase() : "default"}`}
+                    >
                       {a.type || "N/A"}
                     </span>
                   </td>
-                  <td><span className={statusClass[a.status]}>{a.status}</span></td>
+                  <td>
+                    <span className={statusClass[a.status]}>{a.status}</span>
+                  </td>
                 </tr>
               ))}
             </tbody>
           </table>
         )}
       </div>
-
     </div>
   );
 };
