@@ -170,15 +170,15 @@ useEffect(() => {
               <div className="ah-profile-info">
                 <div className="ah-profile-avatar-lg">A</div>
                 <div>
-                  <p className="ah-profile-name">Admin User</p>
+                  <p className="ah-profile-name">Admin</p>
                   <p className="ah-profile-email">admin04@gmail.com</p>
                 </div>
               </div>
               <hr className="ah-profile-divider" />
               <ul className="ah-profile-menu">
-                <li onClick={() => goTo("/admin/profile")}>
+                {/* <li onClick={() => goTo("/admin/profile")}>
                   <span>👤</span> My Profile
-                </li>
+                </li> */}
                 <li
                   className="ah-profile-logout"
                   onClick={async () => {
