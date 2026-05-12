@@ -54,10 +54,33 @@ export default function DoctorHeader({ open }) {
     seeMore: { padding: "10px", textAlign: "center", fontSize: "13px", color: "#0AA5A5", fontWeight: "600", cursor: "pointer", display: "block", textDecoration: "none" }
   };
 
+// useEffect(() => {
+
+//   console.log("DOCTOR CONTEXT:", doctor);
+
+//   if (!doctor?.id) return;
+
+//   if (!socket.connected) {
+//     socket.connect();
+//   }
+
+//   console.log("DOCTOR ID:", doctor.id);
+
+//   socket.emit("join", doctor.id);
+
+//   console.log("✅ DOCTOR JOIN SENT");
+
+//   socket.on("connect", () => {
+//     console.log("✅ DOCTOR SOCKET CONNECTED:", socket.id);
+//   });
+
+//   return () => {
+//     socket.off("connect");
+//   };
+
+// }, [doctor?.id]);
+
 useEffect(() => {
-
-  console.log("DOCTOR CONTEXT:", doctor);
-
   if (!doctor?.id) return;
 
   if (!socket.connected) {
@@ -66,18 +89,21 @@ useEffect(() => {
 
   console.log("DOCTOR ID:", doctor.id);
 
+  // ✅ Join personal room
   socket.emit("join", doctor.id);
 
-  console.log("✅ DOCTOR JOIN SENT");
+  // ✅ Join role room (IMPORTANT)
+  socket.emit("joinRole", "Doctor");
+
+  console.log("✅ DOCTOR JOIN + ROLE JOIN SENT");
 
   socket.on("connect", () => {
-    console.log("✅ DOCTOR SOCKET CONNECTED:", socket.id);
+    console.log("✅ SOCKET CONNECTED:", socket.id);
   });
 
   return () => {
     socket.off("connect");
   };
-
 }, [doctor?.id]);
 
 useEffect(() => {
