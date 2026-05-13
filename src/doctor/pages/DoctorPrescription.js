@@ -9,6 +9,7 @@ const BLANK_FORM = () => ({
   id: "",
   patientId: "", patientName: "", date: new Date().toISOString().split("T")[0],
   diagnosis: "", notes: "", medicines: [BLANK_MEDICINE()],
+  status: "Active",
 });
 
 const getInitials = (name) => {
@@ -35,7 +36,6 @@ function MedStatusToggle({ med, index, onChange, prescriptionId }) {
   const handleChange = async (e) => {
     const newStatus = e.target.value;
     if (newStatus === med.status) return;
-
     if (!prescriptionId) return;
 
     onChange(index, { field: "status", val: newStatus });
@@ -48,14 +48,14 @@ function MedStatusToggle({ med, index, onChange, prescriptionId }) {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
           credentials: "include",
-          body: JSON.stringify({ status: newStatus }),
+          body: JSON.stringify({ mStatus: newStatus }),
         }
       );
       const data = await res.json();
       if (!res.ok) throw new Error(data.message);
-      onChange(index, { field: "status", val: newStatus });
     } catch (err) {
       console.error(err);
+      onChange(index, { field: "status", val: med.status });
       alert(`❌ ${err.message}`);
     } finally {
       setBusy(false);
@@ -117,7 +117,7 @@ function MedicineRow({ med, index, onChange, onRemove, canRemove, prescriptionId
 
         <input
           className="dpresc-input"
-          placeholder="Dosage (e.g. 500mg)"
+          placeholder="(e.g. 500mg)"
           value={med.dosage}
           onChange={(e) => onChange(index, { field: "dosage", val: e.target.value })}
         />
@@ -142,7 +142,7 @@ function MedicineRow({ med, index, onChange, onRemove, canRemove, prescriptionId
 
         <input
           className="dpresc-input"
-          placeholder="Duration (e.g. 7 days)"
+          placeholder="(e.g. 7 days)"
           value={med.duration}
           onChange={(e) => onChange(index, { field: "duration", val: e.target.value })}
         />
@@ -449,12 +449,12 @@ export default function DoctorPrescription() {
             name: m.name,
             dosage: m.dosage,
             duration: m.duration,
-            status: m.status || "Active",
+            status: m.mStatus || "Active",
             timing: timingArray,
             foodPref: foodPrefObj,
           };
         }),
-        status: rx.status || "Active",
+        status: rx.pStatus || "Active",
         notes: rx.notes || "",
       }));
 
@@ -495,7 +495,7 @@ export default function DoctorPrescription() {
           name: m.name,
           dosage: m.dosage,
           duration: m.duration,
-          status: m.status || "Active",
+          mStatus: m.status || "Active",
           timing: m.timing.map((t) => ({
             timeOfDay: t,
             intake: m.foodPref[t] === "Before Food" ? "before_food" : "after_food",
@@ -519,6 +519,7 @@ export default function DoctorPrescription() {
           diagnosis: form.diagnosis,
           medicines: formattedMedicines,
           notes: form.notes,
+          pStatus: form.status || "Active",
         }),
       });
       const data = await res.json();
@@ -543,6 +544,7 @@ export default function DoctorPrescription() {
       diagnosis: rx.diagnosis,
       medicines: rx.medicines,
       notes: rx.notes,
+       status: rx.status || "Active",
     });
     setShowForm(true);
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -575,7 +577,7 @@ export default function DoctorPrescription() {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
           credentials: "include",
-          body: JSON.stringify({ status: newStatus }),
+          body: JSON.stringify({ pStatus: newStatus }),
         }
       );
       const data = await res.json();

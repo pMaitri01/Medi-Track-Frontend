@@ -702,7 +702,6 @@ html, body {
 
 .PatHome-chat-submit-btn:hover {
   transform: scale(1.05);
-  background: #1d4ed8;
 }
 /* Dark background that covers the screen */
 .PatHome-booking-modal-overlay {
