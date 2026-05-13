@@ -167,3 +167,53 @@
   font-size: 14px;
   color: white;
 }
+.notification-sidebar {
+  position: fixed;
+  top: 80px; /* 👈 BELOW NAVBAR */
+  right: -400px;
+  width: 350px;
+  height: calc(100% - 80px); /* 👈 avoid overflow */
+  background: #f3f7fd;
+  box-shadow: -2px 0 10px rgba(0,0,0,0.2);
+  transition: right 0.3s ease;
+  z-index: 1000;
+  padding: 15px;
+  overflow-y: auto;
+}
+.notification-sidebar.open {
+  right: 0;
+}
+
+.notification-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.4);
+  z-index: 999;
+}
+
+.notification-sidebar {
+  position: fixed;
+  right: -400px; /* hidden */
+  width: 350px;
+  height: 100%;
+  background:#f3f7fd;;
+  box-shadow: -2px 0 10px rgba(0,0,0,0.2);
+  transition: right 0.3s ease;
+  z-index: 1000;
+  padding: 15px;
+  overflow-y: auto;
+}
+
+.notification-sidebar.open {
+  right: 0; /* visible */
+}
+.main-layout {
+  transition: margin-right 0.3s ease;
+}
+
+.main-layout.shifted {
+  margin-right: 350px; /* same as sidebar width */
+}
