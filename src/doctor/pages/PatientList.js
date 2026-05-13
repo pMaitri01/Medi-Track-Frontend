@@ -13,8 +13,16 @@ const PatientList = () => {
   const [patients, setPatients] = useState([]);
   const [appointments, setAppointments] = useState([]);
 
-  const [filters, setFilters] = useState({ age: "All", date: "", gender: "All" });
-  const [appliedFilters, setAppliedFilters] = useState({ age: "All", date: "", gender: "All" });
+  const [filters, setFilters] = useState({
+    age: "All",
+    date: "",
+    gender: "All",
+  });
+  const [appliedFilters, setAppliedFilters] = useState({
+    age: "All",
+    date: "",
+    gender: "All",
+  });
 
   const [selectedPatient, setSelectedPatient] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -32,7 +40,9 @@ const PatientList = () => {
   // ── Fetch patients ──────────────────────────────────────────────────────
   const fetchPatients = async () => {
     try {
-      const res = await fetch(`${process.env.REACT_APP_API_URL}/api/patient/list`);
+      const res = await fetch(
+        `${process.env.REACT_APP_API_URL}/api/patient/list`,
+      );
       const data = await res.json();
       setPatients(data);
     } catch (error) {
@@ -44,18 +54,27 @@ const PatientList = () => {
   const fetchAppointments = async () => {
     try {
       const token = localStorage.getItem("token");
-      if (!token) { console.error("No token found."); return; }
+      if (!token) {
+        console.error("No token found.");
+        return;
+      }
 
       const res = await fetch(
         `${process.env.REACT_APP_API_URL}/api/appointment/doctor`,
         {
           method: "GET",
-          headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
           credentials: "include",
-        }
+        },
       );
 
-      if (res.status === 401) { console.error("Unauthorized"); return; }
+      if (res.status === 401) {
+        console.error("Unauthorized");
+        return;
+      }
       if (!res.ok) throw new Error("Failed to fetch appointments");
 
       const data = await res.json();
@@ -76,14 +95,18 @@ const PatientList = () => {
   const filteredPatients = patients
     .filter((p) => patientIds.includes(p._id))
     .filter((p) => {
-      const fullName = `${p.firstName || ""} ${p.lastName || ""}`.toLowerCase();
+      const search = searchTerm.trim().toLowerCase();
+
+      const fullName = (p.name || "").toLowerCase();
+      const phone = (p.phone || "").toLowerCase();
+      const id = (p._id || "").toLowerCase(); // convert to string
 
       const matchesSearch =
-        fullName.includes(searchTerm.toLowerCase()) ||
-        (p.mobile || "").includes(searchTerm) ||
-        (p._id || "").includes(searchTerm);
+        fullName.includes(search) ||
+        phone.includes(search) ||
+        id.includes(search);
 
-      // Age (calculate from DOB if age not present)
+      // Age filter
       let age = p.age;
       if (!age && p.dob) {
         const diff = Date.now() - new Date(p.dob).getTime();
@@ -92,14 +115,17 @@ const PatientList = () => {
 
       let matchesAge = true;
       if (appliedFilters.age === "0-18") matchesAge = age <= 18;
-      else if (appliedFilters.age === "19-45") matchesAge = age >= 19 && age <= 45;
+      else if (appliedFilters.age === "19-45")
+        matchesAge = age >= 19 && age <= 45;
       else if (appliedFilters.age === "45+") matchesAge = age > 45;
 
+      // Gender filter
       let matchesGender = true;
       if (appliedFilters.gender !== "All") {
         matchesGender = (p.gender || "") === appliedFilters.gender;
       }
 
+      // Date filter
       let matchesDate = true;
       if (appliedFilters.date && p.createdAt) {
         const patientDate = new Date(p.createdAt).toISOString().split("T")[0];
@@ -108,6 +134,7 @@ const PatientList = () => {
 
       return matchesSearch && matchesAge && matchesGender && matchesDate;
     });
+
   const indexOfLast = currentPage * patientsPerPage;
   const indexOfFirst = indexOfLast - patientsPerPage;
   const currentPatients = filteredPatients.slice(indexOfFirst, indexOfLast);
@@ -120,7 +147,6 @@ const PatientList = () => {
         <DoctorHeader open={open} />
 
         <div className="dplist-container">
-
           {/* Page heading */}
           <div className="dplist-header">
             <div className="dplist-title-section">
@@ -147,120 +173,70 @@ const PatientList = () => {
             </div>
 
             {isFilterOpen && (
-              // <div className="dplist-filter-drawer">
-              //   <div className="dplist-filter-grid">
-              //     <div className="dplist-filter-group">
-              //       <label>Age</label>
-              //       <select
-              //         value={filters.age}
-              //         onChange={(e) => setFilters({ ...filters, age: e.target.value })}
-              //       >
-              //         <option value="All">Any Age</option>
-              //         <option value="0-18">0–18</option>
-              //         <option value="19-45">19–45</option>
-              //         <option value="45+">45+</option>
-              //       </select>
-              //     </div>
-
-              //     <div className="dplist-filter-group">
-              //       <label>Date</label>
-              //       <input
-              //         type="date"
-              //         value={filters.date}
-              //         onChange={(e) => setFilters({ ...filters, date: e.target.value })}
-              //       />
-              //     </div>
-
-              //     <div className="dplist-filter-group">
-              //       <label>Gender</label>
-              //       <select
-              //         value={filters.gender}
-              //         onChange={(e) => setFilters({ ...filters, gender: e.target.value })}
-              //       >
-              //         <option value="All">All</option>
-              //         <option value="Male">Male</option>
-              //         <option value="Female">Female</option>
-              //       </select>
-              //     </div>
-              //   </div>
-
-              //   <div className="dplist-filter-footer">
-              //     <button
-              //       className="dplist-apply-btn"
-              //       onClick={() => setAppliedFilters(filters)}
-              //     >
-              //       Apply
-              //     </button>
-              //     <button
-              //       className="dplist-reset-btn"
-              //       onClick={() => {
-              //         const reset = { age: "All", date: "", gender: "All" };
-              //         setFilters(reset);
-              //         setAppliedFilters(reset);
-              //       }}
-              //     >
-              //       Reset
-              //     </button>
-              //   </div>
-              // </div>
               <div className="dplist-filter-drawer">
-  <div className="dplist-filter-grid">
-    <div className="dplist-filter-group">
-      <label>Age</label>
-      <select
-        value={filters.age}
-        onChange={(e) => setFilters({ ...filters, age: e.target.value })}
-      >
-        <option value="All">Any Age</option>
-        <option value="0-18">0–18</option>
-        <option value="19-45">19–45</option>
-        <option value="45+">45+</option>
-      </select>
-    </div>
+                <div className="dplist-filter-grid">
+                  <div className="dplist-filter-group">
+                    <label>Age</label>
+                    <select
+                      value={filters.age}
+                      onChange={(e) =>
+                        setFilters({ ...filters, age: e.target.value })
+                      }
+                    >
+                      <option value="All">Any Age</option>
+                      <option value="0-18">0–18</option>
+                      <option value="19-45">19–45</option>
+                      <option value="45+">45+</option>
+                    </select>
+                  </div>
 
-    <div className="dplist-filter-group">
-      <label>Date</label>
-      <input
-        type="date"
-        value={filters.date}
-        onChange={(e) => setFilters({ ...filters, date: e.target.value })}
-      />
-    </div>
+                  <div className="dplist-filter-group">
+                    <label>Date</label>
+                    <input
+                      type="date"
+                      value={filters.date}
+                      onChange={(e) =>
+                        setFilters({ ...filters, date: e.target.value })
+                      }
+                    />
+                  </div>
 
-    <div className="dplist-filter-group">
-      <label>Gender</label>
-      <select
-        value={filters.gender}
-        onChange={(e) => setFilters({ ...filters, gender: e.target.value })}
-      >
-        <option value="All">All</option>
-        <option value="Male">Male</option>
-        <option value="Female">Female</option>
-      </select>
-    </div>
+                  <div className="dplist-filter-group">
+                    <label>Gender</label>
+                    <select
+                      value={filters.gender}
+                      onChange={(e) =>
+                        setFilters({ ...filters, gender: e.target.value })
+                      }
+                    >
+                      <option value="All">All</option>
+                      <option value="Male">Male</option>
+                      <option value="Female">Female</option>
+                    </select>
+                  </div>
 
-    {/* Buttons beside fields */}
-    <div className="dplist-filter-actions">
-      <button
-        className="dplist-apply-btn"
-        onClick={() => setAppliedFilters(filters)}
-      >
-        Apply
-      </button>
+                  {/* Buttons beside fields */}
+                  <div className="dplist-filter-actions">
+                    <button
+                      className="dplist-apply-btn"
+                      onClick={() => setAppliedFilters(filters)}
+                    >
+                      Apply
+                    </button>
 
-      <button
-        className="dplist-reset-btn"
-        onClick={() => {
-          const reset = { age: "All", date: "", gender: "All" };
-          setFilters(reset);
-          setAppliedFilters(reset);
-        }}
-      >
-        Reset
-      </button>
-    </div>
-  </div>
-</div>
+                    <button
+                      className="dplist-reset-btn"
+                      onClick={() => {
+                        const reset = { age: "All", date: "", gender: "All" };
+                        setFilters(reset);
+                        setAppliedFilters(reset);
+                      }}
+                    >
+                      Reset
+                    </button>
+                  </div>
+                </div>
+              </div>
             )}
           </div>
 
@@ -280,113 +256,178 @@ const PatientList = () => {
               <tbody>
                 {filteredPatients.length > 0 ? (
                   filteredPatients.map((patient) => (
-                    <tr key={patient._id} className="dplist-row-clickable"
+                    <tr
+                      key={patient._id}
+                      className="dplist-row-clickable"
                       onClick={() => {
                         setSelectedPatient(patient);
                         setIsModalOpen(true);
-                      }}>
+                      }}
+                    >
                       <td>{patient.name}</td>
                       <td>
-                        {
-                          patient.age ||
+                        {patient.age ||
                           (patient.dob
-                            ? new Date().getFullYear() - new Date(patient.dob).getFullYear()
-                            : "N/A")
-                        } / {patient.gender}
+                            ? new Date().getFullYear() -
+                              new Date(patient.dob).getFullYear()
+                            : "N/A")}{" "}
+                        / {patient.gender}
                       </td>
                       <td>📞 {patient.phone}</td>
                       <td>{patient.email}</td>
                       <td>{patient.city}</td>
-                      <td>{new Date(patient.createdAt).toLocaleDateString()}</td>
+                      <td>
+                        {new Date(patient.createdAt).toLocaleDateString()}
+                      </td>
                     </tr>
                   ))
                 ) : (
                   <tr>
-                    <td colSpan="7" style={{ textAlign: "center", padding: "40px", color: "#94a3b8" }}>
+                    <td
+                      colSpan="7"
+                      style={{
+                        textAlign: "center",
+                        padding: "40px",
+                        color: "#94a3b8",
+                      }}
+                    >
                       No Patients Found
                     </td>
                   </tr>
                 )}
               </tbody>
             </table>
-          {isModalOpen && selectedPatient && (
-  <div className="dp-modal-overlay" onClick={() => setIsModalOpen(false)}>
-    <div className="dp-modal-new" onClick={(e) => e.stopPropagation()}>
+            {isModalOpen && selectedPatient && (
+              <div
+                className="dp-modal-overlay"
+                onClick={() => setIsModalOpen(false)}
+              >
+                <div
+                  className="dp-modal-new"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  {/* HEADER */}
+                  <div className="dp-modal-header-new">
+                    <div className="dp-user">
+                      <div className="dp-avatar">
+                        {selectedPatient.firstName?.charAt(0)}
+                      </div>
+                      <div>
+                        <h2>
+                          {selectedPatient.firstName} {selectedPatient.lastName}
+                        </h2>
+                        <span>{selectedPatient.gender}</span>
+                      </div>
+                    </div>
+                    <button
+                      className="dp-close-btn"
+                      onClick={() => setIsModalOpen(false)}
+                    >
+                      ✖
+                    </button>
+                  </div>
 
-      {/* HEADER */}
-      <div className="dp-modal-header-new">
-        <div className="dp-user">
-          <div className="dp-avatar">
-            {selectedPatient.firstName?.charAt(0)}
-          </div>
-          <div>
-            <h2>
-              {selectedPatient.firstName} {selectedPatient.lastName}
-            </h2>
-            <span>{selectedPatient.gender}</span>
-          </div>
-        </div>
-        <button className="dp-close-btn" onClick={() => setIsModalOpen(false)}>✖</button>
-      </div>
+                  {/* BODY */}
+                  <div className="dp-modal-grid">
+                    {/* BASIC INFO */}
+                    <div className="dp-card">
+                      <h4>👤 Basic Information</h4>
+                      <p>
+                        <span>First Name:</span> {selectedPatient.firstName}
+                      </p>
+                      <p>
+                        <span>Last Name:</span> {selectedPatient.lastName}
+                      </p>
+                      <p>
+                        <span>Gender:</span> {selectedPatient.gender}
+                      </p>
+                      <p>
+                        <span>Age:</span>{" "}
+                        {selectedPatient.age ||
+                          (selectedPatient.dob
+                            ? new Date().getFullYear() -
+                              new Date(selectedPatient.dob).getFullYear()
+                            : "N/A")}
+                      </p>
+                      <p>
+                        <span>DOB:</span>{" "}
+                        {new Date(selectedPatient.dob).toLocaleDateString()}
+                      </p>
+                    </div>
+                    {/* ADDRESS */}
+                    <div className="dp-card">
+                      <h4>📍 Address</h4>
+                      <p>
+                        <span>Address:</span> {selectedPatient.address}
+                      </p>
+                      <p>
+                        <span>City:</span> {selectedPatient.city}
+                      </p>
+                      <p>
+                        <span>State:</span> {selectedPatient.state}
+                      </p>
+                      <p>
+                        <span>Pincode:</span> {selectedPatient.pincode}
+                      </p>
+                    </div>
 
-      {/* BODY */}
-      <div className="dp-modal-grid">
+                    {/* CONTACT */}
+                    <div className="dp-card">
+                      <h4>📞 Contact Details</h4>
+                      <p>
+                        <span>Mobile:</span> {selectedPatient.mobile}
+                      </p>
+                      <p>
+                        <span>Email:</span> {selectedPatient.email}
+                      </p>
+                    </div>
+                    {/* EMERGENCY */}
+                    <div className="dp-card">
+                      <h4>🚨 Emergency Contact</h4>
+                      <p>
+                        <span>Name:</span>{" "}
+                        {selectedPatient.emergencyContact?.name}
+                      </p>
+                      <p>
+                        <span>Mobile:</span>{" "}
+                        {selectedPatient.emergencyContact?.mobile}
+                      </p>
+                      <p>
+                        <span>Relation:</span>{" "}
+                        {selectedPatient.emergencyContact?.relationship}
+                      </p>
+                    </div>
+                    {/* MEDICAL */}
+                    <div className="dp-card">
+                      <h4>🩺 Medical Details</h4>
+                      <p>
+                        <span>Blood Group:</span> {selectedPatient.bloodGroup}
+                      </p>
+                      <p>
+                        <span>Weight:</span> {selectedPatient.weight} kg
+                      </p>
+                      <p>
+                        <span>Diseases:</span>{" "}
+                        {selectedPatient.diseases?.join(", ") || "None"}
+                      </p>
+                      <p>
+                        <span>Allergies:</span>{" "}
+                        {selectedPatient.allergies || "None"}
+                      </p>
+                      <p>
+                        <span>Medications:</span>{" "}
+                        {selectedPatient.medications || "None"}
+                      </p>
+                    </div>
+                  </div>
 
-        {/* BASIC INFO */}
-        <div className="dp-card">
-          <h4>👤 Basic Information</h4>
-          <p><span>First Name:</span> {selectedPatient.firstName}</p>
-          <p><span>Last Name:</span> {selectedPatient.lastName}</p>
-          <p><span>Gender:</span> {selectedPatient.gender}</p>
-          <p><span>Age:</span> {
-            selectedPatient.age ||
-            (selectedPatient.dob
-              ? new Date().getFullYear() - new Date(selectedPatient.dob).getFullYear()
-              : "N/A")
-          }</p>
-          <p><span>DOB:</span> {new Date(selectedPatient.dob).toLocaleDateString()}</p>
-        </div>
-        {/* ADDRESS */}
-        <div className="dp-card">
-          <h4>📍 Address</h4>
-          <p><span>Address:</span> {selectedPatient.address}</p>
-          <p><span>City:</span> {selectedPatient.city}</p>
-          <p><span>State:</span> {selectedPatient.state}</p>
-          <p><span>Pincode:</span> {selectedPatient.pincode}</p>
-        </div>
-
-        {/* CONTACT */}
-        <div className="dp-card">
-          <h4>📞 Contact Details</h4>
-          <p><span>Mobile:</span> {selectedPatient.mobile}</p>
-          <p><span>Email:</span> {selectedPatient.email}</p>
-        </div>
-         {/* EMERGENCY */}
-        <div className="dp-card">
-          <h4>🚨 Emergency Contact</h4>
-          <p><span>Name:</span> {selectedPatient.emergencyContact?.name}</p>
-          <p><span>Mobile:</span> {selectedPatient.emergencyContact?.mobile}</p>
-          <p><span>Relation:</span> {selectedPatient.emergencyContact?.relationship}</p>
-        </div>
-        {/* MEDICAL */}
-        <div className="dp-card">
-          <h4>🩺 Medical Details</h4>
-          <p><span>Blood Group:</span> {selectedPatient.bloodGroup}</p>
-          <p><span>Weight:</span> {selectedPatient.weight} kg</p>
-          <p><span>Diseases:</span> {selectedPatient.diseases?.join(", ") || "None"}</p>
-          <p><span>Allergies:</span> {selectedPatient.allergies || "None"}</p>
-          <p><span>Medications:</span> {selectedPatient.medications || "None"}</p>
-        </div>
-      </div>
-
-      {/* FOOTER */}
-      <div className="dp-modal-footer-new">
-        <button onClick={() => setIsModalOpen(false)}>Close</button>
-      </div>
-
-    </div>
-  </div>
-)}
+                  {/* FOOTER */}
+                  <div className="dp-modal-footer-new">
+                    <button onClick={() => setIsModalOpen(false)}>Close</button>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Pagination footer */}
@@ -396,7 +437,6 @@ const PatientList = () => {
               {String(filteredPatients.length).padStart(2, "0")}
             </span>
           </div>
-
         </div>
       </div>
     </>
