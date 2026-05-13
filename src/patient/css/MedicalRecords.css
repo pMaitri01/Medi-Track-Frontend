@@ -166,8 +166,6 @@
   transition: all 0.2s;
 }
 
-.MedRec-mr-tab:hover { border-color: var(--mr-primary); color: var(--mr-primary); }
-
 .MedRec-mr-tab--active {
   background: var(--mr-primary);
   color: white;

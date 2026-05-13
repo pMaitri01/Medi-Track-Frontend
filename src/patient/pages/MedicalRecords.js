@@ -5,13 +5,13 @@ import UploadMedicalRecord from "./UploadMedicalRecord";
 import defaultDoctorImg from "../images/user.png";
 import { toast } from "react-toastify";
 
-const TABS = ["All Records", "Lab", "Scan", "Visit"];
+const TABS = ["All Records", "Report", "Scan", "Prescription"];
 const DATES = ["All Time", "Last 7 Days", "Last Month"];
-const TYPE_ICON = { Lab: "🧪", Scan: "🩻", Visit: "🏥" };
+const TYPE_ICON = { Report: "🧪", Scan: "🩻", Prescription: "🏥" };
 const TYPE_COLOR = {
-  Lab: { bg: "#e0f2fe", color: "#0369a1" },
   Scan: { bg: "#f3e8ff", color: "#6b21a8" },
-  Visit: { bg: "#d1fae5", color: "#065f46" },
+  Report: { bg: "#e0f2fe", color: "#0369a1" },
+  Prescription: { bg: "#d1fae5", color: "#065f46" },
 };
 
 const formatDate = (d) =>
@@ -24,7 +24,7 @@ const withinDays = (dateStr, days) => {
 
 const capitalizeType = (type) => {
   if (!type) return "";
-  if (type === "prescription") return "Visit";
+  if (type === "prescription") return "Prescription";
   return type.charAt(0).toUpperCase() + type.slice(1);
 };
 
