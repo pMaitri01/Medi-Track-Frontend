@@ -52,6 +52,14 @@
   color: black;
   cursor: pointer;
 }
+.PrescriptionModal-close-btn:hover {
+  background: #0AA5A5;
+  border: none;
+  font-size: 22px;
+  color: white;
+  cursor: pointer;
+  width: 30px;
+}
 
 /* Body */
 .PrescriptionModal-modal-body {

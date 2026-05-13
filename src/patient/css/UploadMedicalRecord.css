@@ -42,9 +42,23 @@ UploadMedRec-upload-close {
   cursor: pointer;
   color: #6b7280;
 }
-
-UploadMedRec-upload-close:hover {
-  color: #111827;
+.UploadMedRec-upload-close {
+  background: white !important;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  color:black !important;
+  width: 50px;
+  height: 35px;
+}
+.UploadMedRec-upload-close:hover {
+  background: #0aa5a5 !important;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: white !important;
+  width: 50px;
+  height: 35px;
 }
 
 /* FORM GRID (2 column like booking modal) */
@@ -86,7 +100,7 @@ UploadMedRec-upload-form textarea {
 UploadMedRec-upload-form input:focus,
 UploadMedRec-upload-form select:focus,
 UploadMedRec-upload-form textarea:focus {
-  border-color: #2563eb;
+border: none;
 }
 
 /* Textarea */
