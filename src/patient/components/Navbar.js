@@ -8,7 +8,7 @@ import socket from "../../socket";
 
 function Navbar() {
   const [showProfileDropdown, setShowProfileDropdown] = useState(false);
-  const [showNotificationDropdown, setShowNotificationDropdown] = useState(false); 
+  const [showNotificationSidebar, setShowNotificationSidebar] = useState(false); 
   const [notifications, setNotifications] = useState([]);
   const dropdownRef = useRef(null);
   const [username, setUsername] = useState("");
@@ -54,7 +54,8 @@ function Navbar() {
     function handleClickOutside(event) {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
         setShowProfileDropdown(false);
-        setShowNotificationDropdown(false);
+        // setShowNotificationDropdown(false);
+        setShowNotificationSidebar(false);
       }
     }
 
@@ -108,15 +109,10 @@ useEffect(() => {
 
   socket.connect();
 
-  console.log("FRONTEND USER ID:", user._id);
-  console.log("DETECTED ROLE:", role);
-
   socket.emit("join", user._id);
   socket.emit("joinRole", role);
   socket.emit("joinAll");
   
-  console.log("JOIN EVENT SENT");
-
   socket.on("connect", () => {
     console.log("✅ SOCKET CONNECTED:", socket.id);
   });
@@ -192,9 +188,7 @@ useEffect(() => {
         <div style={{ position: "relative", marginRight: "20px" }}>
           <FaBell
             className="icon"
-            onClick={() =>
-              setShowNotificationDropdown(!showNotificationDropdown)
-            }
+           onClick={() => setShowNotificationSidebar(true)}
           />
 
           {/* 🔴 COUNT */}
@@ -215,84 +209,105 @@ useEffect(() => {
             </span>
           )}
 
-          {/* 📦 DROPDOWN */}
-          {showNotificationDropdown && (
-            <div
-              style={{
-                position: "absolute",
-                top: "40px",
-                right: "0",
-                width: "300px",
-                background: "#fff",
-                border: "1px solid #ccc",
-                borderRadius: "5px",
-                maxHeight: "300px",
-                overflowY: "auto",
-                zIndex: 1000,
-              }}
-            >
-              {notifications.length === 0 ? (
-                <p style={{ padding: "15px", textAlign: "center", color: "gray" }}>
-                  🔕 No new notifications
-                </p>
-              ) : (
-                notifications.slice(0, 6).map((n) => (
-                  <div
-                    key={n._id}
-                    style={{
-                      padding: "10px",
-                      borderBottom: "1px solid #eee",
-                      background: n.isRead ? "#fff" : "#eef6ff",
-                      fontWeight: n.isRead ? "normal" : "bold", cursor: "pointer",
-                    }}
-                    // onClick={async () => {
-                    //   await fetch(
-                    //     `${process.env.REACT_APP_API_URL}/api/notification/${n._id}/read`,
-                    //     {
-                    //       method: "PUT",
-                    //       credentials: "include",
-                    //     }
-                    //   );
+          {/* 📦 SIDEBAR*/}
+     {showNotificationSidebar && (
+  <>
+    {/* 🔥 BACKDROP */}
+    <div
+      onClick={() => setShowNotificationSidebar(false)}
+      style={{
+        position: "fixed",
+        top: 0,
+        left: 0,
+        width: "100%",
+        height: "100%",
+        background: "rgba(0,0,0,0.4)",
+        zIndex: 999,
+      }}
+    />
 
-                    //   window.location.href = n.link;
-                    // }}
-                    onClick={async () => {
-                      try {
-                        await fetch(
-                          `${process.env.REACT_APP_API_URL}/api/notification/${n._id}/read`,
-                          {
-                            method: "PUT",
-                            credentials: "include",
-                          }
-                        );
+    {/* 📦 SIDEBAR */}
+    <div className={`notification-sidebar ${showNotificationSidebar ? "open" : ""}`}
+      style={{
+        position: "fixed",
+        top: 0,
+        right: 0,
+        width: "350px",
+        height: "100%",
+        background: "#fff",
+        zIndex: 1000,
+        boxShadow: "-2px 0 10px rgba(0,0,0,0.2)",
+        padding: "15px",
+        overflowY: "auto",
+        transition: "0.3s",
+      }}
+    >
+      {/* HEADER */}
+      <div style={{
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+        marginBottom: "15px"
+      }}>
+        <h3>Notifications</h3>
+        <button onClick={() => setShowNotificationSidebar(false)}>❌</button>
+      </div>
 
-                        // ✅ Update UI instantly
-                        setNotifications((prev) =>
-                          prev.map((notif) =>
-                            notif._id === n._id ? { ...notif, isRead: true } : notif
-                          )
-                        );
+      {/* CONTENT */}
+      {notifications.length === 0 ? (
+        <p style={{ textAlign: "center", color: "gray" }}>
+          🔕 No notifications
+        </p>
+      ) : (
+        notifications.map((n) => (
+          <div
+            key={n._id}
+            style={{
+              padding: "10px",
+              borderBottom: "1px solid #eee",
+              background: n.isRead ? "#fff" : "#eef6ff",
+              marginBottom: "8px",
+              borderRadius: "5px",
+              cursor: "pointer"
+            }}
+            onClick={async () => {
+              try {
+                await fetch(
+                  `${process.env.REACT_APP_API_URL}/api/notification/${n._id}/read`,
+                  {
+                    method: "PUT",
+                    credentials: "include",
+                  }
+                );
 
-                        navigate(n.link);
-                      } catch (err) {
-                        console.error(err);
-                      }
-                    }}
-                  >
-                    <div>
-                      <strong>{n.title}</strong>
-                      <p style={{ margin: "5px 0", fontSize: "14px" }}>
-                        {n.message}
-                      </p>
-                      <small style={{ color: "gray" }}>
-                        {new Date(n.createdAt).toLocaleString()}
-                      </small>
-                    </div>
-                  </div>
-                ))
-              )}
-            </div>
-          )}
+                setNotifications((prev) =>
+                  prev.map((notif) =>
+                    notif._id === n._id
+                      ? { ...notif, isRead: true }
+                      : notif
+                  )
+                );
+
+                navigate(n.link);
+                setShowNotificationSidebar(false); // 👈 close after click
+              } catch (err) {
+                console.error(err);
+              }
+            }}
+          >
+            <strong>{n.title}</strong>
+            <p style={{ margin: "5px 0", fontSize: "14px" }}>
+              {n.message}
+            </p>
+            <small style={{ color: "gray" }}>
+              {new Date(n.createdAt).toLocaleString()}
+            </small>
+          </div>
+        ))
+      )}
+    </div>
+  </>
+)}
         </div>
 
         {/* 👤 PROFILE */}
