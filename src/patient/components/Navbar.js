@@ -8,7 +8,7 @@ import socket from "../../socket";
 
 function Navbar() {
   const [showProfileDropdown, setShowProfileDropdown] = useState(false);
-  const [showNotificationSidebar, setShowNotificationSidebar] = useState(false); 
+  const [showNotificationSidebar, setShowNotificationSidebar] = useState(false);
   const [notifications, setNotifications] = useState([]);
   const dropdownRef = useRef(null);
   const [username, setUsername] = useState("");
@@ -39,7 +39,7 @@ function Navbar() {
     }
   };
 
-  
+
   useEffect(() => {
     setUsername(
       user?.fullName ||
@@ -49,7 +49,7 @@ function Navbar() {
     );
   }, []);
 
- 
+
   useEffect(() => {
     function handleClickOutside(event) {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -66,61 +66,61 @@ function Navbar() {
   }, []);
 
   // 🔥 SOCKET JOIN
-//   useEffect(() => {
-//   if (user?._id) {
+  //   useEffect(() => {
+  //   if (user?._id) {
 
-//     // connect socket manually
-//     socket.connect();
+  //     // connect socket manually
+  //     socket.connect();
 
-//     console.log("FRONTEND USER ID:", user._id);
+  //     console.log("FRONTEND USER ID:", user._id);
 
-//     socket.emit("join", user._id);
-//     const role =
-//   user.role ||
-//   user.userRole ||
-//   user.userType ||
-//   user.accountType;
+  //     socket.emit("join", user._id);
+  //     const role =
+  //   user.role ||
+  //   user.userRole ||
+  //   user.userType ||
+  //   user.accountType;
 
-// console.log("DETECTED ROLE:", role);
-//     socket.emit("joinRole", user.role);
+  // console.log("DETECTED ROLE:", role);
+  //     socket.emit("joinRole", user.role);
 
-//     console.log("JOIN EVENT SENT");
+  //     console.log("JOIN EVENT SENT");
 
-//     socket.on("connect", () => {
-//       console.log("✅ SOCKET CONNECTED:", socket.id);
-//     });
-//   }
+  //     socket.on("connect", () => {
+  //       console.log("✅ SOCKET CONNECTED:", socket.id);
+  //     });
+  //   }
 
-//   return () => {
-//     socket.off("connect");
-//   };
+  //   return () => {
+  //     socket.off("connect");
+  //   };
 
-// }, [user]);
+  // }, [user]);
 
-useEffect(() => {
-  if (!user || !user._id) return;
+  useEffect(() => {
+    if (!user || !user._id) return;
 
-  const role = user.role;
+    const role = user.role;
 
-  if (!role) {
-    console.warn("⛔ Skipping socket join: role missing");
-    return;
-  }
+    if (!role) {
+      console.warn("⛔ Skipping socket join: role missing");
+      return;
+    }
 
-  socket.connect();
+    socket.connect();
 
-  socket.emit("join", user._id);
-  socket.emit("joinRole", role);
-  socket.emit("joinAll");
-  
-  socket.on("connect", () => {
-    console.log("✅ SOCKET CONNECTED:", socket.id);
-  });
+    socket.emit("join", user._id);
+    socket.emit("joinRole", role);
+    socket.emit("joinAll");
 
-  return () => {
-    socket.off("connect");
-  };
-}, [user]);
+    socket.on("connect", () => {
+      console.log("✅ SOCKET CONNECTED:", socket.id);
+    });
+
+    return () => {
+      socket.off("connect");
+    };
+  }, [user]);
 
   // 🔔 REAL-TIME LISTENER
   // useEffect(() => {
@@ -132,16 +132,16 @@ useEffect(() => {
   //   return () => socket.off("newNotification");
   // }, []);
   useEffect(() => {
-  socket.on("newNotification", (data) => {
-    console.log("🔥 REALTIME RECEIVED:", data);
+    socket.on("newNotification", (data) => {
+      console.log("🔥 REALTIME RECEIVED:", data);
 
-    setNotifications((prev) => [data, ...prev]);
-  });
+      setNotifications((prev) => [data, ...prev]);
+    });
 
-  return () => {
-    socket.off("newNotification");
-  };
-}, []);
+    return () => {
+      socket.off("newNotification");
+    };
+  }, []);
 
   // 📥 FETCH OLD NOTIFICATIONS
   useEffect(() => {
@@ -159,7 +159,32 @@ useEffect(() => {
 
     fetchNotifications();
   }, []);
+  // 🗑️ Delete single notification
+  const deleteOne = async (e, id) => {
+    e.stopPropagation(); // Prevents navigating to the link when clicking the X
+    try {
+      await fetch(`${process.env.REACT_APP_API_URL}/api/notification/${id}`, {
+        method: "DELETE",
+        credentials: "include",
+      });
+      setNotifications((prev) => prev.filter((n) => n._id !== id));
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
+  // 🧹 Clear all notifications
+  const clearAll = async () => {
+    try {
+      await fetch(`${process.env.REACT_APP_API_URL}/api/notification/clearall`, {
+        method: "DELETE",
+        credentials: "include",
+      });
+      setNotifications([]);
+    } catch (err) {
+      console.error(err);
+    }
+  };
   return (
     <nav className="navbar">
       {/* Logo */}
@@ -188,7 +213,7 @@ useEffect(() => {
         <div style={{ position: "relative", marginRight: "20px" }}>
           <FaBell
             className="icon"
-           onClick={() => setShowNotificationSidebar(true)}
+            onClick={() => setShowNotificationSidebar(true)}
           />
 
           {/* 🔴 COUNT */}
@@ -210,104 +235,116 @@ useEffect(() => {
           )}
 
           {/* 📦 SIDEBAR*/}
-     {showNotificationSidebar && (
-  <>
-    {/* 🔥 BACKDROP */}
-    <div
-      onClick={() => setShowNotificationSidebar(false)}
-      style={{
-        position: "fixed",
-        top: 0,
-        left: 0,
-        width: "100%",
-        height: "100%",
-        background: "rgba(0,0,0,0.4)",
-        zIndex: 999,
-      }}
-    />
+          {showNotificationSidebar && (
+            <>
+              {/* 🔥 BACKDROP */}
+              <div
+                onClick={() => setShowNotificationSidebar(false)}
+                style={{
+                  position: "fixed",
+                  top: 0,
+                  left: 0,
+                  width: "100%",
+                  height: "100%",
+                  background: "rgba(0,0,0,0.4)",
+                  zIndex: 999,
+                }}
+              />
 
-    {/* 📦 SIDEBAR */}
-    <div className={`notification-sidebar ${showNotificationSidebar ? "open" : ""}`}
-      style={{
-        position: "fixed",
-        top: 0,
-        right: 0,
-        width: "350px",
-        height: "100%",
-        background: "#fff",
-        zIndex: 1000,
-        boxShadow: "-2px 0 10px rgba(0,0,0,0.2)",
-        padding: "15px",
-        overflowY: "auto",
-        transition: "0.3s",
-      }}
-    >
-      {/* HEADER */}
-      <div style={{
-        display: "flex",
-        justifyContent: "space-between",
-        alignItems: "center",
-        marginBottom: "15px"
-      }}>
-        <h3>Notifications</h3>
-        <button onClick={() => setShowNotificationSidebar(false)}>❌</button>
-      </div>
+              {/* 📦 SIDEBAR */}
+              <div className={`notification-sidebar ${showNotificationSidebar ? "open" : ""}`}
+                style={{
+                  position: "fixed",
+                  top: 0,
+                  right: 0,
+                  width: "350px",
+                  height: "100%",
+                  background: "#fff",
+                  zIndex: 1000,
+                  boxShadow: "-2px 0 10px rgba(0,0,0,0.2)",
+                  padding: "15px",
+                  overflowY: "auto",
+                  transition: "0.3s",
+                }}
+              >
+                {/* HEADER */}
+                <div style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  marginBottom: "15px"
+                }}>
+                  <h3>Notifications</h3>
+                  <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
+                    {notifications.length > 0 && (
+                      <button
+                        onClick={clearAll}
+                        style={{ fontSize: "12px", color: "red", cursor: "pointer", border: "none", background: "none" }}
+                      >
+                        Clear All
+                      </button>
+                    )}
+                    <button onClick={() => setShowNotificationSidebar(false)}>❌</button>
+                  </div>
+                </div>
+                {/* CONTENT */}
+                {notifications.length === 0 ? (
+                  <p style={{ textAlign: "center", color: "gray" }}>
+                    🔕 No notifications
+                  </p>
+                ) : (
+                  notifications.map((n) => (
+                   <div
+  key={n._id}
+  style={{
+    position: "relative",   // ✅ IMPORTANT
+    padding: "14px",
+    borderBottom: "1px solid #eee",
+    background: n.isRead ? "#fff" : "#eef6ff",
+    marginBottom: "10px",
+    borderRadius: "8px",
+    cursor: "pointer"
+  }}
+>
+  {/* ❌ ABSOLUTE POSITION */}
+  <span
+    onClick={(e) => deleteOne(e, n._id)}
+    style={{
+      position: "absolute",
+      top: "10px",        // ✅ aligns perfectly
+      right: "12px",
+      cursor: "pointer",
+      fontSize: "14px",
+      color: "#666"
+    }}
+  >
+    ✕
+  </span>
 
-      {/* CONTENT */}
-      {notifications.length === 0 ? (
-        <p style={{ textAlign: "center", color: "gray" }}>
-          🔕 No notifications
-        </p>
-      ) : (
-        notifications.map((n) => (
-          <div
-            key={n._id}
-            style={{
-              padding: "10px",
-              borderBottom: "1px solid #eee",
-              background: n.isRead ? "#fff" : "#eef6ff",
-              marginBottom: "8px",
-              borderRadius: "5px",
-              cursor: "pointer"
-            }}
-            onClick={async () => {
-              try {
-                await fetch(
-                  `${process.env.REACT_APP_API_URL}/api/notification/${n._id}/read`,
-                  {
-                    method: "PUT",
-                    credentials: "include",
-                  }
-                );
+  {/* MESSAGE */}
+  <p style={{
+    margin: 0,
+    fontSize: "14px",
+    paddingRight: "20px"  // ✅ avoid overlap with ❌
+  }}>
+    {n.message}
+  </p>
 
-                setNotifications((prev) =>
-                  prev.map((notif) =>
-                    notif._id === n._id
-                      ? { ...notif, isRead: true }
-                      : notif
-                  )
-                );
-
-                navigate(n.link);
-                setShowNotificationSidebar(false); // 👈 close after click
-              } catch (err) {
-                console.error(err);
-              }
-            }}
-          >
-            <strong>{n.title}</strong>
-            <p style={{ margin: "5px 0", fontSize: "14px" }}>
-              {n.message}
-            </p>
-            <small style={{ color: "gray" }}>
-              {new Date(n.createdAt).toLocaleString()}
-            </small>
-          </div>
-        ))
-      )}
-    </div>
-  </>
-)}
+  {/* TIME */}
+  <small style={{
+    color: "gray",
+    fontSize: "12px",
+    display: "block",
+    marginTop: "6px"
+  }}>
+    {new Date(n.createdAt).toLocaleString()}
+  </small>
+</div>
+                  ))
+                )}
+              </div>
+            </>
+          )}
         </div>
 
         {/* 👤 PROFILE */}
