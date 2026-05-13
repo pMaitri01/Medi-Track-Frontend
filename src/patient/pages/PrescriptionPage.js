@@ -34,8 +34,8 @@ function PrescriptionCard({ rx, onView }) {
           <span className="PrescriptionPage-rx-spec-tag">{rx.doctor?.specialization}</span>        </div>
         {/* <span className={`rx-badge ${isActive ? "rx-badge--active" : "rx-badge--past"}`}>
         </span> */}
-        <span className={`rx-badge ${isActive ? "rx-badge--active" : "rx-badge--past"}`}>
-          {rx.pStatus}
+        <span className={`rx-badge ${rx.pStatus === "Active" ? "rx-badge--active" : "rx-badge--past"}`}>
+          {rx.pStatus === "Active" ? "Active" : "Completed"}
         </span>
       </div>
 
@@ -203,8 +203,8 @@ function PrescriptionModal({ rx, onClose }) {
           </div>
           <div className="PrescriptionPage-rx-modal-meta-item">
             <span className="PrescriptionPage-rx-modal-meta-label">Status</span>
-            <span className={`rx-badge ${isActive ? "rx-badge--active" : "rx-badge--past"}`}>
-              {rx.pStatus}
+            <span className={`rx-badge ${rx.pStatus === "Active" ? "rx-badge--active" : "rx-badge--past"}`}>
+              {rx.pStatus === "Active" ? "Active" : "Completed"}
             </span>
           </div>
         </div>
@@ -288,19 +288,26 @@ export default function PrescriptionPage() {
   }, []);
 
   const filtered = prescriptions.filter((rx) => {
-    const tabMatch = rx.pStatus === activeTab.toLowerCase(); const dateMatch =
-      dateFilter === "All Time" ? true :
-        dateFilter === "Last 7 Days" ? withinDays(rx.createdAt, 7) :
-          withinDays(rx.date, 30);
+
+    const tabMatch =
+    activeTab === "Active"
+      ? rx.pStatus === "Active"
+      : rx.pStatus === "Completed";  
+
+    const dateMatch =
+    dateFilter === "All Time" ? true :
+    dateFilter === "Last 7 Days" ? withinDays(rx.createdAt, 7) :
+    withinDays(rx.createdAt, 30);
+
     const q = search.toLowerCase();
     const searchMatch =
       !q ||
       rx.doctor?.fullName?.toLowerCase().includes(q) ||
       rx.diagnosis.toLowerCase().includes(q) ||
       rx.medicines.some((m) => m.name.toLowerCase().includes(q));
+
     return tabMatch && dateMatch && searchMatch;
-  })
-    .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+  }).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
   return (
     <div className="PrescriptionPage-rx-page">
@@ -336,16 +343,24 @@ export default function PrescriptionPage() {
 
         {/* Tabs */}
         <div className="PrescriptionPage-rx-tabs">
-          {["Active", "Past"].map((tab) => (
-            <button
-              key={tab}
-              className={`PrescriptionPage-rx-tab-active-past ${activeTab === tab ? "rx-tab--active" : ""}`}
-              onClick={() => setActiveTab(tab)}
-            >
-              {tab === "Active" ? "🟢" : "⚪"} {tab} Prescriptions
-            </button>
-          ))}
-        </div>
+  <button
+    className={`PrescriptionPage-rx-tab-active-past ${
+      activeTab === "Active" ? "rx-tab--active-green" : ""
+    }`}
+    onClick={() => setActiveTab("Active")}
+  >
+    🟢 Active Prescriptions
+  </button>
+
+  <button
+    className={`PrescriptionPage-rx-tab-active-past ${
+      activeTab === "Past" ? "rx-tab--active-grey" : ""
+    }`}
+    onClick={() => setActiveTab("Past")}
+  >
+    ⚪ Past Prescriptions
+  </button>
+</div>
 
         {/* Cards */}
         {filtered.length === 0 ? (

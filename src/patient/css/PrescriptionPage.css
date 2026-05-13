@@ -83,7 +83,7 @@
   height: 43px;
 }
 
-/* ── Tabs ───────────────────────────────────────────────────────────────── */
+/* ── Tabs ── */
 .PrescriptionPage-rx-tabs {
   display: flex;
   gap: 10px;
@@ -106,6 +106,13 @@
 .PrescriptionPage-rx-tab-active-past{
   padding: 10px;
   border-radius: 20px;
+  border: 2px solid transparent;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background: white;
+  color: #64748b;
 }
 .PrescriptionPage-rx-tab-tab-active-past:hover {background: #0aa5a5 ; color: white !important; }
 .PrescriptionPage-rx-tab--active {
@@ -114,10 +121,29 @@
   border-color: var(--rx-primary);
 }
 
+/* Active tab — green */
+.PrescriptionPage-rx-tab-active-past.rx-tab--active-green {
+  background: #d1fae5;
+  color: #065f46;
+  border-color: #6ee7b7;
+}
+
+/* Past tab — grey */
+.PrescriptionPage-rx-tab-active-past.rx-tab--active-grey {
+  background: #f1f5f9;
+  color: #475569;
+  border-color: #cbd5e1;
+}
+
+/* Hover states */
+.PrescriptionPage-rx-tab-active-past:hover {
+  opacity: 0.85;
+}
+
 /* ── Card grid ──────────────────────────────────────────────────────────── */
 .PrescriptionPage-rx-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(325px, 1fr));
   gap: 20px;
 }
 
@@ -561,4 +587,50 @@
 .PrescriptionPage-pdf-table tr {
   page-break-inside: avoid;
   page-break-after: auto;
+}
+
+/* ── Status badges ──────────────────────────────────────────────────────── */
+.rx-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  white-space: nowrap;
+  align-self: flex-start;
+}
+
+.rx-badge--active {
+  background: #d1fae5;
+  color: #065f46;
+  border: 1px solid #6ee7b7;
+}
+
+.rx-badge--active::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #10b981;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+.rx-badge--past {
+  background: #f1f5f9;
+  color: #64748b;
+  border: 1px solid #e2e8f0;
+}
+
+.rx-badge--past::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #9ca3af;
+  display: inline-block;
+  flex-shrink: 0;
 }
