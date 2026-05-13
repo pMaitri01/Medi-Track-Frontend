@@ -215,9 +215,11 @@ const DoctorManagement = () => {
                     </td>
                     <td>{doc.specialization}</td>
                     <td>{doc.experience} yrs</td>
-                    <td><span className={`dm-status ${doc.status.toLowerCase()}`}>
-                      {doc.status}
-                    </span></td>
+                    <td>
+                    <span className={`dm-badge dm-badge-${doc.status.toLowerCase()}`}>
+                        {doc.status}
+                    </span>
+                    </td>
                   </tr>
                 ))}
               </tbody>
