@@ -134,7 +134,6 @@ function Navbar() {
   useEffect(() => {
     socket.on("newNotification", (data) => {
       console.log("🔥 REALTIME RECEIVED:", data);
-
       setNotifications((prev) => [data, ...prev]);
     });
 
@@ -159,11 +158,30 @@ function Navbar() {
 
     fetchNotifications();
   }, []);
+  const markAsRead = async (id) => {
+  try {
+    await fetch(
+      `${process.env.REACT_APP_API_URL}/api/notification/${id}/read`,
+      {
+        method: "PUT",
+        credentials: "include",
+      }
+    );
+
+    setNotifications((prev) =>
+      prev.map((n) =>
+        n._id === id ? { ...n, isRead: true } : n
+      )
+    );
+  } catch (err) {
+    console.error(err);
+  }
+};
   // 🗑️ Delete single notification
   const deleteOne = async (e, id) => {
     e.stopPropagation(); // Prevents navigating to the link when clicking the X
     try {
-      await fetch(`${process.env.REACT_APP_API_URL}/api/notification/${id}`, {
+      await fetch(`${process.env.REACT_APP_API_URL}/api/notification/delete/${id}`, {
         method: "DELETE",
         credentials: "include",
       });
@@ -176,7 +194,7 @@ function Navbar() {
   // 🧹 Clear all notifications
   const clearAll = async () => {
     try {
-      await fetch(`${process.env.REACT_APP_API_URL}/api/notification/clearall`, {
+      await fetch(`${process.env.REACT_APP_API_URL}/api/notification/clear-all`, {
         method: "DELETE",
         credentials: "include",
       });
@@ -294,7 +312,7 @@ function Navbar() {
                   </p>
                 ) : (
                   notifications.map((n) => (
-                   <div
+                   <div onClick={() => markAsRead(n._id)}
   key={n._id}
   style={{
     position: "relative",   // ✅ IMPORTANT
