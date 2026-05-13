@@ -13,3 +13,4 @@ Runs the app in development mode at http://localhost:3000
 7. AppointmentManagement.js -Done
 8. DoctorMedicalRecords.js -Done
 9. UploadMedicalRecords.js - Done
+10. DoctorList.js -Done
