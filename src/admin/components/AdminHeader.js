@@ -5,10 +5,9 @@ import { io } from "socket.io-client";
 import socket from "../../socket";
 
 const AdminHeader = ({ pageTitle, onHamburger }) => {
-  const [bellOpen, setBellOpen] = useState(false);
+  const [showNotificationSidebar, setShowNotificationSidebar] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
   const [notifications, setNotifications] = useState([]);
-  const bellRef = useRef(null);
   const profileRef = useRef(null);
   const navigate = useNavigate();
  const adminData = JSON.parse(localStorage.getItem("adminData"));
@@ -17,7 +16,7 @@ const adminId =
   adminData?.id ||
   adminData?._id ||
   adminData?.admin?._id;
-  const unread = notifications.length;
+  const unread = notifications.filter((n) => !n.isRead).length;
 //   useEffect(() => {
 //   socket.connect();
 
@@ -100,18 +99,67 @@ useEffect(() => {
   // close dropdowns on outside click
   useEffect(() => {
     const handler = (e) => {
-      if (bellRef.current && !bellRef.current.contains(e.target)) setBellOpen(false);
+      // if (bellRef.current && !bellRef.current.contains(e.target)) setBellOpen(false);
       if (profileRef.current && !profileRef.current.contains(e.target)) setProfileOpen(false);
     };
     document.addEventListener("mousedown", handler);
     return () => document.removeEventListener("mousedown", handler);
   }, []);
 
-  const clearAll = () => setNotifications([]);
-  const dismiss = (id) => setNotifications(prev => prev.filter(n => n._id !== id));
 
   const goTo = (path) => { setProfileOpen(false); navigate(path); };
 
+  const markAsRead = async (id) => {
+  try {
+    await fetch(
+      `${process.env.REACT_APP_API_URL}/api/notification/${id}/read`,
+      {
+        method: "PUT",
+        credentials: "include",
+      }
+    );
+
+    setNotifications((prev) =>
+      prev.map((n) =>
+        n._id === id ? { ...n, isRead: true } : n
+      )
+    );
+  } catch (err) {
+    console.error(err);
+  }
+};
+const dismiss = async (id) => {
+  try {
+    await fetch(
+      `${process.env.REACT_APP_API_URL}/api/notification/delete/${id}`,
+      {
+        method: "DELETE",
+        credentials: "include",
+      }
+    );
+
+    setNotifications((prev) =>
+      prev.filter((n) => n._id !== id)
+    );
+  } catch (err) {
+    console.error(err);
+  }
+};
+const clearAll = async () => {
+  try {
+    await fetch(
+      `${process.env.REACT_APP_API_URL}/api/notification/clear-all`,
+      {
+        method: "DELETE",
+        credentials: "include",
+      }
+    );
+
+    setNotifications([]);
+  } catch (err) {
+    console.error(err);
+  }
+};
   return (
     <header className="ah-header">
 
@@ -125,43 +173,86 @@ useEffect(() => {
       <div className="ah-right">
 
         {/* ── Bell ── */}
-        <div className="ah-bell-wrap" ref={bellRef}>
-          <button className="ah-icon-btn" onClick={() => { setBellOpen(o => !o); setProfileOpen(false); }}>
+        <div className="ah-bell-wrap">
+          <button className="ah-icon-btn" onClick={() => {
+  setShowNotificationSidebar(true);
+  setProfileOpen(false);
+}}>
             🔔
             {unread > 0 && <span className="ah-badge">{unread}</span>}
           </button>
 
-          {bellOpen && (
-            <div className="ah-dropdown">
-              <div className="ah-dropdown-header">
-                <span className="ah-dropdown-title">Notifications</span>
-                {notifications.length > 0 && (
-                  <button className="ah-clear-btn" onClick={clearAll}>Clear all</button>
-                )}
+        {showNotificationSidebar && (
+  <>
+    {/* Overlay */}
+    <div
+      className="notif-overlay"
+      onClick={() => setShowNotificationSidebar(false)}
+    />
+
+    {/* Sidebar */}
+    <div className="notif-sidebar">
+      
+      {/* Header */}
+      <div className="notif-header">
+        <h3>Notifications</h3>
+        <button onClick={() => setShowNotificationSidebar(false)}>✕</button>
+      </div>
+
+      {/* Clear All */}
+      {notifications.length > 0 && (
+        <div className="notif-clear">
+          <button onClick={clearAll}>Clear All</button>
+        </div>
+      )}
+
+      {/* List */}
+      <div className="notif-list">
+        {notifications.length === 0 ? (
+          <p className="notif-empty">🎉 All caught up!</p>
+        ) : (
+          notifications.map((n) => (
+            <div
+  key={n._id}
+  className="notif-item"
+  onClick={() => {
+    markAsRead(n._id);
+    if (n.link) navigate(n.link);
+  }}
+  style={{ cursor: "pointer" }}
+>
+              
+              <div className="notif-content">
+                <p>{n.message}</p>
+                <span>{n.time}</span>
               </div>
-              <ul className="ah-notif-list">
-                {notifications.length === 0 ? (
-                  <li className="ah-notif-empty"><span>🎉</span> All caught up!</li>
-                ) : (
-                  notifications.map(n => (
-                    <li key={n._id} className="ah-notif-item">
-                      <div className="ah-notif-dot" />
-                      <div className="ah-notif-body">
-                        <p className="ah-notif-msg">{n.message}</p>
-                        <span className="ah-notif-time">{n.time}</span>
-                      </div>
-                      <button className="ah-notif-dismiss" onClick={() => dismiss(n._id)}>✕</button>
-                    </li>
-                  ))
-                )}
-              </ul>
+
+              <button
+                className="notif-delete"
+                onClick={(e) => {
+  e.stopPropagation();
+  dismiss(n._id);
+}}
+              >
+                ✕
+              </button>
+
             </div>
-          )}
+          ))
+        )}
+      </div>
+
+    </div>
+  </>
+)}
         </div>
 
         {/* ── Profile ── */}
         <div className="ah-profile-wrap" ref={profileRef}>
-          <button className="ah-avatar" onClick={() => { setProfileOpen(o => !o); setBellOpen(false); }}>
+          <button
+  className="ah-avatar"
+  onClick={() => setProfileOpen(o => !o)}
+>
             A
           </button>
 
