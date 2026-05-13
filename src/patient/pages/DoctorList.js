@@ -485,7 +485,6 @@ const DoctorList = () => {
                   >
                     Professional Info
                   </h4>
-                  {/* <p><strong>Designation:</strong> {selectedDoctor.rank}</p> */}
                   <p>
                     <strong>Experience:</strong> {selectedDoctor.exp} years
                   </p>
