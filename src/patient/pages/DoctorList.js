@@ -1,38 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import '../css/DoctorList.css';
-import Navbar from '../components/Navbar';
-import defaultDoctorImg from '../images/user.png';
+import React, { useState, useEffect } from "react";
+import "../css/DoctorList.css";
+import Navbar from "../components/Navbar";
+import defaultDoctorImg from "../images/user.png";
 import DoctorBookingModal from "./DoctorBookingModal";
 
-// ── Map backend doctor object to UI format ──
-// const mapDoctor = (doc) => ({
-//   id: doc._id,
-//   _id: doc._id,
-// name: `Dr. ${doc.fullName}`,
-//   spec: doc.specialization,
-//   city: doc.city,
-//   state: doc.state,
-//   gender: doc.gender,
-//   about: doc.about,
-//   rank: doc.designation,
-//   exp: doc.experience,
-//   qualification: doc.qualification,
-//   email: doc.email,
-//   mobile: doc.mobile,
-//   clinicName: doc.clinicName,
-//   clinicAddress: doc.clinicAddress,
-//   workingDays: doc.workingDays,
-//   workingHours: doc.workingHours,
-//   licenseNumber: doc.licenseNumber,
-//   emergencyContact: doc.emergencyContact,
-
-//   status: doc.status, // ✅ ADD THIS
-// });
 const mapDoctor = (doc) => ({
-  id: doc._id,
   _id: doc._id,
 
-  // ✅ KEEP BOTH (important)
   fullName: doc.fullName,
   specialization: doc.specialization,
 
@@ -44,7 +18,6 @@ const mapDoctor = (doc) => ({
   state: doc.state,
   gender: doc.gender,
   about: doc.about,
-  rank: doc.designation,
   exp: doc.experience,
   qualification: doc.qualification,
   email: doc.email,
@@ -56,6 +29,7 @@ const mapDoctor = (doc) => ({
   licenseNumber: doc.licenseNumber,
   emergencyContact: doc.emergencyContact,
   status: doc.status,
+  rating: doc.averageRating,
 
   // (optional but useful for modal)
   serviceType: doc.serviceType,
@@ -80,12 +54,12 @@ const DoctorList = () => {
     const fetchDoctors = async () => {
       try {
         const res = await fetch(
-          `${process.env.REACT_APP_API_URL}/api/doctor/all`
+          `${process.env.REACT_APP_API_URL}/api/doctor/all`,
         );
         if (!res.ok) throw new Error("Failed to fetch doctors.");
         const data = await res.json();
         const approvedDoctors = data.doctors
-          .filter(doc => doc.status === "approved" && doc.isProfileComplete)
+          .filter((doc) => doc.status === "approved" && doc.isProfileComplete)
           .map(mapDoctor);
 
         setDoctors(approvedDoctors);
@@ -102,38 +76,29 @@ const DoctorList = () => {
     const fetchDoctors = async () => {
       try {
         const res = await fetch(
-          `${process.env.REACT_APP_API_URL}/api/doctor/all`
+          `${process.env.REACT_APP_API_URL}/api/doctor/all`,
         );
 
         const data = await res.json();
 
         const approvedDoctors = data.doctors
-          .filter(doc => doc.status === "approved" && doc.isProfileComplete)
+          .filter((doc) => doc.status === "approved" && doc.isProfileComplete)
           .map(mapDoctor);
 
         setDoctors(approvedDoctors);
 
-        // ✅ EXTRACT UNIQUE CITIES
+        // EXTRACT UNIQUE CITIES
         const uniqueCities = [
-          ...new Set(
-            approvedDoctors
-              .map(d => d.city)
-              .filter(Boolean)
-          ),
+          ...new Set(approvedDoctors.map((d) => d.city).filter(Boolean)),
         ];
 
         setCities(uniqueCities);
 
         const uniqueSpecializations = [
-          ...new Set(
-            approvedDoctors
-              .map(d => d.spec)
-              .filter(Boolean)
-          ),
+          ...new Set(approvedDoctors.map((d) => d.spec).filter(Boolean)),
         ];
 
         setSpecializations(uniqueSpecializations);
-
       } catch (err) {
         setFetchError("Unable to load doctors. Please try again later.");
       } finally {
@@ -146,15 +111,31 @@ const DoctorList = () => {
   // Filtering States
   const [searchTerm, setSearchTerm] = useState("");
   const [isFilterOpen, setIsFilterOpen] = useState(false);
-  const [filterInputs, setFilterInputs] = useState({ specialization: '', location: '', gender: '', experience: '' });
-  const [appliedFilters, setAppliedFilters] = useState({ specialization: '', location: '', gender: '', experience: '' });
+  const [filterInputs, setFilterInputs] = useState({
+    specialization: "",
+    location: "",
+    gender: "",
+    experience: "",
+  });
+  const [appliedFilters, setAppliedFilters] = useState({
+    specialization: "",
+    location: "",
+    gender: "",
+    experience: "",
+  });
 
   // Booking States
   const [bookingDate, setBookingDate] = useState("");
   const [selectedSlot, setSelectedSlot] = useState("");
-  const timeSlots = ["10:00 AM", "11:00 AM", "12:00 PM", "02:00 PM", "04:00 PM"];
+  const timeSlots = [
+    "10:00 AM",
+    "11:00 AM",
+    "12:00 PM",
+    "02:00 PM",
+    "04:00 PM",
+  ];
 
-  const today = new Date().toISOString().split('T')[0];
+  const today = new Date().toISOString().split("T")[0];
 
   // --- Handlers ---
   const handleInputChange = (e) => {
@@ -167,7 +148,12 @@ const DoctorList = () => {
   };
 
   const handleResetFilters = () => {
-    const emptyFilters = { specialization: '', location: '', gender: '', experience: '' };
+    const emptyFilters = {
+      specialization: "",
+      location: "",
+      gender: "",
+      experience: "",
+    };
     setFilterInputs(emptyFilters);
     setAppliedFilters(emptyFilters);
     setSearchTerm("");
@@ -184,12 +170,14 @@ const DoctorList = () => {
     // 2. Applied Dropdown Matches
     return (
       matchesSearch &&
-      (appliedFilters.specialization === '' || doc.spec === appliedFilters.specialization) &&
-      (appliedFilters.location === '' || doc.city === appliedFilters.location) &&
-      (appliedFilters.gender === '' || doc.gender === appliedFilters.gender) &&
-      (appliedFilters.experience === '' ||
-        (appliedFilters.experience === '5+' && doc.exp >= 5) ||
-        (appliedFilters.experience === '10+' && doc.exp >= 10))
+      (appliedFilters.specialization === "" ||
+        doc.spec === appliedFilters.specialization) &&
+      (appliedFilters.location === "" ||
+        doc.city === appliedFilters.location) &&
+      (appliedFilters.gender === "" || doc.gender === appliedFilters.gender) &&
+      (appliedFilters.experience === "" ||
+        (appliedFilters.experience === "5+" && doc.exp >= 5) ||
+        (appliedFilters.experience === "10+" && doc.exp >= 10))
     );
   });
   const validateBooking = () => {
@@ -226,14 +214,15 @@ const DoctorList = () => {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-          }, credentials: "include",
+          },
+          credentials: "include",
           body: JSON.stringify({
-            doctor: selectedDoctor.id,
-            patient: user._id, // ✅ required
+            doctor: selectedDoctor._id,
+            patient: user._id, // required
             date: bookingDate,
             time: selectedSlot,
           }),
-        }
+        },
       );
 
       const data = await response.json();
@@ -244,7 +233,6 @@ const DoctorList = () => {
 
       setShowBooking(false);
       setShowSuccess(true);
-
     } catch (err) {
       console.error(err);
       setError(err.message);
@@ -256,7 +244,9 @@ const DoctorList = () => {
       <Navbar />
       <main className="DocList-content">
         <nav className="DocList-navbar1">
-          <div className="DocList-nav-logo"><span className="DocList-logo-icon">🩺</span> Find a Doctor</div>
+          <div className="DocList-nav-logo">
+            <span className="DocList-logo-icon">🩺</span> Find a Doctor
+          </div>
         </nav>
 
         <div className="DocList-filter-card">
@@ -269,13 +259,16 @@ const DoctorList = () => {
                 borderRadius: "5px",
                 border: "1px solid #ccc",
                 width: "85%",
-                marginLeft: "0px"
+                marginLeft: "0px",
               }}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
 
-            <button className="DocList-DL-collapse-btn" onClick={() => setIsFilterOpen(!isFilterOpen)}>
+            <button
+              className="DocList-DL-collapse-btn"
+              onClick={() => setIsFilterOpen(!isFilterOpen)}
+            >
               {isFilterOpen ? "Hide Filters ↑" : "Show Filters ↓"}
             </button>
           </div>
@@ -285,7 +278,11 @@ const DoctorList = () => {
               <div className="DocList-filter-grid">
                 <div className="DocList-input-group">
                   <label>SPECIALIZATION</label>
-                  <select name="specialization" value={filterInputs.specialization} onChange={handleInputChange}>
+                  <select
+                    name="specialization"
+                    value={filterInputs.specialization}
+                    onChange={handleInputChange}
+                  >
                     <option value="">All Specializations</option>
 
                     {specializations.map((spec, idx) => (
@@ -297,7 +294,11 @@ const DoctorList = () => {
                 </div>
                 <div className="DocList-input-group">
                   <label>LOCATION</label>
-                  <select name="location" value={filterInputs.location} onChange={handleInputChange}>
+                  <select
+                    name="location"
+                    value={filterInputs.location}
+                    onChange={handleInputChange}
+                  >
                     <option value="">All Locations</option>
                     {cities.map((city, idx) => (
                       <option key={idx} value={city}>
@@ -308,7 +309,11 @@ const DoctorList = () => {
                 </div>
                 <div className="DocList-input-group">
                   <label>GENDER</label>
-                  <select name="gender" value={filterInputs.gender} onChange={handleInputChange}>
+                  <select
+                    name="gender"
+                    value={filterInputs.gender}
+                    onChange={handleInputChange}
+                  >
                     <option value="">All Genders</option>
                     <option value="Male">Male</option>
                     <option value="Female">Female</option>
@@ -316,7 +321,11 @@ const DoctorList = () => {
                 </div>
                 <div className="DocList-input-group">
                   <label>EXPERIENCE</label>
-                  <select name="experience" value={filterInputs.experience} onChange={handleInputChange}>
+                  <select
+                    name="experience"
+                    value={filterInputs.experience}
+                    onChange={handleInputChange}
+                  >
                     <option value="">Any Experience</option>
                     <option value="5+">5+ Years</option>
                     <option value="10+">10+ Years</option>
@@ -324,8 +333,19 @@ const DoctorList = () => {
                 </div>
               </div>
               <div className="DocList-search-footer">
-                <button className="DocList-DL-main-search-btn" onClick={handleApplyFilters}>Apply Filter</button>
-                <button className="DocList-DL-btn-secondary" onClick={handleResetFilters} style={{ marginRight: '10px' }}>Reset</button>
+                <button
+                  className="DocList-DL-main-search-btn"
+                  onClick={handleApplyFilters}
+                >
+                  Apply Filter
+                </button>
+                <button
+                  className="DocList-DL-btn-secondary"
+                  onClick={handleResetFilters}
+                  style={{ marginRight: "10px" }}
+                >
+                  Reset
+                </button>
               </div>
             </>
           )}
@@ -338,18 +358,27 @@ const DoctorList = () => {
             <p style={{ color: "red" }}>{fetchError}</p>
           ) : filteredDoctors.length > 0 ? (
             filteredDoctors.map((doc) => (
-              <div key={doc.id} className="DocList-doc-card">
-
+              <div key={doc._id} className="DocList-doc-card">
                 {/* Top Section */}
                 <div className="DocList-doc-info">
-                  <img src={defaultDoctorImg} alt="doctor" className="DocList-doc-img" />
+                  <img
+                    src={defaultDoctorImg}
+                    alt="doctor"
+                    className="DocList-doc-img"
+                  />
 
                   <div className="DocList-doc-text">
                     <h3>{doc.name}</h3>
-                    <span className="DocList-spec-tag">{doc.spec}</span>
-                    <p>💼 {doc.rank}</p>
+                    <span className="DocList-spec-tag">
+                      <span className="spec">{doc.spec}</span>|
+                      <span className="qual"> 💼 {doc.qualification}</span>
+                    </span>
                     <p>🕒 {doc.exp} years experience</p>
                     <p>📍 {doc.city}</p>
+                    <p>
+                      ⭐{" "}
+                      {doc.rating && doc.rating > 0 ? doc.rating : "No Rating"}
+                    </p>
                   </div>
                 </div>
 
@@ -375,7 +404,6 @@ const DoctorList = () => {
                     📅 Book
                   </button>
                 </div>
-
               </div>
             ))
           ) : (
@@ -414,7 +442,7 @@ const DoctorList = () => {
             {/* Optional: Add an 'OK' button to make it user-friendly */}
             <button
               className="DocList-DL-main-search-btn"
-              style={{ marginTop: '20px' }}
+              style={{ marginTop: "20px" }}
               onClick={() => setShowSuccess(false)}
             >
               Done
@@ -426,7 +454,6 @@ const DoctorList = () => {
       {showDetails && selectedDoctor && (
         <div className="DocList-modal-overlay">
           <div className="DocList-details-modal">
-
             {/* HEADER */}
             <div className="DocList-booking-header">
               <h3>Doctor Details</h3>
@@ -438,36 +465,80 @@ const DoctorList = () => {
               <img
                 src={defaultDoctorImg}
                 alt="doctor"
-                style={{ width: "100px", borderRadius: "50%", marginBottom: '10px' }}
+                style={{
+                  width: "100px",
+                  borderRadius: "50%",
+                  marginBottom: "10px",
+                }}
               />
               <h2>{selectedDoctor.name}</h2>
               <span className="DocList-spec-tag">{selectedDoctor.spec}</span>
 
-              <div className="DocList-info-sections" style={{ textAlign: 'left', marginTop: '20px' }}>
-
+              <div
+                className="DocList-info-sections"
+                style={{ textAlign: "left", marginTop: "20px" }}
+              >
                 {/* Section 1: Professional Details */}
                 <div className="DocList-info-group">
-                  <h4 style={{ color: '#0d9488', borderBottom: '1px solid #eee' }}>Professional Info</h4>
-                  <p><strong>Designation:</strong> {selectedDoctor.rank}</p>
-                  <p><strong>Experience:</strong> {selectedDoctor.exp} years</p>
-                  <p><strong>Qualification:</strong> {selectedDoctor.qualification}</p>
-                  <p><strong>License No:</strong> {selectedDoctor.licenseNumber}</p>
+                  <h4
+                    style={{ color: "#0d9488", borderBottom: "1px solid #eee" }}
+                  >
+                    Professional Info
+                  </h4>
+                  <p>
+                    <strong>Experience:</strong> {selectedDoctor.exp} years
+                  </p>
+                  <p>
+                    <strong>Qualification:</strong>{" "}
+                    {selectedDoctor.qualification}
+                  </p>
+                  <p>
+                    <strong>License No:</strong> {selectedDoctor.licenseNumber}
+                  </p>
                 </div>
 
                 {/* Section 2: Contact Details */}
-                <div className="DocList-info-group" style={{ marginTop: '15px' }}>
-                  <h4 style={{ color: '#0d9488', borderBottom: '1px solid #eee' }}>Contact & Location</h4>
-                  <p><strong>Email:</strong> {selectedDoctor.email}</p>
-                  <p><strong>Mobile:</strong> {selectedDoctor.mobile}</p>
-                  <p><strong>Location:</strong> {selectedDoctor.city}, {selectedDoctor.state}</p>
-                  <p><strong>Emergency:</strong> {selectedDoctor.emergencyContact}</p>
+                <div
+                  className="DocList-info-group"
+                  style={{ marginTop: "15px" }}
+                >
+                  <h4
+                    style={{ color: "#0d9488", borderBottom: "1px solid #eee" }}
+                  >
+                    Contact & Location
+                  </h4>
+                  <p>
+                    <strong>Email:</strong> {selectedDoctor.email}
+                  </p>
+                  <p>
+                    <strong>Mobile:</strong> {selectedDoctor.mobile}
+                  </p>
+                  <p>
+                    <strong>Location:</strong> {selectedDoctor.city},{" "}
+                    {selectedDoctor.state}
+                  </p>
+                  <p>
+                    <strong>Emergency:</strong>{" "}
+                    {selectedDoctor.emergencyContact}
+                  </p>
                 </div>
 
                 {/* Section 3: Clinic & Availability */}
-                <div className="DocList-info-group" style={{ marginTop: '15px' }}>
-                  <h4 style={{ color: '#0d9488', borderBottom: '1px solid #eee' }}>Clinic Details</h4>
-                  <p><strong>Clinic:</strong> {selectedDoctor.clinicName}</p>
-                  <p><strong>Address:</strong> {selectedDoctor.clinicAddress}</p>
+                <div
+                  className="DocList-info-group"
+                  style={{ marginTop: "15px" }}
+                >
+                  <h4
+                    style={{ color: "#0d9488", borderBottom: "1px solid #eee" }}
+                  >
+                    Clinic Details
+                  </h4>
+                  <p>
+                    <strong>Clinic:</strong> {selectedDoctor.clinicName}
+                  </p>
+                  <p>
+                    <strong>Address:</strong> {selectedDoctor.clinicAddress}
+                  </p>
                   <p>
                     <strong>Working Days:</strong>{" "}
                     {Array.isArray(selectedDoctor.workingDays)
@@ -477,25 +548,32 @@ const DoctorList = () => {
                   <p>
                     <strong>Hours:</strong>{" "}
                     {Array.isArray(selectedDoctor.workingHours) &&
-                      selectedDoctor.workingHours.length > 0 ? (
-                      selectedDoctor.workingHours.map((slot, i) => (
-                        <span key={i}>
-                          {slot.start} - {slot.end}
-                          {i !== selectedDoctor.workingHours.length - 1 && ", "}
-                        </span>
-                      ))
-                    ) : (
-                      "N/A"
-                    )}
+                    selectedDoctor.workingHours.length > 0
+                      ? selectedDoctor.workingHours.map((slot, i) => (
+                          <span key={i}>
+                            {slot.start} - {slot.end}
+                            {i !== selectedDoctor.workingHours.length - 1 &&
+                              ", "}
+                          </span>
+                        ))
+                      : "N/A"}
                   </p>
                 </div>
 
                 {/* Section 4: About */}
-                <div className="DocList-info-group" style={{ marginTop: '15px' }}>
-                  <h4 style={{ color: '#0d9488', borderBottom: '1px solid #eee' }}>About</h4>
-                  <p style={{ fontStyle: 'italic', color: '#64748b' }}>{selectedDoctor.about}</p>
+                <div
+                  className="DocList-info-group"
+                  style={{ marginTop: "15px" }}
+                >
+                  <h4
+                    style={{ color: "#0d9488", borderBottom: "1px solid #eee" }}
+                  >
+                    About
+                  </h4>
+                  <p style={{ fontStyle: "italic", color: "#64748b" }}>
+                    {selectedDoctor.about}
+                  </p>
                 </div>
-
               </div>
             </div>
 
@@ -511,7 +589,6 @@ const DoctorList = () => {
                 📅 Book Appointment
               </button>
             </div>
-
           </div>
         </div>
       )}
