@@ -74,36 +74,35 @@
 
 /* Slots Grid */
 .RescheduleApp-rs-slots {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  display: flex;
+  flex-wrap: wrap;
   gap: 8px;
-}
 
+}
 .RescheduleApp-rs-slot {
-  padding: 8px;
+  padding: 10px;
+  border-radius: 20px;
   border: 1px solid #ccc;
-  background: white;
-  border-radius: 6px;
   cursor: pointer;
-  font-size: 12px;
-  transition: 0.2s;
+  background: white;
+  transition: all 0.2s ease;
 }
-
-.RescheduleApp-rs-slot:hover:not(:disabled) {
-  background: #f0f0f0;
-}
-
 .RescheduleApp-rs-slot.RescheduleApp-active {
-  background: #0a8f6a;
+  background: #0aa5a5;
   color: white;
-  border-color: #0a8f6a;
+  border: 1px solid #0aa5a5;
+}
+.RescheduleApp-rs-slot:hover:not(:disabled) {
+  background: #f3f4f6;
 }
 
 .RescheduleApp-rs-slot:disabled {
-  background: #f5f5f5;
-  color: #ccc;
+  background: #e5e7eb;
+  color: #999;
   cursor: not-allowed;
+  opacity: 0.6;
 }
+
 
 /* Footer alignment inside the right column */
 .RescheduleApp-rs-footer {
@@ -113,7 +112,7 @@
 }
 
 .RescheduleApp-rs-confirm {
-  background: #10b981; /* Teal green matching your image */
+  background: #0aa5a5; /* Teal green matching your image */
   color: white;
   padding: 12px 20px;
   border: none;
@@ -143,4 +142,22 @@
 .RescheduleApp-rs-hint {
   color: #666;
   font-size: 13px;
+}
+.RescheduleApp-rs-close {
+  background: white !important;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  color:black!important;
+  width: 50px;
+  height: 35px;
+}
+.RescheduleApp-rs-close:hover {
+  background: #0aa5a5 !important;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: white !important;
+  width: 50px;
+  height: 35px;
 }

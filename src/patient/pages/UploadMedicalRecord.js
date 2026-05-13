@@ -89,7 +89,8 @@ const UploadMedicalRecord = ({ onClose }) => {
     return (
         <div className="UploadMedRec-upload-modal-overlay">
             <div className="UploadMedRec-upload-modal">
-                <span className="UploadMedRec-upload-close" onClick={onClose}>✖</span>
+                {/* <span className="UploadMedRec-upload-close" onClick={onClose}>✖</span> */}
+                <button className="UploadMedRec-upload-close" onClick={onClose}>&times;</button>
                 <h2>Upload Medical Record</h2>
 
                 <form onSubmit={handleSubmit} className="UploadMedRec-upload-form">
