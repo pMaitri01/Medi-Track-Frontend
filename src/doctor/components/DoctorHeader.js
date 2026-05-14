@@ -329,10 +329,18 @@ const clearAll = async () => {
                     >
                       {/* DELETE */}
                       <span
-                       onClick={(e) => deleteOne(e, n._id)}
-                      >
-                        ✕
-                      </span>
+  onClick={(e) => deleteOne(e, n._id)}
+  style={{
+    position: "absolute",
+    top: "10px",
+    right: "12px",
+    cursor: "pointer",
+    fontSize: "14px",
+    color: "#666"
+  }}
+>
+  ✕
+</span>
 
                       <p style={{ margin: 0, paddingRight: "20px" }}>
                         {n.message}
