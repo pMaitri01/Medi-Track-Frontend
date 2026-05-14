@@ -126,9 +126,14 @@ const PrescriptionModal = ({ isOpen, onClose }) => {
                       <td>{m.name}</td>
                       <td>{m.dosage}</td>
                       <td>
-                        {typeof m.timeOfDay === "object"
-                          ? m.timeOfDay?.timeOfDay
-                          : m.timeOfDay}
+                        {m.timing?.map((t, i) => (
+                          <div key={i}>
+                            {t.timeOfDay === "Morning" ? "🌅" : t.timeOfDay === "Afternoon" ? "🌇" : "🌙"} {t.timeOfDay}
+                            <span style={{ fontSize: "13px", color: "#64748b", marginLeft: "4px" }}>
+                              ({t.intake === "before_food" ? "Before Food" : "After Food"})
+                            </span>
+                          </div>
+                        ))}
                       </td>
                       <td>{m.duration}</td>
                     </tr>
