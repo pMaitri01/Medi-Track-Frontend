@@ -302,7 +302,15 @@ function Navbar() {
                         Clear All
                       </button>
                     )}
-                    <button onClick={() => setShowNotificationSidebar(false)}>❌</button>
+                    <button class="pheader-close-btn" onClick={() => setShowNotificationSidebar(false)}
+                        style={{
+                          fontSize: "30px",
+                          color: "blacks",
+                          border: "none",
+                          background: "none",
+                          cursor: "pointer"
+                        }}>×</button>
+                    {/* <button onClick={() => setShowNotificationSidebar(false)}>❌</button> */}
                   </div>
                 </div>
                 {/* CONTENT */}

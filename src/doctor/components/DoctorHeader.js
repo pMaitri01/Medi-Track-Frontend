@@ -290,9 +290,17 @@ const clearAll = async () => {
                       </button>
                     )}
 
-                    <button onClick={() => setShowNotificationSidebar(false)}>
+                    {/* <button>
                       ❌
-                    </button>
+                    </button> */}
+                    <button class="dheader-close-btn" onClick={() => setShowNotificationSidebar(false)}
+                        style={{
+                          fontSize: "30px",
+                          color: "blacks",
+                          border: "none",
+                          background: "none",
+                          cursor: "pointer"
+                        }}>×</button>
                   </div>
                 </div>
 
