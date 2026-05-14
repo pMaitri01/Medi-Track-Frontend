@@ -128,8 +128,9 @@ useEffect(() => {
 
   // 🔥 RESCHEDULE API
   const handleReschedule = async () => {
-    if (!selectedDoctor || !selectedDate || !selectedTime) return;
+    if (!selectedDoctor || !selectedDate || !selectedTime)
       toast.error("Please select doctor, date and time");
+
     if (
     selectedDoctorData &&
     !selectedDoctorData.serviceType.includes(appointmentType)
