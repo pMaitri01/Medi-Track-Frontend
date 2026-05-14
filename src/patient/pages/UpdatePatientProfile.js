@@ -97,7 +97,7 @@ const TagRow = ({ text, name, isEditing, onChange, color }) => {
   );
 };
 
-const Field = ({ label, name, value, isEditing, onChange }) => {
+const Field = ({ label, name, value, isEditing, onChange, type = "text" }) => {
   const safeValue =
     typeof value === "object" ? JSON.stringify(value) : value;
 
@@ -108,6 +108,7 @@ const Field = ({ label, name, value, isEditing, onChange }) => {
         <input
           className="field__input"
           name={name}
+          type={type}  
           value={safeValue || ""}
           onChange={onChange}
         />
@@ -150,9 +151,14 @@ function UpdatePatientProfile() {
         );
         const data = await res.json();
         if (data.user) {
-          setFormData(data.user);
-          setOriginalData(data.user);
-        }
+  const d = data.user;
+  const profileData = {
+    ...d,
+    dob: d.dob ? d.dob.split("T")[0] : "",  // 👈 add this
+  };
+  setFormData(profileData);
+  setOriginalData(profileData);
+}
       } catch (err) {
         console.error(err);
         toast.error("Failed to fetch profile");
@@ -288,7 +294,7 @@ function UpdatePatientProfile() {
             <SectionCard icon="👤" title="Personal Info" flex>
               <div className="two-col">
                 <Field label="Gender" name="gender" value={formData.gender} isEditing={isEditing} onChange={handleChange} />
-                <Field label="Date of Birth" name="dob" value={isEditing ? formData.dob : formatDob(formData.dob)} isEditing={isEditing} onChange={handleChange} />
+                <Field label="Date of Birth" name="dob" type="date" value={isEditing ? formData.dob : formatDob(formData.dob)} isEditing={isEditing} onChange={handleChange}/>
                 <Field label="Mobile" name="mobile" value={formData.mobile} isEditing={isEditing} onChange={handleChange} />
                 <Field label="Emergency Contact" name="emergencyMobile" value={formData.emergencyContact?.mobile} isEditing={isEditing}
                   onChange={(e) =>
