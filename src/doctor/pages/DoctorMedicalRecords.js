@@ -157,7 +157,7 @@ const DoctorMedicalRecords = () => {
                     Total Records: {records.length}
                   </div>
                   <div className="dmr-card">
-                    Reports: {records.filter((r) => r.type === "Report").length}
+                    Reports: {records.filter((r) => r.type === "report").length}
                   </div>
                   <div className="dmr-card">
                     Scans: {records.filter((r) => r.type === "scan").length}
