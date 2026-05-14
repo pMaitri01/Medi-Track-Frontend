@@ -71,10 +71,28 @@ const DoctorMedicalRecords = () => {
   const getDownloadUrl = (url, fileName) => {
     if (!url) return "#";
 
+    const extension = fileName?.split(".").pop() || "pdf";
+
+    // ✅ Add extension if missing
+    let fixedUrl = url;
+    if (!url.endsWith(`.${extension}`)) {
+      fixedUrl = `${url}.${extension}`;
+    }
+
     const safeName = encodeURIComponent(fileName || "medical-record.pdf");
 
-    return url.replace("/upload/", `/upload/fl_attachment:${safeName}/`);
+    return fixedUrl.replace(
+      "/upload/",
+      `/upload/fl_attachment:${safeName}/`
+    );
   };
+  // const getDownloadUrl = (url, fileName) => {
+  //   if (!url) return "#";
+
+  //   const safeName = encodeURIComponent(fileName || "medical-record.pdf");
+
+  //   return url.replace("/upload/", `/upload/fl_attachment:${safeName}/`);
+  // };
   return (
     <>
       <DoctorNavbar open={open} setOpen={setOpen} />
@@ -174,18 +192,12 @@ const DoctorMedicalRecords = () => {
                             <td>{new Date(rec.date).toLocaleDateString()}</td>
                             <td>
                               {rec.fileUrl ? (
-                                <a
-                                  href={getDownloadUrl(
-                                    rec.fileUrl,
-                                    rec.fileName,
-                                  )}
-                                  target="_blank"
-                                  rel="noreferrer"
+                                <button
+                                  className="download-btn"
+                                  onClick={() => window.open(rec.fileUrl, "_blank")}
                                 >
-                                  <button className="download-btn">
-                                    Download Record
-                                  </button>
-                                </a>
+                                  Download Record
+                                </button>
                               ) : (
                                 <span>No file</span>
                               )}
