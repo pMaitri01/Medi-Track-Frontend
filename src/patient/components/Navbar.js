@@ -5,6 +5,8 @@ import "./Navbar.css";
 import Img from "../images/LogoP.png";
 import { useNavigate } from "react-router-dom";
 import socket from "../../socket";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function Navbar() {
   const [showProfileDropdown, setShowProfileDropdown] = useState(false);
@@ -23,23 +25,76 @@ function Navbar() {
     navigate("/UpdatePatientProfile");
   };
 
-  const handleLogout = async () => {
-    try {
-      await fetch(`${process.env.REACT_APP_API_URL}/api/Patient/logout`, {
-        method: "POST",
-        credentials: "include",
-      });
+ 
+const handleLogout = () => {
+  toast(
+    ({ closeToast }) => (
+      <div>
+        <p style={{ marginBottom: "10px" }}>
+          Are you sure you want to logout?
+        </p>
 
-      localStorage.removeItem("user");
-      alert("logged out");
+        <div style={{ display: "flex", gap: "10px" }}>
+          {/* ✅ YES BUTTON */}
+          <button
+            onClick={async () => {
+              try {
+                await fetch(`${process.env.REACT_APP_API_URL}/api/Patient/logout`, {
+                  method: "POST",
+                  credentials: "include",
+                });
 
-      window.location.href = "/";
-    } catch (error) {
-      console.log(error);
+                localStorage.removeItem("user");
+
+                toast.success("Logged out successfully");
+                closeToast();
+
+                setTimeout(() => {
+                  window.location.href = "/";
+                }, 1200);
+
+              } catch (error) {
+                console.log(error);
+                toast.error("Logout failed");
+              }
+            }}
+            style={{
+              padding: "5px 10px",
+              background: "red",
+              color: "#fff",
+              border: "none",
+              cursor: "pointer",
+              borderRadius: "5px"
+            }}
+          >
+            Yes
+          </button>
+
+          {/* ❌ NO BUTTON */}
+          <button
+            onClick={closeToast}
+            style={{
+              padding: "5px 10px",
+              background: "gray",
+              color: "#fff",
+              border: "none",
+              cursor: "pointer",
+              borderRadius: "5px"
+            }}
+          >
+            No
+          </button>
+        </div>
+      </div>
+    ),
+    {
+      position: "top-center",
+      autoClose: false, // ❗ important (wait for user action)
+      closeOnClick: false,
+      draggable: false,
     }
-  };
-
-
+  );
+};
   useEffect(() => {
     setUsername(
       user?.fullName ||
