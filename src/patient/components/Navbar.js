@@ -17,8 +17,8 @@ function Navbar() {
 
 
   const user = JSON.parse(localStorage.getItem("user") || "{}");
-  console.log("USER FROM LOCALSTORAGE:", user);
-  console.log("LOCAL USER:", user);
+  // console.log("USER FROM LOCALSTORAGE:", user);
+  // console.log("LOCAL USER:", user);
   const goToProfile = () => {
     navigate("/UpdatePatientProfile");
   };
@@ -114,7 +114,7 @@ function Navbar() {
     socket.emit("joinAll");
 
     socket.on("connect", () => {
-      console.log("✅ SOCKET CONNECTED:", socket.id);
+      // console.log("✅ SOCKET CONNECTED:", socket.id);
     });
 
     return () => {

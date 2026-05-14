@@ -19,7 +19,19 @@ const formatDate = (d) =>
 
 const withinDays = (dateStr, days) => {
   const diff = (new Date() - new Date(dateStr)) / (1000 * 60 * 60 * 24);
+  console.log("date:", dateStr, "diff:", diff, "days:", days, "result:", diff <= days);
   return diff <= days;
+};
+
+const withinLastCalendarMonth = (dateStr) => {
+  if (!dateStr) return false;
+  const record = new Date(dateStr);
+  const now = new Date();
+  
+  const firstDayLastMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+  const lastDayLastMonth = new Date(now.getFullYear(), now.getMonth(), 0, 23, 59, 59);
+  
+  return record >= firstDayLastMonth && record <= lastDayLastMonth;
 };
 
 const capitalizeType = (type) => {
@@ -148,7 +160,8 @@ if (!data.records || !Array.isArray(data.records)) {
       const dateMatch =
         dateFilter === "All Time" ? true :
           dateFilter === "Last 7 Days" ? withinDays(r.date, 7) :
-            withinDays(r.date, 30);
+          dateFilter === "Last Month" ? withinLastCalendarMonth(r.date) :
+          true;
       const q = search.toLowerCase();
       const searchMatch =
         !q ||
