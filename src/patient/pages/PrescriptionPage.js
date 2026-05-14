@@ -21,6 +21,15 @@ const medicineSummary = (medicines) =>
 
 const shortId = (id = "") => `RX-${String(id).slice(-8).toUpperCase()}`;
 
+const withinLastCalendarMonth = (dateStr) => {
+  if (!dateStr) return false;
+  const record = new Date(dateStr);
+  const now = new Date();
+  const firstDayLastMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+  const lastDayLastMonth = new Date(now.getFullYear(), now.getMonth(), 0, 23, 59, 59);
+  return record >= firstDayLastMonth && record <= lastDayLastMonth;
+};
+
 // ── PrescriptionCard ─────────────────────────────────────────────────────────
 function PrescriptionCard({ rx, onView }) {
   const isActive = rx.pStatus === "active"; return (
@@ -297,6 +306,7 @@ export default function PrescriptionPage() {
     const dateMatch =
     dateFilter === "All Time" ? true :
     dateFilter === "Last 7 Days" ? withinDays(rx.createdAt, 7) :
+    dateFilter === "Last Month" ? withinLastCalendarMonth(rx.createdAt) :
     withinDays(rx.createdAt, 30);
 
     const q = search.toLowerCase();

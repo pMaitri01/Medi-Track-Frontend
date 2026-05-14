@@ -37,7 +37,7 @@ const PatientList = () => {
     backgroundColor: "#f8fafc",
   };
 
-  // ── Fetch patients ──────────────────────────────────────────────────────
+  // ── Fetch patients ──
   const fetchPatients = async () => {
     try {
       const res = await fetch(
@@ -50,7 +50,7 @@ const PatientList = () => {
     }
   };
 
-  // ── Fetch appointments ──────────────────────────────────────────────────
+  // ── Fetch appointments ──
   const fetchAppointments = async () => {
     try {
       const token = localStorage.getItem("token");
@@ -89,7 +89,7 @@ const PatientList = () => {
     fetchAppointments();
   }, []);
 
-  // ── Filter logic ────────────────────────────────────────────────────────
+  // ── Filter logic ───
   const patientIds = [...new Set(appointments.map((a) => a.patient?._id))];
 
   const filteredPatients = patients
@@ -310,12 +310,14 @@ const PatientList = () => {
                   <div className="dp-modal-header-new">
                     <div className="dp-user">
                       <div className="dp-avatar">
-                        {selectedPatient.firstName?.charAt(0)}
+                        {selectedPatient.name
+                          ?.split(" ")
+                          .map((word) => word.charAt(0))
+                          .join("")
+                          .toUpperCase()}
                       </div>
                       <div>
-                        <h2>
-                          {selectedPatient.firstName} {selectedPatient.lastName}
-                        </h2>
+                        <h2>{selectedPatient.name}</h2>
                         <span>{selectedPatient.gender}</span>
                       </div>
                     </div>
@@ -332,15 +334,15 @@ const PatientList = () => {
                     {/* BASIC INFO */}
                     <div className="dp-card">
                       <h4>👤 Basic Information</h4>
+
                       <p>
-                        <span>First Name:</span> {selectedPatient.firstName}
+                        <span>Name:</span> {selectedPatient.name || "N/A"}
                       </p>
+
                       <p>
-                        <span>Last Name:</span> {selectedPatient.lastName}
+                        <span>Gender:</span> {selectedPatient.gender || "N/A"}
                       </p>
-                      <p>
-                        <span>Gender:</span> {selectedPatient.gender}
-                      </p>
+
                       <p>
                         <span>Age:</span>{" "}
                         {selectedPatient.age ||
@@ -349,71 +351,98 @@ const PatientList = () => {
                               new Date(selectedPatient.dob).getFullYear()
                             : "N/A")}
                       </p>
+
                       <p>
                         <span>DOB:</span>{" "}
-                        {new Date(selectedPatient.dob).toLocaleDateString()}
+                        {selectedPatient.dob
+                          ? new Date(selectedPatient.dob).toLocaleDateString()
+                          : "N/A"
+                        }
                       </p>
                     </div>
+
                     {/* ADDRESS */}
                     <div className="dp-card">
                       <h4>📍 Address</h4>
+
                       <p>
-                        <span>Address:</span> {selectedPatient.address}
+                        <span>Address:</span> {selectedPatient.address || "N/A"}
                       </p>
+
                       <p>
-                        <span>City:</span> {selectedPatient.city}
+                        <span>City:</span> {selectedPatient.city || "N/A"}
                       </p>
+
                       <p>
-                        <span>State:</span> {selectedPatient.state}
+                        <span>State:</span> {selectedPatient.state || "N/A"}
                       </p>
+
                       <p>
-                        <span>Pincode:</span> {selectedPatient.pincode}
+                        <span>Pincode:</span> {selectedPatient.pincode || "N/A"}
                       </p>
                     </div>
 
                     {/* CONTACT */}
                     <div className="dp-card">
                       <h4>📞 Contact Details</h4>
+
                       <p>
-                        <span>Mobile:</span> {selectedPatient.mobile}
+                        <span>Mobile:</span> {selectedPatient.phone || "N/A"}
                       </p>
+
                       <p>
-                        <span>Email:</span> {selectedPatient.email}
+                        <span>Email:</span> {selectedPatient.email || "N/A"}
                       </p>
                     </div>
                     {/* EMERGENCY */}
                     <div className="dp-card">
                       <h4>🚨 Emergency Contact</h4>
+
                       <p>
                         <span>Name:</span>{" "}
-                        {selectedPatient.emergencyContact?.name}
+                        {selectedPatient.emergencyContact?.name || "N/A"}
                       </p>
+
                       <p>
                         <span>Mobile:</span>{" "}
-                        {selectedPatient.emergencyContact?.mobile}
+                        {selectedPatient.emergencyContact?.mobile || "N/A"}
                       </p>
+
                       <p>
                         <span>Relation:</span>{" "}
-                        {selectedPatient.emergencyContact?.relationship}
+                        {selectedPatient.emergencyContact?.relationship ||
+                          "N/A"}
                       </p>
                     </div>
+
                     {/* MEDICAL */}
                     <div className="dp-card">
                       <h4>🩺 Medical Details</h4>
+
                       <p>
-                        <span>Blood Group:</span> {selectedPatient.bloodGroup}
+                        <span>Blood Group:</span>{" "}
+                        {selectedPatient.bloodGroup || "N/A"}
                       </p>
+
                       <p>
-                        <span>Weight:</span> {selectedPatient.weight} kg
+                        <span>Weight:</span>{" "}
+                        {selectedPatient.weight
+                          ? `${selectedPatient.weight} kg`
+                          : "N/A"}
                       </p>
+
                       <p>
                         <span>Diseases:</span>{" "}
-                        {selectedPatient.diseases?.join(", ") || "None"}
+                        {selectedPatient.diseases?.length
+                          ? selectedPatient.diseases.join(", ")
+                          : "None"}
                       </p>
+
                       <p>
                         <span>Allergies:</span>{" "}
                         {selectedPatient.allergies || "None"}
                       </p>
+
                       <p>
                         <span>Medications:</span>{" "}
                         {selectedPatient.medications || "None"}
