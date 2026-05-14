@@ -3,53 +3,92 @@ import "../css/DoctorProfile.css";
 import { useNavigate } from "react-router-dom";
 
 const initialState = {
-  fullName: "", dob: "", gender: "",
+  fullName: "",
+  dob: "",
+  gender: "",
+
+  specialization: "",
+  qualification: "",
+  experience: "",
+  licenseNumber: "",
+  email: "",
+
   workingDays: [],
   workingHours: [{ start: "09:00", end: "17:00" }],
   serviceType: [],
+
   applyAllDays: false,
   about: "",
-  mobile: "", emergencyContact: "", hospitalName: "", address: "", city: "", state: "", mapLink: "",
+
+  mobile: "",
+  emergencyContact: "",
+
+  hospitalName: "",
+  address: "",
+  city: "",
+  state: "",
+  mapLink: "",
 };
 
 const STEPS = [
-  { label: "Personal Details",     icon: "⚕️" },
+  { label: "Personal Details", icon: "⚕️" },
   { label: "Professional Details", icon: "🏥" },
-  { label: "Contact & Location",   icon: "📞" },
+  { label: "Contact & Location", icon: "📞" },
 ];
 
-// ── Custom Calendar Date Picker ──────────────────────────────────────────────
+// ── Custom Calendar Date Picker ────
 const MONTH_NAMES = [
-  "January","February","March","April","May","June",
-  "July","August","September","October","November","December",
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
 ];
-const DAY_NAMES = ["Su","Mo","Tu","We","Th","Fr","Sa"];
+const DAY_NAMES = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"];
 
-const CustomDatePicker = ({ value, onChange, error }) => {
-  const today  = new Date();
+const CustomDatePicker = ({ value, onChange, error, readOnly }) => {
+  const today = new Date();
   const parsed = value ? new Date(value + "T00:00:00") : null;
 
-  const [open, setOpen]           = useState(false);
-  const [viewYear, setViewYear]   = useState(parsed ? parsed.getFullYear()  : today.getFullYear() - 25);
-  const [viewMonth, setViewMonth] = useState(parsed ? parsed.getMonth()     : today.getMonth());
+  const [open, setOpen] = useState(false);
+  const [viewYear, setViewYear] = useState(
+    parsed ? parsed.getFullYear() : today.getFullYear() - 25,
+  );
+  const [viewMonth, setViewMonth] = useState(
+    parsed ? parsed.getMonth() : today.getMonth(),
+  );
+
   const ref = useRef(null);
 
   useEffect(() => {
-    const handler = (e) => { if (ref.current && !ref.current.contains(e.target)) setOpen(false); };
+    const handler = (e) => {
+      if (ref.current && !ref.current.contains(e.target)) setOpen(false);
+    };
     document.addEventListener("mousedown", handler);
     return () => document.removeEventListener("mousedown", handler);
   }, []);
 
-  const firstDay    = new Date(viewYear, viewMonth, 1).getDay();
+  const firstDay = new Date(viewYear, viewMonth, 1).getDay();
   const daysInMonth = new Date(viewYear, viewMonth + 1, 0).getDate();
 
   const prevMonth = () => {
-    if (viewMonth === 0) { setViewMonth(11); setViewYear(y => y - 1); }
-    else setViewMonth(m => m - 1);
+    if (viewMonth === 0) {
+      setViewMonth(11);
+      setViewYear((y) => y - 1);
+    } else setViewMonth((m) => m - 1);
   };
   const nextMonth = () => {
-    if (viewMonth === 11) { setViewMonth(0); setViewYear(y => y + 1); }
-    else setViewMonth(m => m + 1);
+    if (viewMonth === 11) {
+      setViewMonth(0);
+      setViewYear((y) => y + 1);
+    } else setViewMonth((m) => m + 1);
   };
 
   const selectDay = (day) => {
@@ -60,25 +99,42 @@ const CustomDatePicker = ({ value, onChange, error }) => {
   };
 
   const displayValue = parsed
-    ? `${String(parsed.getDate()).padStart(2,"0")} ${MONTH_NAMES[parsed.getMonth()]} ${parsed.getFullYear()}`
+    ? `${String(parsed.getDate()).padStart(2, "0")} ${MONTH_NAMES[parsed.getMonth()]} ${parsed.getFullYear()}`
     : "";
 
   const cells = [];
   for (let i = 0; i < firstDay; i++) cells.push(null);
   for (let d = 1; d <= daysInMonth; d++) cells.push(d);
 
-  const isSelected  = (d) => parsed && d &&
-    parsed.getFullYear() === viewYear && parsed.getMonth() === viewMonth && parsed.getDate() === d;
-  const isTodayCell = (d) => d &&
-    today.getFullYear() === viewYear && today.getMonth() === viewMonth && today.getDate() === d;
+  const isSelected = (d) =>
+    parsed &&
+    d &&
+    parsed.getFullYear() === viewYear &&
+    parsed.getMonth() === viewMonth &&
+    parsed.getDate() === d;
+  const isTodayCell = (d) =>
+    d &&
+    today.getFullYear() === viewYear &&
+    today.getMonth() === viewMonth &&
+    today.getDate() === d;
 
   return (
     <div className="dprof-cdp-wrap" ref={ref}>
       <div
-        className={"dprof-cdp-trigger" + (error ? " dprof-input-error" : "")}
-        onClick={() => setOpen(o => !o)}
+        className={
+          "dprof-cdp-trigger" +
+          (error ? " dprof-input-error" : "") +
+          (readOnly ? " dprof-readonly" : "")
+        }
+        onClick={() => {
+          if (!readOnly) {
+            setOpen((o) => !o);
+          }
+        }}
       >
-        <span className={displayValue ? "dprof-cdp-value" : "dprof-cdp-placeholder"}>
+        <span
+          className={displayValue ? "dprof-cdp-value" : "dprof-cdp-placeholder"}
+        >
           {displayValue || "Select date"}
         </span>
         <span className="dprof-cdp-icon">📅</span>
@@ -87,37 +143,54 @@ const CustomDatePicker = ({ value, onChange, error }) => {
       {open && (
         <div className="dprof-cdp-popup">
           <div className="dprof-cdp-header">
-            <button className="dprof-cdp-nav" onClick={prevMonth}>&#8249;</button>
+            <button className="dprof-cdp-nav" onClick={prevMonth}>
+              &#8249;
+            </button>
             <div className="dprof-cdp-month-year">
               <select
                 className="dprof-cdp-month-sel"
                 value={viewMonth}
                 onChange={(e) => setViewMonth(Number(e.target.value))}
               >
-                {MONTH_NAMES.map((m, i) => <option key={m} value={i}>{m}</option>)}
+                {MONTH_NAMES.map((m, i) => (
+                  <option key={m} value={i}>
+                    {m}
+                  </option>
+                ))}
               </select>
               <select
                 className="dprof-cdp-year-sel"
                 value={viewYear}
                 onChange={(e) => setViewYear(Number(e.target.value))}
               >
-                {Array.from({ length: 80 }, (_, i) => today.getFullYear() - i).map(y => (
-                  <option key={y} value={y}>{y}</option>
+                {Array.from(
+                  { length: 80 },
+                  (_, i) => today.getFullYear() - i,
+                ).map((y) => (
+                  <option key={y} value={y}>
+                    {y}
+                  </option>
                 ))}
               </select>
             </div>
-            <button className="dprof-cdp-nav" onClick={nextMonth}>&#8250;</button>
+            <button className="dprof-cdp-nav" onClick={nextMonth}>
+              &#8250;
+            </button>
           </div>
 
           <div className="dprof-cdp-grid">
-            {DAY_NAMES.map(d => <div key={d} className="dprof-cdp-day-name">{d}</div>)}
+            {DAY_NAMES.map((d) => (
+              <div key={d} className="dprof-cdp-day-name">
+                {d}
+              </div>
+            ))}
             {cells.map((d, i) => (
               <div
                 key={i}
                 className={
                   "dprof-cdp-cell" +
                   (!d ? " dprof-cdp-empty" : "") +
-                  (isSelected(d)  ? " dprof-cdp-selected" : "") +
+                  (isSelected(d) ? " dprof-cdp-selected" : "") +
                   (isTodayCell(d) && !isSelected(d) ? " dprof-cdp-today" : "")
                 }
                 onClick={() => d && selectDay(d)}
@@ -130,13 +203,19 @@ const CustomDatePicker = ({ value, onChange, error }) => {
           <div className="dprof-cdp-footer">
             <button
               className="dprof-cdp-clear"
-              onClick={() => { onChange({ target: { name: "dob", value: "" } }); setOpen(false); }}
+              onClick={() => {
+                onChange({ target: { name: "dob", value: "" } });
+                setOpen(false);
+              }}
             >
               Clear
             </button>
             <button
               className="dprof-cdp-today-btn"
-              onClick={() => { setViewYear(today.getFullYear()); setViewMonth(today.getMonth()); }}
+              onClick={() => {
+                setViewYear(today.getFullYear());
+                setViewMonth(today.getMonth());
+              }}
             >
               Today
             </button>
@@ -147,27 +226,43 @@ const CustomDatePicker = ({ value, onChange, error }) => {
   );
 };
 
-// ── Availability constants ────────────────────────────────────────────────────
-const ALL_DAYS = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"];
+// ── Availability constants ────────
+const ALL_DAYS = [
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+  "Saturday",
+  "Sunday",
+];
 const DAY_SHORT = {
-  Monday:"Mon", Tuesday:"Tue", Wednesday:"Wed", Thursday:"Thu",
-  Friday:"Fri", Saturday:"Sat", Sunday:"Sun",
+  Monday: "Mon",
+  Tuesday: "Tue",
+  Wednesday: "Wed",
+  Thursday: "Thu",
+  Friday: "Fri",
+  Saturday: "Sat",
+  Sunday: "Sun",
 };
 const SERVICE_OPTS = [
-  { value: "physical",  label: "🏥 Physical Consultation" },
-  { value: "videocall", label: "📹 Video Consultation"    },
+  { value: "physical", label: "🏥 Physical Consultation" },
+  { value: "videocall", label: "📹 Video Consultation" },
 ];
 
 const TIME_OPTIONS = (() => {
   const opts = [];
   for (let h = 0; h < 24; h++) {
     for (let m = 0; m < 60; m += 30) {
-      const hh   = String(h).padStart(2, "0");
-      const mm   = String(m).padStart(2, "0");
-      const val  = `${hh}:${mm}`;
+      const hh = String(h).padStart(2, "0");
+      const mm = String(m).padStart(2, "0");
+      const val = `${hh}:${mm}`;
       const ampm = h < 12 ? "AM" : "PM";
-      const h12  = h === 0 ? 12 : h > 12 ? h - 12 : h;
-      opts.push({ value: val, label: `${String(h12).padStart(2,"0")}:${mm} ${ampm}` });
+      const h12 = h === 0 ? 12 : h > 12 ? h - 12 : h;
+      opts.push({
+        value: val,
+        label: `${String(h12).padStart(2, "0")}:${mm} ${ampm}`,
+      });
     }
   }
   return opts;
@@ -182,14 +277,19 @@ function WorkingDaysPicker({ selected, onChange, error }) {
   };
   return (
     <div className="dprof-field">
-      <label className="dprof-label">Working Days <span className="dprof-required">*</span></label>
+      <label className="dprof-label">
+        Working Days <span className="dprof-required">*</span>
+      </label>
       <div className="dprof-day-chips">
         {ALL_DAYS.map((day) => (
           <div
             key={day}
             role="button"
             tabIndex={0}
-            className={"dprof-day-chip" + (selected.includes(day) ? " dprof-day-chip--on" : "")}
+            className={
+              "dprof-day-chip" +
+              (selected.includes(day) ? " dprof-day-chip--on" : "")
+            }
             onClick={() => toggle(day)}
             onKeyDown={(e) => e.key === "Enter" && toggle(day)}
           >
@@ -203,32 +303,51 @@ function WorkingDaysPicker({ selected, onChange, error }) {
 }
 
 function WorkingHoursSessions({ sessions, onChange, sessionErrors }) {
-  const addSession    = () => onChange([...sessions, { start: "09:00", end: "17:00" }]);
+  const addSession = () =>
+    onChange([...sessions, { start: "09:00", end: "17:00" }]);
   const removeSession = (i) => onChange(sessions.filter((_, idx) => idx !== i));
   const updateSession = (i, field, val) =>
-    onChange(sessions.map((s, idx) => idx === i ? { ...s, [field]: val } : s));
+    onChange(
+      sessions.map((s, idx) => (idx === i ? { ...s, [field]: val } : s)),
+    );
 
   return (
     <div className="dprof-field">
-      <label className="dprof-label">Working Hours <span className="dprof-required">*</span></label>
+      <label className="dprof-label">
+        Working Hours <span className="dprof-required">*</span>
+      </label>
       <div className="dprof-sessions">
         {sessions.map((s, i) => (
           <div key={i} className="dprof-session-row">
             <span className="dprof-session-num">Session {i + 1}</span>
             <select
-              className={"dprof-input dprof-time-sel" + (sessionErrors?.[i]?.start ? " dprof-input-error" : "")}
+              className={
+                "dprof-input dprof-time-sel" +
+                (sessionErrors?.[i]?.start ? " dprof-input-error" : "")
+              }
               value={s.start}
               onChange={(e) => updateSession(i, "start", e.target.value)}
             >
-              {TIME_OPTIONS.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
+              {TIME_OPTIONS.map((o) => (
+                <option key={o.value} value={o.value}>
+                  {o.label}
+                </option>
+              ))}
             </select>
             <span className="dprof-session-to">to</span>
             <select
-              className={"dprof-input dprof-time-sel" + (sessionErrors?.[i]?.end ? " dprof-input-error" : "")}
+              className={
+                "dprof-input dprof-time-sel" +
+                (sessionErrors?.[i]?.end ? " dprof-input-error" : "")
+              }
               value={s.end}
               onChange={(e) => updateSession(i, "end", e.target.value)}
             >
-              {TIME_OPTIONS.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
+              {TIME_OPTIONS.map((o) => (
+                <option key={o.value} value={o.value}>
+                  {o.label}
+                </option>
+              ))}
             </select>
             {sessions.length > 1 && (
               <button
@@ -236,7 +355,9 @@ function WorkingHoursSessions({ sessions, onChange, sessionErrors }) {
                 className="dprof-session-remove"
                 onClick={() => removeSession(i)}
                 title="Remove"
-              >✕</button>
+              >
+                ✕
+              </button>
             )}
             {sessionErrors?.[i] && (
               <span className="dprof-error-msg dprof-session-err">
@@ -246,7 +367,11 @@ function WorkingHoursSessions({ sessions, onChange, sessionErrors }) {
           </div>
         ))}
       </div>
-      <button type="button" className="dprof-add-session-btn" onClick={addSession}>
+      <button
+        type="button"
+        className="dprof-add-session-btn"
+        onClick={addSession}
+      >
         ＋ Add Session
       </button>
     </div>
@@ -262,12 +387,17 @@ function ServiceTypePicker({ selected, onChange, error }) {
   };
   return (
     <div className="dprof-field">
-      <label className="dprof-label">Type of Service <span className="dprof-required">*</span></label>
+      <label className="dprof-label">
+        Type of Service <span className="dprof-required">*</span>
+      </label>
       <div className="dprof-service-opts">
         {SERVICE_OPTS.map((opt) => (
           <label
             key={opt.value}
-            className={"dprof-service-chip" + (selected.includes(opt.value) ? " dprof-service-chip--on" : "")}
+            className={
+              "dprof-service-chip" +
+              (selected.includes(opt.value) ? " dprof-service-chip--on" : "")
+            }
           >
             <input
               type="checkbox"
@@ -285,30 +415,62 @@ function ServiceTypePicker({ selected, onChange, error }) {
 }
 
 // ── Field — lives outside DoctorProfile so it never gets recreated ───────────
-const Field = ({ label, name, type = "text", options, textarea, required, value, onChange, error }) => (
+const Field = ({
+  label,
+  name,
+  type = "text",
+  options,
+  textarea,
+  required,
+  value,
+  onChange,
+  error,
+  readOnly = false,
+}) => (
   <div className="dprof-field">
     <label className="dprof-label">
       {label} {required && <span className="dprof-required">*</span>}
     </label>
+
     {textarea ? (
       <textarea
         name={name}
         value={value}
         onChange={onChange}
+        readOnly={readOnly}
         rows={4}
-        className={"dprof-input" + (error ? " dprof-input-error" : "")}
+        className={
+          "dprof-input" +
+          (error ? " dprof-input-error" : "") +
+          (readOnly ? " dprof-readonly" : "")
+        }
       />
     ) : type === "date" ? (
-      <CustomDatePicker value={value} onChange={onChange} error={error} />
+      <CustomDatePicker
+        value={value}
+        onChange={onChange}
+        error={error}
+        readOnly={readOnly}
+      />
     ) : options ? (
       <select
         name={name}
         value={value}
         onChange={onChange}
-        className={"dprof-input dprof-select" + (error ? " dprof-input-error" : "")}
+        disabled={readOnly}
+        className={
+          "dprof-input dprof-select" +
+          (error ? " dprof-input-error" : "") +
+          (readOnly ? " dprof-readonly" : "")
+        }
       >
         <option value="">Select {label}</option>
-        {options.map((o) => <option key={o} value={o}>{o}</option>)}
+
+        {options.map((o) => (
+          <option key={o} value={o}>
+            {o}
+          </option>
+        ))}
       </select>
     ) : (
       <input
@@ -316,22 +478,98 @@ const Field = ({ label, name, type = "text", options, textarea, required, value,
         name={name}
         value={value}
         onChange={onChange}
-        className={"dprof-input" + (error ? " dprof-input-error" : "")}
+        readOnly={readOnly}
+        className={
+          "dprof-input" +
+          (error ? " dprof-input-error" : "") +
+          (readOnly ? " dprof-readonly" : "")
+        }
       />
     )}
+
     {error && <span className="dprof-error-msg">{error}</span>}
   </div>
 );
 
-// ── Main component ────────────────────────────────────────────────────────────
+// ── Main component ──────────────────
 const DoctorProfile = () => {
   const navigate = useNavigate();
-  const [step, setStep]           = useState(0);
-  const [form, setForm]           = useState(initialState);
-  const [errors, setErrors]       = useState({});
+  const [step, setStep] = useState(0);
+  const [form, setForm] = useState(initialState);
+  const [errors, setErrors] = useState({});
   const [submitted, setSubmitted] = useState(false);
-  const [loading, setLoading]     = useState(false);
-  const [apiError, setApiError]   = useState("");
+  const [loading, setLoading] = useState(false);
+  const [apiError, setApiError] = useState("");
+
+  useEffect(() => {
+    fetchDoctorProfile();
+  }, []);
+
+  const fetchDoctorProfile = async () => {
+    try {
+      const response = await fetch(
+        `${process.env.REACT_APP_API_URL}/api/doctor/profile-full`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+          credentials: "include",
+        },
+      );
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setForm((prev) => ({
+          ...prev,
+
+          fullName: data.user.fullName || "",
+
+          dob: data.user.dob ? data.user.dob.split("T")[0] : "",
+
+          gender: data.user.gender || "",
+
+          specialization: data.user.specialization || "",
+
+          qualification: data.user.qualification || "",
+
+          experience: data.user.experience || "",
+
+          licenseNumber: data.user.licenseNumber || "",
+
+          email: data.user.email || "",
+
+          mobile: data.user.mobile || "",
+
+          workingDays: data.user.workingDays || [],
+
+          workingHours:
+            data.user.workingHours?.length > 0
+              ? data.user.workingHours
+              : [{ start: "09:00", end: "17:00" }],
+
+          serviceType: data.user.serviceType || [],
+
+          about: data.user.about || "",
+
+          emergencyContact: data.user.emergencyContact || "",
+
+          hospitalName: data.user.clinicName || "",
+
+          address: data.user.clinicAddress || "",
+
+          city: data.user.city || "",
+
+          state: data.user.state || "",
+
+          mapLink: data.user.mapLink || "",
+        }));
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -342,7 +580,9 @@ const DoctorProfile = () => {
   const scrollToFirstError = (errs) => {
     const firstKey = Object.keys(errs)[0];
     if (!firstKey) return;
-    const el = document.querySelector(`[name="${firstKey}"], .dprof-cdp-trigger`);
+    const el = document.querySelector(
+      `[name="${firstKey}"], .dprof-cdp-trigger`,
+    );
     if (el) el.scrollIntoView({ behavior: "smooth", block: "center" });
   };
 
@@ -351,17 +591,17 @@ const DoctorProfile = () => {
     const t = (field) => form[field].toString().trim();
 
     if (stepIndex === 0) {
-      if (!t("fullName"))
-        e.fullName = "Full name is required.";
+      if (!t("fullName")) e.fullName = "Full name is required.";
       else if (t("fullName").length < 3)
         e.fullName = "Full name must be at least 3 characters.";
       else if (!/^[a-zA-Z\s.'-]+$/.test(t("fullName")))
-        e.fullName = "Full name can only contain letters, spaces, dots, or hyphens.";
+        e.fullName =
+          "Full name can only contain letters, spaces, dots, or hyphens.";
 
       if (!t("dob")) {
         e.dob = "Date of birth is required.";
       } else {
-        const dob   = new Date(form.dob + "T00:00:00");
+        const dob = new Date(form.dob + "T00:00:00");
         const today = new Date();
         today.setHours(0, 0, 0, 0);
         if (dob >= today)
@@ -382,14 +622,17 @@ const DoctorProfile = () => {
 
       const sessionErrs = {};
       form.workingHours.forEach((s, i) => {
-        if (s.start >= s.end) sessionErrs[i] = { end: "End time must be after start time." };
+        if (s.start >= s.end)
+          sessionErrs[i] = { end: "End time must be after start time." };
       });
       for (let i = 0; i < form.workingHours.length; i++) {
         for (let j = i + 1; j < form.workingHours.length; j++) {
           const a = form.workingHours[i];
           const b = form.workingHours[j];
           if (a.start < b.end && b.start < a.end)
-            sessionErrs[j] = { overlap: `Session ${j + 1} overlaps with session ${i + 1}.` };
+            sessionErrs[j] = {
+              overlap: `Session ${j + 1} overlaps with session ${i + 1}.`,
+            };
         }
       }
       if (Object.keys(sessionErrs).length > 0) e.workingHours = sessionErrs;
@@ -402,8 +645,7 @@ const DoctorProfile = () => {
     }
 
     if (stepIndex === 2) {
-      if (!t("mobile"))
-        e.mobile = "Mobile number is required.";
+      if (!t("mobile")) e.mobile = "Mobile number is required.";
       else if (!/^\d{10}$/.test(t("mobile")))
         e.mobile = "Mobile number must be exactly 10 digits.";
 
@@ -412,30 +654,27 @@ const DoctorProfile = () => {
       else if (!/^\d{10}$/.test(t("emergencyContact")))
         e.emergencyContact = "Emergency contact must be exactly 10 digits.";
       else if (t("mobile") === t("emergencyContact"))
-        e.emergencyContact = "Emergency contact must be different from mobile number.";
+        e.emergencyContact =
+          "Emergency contact must be different from mobile number.";
 
       if (!t("hospitalName"))
         e.hospitalName = "Hospital / clinic name is required.";
       else if (t("hospitalName").length < 3)
         e.hospitalName = "Name must be at least 3 characters.";
 
-      if (!t("address"))
-        e.address = "Address is required.";
+      if (!t("address")) e.address = "Address is required.";
       else if (t("address").length < 10)
         e.address = "Address must be at least 10 characters.";
 
-      if (!t("city"))
-        e.city = "City is required.";
+      if (!t("city")) e.city = "City is required.";
       else if (!/^[a-zA-Z\s]{2,}$/.test(t("city")))
         e.city = "Enter a valid city name (letters only).";
 
-      if (!t("state"))
-        e.state = "State is required.";
+      if (!t("state")) e.state = "State is required.";
       else if (!/^[a-zA-Z\s]{2,}$/.test(t("state")))
         e.state = "Enter a valid state name (letters only).";
 
-      if (!t("mapLink"))
-        e.mapLink = "Map link is required.";
+      if (!t("mapLink")) e.mapLink = "Map link is required.";
       else if (!/^https?:\/\/.+\..+/.test(t("mapLink")))
         e.mapLink = "Enter a valid URL starting with http:// or https://.";
     }
@@ -445,51 +684,68 @@ const DoctorProfile = () => {
 
   const handleNext = () => {
     const errs = validate(step);
-    if (Object.keys(errs).length > 0) { setErrors(errs); scrollToFirstError(errs); return; }
+    if (Object.keys(errs).length > 0) {
+      setErrors(errs);
+      scrollToFirstError(errs);
+      return;
+    }
     setErrors({});
     setStep((s) => s + 1);
   };
 
-  const handleBack = () => { setErrors({}); setStep((s) => s - 1); };
+  const handleBack = () => {
+    setErrors({});
+    setStep((s) => s - 1);
+  };
 
   const handleSubmit = async () => {
     const errs = validate(2);
-    if (Object.keys(errs).length > 0) { setErrors(errs); scrollToFirstError(errs); return; }
+    if (Object.keys(errs).length > 0) {
+      setErrors(errs);
+      scrollToFirstError(errs);
+      return;
+    }
 
     setLoading(true);
     setApiError("");
 
     try {
       const payload = {
-        gender:           form.gender,
-        dob:              form.dob,
-        workingDays:      form.workingDays,
-        workingHours:     Array.isArray(form.workingHours)
-          ? form.workingHours.map(s => ({ start: String(s.start), end: String(s.end) }))
+        gender: form.gender,
+        dob: form.dob,
+        workingDays: form.workingDays,
+        workingHours: Array.isArray(form.workingHours)
+          ? form.workingHours.map((s) => ({
+              start: String(s.start),
+              end: String(s.end),
+            }))
           : [],
-        serviceType:      form.serviceType,
-        about:            form.about,
-        mobile:           form.mobile,
+        serviceType: form.serviceType,
+        about: form.about,
+        mobile: form.mobile,
         emergencyContact: form.emergencyContact,
-        clinicName:       form.hospitalName,
-        clinicAddress:    form.address,
-        city:             form.city,
-        state:            form.state,
-        mapLink:          form.mapLink,
+        clinicName: form.hospitalName,
+        clinicAddress: form.address,
+        city: form.city,
+        state: form.state,
+        mapLink: form.mapLink,
       };
 
       const response = await fetch(
         `${process.env.REACT_APP_API_URL}/api/doctor/complete-profile`,
         {
-          method:      "POST",
+          method: "POST",
           credentials: "include",
-          headers:     { "Content-Type": "application/json" },
-          body:        JSON.stringify(payload),
-        }
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        },
       );
 
       const data = await response.json();
-      if (!response.ok) throw new Error(data.message || "Profile update failed. Please try again.");
+      if (!response.ok)
+        throw new Error(
+          data.message || "Profile update failed. Please try again.",
+        );
 
       setSubmitted(true);
     } catch (err) {
@@ -499,7 +755,11 @@ const DoctorProfile = () => {
     }
   };
 
-  const f = (name) => ({ value: form[name], onChange: handleChange, error: errors[name] });
+  const f = (name) => ({
+    value: form[name],
+    onChange: handleChange,
+    error: errors[name],
+  });
 
   // ── Success screen ──
   if (submitted) {
@@ -511,7 +771,12 @@ const DoctorProfile = () => {
           <p>Your doctor profile has been submitted successfully.</p>
           <button
             className="dprof-btn dprof-btn-save"
-            onClick={() => { setSubmitted(false); setStep(0); setForm(initialState); navigate("/DoctorDashboard"); }}
+            onClick={() => {
+              setSubmitted(false);
+              setStep(0);
+              setForm(initialState);
+              navigate("/DoctorDashboard");
+            }}
           >
             Go to Dashboard
           </button>
@@ -531,10 +796,19 @@ const DoctorProfile = () => {
       <div className="dprof-stepper">
         {STEPS.map((s, i) => (
           <div key={i} className="dprof-step-item">
-            <div className={"dprof-step-circle" + (i < step ? " done" : i === step ? " active" : "")}>
+            <div
+              className={
+                "dprof-step-circle" +
+                (i < step ? " done" : i === step ? " active" : "")
+              }
+            >
               {i < step ? "✓" : i + 1}
             </div>
-            <span className={"dprof-step-label" + (i === step ? " active" : "")}>{s.label}</span>
+            <span
+              className={"dprof-step-label" + (i === step ? " active" : "")}
+            >
+              {s.label}
+            </span>
             {i < STEPS.length - 1 && (
               <div className={"dprof-step-line" + (i < step ? " done" : "")} />
             )}
@@ -551,9 +825,64 @@ const DoctorProfile = () => {
 
         {step === 0 && (
           <div className="dprof-grid-2">
-            <Field label="Full Name"     name="fullName" required {...f("fullName")} />
-            <Field label="Date of Birth" name="dob" type="date" required {...f("dob")} />
-            <Field label="Gender" name="gender" options={["Male","Female","Other"]} required {...f("gender")} />
+            <Field
+              label="Full Name"
+              name="fullName"
+              required
+              readOnly
+              {...f("fullName")}
+            />
+            <Field
+              label="Date of Birth"
+              name="dob"
+              type="date"
+              required
+              readOnly
+              {...f("dob")}
+            />
+            <Field
+              label="Gender"
+              name="gender"
+              options={["Male", "Female", "Other"]}
+              required
+              readOnly
+              {...f("gender")}
+            />
+            <Field
+              label="Specialization"
+              name="specialization"
+              readOnly
+              {...f("specialization")}
+            />
+
+            <Field
+              label="Qualification"
+              name="qualification"
+              readOnly
+              {...f("qualification")}
+            />
+
+            <Field
+              label="Experience"
+              name="experience"
+              readOnly
+              {...f("experience")}
+            />
+
+            <Field
+              label="License Number"
+              name="licenseNumber"
+              readOnly
+              {...f("licenseNumber")}
+            />
+
+            <Field
+              label="Email"
+              name="email"
+              type="email"
+              readOnly
+              {...f("email")}
+            />
           </div>
         )}
 
@@ -563,7 +892,8 @@ const DoctorProfile = () => {
               selected={form.workingDays}
               onChange={(days) => {
                 setForm((p) => ({ ...p, workingDays: days }));
-                if (errors.workingDays) setErrors((p) => ({ ...p, workingDays: "" }));
+                if (errors.workingDays)
+                  setErrors((p) => ({ ...p, workingDays: "" }));
               }}
               error={errors.workingDays}
             />
@@ -571,53 +901,97 @@ const DoctorProfile = () => {
               sessions={form.workingHours}
               onChange={(sessions) => {
                 setForm((p) => ({ ...p, workingHours: sessions }));
-                if (errors.workingHours) setErrors((p) => ({ ...p, workingHours: "" }));
+                if (errors.workingHours)
+                  setErrors((p) => ({ ...p, workingHours: "" }));
               }}
-              sessionErrors={typeof errors.workingHours === "object" ? errors.workingHours : null}
+              sessionErrors={
+                typeof errors.workingHours === "object"
+                  ? errors.workingHours
+                  : null
+              }
             />
             <ServiceTypePicker
               selected={form.serviceType}
               onChange={(types) => {
                 setForm((p) => ({ ...p, serviceType: types }));
-                if (errors.serviceType) setErrors((p) => ({ ...p, serviceType: "" }));
+                if (errors.serviceType)
+                  setErrors((p) => ({ ...p, serviceType: "" }));
               }}
               error={errors.serviceType}
             />
-            <Field label="About Doctor" name="about" textarea required {...f("about")} />
+            <Field
+              label="About Doctor"
+              name="about"
+              textarea
+              required
+              {...f("about")}
+            />
           </>
         )}
 
         {step === 2 && (
           <>
             <div className="dprof-grid-2">
-              <Field label="Mobile Number"     name="mobile"           type="tel" required {...f("mobile")} />
-              <Field label="Emergency Contact" name="emergencyContact" type="tel"          {...f("emergencyContact")} />
-              <Field label="Hospital / Clinic" name="hospitalName"                required {...f("hospitalName")} />
-              <Field label="City"              name="city"                         required {...f("city")} />
-              <Field label="State"             name="state"                        required {...f("state")} />
-              <Field label="Map Link"          name="mapLink"          type="url"           {...f("mapLink")} />
+              <Field
+                label="Mobile Number"
+                name="mobile"
+                type="tel"
+                required
+                readOnly
+                {...f("mobile")}
+              />
+              <Field
+                label="Emergency Contact"
+                name="emergencyContact"
+                type="tel"
+                {...f("emergencyContact")}
+              />
+              <Field
+                label="Hospital / Clinic"
+                name="hospitalName"
+                required
+                {...f("hospitalName")}
+              />
+              <Field label="City" name="city" required {...f("city")} />
+              <Field label="State" name="state" required {...f("state")} />
+              <Field
+                label="Map Link"
+                name="mapLink"
+                type="url"
+                {...f("mapLink")}
+              />
             </div>
             <Field label="Address" name="address" {...f("address")} />
           </>
         )}
       </div>
 
-      {/* API error banner */}
       {apiError && <div className="dprof-api-error">❌ {apiError}</div>}
 
       {/* NAVIGATION */}
       <div className="dprof-actions">
         {step > 0 && (
-          <button className="dprof-btn dprof-btn-back" onClick={handleBack} disabled={loading}>
+          <button
+            className="dprof-btn dprof-btn-back"
+            onClick={handleBack}
+            disabled={loading}
+          >
             ← Back
           </button>
         )}
-        {step < STEPS.length - 1
-          ? <button className="dprof-btn dprof-btn-save" onClick={handleNext}>Next →</button>
-          : <button className="dprof-btn dprof-btn-save" onClick={handleSubmit} disabled={loading}>
-              {loading ? "Saving..." : "Save Profile"}
-            </button>
-        }
+        {step < STEPS.length - 1 ? (
+          <button className="dprof-btn dprof-btn-save" onClick={handleNext}>
+            Next →
+          </button>
+        ) : (
+          <button
+            className="dprof-btn dprof-btn-save"
+            onClick={handleSubmit}
+            disabled={loading}
+          >
+            {loading ? "Saving..." : "Save Profile"}
+          </button>
+        )}
       </div>
     </div>
   );
