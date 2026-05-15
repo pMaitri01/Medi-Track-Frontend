@@ -45,7 +45,20 @@
   font-size: 14px;
   opacity: 0.9;
 }
+/* DEFAULT (pending = orange) */
+.dwait-band--pending {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+}
 
+/* APPROVED = GREEN */
+.dwait-band--approved {
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+}
+
+/* REJECTED = RED */
+.dwait-band--rejected {
+  background: linear-gradient(135deg, #ef4444, #b91c1c);
+}
 .dwait-body {
   padding: 28px 28px 32px;
 }
@@ -66,6 +79,23 @@
   border-radius: 20px;
   font-size: 13px;
   font-weight: 700;
+}
+ .dwait-badge--pending {
+  background: #fefce8;
+  color: #ca8a04;
+  border: 1px solid #fde68a;
+}
+
+.dwait-badge--approved {
+  background: #dcfce7;
+  color: #16a34a;
+  border: 1px solid #86efac;
+}
+
+.dwait-badge--rejected {
+  background: #fee2e2;
+  color: #dc2626;
+  border: 1px solid #fca5a5;
 }
 
 .dwait-info-box {

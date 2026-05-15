@@ -391,7 +391,7 @@ const PatientHome = () => {
   };
   const canStartCall =
     upcomingAppointment &&
-    upcomingAppointment?.type === "video" &&
+    upcomingAppointment?.type === "videocall" &&
     isCallTime(upcomingAppointment.date, upcomingAppointment.time);
   return (
     <>

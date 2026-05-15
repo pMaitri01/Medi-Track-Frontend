@@ -269,7 +269,7 @@ const handleRefresh = async () => {
 
           {/* Status badge */}
           <div className="dwait-badge-row">
-            <span className="dwait-badge">
+            <span className={`dwait-badge dwait-badge--${status}`}>
               ● {status}
             </span>
           </div>
