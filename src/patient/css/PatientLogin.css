@@ -1,7 +1,7 @@
 body {
   margin: 0;
   padding: 0;
-  overflow: hidden;   /* removes both horizontal & vertical scroll */
+  overflow: hidden; /* removes both horizontal & vertical scroll */
 }
 
 /* Also ensure main container doesn’t overflow */
@@ -39,7 +39,8 @@ body {
   color: #0aa5a5;
   margin-left: -15px;
 }
-.headspan{
+
+.headspan {
   font-size: 30px;
   font-weight: 500;
   letter-spacing: 1px;
@@ -53,7 +54,7 @@ body {
   background: white;
   display: flex;
   border-radius: 10px;
-  box-shadow: 0px 10px 30px rgba(0,0,0,0.2);
+  box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.2);
   overflow: hidden;
   margin-top: 80px;
 }
@@ -66,20 +67,19 @@ body {
   flex-direction: column;
   justify-content: center;
 }
-input{
-    margin-bottom: 2px;
+
+input {
+  margin-bottom: 2px;
 }
+
 .login-heading {
   font-size: 28px;
   font-weight: 700;
   color: #0aa5a5;
   margin-bottom: 25px;
-  text-align: center;   /* keep it left aligned */
+  text-align: center; /* keep it left aligned */
 }
-/* .txtreg {
-  margin-top: 10px;
-  display: block;
-} */
+
 .right-section {
   width: 50%;
   height: 100%;
@@ -89,16 +89,20 @@ input{
   justify-content: center;
   align-items: center;
 }
+
 .right-section img {
   width: 100%;
   height: 100%;
 }
+
 .password-wrapper {
   position: relative;
 }
+
 .password-field input {
   border: 0 px solid #dee2e6 !important;
-  }
+}
+
 .password-wrapper input {
   padding-right: 40px; /* space for eye icon */
 }
@@ -112,6 +116,7 @@ input{
   font-size: 18px;
   z-index: 2;
 }
+
 .password-field {
   position: relative;
   width: 100%;
@@ -120,6 +125,7 @@ input{
 .password-field input {
   padding-right: 45px;
 }
+
 .toggle-eye {
   position: absolute;
   right: 20px;
@@ -129,20 +135,41 @@ input{
   font-size: 18px;
   color: #666;
   transition: 0.3s;
-} 
-.text-primary{
+}
+
+.text-primary {
+  text-decoration: none;
+  color: #0aa5a5 !important;
+}
+
+.custom-link {
+  color: #0aa5a5 !important;
   text-decoration: none;
 }
+
+.custom-link:hover {
+  color: #088c8c !important;
+}
+
+.d-flex.justify-content-between {
+  display: flex;
+  justify-content: flex-end !important;
+  width: 100%;
+}
+
 .toggle-eye:hover {
   color: #0aa5a5;
 }
-.ckb{
+
+.ckb {
   width: 20px;
   margin-top: 0px !important;
 }
+
 .password-field .form-control.is-invalid {
   background-position: right 27px center;
 }
-.btn{
+
+.btn {
   margin-top: -5px !important;
 }
