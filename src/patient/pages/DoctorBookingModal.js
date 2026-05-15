@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import "../css/RescheduleAppointment.css";
+import "../css/DoctorBookingModal.css";
 import { toast } from "react-toastify";
 
 const DoctorBookingModal = ({ doctor, onClose, onConfirm }) => {
@@ -147,6 +148,7 @@ console.log("👤 USER ID:", user?._id);
               <select
                 value={appointmentType}
                 onChange={(e) => setAppointmentType(e.target.value)}
+                className="DBMSelect"
               >
                 <option value="">Select Type</option>
 
