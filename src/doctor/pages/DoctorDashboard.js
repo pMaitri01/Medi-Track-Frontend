@@ -524,7 +524,7 @@ export default function DoctorDashboard() {
                 )}
               </div>
 
-              <div className="review-header" onClick={() => navigate("/doctor/reviews")} style={{ marginLeft: "200px",cursor: "pointer" }}>
+              <div className="review-header" onClick={() => navigate("/doctor/reviews")} style={{ marginLeft: "200px",cursor: "pointer"   }}>
                 {/* <button className="view-more-btn"> </button>   */}
                 View More →
               </div>
