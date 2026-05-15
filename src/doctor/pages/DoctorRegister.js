@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import "../css/DoctorRegister.css";
+import { toast } from "react-toastify";
 
 const SPECIALIZATIONS = [
   "Cardiologist",
@@ -150,6 +151,7 @@ const DoctorRegister = () => {
     const errs = validate();
     if (Object.keys(errs).length > 0) {
       setErrors(errs);
+      toast.warning("Please fill all required fields correctly");
       return;
     }
 
@@ -178,6 +180,7 @@ const DoctorRegister = () => {
       const data = await res.json();
 
       if (res.ok) {
+        toast.success("Registration submitted successfully. Waiting for admin approval");
         sessionStorage.setItem(
           "pendingDoctor",
           JSON.stringify({
@@ -188,13 +191,14 @@ const DoctorRegister = () => {
         );
         navigate("/DoctorLogin");
       } else {
+        toast.error(data.message || "Registration failed. Please try again.");
         setErrors((p) => ({
           ...p,
           submit: data.message || "Registration failed. Please try again.",
         }));
       }
     } catch {
-      setErrors((p) => ({ ...p, submit: "Network error. Please try again." }));
+      toast.error("Network error. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -429,7 +433,7 @@ const DoctorRegister = () => {
             </div>
 
             {/* Submit error */}
-            {errors.submit && (
+            {/* {errors.submit && (
               <div
                 style={{
                   background: "#fef2f2",
@@ -443,7 +447,7 @@ const DoctorRegister = () => {
               >
                 ❌ {errors.submit}
               </div>
-            )}
+            )} */}
 
             {/* ── Buttons ── */}
             <div className="dreg-submit-wrap">

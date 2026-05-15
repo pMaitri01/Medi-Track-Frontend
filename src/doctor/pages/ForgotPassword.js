@@ -1,5 +1,6 @@
 import { useState } from "react";
 import "../css/ForgotPassword.css";
+import { toast } from "react-toastify";
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -17,7 +18,11 @@ const ForgotPassword = ({ onBack, onNext }) => {
 
  const handleSubmit = async () => {
   const err = validate();
-  if (err) { setError(err); return; }
+  if (err) {
+  setError(err);
+  toast.warning(err);
+  return;
+}
 
   setLoading(true);
 
@@ -34,16 +39,20 @@ const ForgotPassword = ({ onBack, onNext }) => {
     const data = await res.json();
 
     if (!res.ok) {
-      setError(data.message);
-      setLoading(false);
-      return;
-    }
+  const msg = data.message || "Failed to send OTP";
+  setError(msg);
+  toast.error(msg);
+  setLoading(false);
+  return;
+}     
 
     localStorage.setItem("resetEmail", email);
-
+    toast.success("OTP sent successfully");
     setDone(true);
-  } catch (err) {
+  } 
+  catch (err) {
     setError("Something went wrong");
+      toast.error("Something went wrong");
   }
 
   setLoading(false);

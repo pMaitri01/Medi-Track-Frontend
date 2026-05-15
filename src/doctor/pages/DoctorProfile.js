@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import "../css/DoctorProfile.css";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const initialState = {
   fullName: "",
@@ -685,6 +686,7 @@ const DoctorProfile = () => {
   const handleNext = () => {
     const errs = validate(step);
     if (Object.keys(errs).length > 0) {
+      toast.warning("Please fix the highlighted errors");
       setErrors(errs);
       scrollToFirstError(errs);
       return;
@@ -746,10 +748,12 @@ const DoctorProfile = () => {
         throw new Error(
           data.message || "Profile update failed. Please try again.",
         );
-
+        toast.success("Profile saved successfully");
       setSubmitted(true);
     } catch (err) {
       setApiError(err.message);
+        toast.error(err.message || "Profile update failed");
+
     } finally {
       setLoading(false);
     }
@@ -965,8 +969,6 @@ const DoctorProfile = () => {
           </>
         )}
       </div>
-
-      {apiError && <div className="dprof-api-error">❌ {apiError}</div>}
 
       {/* NAVIGATION */}
       <div className="dprof-actions">

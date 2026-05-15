@@ -1,5 +1,6 @@
 import { useState } from "react";
 import "../css/ResetPassword.css";
+import { toast } from "react-toastify";
 
 const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#]).{6,}$/;
 
@@ -70,11 +71,13 @@ const otp = localStorage.getItem("resetOtp");
 
     if (!res.ok) {
       setErrors({ pwd: data.message });
+      toast.error(data.message || "Password reset failed");
       setLoading(false);
       return;
     }
 
     setSuccess(true);
+    toast.success("Password reset successfully!");
   } catch (err) {
     setErrors({ pwd: "Something went wrong" });
   }

@@ -3,6 +3,7 @@ import DoctorNavbar from "../components/DoctorNavbar";
 import DoctorHeader from "../components/DoctorHeader";
 import "../css/DoctorPrescription.css";
 import { generateDoctorPrescriptionPDF } from "../utils/generateDoctorPrescriptionPDF";
+import { toast } from "react-toastify";
 
 const BLANK_MEDICINE = () => ({ id: "", name: "", dosage: "", timing: [], foodPref: {}, duration: "", status: "Active" });
 const BLANK_FORM = () => ({
@@ -52,11 +53,14 @@ function MedStatusToggle({ med, index, onChange, prescriptionId }) {
         }
       );
       const data = await res.json();
-      if (!res.ok) throw new Error(data.message);
+      if (!res.ok){
+        throw new Error(data.message) }
+      else{
+        toast.success("Medicine status updated");}
     } catch (err) {
       console.error(err);
       onChange(index, { field: "status", val: med.status });
-      alert(`❌ ${err.message}`);
+      toast.error(err.message || "Failed to update medicine status");
     } finally {
       setBusy(false);
     }
@@ -468,7 +472,7 @@ export default function DoctorPrescription() {
 
   const handleSave = async () => {
     if (!form.patientId || !form.diagnosis || form.medicines.some((m) => !m.name)) {
-      alert("Please fill all required fields");
+      toast.warning("Please fill all required fields");
       return;
     }
     const isEdit = !!form.id;
@@ -525,13 +529,15 @@ export default function DoctorPrescription() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.message);
 
-      alert(isEdit ? "✅ Prescription updated successfully" : "✅ Prescription saved successfully");
+      toast.success(
+  isEdit ? "Prescription updated successfully" : "Prescription saved successfully"
+);
       setForm(BLANK_FORM());
       setShowForm(false);
       fetchPrescriptions();
     } catch (err) {
       console.error(err);
-      alert("❌ Failed to save prescription");
+      toast.error("Failed to save prescription");
     }
   };
 
@@ -551,7 +557,42 @@ export default function DoctorPrescription() {
   };
 
   const handleDelete = async (id) => {
-    if (!window.confirm("Delete this prescription?")) return;
+    toast(
+  ({ closeToast }) => (
+    <div>
+      <p>Delete this prescription?</p>
+      <div style={{ display: "flex", gap: "10px", marginTop: "10px" }}>
+        <button
+          onClick={async () => {
+            closeToast();
+
+            try {
+              const res = await fetch(
+                `${process.env.REACT_APP_API_URL}/api/prescription/${id}`,
+                { method: "DELETE", credentials: "include" }
+              );
+
+              if (!res.ok) {
+                const data = await res.json().catch(() => ({}));
+                throw new Error(data.message || "Failed to delete prescription");
+              }
+
+              setPrescriptions((prev) => prev.filter((rx) => rx.id !== id));
+              toast.success("Prescription deleted successfully");
+            } catch (err) {
+              toast.error(err.message);
+            }
+          }}
+        >
+          Yes
+        </button>
+
+        <button onClick={closeToast}>No</button>
+      </div>
+    </div>
+  ),
+  { autoClose: false }
+);
     try {
       const res = await fetch(
         `${process.env.REACT_APP_API_URL}/api/prescription/${id}`,
@@ -564,7 +605,7 @@ export default function DoctorPrescription() {
       setPrescriptions((prev) => prev.filter((rx) => rx.id !== id));
     } catch (err) {
       console.error(err);
-      alert(`❌ ${err.message}`);
+      toast.error(err.message);
     }
   };
 
@@ -585,8 +626,8 @@ export default function DoctorPrescription() {
       fetchPrescriptions();
     } catch (err) {
       console.error(err);
-      alert(`❌ ${err.message}`);
-    }
+      toast.error(err.message || "Failed to update status");   
+ }
   };
 
   const handleCancel = () => {

@@ -4,6 +4,7 @@ import userImg from "../images/user.png";
 import { useNavigate } from "react-router-dom";
 import { useDoctor } from "../../context/DoctorContext";
 import socket from "../../socket";
+import { toast } from "react-toastify";
 
 export default function DoctorHeader({ open }) {
   const [showProfile, setShowProfile] = useState(false);
@@ -131,21 +132,94 @@ export default function DoctorHeader({ open }) {
 
     fetchNotifications();
   }, []);
-  const handleLogout = async () => {
-    try {
-      await fetch(`${process.env.REACT_APP_API_URL}/api/Doctor/logout`, {
-        method: "POST",
-        credentials: "include"
-      });
+  // const handleLogout = async () => {
+  //   try {
+  //     await fetch(`${process.env.REACT_APP_API_URL}/api/Doctor/logout`, {
+  //       method: "POST",
+  //       credentials: "include"
+  //     });
 
-      localStorage.removeItem("doctor");
-      window.location.href = "/";
+  //     localStorage.removeItem("doctor");
+  //     window.location.href = "/";
 
-    } catch (error) {
-      console.error(error);
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
+
+const handleLogout = () => {
+  toast(
+    ({ closeToast }) => (
+      <div>
+        <p style={{ marginBottom: "10px" }}>
+          Are you sure you want to logout?
+        </p>
+
+        <div style={{ display: "flex", gap: "10px" }}>
+          {/* YES */}
+          <button
+            onClick={async () => {
+              try {
+                await fetch(`${process.env.REACT_APP_API_URL}/api/Doctor/logout`, {
+                  method: "POST",
+                  credentials: "include"
+                });
+
+                localStorage.removeItem("doctor");
+
+                toast.success("Logged out successfully");
+                closeToast();
+
+                setTimeout(() => {
+                  window.location.href = "/";
+                }, 1500);
+
+              } catch (error) {
+                console.error(error);
+                toast.error("Logout failed");
+              }
+            }}
+            style={{
+              padding: "5px 10px",
+              background: "#ef4444",
+              color: "#fff",
+              border: "none",
+              borderRadius: "5px",
+              cursor: "pointer"
+            }}
+          >
+            Yes
+          </button>
+
+          {/* NO */}
+          <button
+            onClick={() => {
+              toast.info("Logout cancelled");
+              closeToast();
+            }}
+            style={{
+              padding: "5px 10px",
+              background: "#e5e7eb",
+              color: "#000",
+              border: "none",
+              borderRadius: "5px",
+              cursor: "pointer"
+            }}
+          >
+            No
+          </button>
+        </div>
+      </div>
+    ),
+    {
+      position: "top-center",
+      autoClose: false, // IMPORTANT (so user can click)
+      closeOnClick: false,
+      draggable: false,
     }
-  };
-const markAsRead = async (id) => {
+  );
+};
+  const markAsRead = async (id) => {
   try {
     await fetch(
       `${process.env.REACT_APP_API_URL}/api/notification/${id}/read`,

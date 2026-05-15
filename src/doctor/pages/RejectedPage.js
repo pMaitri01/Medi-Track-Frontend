@@ -1,5 +1,6 @@
 import { useNavigate, useLocation } from "react-router-dom";
 import "../css/RejectedPage.css";
+import { toast } from "react-toastify";
 
 const RejectedPage = () => {
   const navigate = useNavigate();
@@ -8,12 +9,57 @@ const RejectedPage = () => {
   const reason = location.state?.reason || "Your application did not meet our current requirements.";
   const doctor = location.state?.doctor || null;
 
-  const handleLogout = () => {
-    sessionStorage.clear();
-    localStorage.removeItem("token");
-    localStorage.removeItem("doctor");
-    navigate("/DoctorLogin");
-  };
+ const handleLogout = () => {
+  toast(
+    ({ closeToast }) => (
+      <div>
+        <p>Are you sure you want to logout?</p>
+        <div style={{ display: "flex", gap: "10px", marginTop: "10px" }}>
+          <button
+            onClick={() => {
+              sessionStorage.clear();
+              localStorage.removeItem("token");
+              localStorage.removeItem("doctor");
+              closeToast();
+              toast.success("Logged out successfully");
+              navigate("/DoctorLogin");
+            }}
+            style={{
+              padding: "6px 12px",
+              background: "#ef4444",
+              color: "#fff",
+              border: "none",
+              borderRadius: "6px",
+              cursor: "pointer",
+            }}
+          >
+            Yes
+          </button>
+
+          <button
+            onClick={() => {
+              closeToast();
+              toast.info("Logout cancelled");
+            }}
+            style={{
+              padding: "6px 12px",
+              background: "#e5e7eb",
+              border: "none",
+              borderRadius: "6px",
+              cursor: "pointer",
+            }}
+          >
+            No
+          </button>
+        </div>
+      </div>
+    ),
+    {
+      autoClose: false,
+      closeOnClick: false,
+    }
+  );
+};
 
   return (
     <div className="drej-page">

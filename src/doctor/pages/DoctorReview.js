@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import "../css/DoctorReview.css"; 
 import DoctorHeader from "../components/DoctorHeader";
 import DoctorNavbar from "../components/DoctorNavbar";
+import { toast } from "react-toastify";
 
 const DoctorReview = () => {
   const params = useParams();
@@ -38,8 +39,12 @@ const DoctorReview = () => {
           });
           setReviews(data.allReviews || []);
         }
+         else {
+  toast.error(data.message || "Failed to load reviews");
+}
       } catch (err) {
         console.error("Error fetching reviews:", err);
+        toast.error("Failed to load reviews. Please try again.");
       }
     };
     fetchReviews();

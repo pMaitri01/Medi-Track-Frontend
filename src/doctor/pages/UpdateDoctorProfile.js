@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import "../css/UpdateDoctorProfile.css";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import {
   FaArrowLeft,
   FaBell,
@@ -176,11 +177,11 @@ export default function UpdateDoctorProfile() {
         setOriginalProfile(JSON.parse(JSON.stringify(profile)));
         setIsEditing(false);
       } else {
-        alert(data.message || "Error");
+        toast.error(data.message || "Failed to update profile");
       }
     } catch (err) {
       console.log(err);
-      alert("Server Error");
+      toast.error("Server error, please try again");
     }
   };
 

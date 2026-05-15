@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import "../css/DoctorMedicalRecords.css";
 import DoctorHeader from "../components/DoctorHeader";
 import DoctorNavbar from "../components/DoctorNavbar";
+import { toast } from "react-toastify";
 
 const DoctorMedicalRecords = () => {
   const [open, setOpen] = useState(true);
@@ -31,6 +32,7 @@ const DoctorMedicalRecords = () => {
           setPatients([]);
         }
       } catch (err) {
+        toast.error("Failed to load patients");
         console.log(err);
       }
     };
@@ -55,6 +57,7 @@ const DoctorMedicalRecords = () => {
         }
       } catch (err) {
         console.log(err);
+        toast.error("Failed to load medical records");
       }
     };
 
@@ -123,6 +126,10 @@ const DoctorMedicalRecords = () => {
               <select
                 onChange={(e) => {
                   const patientId = e.target.value;
+                  if (!patientId) {
+                    toast.info("Please select a patient");
+                    return;
+                  }
                   setSelectedPatient(patientId);
 
                   const patientObj = patients.find((p) => p._id === patientId);
@@ -194,7 +201,10 @@ const DoctorMedicalRecords = () => {
                               {rec.fileUrl ? (
                                 <button
                                   className="download-btn"
-                                  onClick={() => window.open(rec.fileUrl, "_blank")}
+                                  onClick={() => {
+                                    window.open(rec.fileUrl, "_blank");
+                                    toast.success("Downloading record...");
+                                  }}
                                 >
                                   Download Record
                                 </button>

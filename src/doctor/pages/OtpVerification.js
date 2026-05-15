@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import "../css/OtpVerification.css";
+import { toast } from "react-toastify";
 
 const TIMER_SEC = 30;
 
@@ -50,6 +51,7 @@ const handleVerify = async () => {
 
   if (otpValue.length < 4) {
     setError("Enter valid OTP");
+      toast.warning("Enter valid OTP");
     return;
   }
 
@@ -70,15 +72,17 @@ const handleVerify = async () => {
 
     if (!res.ok) {
       setError(data.message);
+      toast.error(data.message);
       setLoading(false);
       return;
     }
 
     localStorage.setItem("resetOtp", otpValue);
-
+    toast.success("OTP verified successfully");
     onSuccess();
   } catch (err) {
     setError("Something went wrong");
+    toast.error("Something went wrong");
   }
 
   setLoading(false);
@@ -106,12 +110,17 @@ const handleVerify = async () => {
 
     if (!res.ok) {
       setError(data.message);
+        toast.error(data.message || "Invalid OTP");
       return;
     }
+    else {  
+      toast.success("OTP resent successfully");}
+  
 
     console.log("OTP resent");
   } catch (err) {
     setError("Failed to resend OTP");
+    toast.error("Failed to resend OTP");
   }
   };
 

@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import "../css/WaitingApproval.css";
+import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 const WaitingApproval = () => {
   const [doctor, setDoctor] = useState(null);
@@ -79,8 +80,8 @@ useEffect(() => {
 
   fetchDoctorData();
 }, []);
-
-  const handleRefresh = async () => {
+const handleRefresh = async () => {
+  const toastId = toast.loading("Checking approval status...");
   setChecking(true);
 
   try {
@@ -94,44 +95,162 @@ useEffect(() => {
 
     const data = await res.json();
 
-    if (res.ok) {
-      const currentDoctor = data.find(
-        (doc) =>
-          doc._id === storedDoctor._id || 
-          doc.email === storedDoctor.email
-      );
-
-      // if (currentDoctor) {
-      //   setStatus(currentDoctor.status);
-
-      //   // 🚀 AUTO REDIRECT WHEN APPROVED
-      //   if (currentDoctor.status === "approved") {
-      //     window.location.href = "/DoctorDashboard";
-      //   }
-
-      //   localStorage.setItem("doctor", JSON.stringify(currentDoctor));
-      // }
-      if (currentDoctor) {
-  const status = currentDoctor.status?.toLowerCase();
-
-  setStatus(status);
-
-  localStorage.setItem("doctor", JSON.stringify(currentDoctor));
-
-  // 🚀 REDIRECT
-  if (status === "approved") {
-    navigate("/DoctorProfile");
-  } else if (status === "rejected") {
-    navigate("/DoctorRejected");
-  }
-}
+    if (!res.ok) {
+      toast.update(toastId, {
+        render: "Failed to fetch data",
+        type: "error",
+        isLoading: false,
+        autoClose: 3000,
+      });
+      return;
     }
+
+    const currentDoctor = data.doctors.find(
+      (doc) =>
+        doc._id === storedDoctor._id ||
+        doc.email === storedDoctor.email
+    );
+
+    if (!currentDoctor) {
+      toast.update(toastId, {
+        render: "Doctor not found",
+        type: "error",
+        isLoading: false,
+        autoClose: 3000,
+      });
+      return;
+    }
+
+    const newStatus = currentDoctor.status?.toLowerCase();
+
+    setStatus(newStatus);
+    localStorage.setItem("doctor", JSON.stringify(currentDoctor));
+
+    // ✅ STATUS HANDLING
+    if (newStatus === "pending") {
+      toast.update(toastId, {
+        render: "Still under review ⏳",
+        type: "info",
+        isLoading: false,
+        autoClose: 3000,
+      });
+    }
+
+    else if (newStatus === "approved") {
+      toast.update(toastId, {
+        render: "Account approved 🎉 Redirecting...",
+        type: "success",
+        isLoading: false,
+        autoClose: 2000,
+      });
+
+      setTimeout(() => navigate("/DoctorProfile"), 2000);
+    }
+
+    else if (newStatus === "rejected") {
+      toast.update(toastId, {
+        render: "Account rejected ❌",
+        type: "error",
+        isLoading: false,
+        autoClose: 3000,
+      });
+
+      setTimeout(() => navigate("/DoctorRejected"), 2000);
+    }
+
   } catch (err) {
     console.error(err);
+
+    toast.update(toastId, {
+      render: "Server error. Try again.",
+      type: "error",
+      isLoading: false,
+      autoClose: 3000,
+    });
   }
 
   setChecking(false);
 };
+
+//   const handleRefresh = async () => {
+//   const toastId = toast.loading("Checking approval status...");
+//   setChecking(true);
+
+//   try {
+//     const storedDoctor = JSON.parse(localStorage.getItem("doctor"));
+
+//     const res = await fetch(`${process.env.REACT_APP_API_URL}/api/doctor/all`, {
+//       headers: {
+//         Authorization: `Bearer ${localStorage.getItem("token")}`,
+//       },
+//     });
+
+//     const data = await res.json();
+
+//     if (res.ok) {
+//       const currentDoctor = data.find(
+//         (doc) =>
+//           doc._id === storedDoctor._id || 
+//           doc.email === storedDoctor.email
+//       );
+
+//       // if (currentDoctor) {
+//       //   setStatus(currentDoctor.status);
+
+//       //   // 🚀 AUTO REDIRECT WHEN APPROVED
+//       //   if (currentDoctor.status === "approved") {
+//       //     window.location.href = "/DoctorDashboard";
+//       //   }
+
+//       //   localStorage.setItem("doctor", JSON.stringify(currentDoctor));
+//       // }
+//       if (currentDoctor) {
+//         if (status === "pending") {
+//   toast.update(toastId, {
+//     render: "Still under review ⏳",
+//     type: "info",
+//     isLoading: false,
+//     autoClose: 3000,
+//   });
+// }
+//   const status = currentDoctor.status?.toLowerCase();
+
+//   setStatus(status);
+
+//   localStorage.setItem("doctor", JSON.stringify(currentDoctor));
+
+//   // 🚀 REDIRECT
+//   if (status === "approved") {
+//     toast.update(toastId, {
+//   render: "Account approved 🎉 Redirecting...",
+//   type: "success",
+//   isLoading: false,
+//   autoClose: 2000,
+// });
+
+// setTimeout(() => navigate("/DoctorProfile"), 2000);
+//     navigate("/DoctorProfile");
+//   } else if (status === "rejected") {
+//     toast.update(toastId, {
+//   render: "Account rejected ❌",
+//   type: "error",
+//   isLoading: false,
+//   autoClose: 3000,
+// });
+
+// setTimeout(() => navigate("/DoctorRejected"), 2000);
+//     navigate("/DoctorRejected");
+//   }
+// }
+//     }
+//   } catch (err) {
+//     console.error(err);
+//       toast.error("Failed to check status. Try again.");
+
+//   }
+
+//   setChecking(false);
+// };
 
   return (
     <div className="dwait-page">

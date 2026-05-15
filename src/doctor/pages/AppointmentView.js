@@ -3,6 +3,7 @@ import "../css/AppointmentView.css";
 import DoctorHeader from "../components/DoctorHeader";
 import DoctorNavbar from "../components/DoctorNavbar";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 export default function DoctorAppointmentView() {
   const [open, setOpen] = useState(true);
@@ -101,34 +102,96 @@ setAppointments(sorted);
     }
   };
 
+const handleStatusUpdate = (id, newStatus) => {
+  toast(
+    ({ closeToast }) => (
+      <div>
+        <p style={{ marginBottom: "10px" }}>
+          Are you sure you want to {newStatus} this appointment?
+        </p>
 
-  const handleStatusUpdate = async (id, newStatus) => {
-    try {
-      const token = localStorage.getItem("token");
-      const res = await fetch(
-        `${process.env.REACT_APP_API_URL}/api/appointment/${id}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          credentials: "include",
-          body: JSON.stringify({ status: newStatus }),
-        }
-      );
+        <div style={{ display: "flex", gap: "10px" }}>
+          {/* YES */}
+          <button
+            onClick={async () => {
+              try {
+                const token = localStorage.getItem("token");
 
-      if (res.ok) {
-        setAppointments((prev) =>
-          prev.map((item) => (item.id === id ? { ...item, status: newStatus } : item))
-        );
-        setSelectedAppointment(null);
-      }
-    } catch (error) {
-      console.error("Error updating status:", error);
+                const res = await fetch(
+                  `${process.env.REACT_APP_API_URL}/api/appointment/${id}`,
+                  {
+                    method: "PUT",
+                    headers: {
+                      "Content-Type": "application/json",
+                      Authorization: `Bearer ${token}`,
+                    },
+                    credentials: "include",
+                    body: JSON.stringify({ status: newStatus }),
+                  }
+                );
+
+                if (res.ok) {
+                  setAppointments((prev) =>
+                    prev.map((item) =>
+                      item.id === id
+                        ? { ...item, status: newStatus }
+                        : item
+                    )
+                  );
+
+                  setSelectedAppointment(null);
+
+                  toast.success(`Appointment ${newStatus} successfully`);
+                } else {
+                  toast.error("Failed to update status");
+                }
+
+                closeToast();
+              } catch (error) {
+                console.error(error);
+                toast.error("Something went wrong");
+              }
+            }}
+            style={{
+              padding: "5px 10px",
+              background: "#0AA5A5",
+              color: "#fff",
+              border: "none",
+              borderRadius: "5px",
+              cursor: "pointer"
+            }}
+          >
+            Yes
+          </button>
+
+          {/* NO */}
+          <button
+            onClick={() => {
+              toast.info("Action cancelled");
+              closeToast();
+            }}
+            style={{
+              padding: "5px 10px",
+              background: "#e5e7eb",
+              border: "none",
+              borderRadius: "5px",
+              cursor: "pointer"
+            }}
+          >
+            No
+          </button>
+        </div>
+      </div>
+    ),
+    {
+      position: "top-center",
+      autoClose: false,
+      closeOnClick: false,
+      draggable: false,
     }
-  };
-
+  );
+};
+  
 // const startVideoCall = (appointment) => {
 //   // Create unique room name using appointment id
 //   const roomName = `meditrack-${appointment.id}`;

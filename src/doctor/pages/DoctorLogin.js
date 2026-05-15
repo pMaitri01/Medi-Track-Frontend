@@ -4,6 +4,7 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import "../css/DoctorLogin.css";
 import { useDoctor } from "../../context/DoctorContext";
 import doctorImage from "../images/doclogin.png";
+import { toast } from "react-toastify";
 
 export default function DoctorLogin() {
   const [formData, setFormData]         = useState({ email: "", password: "" });
@@ -55,6 +56,7 @@ export default function DoctorLogin() {
       const data = await response.json();
 
       if (response.ok) {
+        toast.success("Login successful");
         const fullDoctor = data.doc || data.doctor || data.data;
 
         if (!fullDoctor) {
@@ -93,6 +95,7 @@ export default function DoctorLogin() {
           setErrors({ status: "Unknown doctor status" });
         }
       } else {
+        toast.error(data.message || data.msg || "Login failed");
         const msg = (data.message || data.msg || "").toLowerCase();
         if (msg.includes("pending") || msg.includes("not approved")) {
           navigate("/DoctorWaiting");

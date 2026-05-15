@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import "../css/PatientList.css";
 import DoctorHeader from "../components/DoctorHeader";
 import DoctorNavbar from "../components/DoctorNavbar";
-
+import { toast } from "react-toastify";
 const PatientList = () => {
   const [open, setOpen] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
@@ -47,6 +47,8 @@ const PatientList = () => {
       setPatients(data);
     } catch (error) {
       console.error("Error fetching patients:", error);
+        toast.error("Failed to load patients");
+
     }
   };
 
@@ -56,6 +58,8 @@ const PatientList = () => {
       const token = localStorage.getItem("token");
       if (!token) {
         console.error("No token found.");
+          toast.error("Session expired. Please login again");
+
         return;
       }
 
@@ -73,6 +77,8 @@ const PatientList = () => {
 
       if (res.status === 401) {
         console.error("Unauthorized");
+          toast.error("Unauthorized access. Please login again");
+
         return;
       }
       if (!res.ok) throw new Error("Failed to fetch appointments");
@@ -81,6 +87,8 @@ const PatientList = () => {
       setAppointments(data);
     } catch (error) {
       console.error("Error fetching appointments:", error);
+        toast.error("Failed to load appointments");
+
     }
   };
 
