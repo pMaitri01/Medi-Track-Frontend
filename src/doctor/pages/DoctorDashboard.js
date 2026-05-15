@@ -41,12 +41,12 @@ export default function DoctorDashboard() {
 
   useEffect(() => {
 
-     // GET doctor name from localStorage
-  const storedDoctor = JSON.parse(localStorage.getItem("doctor") || "{}");
+    // GET doctor name from localStorage
+    const storedDoctor = JSON.parse(localStorage.getItem("doctor") || "{}");
 
-  if (storedDoctor?.fullName) {
-    setDoctorName(storedDoctor.fullName);
-  }
+    if (storedDoctor?.fullName) {
+      setDoctorName(storedDoctor.fullName);
+    }
 
     const fetchDashboard = async () => {
       try {
@@ -524,7 +524,7 @@ export default function DoctorDashboard() {
                 )}
               </div>
 
-              <div className="review-header" onClick={() => navigate("/doctor/reviews")} style={{ marginLeft: "200px" }}>
+              <div className="review-header" onClick={() => navigate("/doctor/reviews")} style={{ marginLeft: "200px",cursor: "pointer" }}>
                 {/* <button className="view-more-btn"> </button>   */}
                 View More →
               </div>
