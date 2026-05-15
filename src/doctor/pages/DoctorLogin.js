@@ -7,8 +7,8 @@ import doctorImage from "../images/doclogin.png";
 import { toast } from "react-toastify";
 
 export default function DoctorLogin() {
-  const [formData, setFormData]         = useState({ email: "", password: "" });
-  const [errors, setErrors]             = useState({});
+  const [formData, setFormData] = useState({ email: "", password: "" });
+  const [errors, setErrors] = useState({});
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
   const { setDoctor } = useDoctor();
@@ -19,7 +19,8 @@ export default function DoctorLogin() {
   const validateField = (name, value) => {
     if (name === "email") {
       if (!value) return "Email is required";
-      if (!/\S+@\S+\.\S+/.test(value)) return "Enter valid email (example: abc@gmail.com)";
+      if (!/\S+@\S+\.\S+/.test(value))
+        return "Enter valid email (example: abc@gmail.com)";
     }
     if (name === "password") {
       if (!value) return "Password is required";
@@ -35,8 +36,8 @@ export default function DoctorLogin() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const emailErr = validateField("email",    formData.email);
-    const passErr  = validateField("password", formData.password);
+    const emailErr = validateField("email", formData.email);
+    const passErr = validateField("password", formData.password);
     if (emailErr || passErr) {
       setErrors({ email: emailErr, password: passErr });
       return;
@@ -46,11 +47,14 @@ export default function DoctorLogin() {
       const response = await fetch(
         `${process.env.REACT_APP_API_URL}/api/doctor/login`,
         {
-          method:      "POST",
-          headers:     { "Content-Type": "application/json" },
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
           credentials: "include",
-          body:        JSON.stringify({ email: formData.email, password: formData.password }),
-        }
+          body: JSON.stringify({
+            email: formData.email,
+            password: formData.password,
+          }),
+        },
       );
 
       const data = await response.json();
@@ -67,10 +71,10 @@ export default function DoctorLogin() {
         const status = (fullDoctor.status || "").toLowerCase();
 
         const doctor = {
-          id:                fullDoctor._id,
-          fullName:          fullDoctor.fullName,
-          email:             fullDoctor.email,
-          specialization:    fullDoctor.specialization,
+          id: fullDoctor._id,
+          fullName: fullDoctor.fullName,
+          email: fullDoctor.email,
+          specialization: fullDoctor.specialization,
           status,
           isProfileComplete: fullDoctor.isProfileComplete,
         };
@@ -78,19 +82,27 @@ export default function DoctorLogin() {
         localStorage.setItem("doctor", JSON.stringify(doctor));
         setDoctor(doctor);
 
-        localStorage.setItem("user", JSON.stringify({
-        token: doctor.token,
-        role: "doctor"
-      }));
+        localStorage.setItem(
+          "user",
+          JSON.stringify({
+            token: doctor.token,
+            role: "doctor",
+          }),
+        );
 
         if (status === "pending") {
           navigate("/DoctorWaiting", { state: { doctor } });
         } else if (status === "rejected") {
           navigate("/DoctorRejected", {
-            state: { reason: fullDoctor.rejectionReason || "No reason provided", doctor },
+            state: {
+              reason: fullDoctor.rejectionReason || "No reason provided",
+              doctor,
+            },
           });
         } else if (status === "approved") {
-          navigate(doctor.isProfileComplete ? "/DoctorDashboard" : "/DoctorProfile");
+          navigate(
+            doctor.isProfileComplete ? "/DoctorDashboard" : "/DoctorProfile",
+          );
         } else {
           setErrors({ status: "Unknown doctor status" });
         }
@@ -100,9 +112,13 @@ export default function DoctorLogin() {
         if (msg.includes("pending") || msg.includes("not approved")) {
           navigate("/DoctorWaiting");
         } else if (msg.includes("reject")) {
-          navigate("/DoctorRejected", { state: { reason: data.message || "" } });
+          navigate("/DoctorRejected", {
+            state: { reason: data.message || "" },
+          });
         } else {
-          setErrors({ password: data.message || data.msg || "Invalid email or password." });
+          setErrors({
+            password: data.message || data.msg || "Invalid email or password.",
+          });
         }
       }
     } catch {
@@ -113,12 +129,13 @@ export default function DoctorLogin() {
   return (
     <div className="dlogin-page-wrapper">
       <div className="dlogin-main-title-box">
-        <h1>DOC <span>TOR</span></h1>
+        <h1>
+          DOC <span>TOR</span>
+        </h1>
         <p className="dlogin-head-subtext">LOGIN</p>
       </div>
 
       <div className="dlogin-split-card">
-
         {/* LEFT — Form */}
         <div className="dlogin-form-container">
           <h2 className="dlogin-title">Login</h2>
@@ -163,15 +180,14 @@ export default function DoctorLogin() {
             )}
 
             <div className="dlogin-utility-row">
-              <small>
-                <input type="checkbox" className="dlogin-checkbox-style" /> Remember me
-              </small>
               <Link to="/DoctorForgotPassword" className="dlogin-link-teal">
                 Forgot Password?
               </Link>
             </div>
 
-            <button type="submit" className="dlogin-submit-btn">Login</button>
+            <button type="submit" className="dlogin-submit-btn">
+              Login
+            </button>
 
             <div style={{ textAlign: "center" }}>
               <small style={{ color: "#666" }}>
@@ -192,7 +208,6 @@ export default function DoctorLogin() {
         <div className="dlogin-image-container">
           <img src={doctorImage} alt="Doctor Login Illustration" />
         </div>
-
       </div>
     </div>
   );

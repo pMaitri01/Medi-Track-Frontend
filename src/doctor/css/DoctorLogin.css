@@ -1,4 +1,4 @@
-/* ── Layout and background split ────────────────────────────────────────── */
+/* ── Layout and background split ── */
 .dlogin-page-wrapper {
   height: 100vh;
   width: 100vw;
@@ -12,7 +12,7 @@
   font-family: "Segoe UI", sans-serif;
 }
 
-/* ── Floating heading ───────────────────────────────────────────────────── */
+/* ── Floating heading ── */
 .dlogin-main-title-box {
   position: absolute;
   top: 60px;
@@ -42,7 +42,7 @@
   margin-top: -10px;
 }
 
-/* ── Main split card ────────────────────────────────────────────────────── */
+/* ── Main split card ── */
 .dlogin-split-card {
   width: 750px;
   height: 400px;
@@ -54,7 +54,7 @@
   margin-top: 80px;
 }
 
-/* ── Form section (left) ────────────────────────────────────────────────── */
+/* ── Form section (left) ── */
 .dlogin-form-container {
   width: 50%;
   padding: 40px 30px;
@@ -72,7 +72,7 @@
   text-align: center;
 }
 
-/* ── Input ──────────────────────────────────────────────────────────────── */
+/* ── Input ── */
 .dlogin-input-field {
   width: 100%;
   padding: 10px;
@@ -86,7 +86,7 @@
   border-color: #dc3545;
 }
 
-/* ── Password group ─────────────────────────────────────────────────────── */
+/* ── Password group ── */
 .dlogin-password-group {
   position: relative;
   width: 100%;
@@ -107,11 +107,12 @@
   color: #0aa5a5;
 }
 
-/* ── Utility row (remember me + forgot) ─────────────────────────────────── */
+/* ── Utility row (remember me + forgot) ── */
 .dlogin-utility-row {
+  width: 100%;
   display: flex;
-  justify-content: space-between;
-  margin-bottom: 15px;
+  justify-content: flex-end;
+  padding-bottom: 9px;
 }
 
 .dlogin-checkbox-style {
@@ -124,10 +125,10 @@
 .dlogin-link-teal {
   color: #0aa5a5;
   text-decoration: none;
-  font-size: 14px;
+  font-size: 14px; 
 }
 
-/* ── Submit button ──────────────────────────────────────────────────────── */
+/* ── Submit button ── */
 .dlogin-submit-btn {
   width: 100%;
   padding: 12px;
@@ -150,7 +151,7 @@
   cursor: not-allowed;
 }
 
-/* ── Image section (right) ──────────────────────────────────────────────── */
+/* ── Image section (right) ── */
 .dlogin-image-container {
   width: 50%;
   height: 100%;
@@ -166,7 +167,7 @@
   object-fit: inherit;
 }
 
-/* ── Error messages ─────────────────────────────────────────────────────── */
+/* ── Error messages ── */
 .dlogin-error-msg {
   color: #dc3545;
   font-size: 12px;

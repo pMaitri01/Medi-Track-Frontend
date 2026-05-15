@@ -9,12 +9,11 @@ import { toast } from "react-toastify";
 export default function PatientLogin() {
   const [formData, setFormData] = useState({
     email: "",
-    password: ""
+    password: "",
   });
 
   const [errors, setErrors] = useState({});
   const [showPassword, setShowPassword] = useState(false);
-
 
   // Handle Input Change
   const handleChange = (e) => {
@@ -22,7 +21,7 @@ export default function PatientLogin() {
 
     setFormData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
   };
 
@@ -45,7 +44,6 @@ export default function PatientLogin() {
         error = "Password must be at least 6 characters";
       }
     }
-
     return error;
   };
 
@@ -57,7 +55,7 @@ export default function PatientLogin() {
 
     setErrors((prev) => ({
       ...prev,
-      [name]: error
+      [name]: error,
     }));
   };
 
@@ -91,27 +89,27 @@ export default function PatientLogin() {
               email: formData.email,
               password: formData.password,
             }),
-          }
+          },
         );
 
         const data = await response.json();
 
         if (response.ok) {
-          toast.success(data.message || "Login successful");//print login successfull msg in alart
+          toast.success(data.message || "Login successful"); 
 
-          // ✅ store token separately
+          // store token separately
           localStorage.setItem("token", data.token);
           localStorage.setItem("user", JSON.stringify(data.user));
-          // ✅ REDIRECT LOGIC
+
+          // REDIRECT LOGIC
           if (!data.user.isProfileComplete) {
             navigate("/PatientProfileSetup");
           } else {
             navigate("/PatientHome");
           }
-        }else {
-  toast.error(data.message || "Invalid email or password");
-}
-
+        } else {
+          toast.error(data.message || "Invalid email or password");
+        }
       } catch (error) {
         console.error(error);
         toast.error("Server Error");
@@ -137,8 +135,9 @@ export default function PatientLogin() {
             <input
               type="email"
               name="email"
-              className={`form-control mb-3 ${errors.email ? "is-invalid" : ""
-                }`}
+              className={`form-control mb-3 ${
+                errors.email ? "is-invalid" : ""
+              }`}
               placeholder="Email"
               value={formData.email}
               onChange={handleChange}
@@ -153,8 +152,9 @@ export default function PatientLogin() {
               <input
                 type={showPassword ? "text" : "password"}
                 name="password"
-                className={`form-control mb-3 ${errors.password ? "is-invalid" : ""
-                  }`}
+                className={`form-control mb-3 ${
+                  errors.password ? "is-invalid" : ""
+                }`}
                 placeholder="Password"
                 value={formData.password}
                 onChange={handleChange}
@@ -170,34 +170,28 @@ export default function PatientLogin() {
             </div>
 
             {errors.password && (
-              <div className="invalid-feedback d-block">
-                {errors.password}
-              </div>
+              <div className="invalid-feedback d-block">{errors.password}</div>
             )}
 
-            <div className="d-flex justify-content-between mb-3">
-              <small>
-                <input type="checkbox" className="ckb" /> Remember me
-              </small>
+            <div className="d-flex justify-content-between mb-3 ">
               <small className="text-primary">
-                <Link to="/patient/forgot" className="text-primary">
+                <Link to="/patient/forgot" className="custom-link">
                   Forgot Password?
                 </Link>
-
               </small>
             </div>
 
             <button type="submit" className="btn btn-info w-100 mb-2">
               Login
             </button>
-
-            <small className="txtreg">
-              Don’t have account?
-              {/* <span className="text-primary"> Register</span> */}
-              <Link to="/patient/register" className="text-primary">
-                Register
-              </Link>
-            </small>
+            <div style={{ textAlign: "center" }}>
+              <small className="txtreg">
+                Don’t have account?{" "}
+                <Link to="/patient/register" className="custom-link">
+                  Register
+                </Link>
+              </small>
+            </div>
           </form>
         </div>
 
