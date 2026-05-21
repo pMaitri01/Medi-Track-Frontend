@@ -212,10 +212,24 @@ export default function PatientAppointment() {
   const [error, setError] = useState("");
   const [selectedAppointment, setSelectedAppointment] = useState(null);
   const [showModal, setShowModal] = useState(false);
+  const [reviewPopup, setReviewPopup] = useState(null);
+  const [reviewText, setReviewText] = useState("");
+  const [rating, setRating] = useState(0);
 
   useEffect(() => {
     loadAppointments();
   }, []);
+  useEffect(() => {
+    if (appointments.length === 0) return;
+
+    const pending = appointments.find(
+      (a) => a.status === "completed" && !a.reviewHandled
+    );
+
+    if (pending) {
+      setReviewPopup(pending);
+    }
+  }, [appointments]);
 
   const user = JSON.parse(localStorage.getItem("user") || "{}");
   const userId = user?._id;
@@ -259,6 +273,8 @@ export default function PatientAppointment() {
           time: item.time || "—",
           status: item.status || "Pending",
           type: (item.type || item.appointmentType || "").toLowerCase(),
+          reviewHandled: item.reviewHandled || false
+
         }));
       setAppointments(mapped);
     } catch (err) {
@@ -267,7 +283,58 @@ export default function PatientAppointment() {
       setLoading(false);
     }
   };
+  const handleSubmitReview = async () => {
+  if (!reviewPopup) return;
 
+  // ✅ VALIDATION (ADD THIS PART)
+  if (rating === 0) {
+    toast.error("Please select a rating");
+    return;
+  }
+
+  if (!reviewText.trim()) {
+    toast.error("Please write your review");
+    return;
+  }
+
+  try {
+    const res = await fetch(`${process.env.REACT_APP_API_URL}/api/review/submit-review`, {
+      method: "POST",
+      credentials: "include",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        appointmentId: reviewPopup.id,
+        rating: rating,
+        comment: reviewText,
+      }),
+    });
+
+    if (!res.ok) throw new Error("Failed to submit review");
+
+    toast.success("Review submitted successfully ✅");
+
+    setReviewPopup(null);
+    setReviewText("");
+    setRating(0);
+
+    loadAppointments(); // refresh
+  } catch (err) {
+    toast.error(err.message);
+  }
+};
+  const handleSkipReview = async () => {
+    if (!reviewPopup) return;
+    await fetch(`${process.env.REACT_APP_API_URL}/api/review/skip-review`, {
+      method: "POST", credentials: "include",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        appointmentId: reviewPopup.id,
+      }),
+    });
+
+    setReviewPopup(null);
+    loadAppointments(); // refresh
+  };
   const handleCancelAppointment = async (appointmentId) => {
     try {
       const res = await fetch(`${process.env.REACT_APP_API_URL}/api/appointment/${appointmentId}/cancel`, {
@@ -367,6 +434,70 @@ export default function PatientAppointment() {
         <div className="PatApp-pa-modal-overlay" onClick={() => setShowReschedule(false)}>
           <div className="PatApp-pa-modal" onClick={(e) => e.stopPropagation()} style={{ maxWidth: "900px", width: "95%" }}>
             <RescheduleAppointment appointment={selectedAppointment} onClose={() => setShowReschedule(false)} />
+          </div>
+        </div>
+      )}
+      {reviewPopup && (
+        <div className="PatApp-pa-modal-overlay">
+          <div className="PatApp-pa-modal review-modal">
+
+            <h5 className="review-title">
+              ⭐ Rate Your Doctor For Recent Appointment
+            </h5>
+
+            {/* Doctor Name */}
+            <div className="review-field">
+              <label>Doctor</label>
+              <input
+                type="text"
+                value={reviewPopup.doctorName}
+                readOnly
+              />
+            </div>
+
+            {/* Star Rating */}
+            <div className="review-field">
+              <label>Rating</label>
+              <div className="star-container">
+                {[1, 2, 3, 4, 5].map((star) => (
+                  <span
+                    key={star}
+                    className={star <= rating ? "star active" : "star"}
+                    onClick={() => setRating(star)}
+                  >
+                    ★
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            {/* Description */}
+            <div className="review-field">
+              <label>Write your experience</label>
+              <textarea
+                placeholder="Share your experience with the doctor..."
+                value={reviewText}
+                onChange={(e) => setReviewText(e.target.value)}
+              />
+            </div>
+
+            {/* Buttons */}
+            <div className="review-actions">
+              <button
+                className="review-submit"
+                onClick={handleSubmitReview}
+              >
+                Submit Review
+              </button>
+
+              <button
+                className="review-close"
+                onClick={handleSkipReview}
+              >
+                Close
+              </button>
+            </div>
+
           </div>
         </div>
       )}

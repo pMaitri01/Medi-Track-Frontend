@@ -296,5 +296,82 @@
   background: white;
   padding: 20px;
   border-radius: 12px;
-  width: 400px;
+  width: 500px;
+}
+.review-modal {
+  padding: 20px;
+}
+
+.review-title {
+  /* text-align: center; */
+  margin-bottom: 15px;
+  font-size: 20px;
+}
+
+.review-field {
+  margin-bottom: 15px;
+  display: flex;
+  flex-direction: column;
+}
+
+.review-field label {
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+
+.review-field input {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background: #f5f5f5;
+}
+
+.review-field textarea {
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  min-height: 100px;
+}
+
+.star-container {
+  display: flex;
+  gap: 8px;
+  font-size: 28px;
+  cursor: pointer;
+}
+
+.star {
+  color: #ccc;
+  transition: 0.2s;
+}
+
+.star:hover {
+  transform: scale(1.2);
+}
+
+.star.active {
+  color: #ffc107;
+}
+
+.review-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 15px;
+}
+
+.review-submit {
+  background: #0aa5a5;
+  color: white;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.review-close {
+  background: #ccc;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
 }
