@@ -353,3 +353,182 @@
   visibility: visible;
   opacity: 1;
 }
+.insights-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-top: 10px;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-bottom: 20px;
+}
+
+.insight-card {
+  padding: 16px;
+  border-radius: 12px;
+  color: #fff;
+  font-weight: 500;
+}
+
+.insight-card h4 {
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+
+.insight-card p {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+/* COLORS */
+.insight-card.green { background: #22c55e; }
+.insight-card.blue { background: #3b82f6; }
+.insight-card.red { background: #ef4444; }
+.insight-card.orange { background: #f59e0b; }
+
+.behavior-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+  margin-top: 10px;
+}
+
+.behavior-card {
+  padding: 16px;
+  border-radius: 12px;
+  color: #fff;
+  font-weight: 500;
+}
+
+.behavior-card h4 {
+  font-size: 14px;
+  margin-bottom: 6px;
+}
+
+.behavior-card p {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+/* colors */
+.behavior-card.blue { background: #3b82f6; }
+.behavior-card.green { background: #22c55e; }
+.behavior-card.purple { background: #9333ea; }
+.behavior-card.red { background: #ef4444; }
+.behavior-card.orange { background: #f59e0b; }
+.patient-behavior {
+  padding: 20px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+.chart-box {
+  background: #fff;
+  padding: 15px;
+  border-radius: 10px;
+  min-height: 300px;
+}
+
+
+/* ================= SECTION ================= */
+.section-title {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 16px;
+  color: #1e293b;
+}
+
+/* ================= PATIENT BEHAVIOR ================= */
+ .div-patient{
+  margin-top: 20px;
+ }
+.patient-behavior {
+  padding: 20px;
+}
+
+/* GRID */
+.behavior-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+/* CARD */
+.behavior-card {
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 18px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+  border: 1px solid #e2e8f0;
+  transition: 0.2s;
+}
+
+.behavior-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+}
+
+/* TITLE */
+.behavior-card h4 {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 10px;
+  color: #334155;
+}
+
+/* ================= RESPONSIVE ================= */
+@media (max-width: 900px) {
+  .behavior-grid {
+    grid-template-columns: 1fr;
+  }
+}
+/* ================= SYSTEM GROWTH ================= */
+.div-growth{
+  margin-top: 20px;
+}
+/* GRID */
+.growth-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-top: 20px;
+}
+
+/* CARD */
+.growth-card {
+  background: #f8fafc;
+  border-radius: 12px;
+  padding: 16px;
+  border: 1px solid #e2e8f0;
+  text-align: center;
+  transition: 0.2s;
+}
+
+.growth-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 14px rgba(0,0,0,0.08);
+}
+
+/* TEXT */
+.growth-card h4 {
+  font-size: 13px;
+  color: #64748b;
+  margin-bottom: 6px;
+}
+
+.growth-card p {
+  font-size: 22px;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+  .growth-grid {
+    grid-template-columns: 1fr;
+  }
+}
