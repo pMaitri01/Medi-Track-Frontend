@@ -478,8 +478,15 @@ const PatientHome = () => {
                             </p>
                           )
                         )}
-                        <button className="PatHome-btn-outline" onClick={handleReschedule}>Reschedule</button>
-
+                        {upcomingAppointment?.status !== "rejected" &&
+                          upcomingAppointment?.doctor?.status !== "suspended" && (
+                            <button
+                              className="PatHome-btn-outline"
+                              onClick={handleReschedule}
+                            >
+                              Reschedule
+                            </button>
+                          )}
                         <button
                           className="PatHome-btn-danger-outline"
                           onClick={() => {

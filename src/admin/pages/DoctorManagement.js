@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import "../css/DoctorManagement.css";
 import userpic from "../../doctor/images/user.png";
+import { toast } from "react-toastify";
 
 const matchExp = (exp, range) => {
   const experience = Number(exp);
@@ -17,6 +18,8 @@ const DoctorManagement = () => {
   const [specFilter, setSpecFilter] = useState("All");
   const [expFilter, setExpFilter] = useState("all");
   const [viewDoc, setViewDoc] = useState(null);
+  const [suspendReason, setSuspendReason] = useState("");
+  const [activeTab, setActiveTab] = useState("approved");
   const [filters, setFilters] = useState({
     specializations: [],
     statuses: []
@@ -78,6 +81,70 @@ const DoctorManagement = () => {
 
     fetchDoctors();
   }, []);
+const handleSuspend = async (doctorId) => {
+  const reason = await askReason();
+
+  if (!reason || !reason.trim()) {
+    toast.error("Suspension reason is required");
+    return;
+  }
+
+  try {
+    const res = await fetch(
+      `${process.env.REACT_APP_API_URL}/api/doctor/suspend`,
+      {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ doctorId, reason }),
+      }
+    );
+
+    const data = await res.json();
+
+    if (data.success) {
+      toast.success("Doctor suspended successfully");
+
+      setDoctors((prev) =>
+        prev.map((d) =>
+          d.id === doctorId
+            ? { ...d, status: "suspended", suspensionReason: reason }
+            : d
+        )
+      );
+
+      setViewDoc((prev) => ({
+        ...prev,
+        status: "suspended",
+        suspensionReason: reason,
+      }));
+    } else {
+      toast.error(data.message || "Failed to suspend doctor");
+    }
+  } catch (err) {
+    toast.error("Something went wrong");
+  }
+};
+const handleActivate = async (doctorId) => {
+  await fetch(`${process.env.REACT_APP_API_URL}/api/doctor/unsuspend`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    credentials: "include",
+    body: JSON.stringify({ doctorId }),
+  });
+
+  setDoctors((prev) =>
+    prev.map((d) =>
+      d.id === doctorId ? { ...d, status: "approved" } : d
+    )
+  );
+
+  setViewDoc((prev) => ({
+    ...prev,
+    status: "approved",
+    suspensionReason: "",
+  }));
+};
   const handleReset = () => { setSearch(""); setSpecFilter("All"); setExpFilter("all"); };
 
   const filtered = doctors.filter((d) => {
@@ -100,7 +167,7 @@ const DoctorManagement = () => {
 
     // STATUS
     const matchStatus =
-      d.status?.toLowerCase() === "approved";
+  d.status?.toLowerCase() === activeTab;
 
     return (
       matchSearch &&
@@ -109,7 +176,36 @@ const DoctorManagement = () => {
       matchStatus
     );
   });
+const askReason = () => {
+  return new Promise((resolve) => {
+    let reason = "";
 
+    const ToastContent = ({ closeToast }) => (
+      <div>
+        <p style={{ marginBottom: "8px" }}>Enter suspension reason:</p>
+        <input
+          autoFocus
+          style={{ width: "100%", padding: "6px" }}
+          onChange={(e) => (reason = e.target.value)}
+        />
+        <button
+          style={{ marginTop: "8px" }}
+          onClick={() => {
+            closeToast();
+            resolve(reason);
+          }}
+        >
+          Submit
+        </button>
+      </div>
+    );
+
+    toast.info(<ToastContent />, {
+      autoClose: false,
+      closeOnClick: false,
+    });
+  });
+};
   return (
     <div className="dm-page">
 
@@ -171,8 +267,28 @@ const DoctorManagement = () => {
       {/* ── TABLE ── */}
       <div className="dm-table-card">
         <div className="dm-table-header">
-          <h3 className="dm-table-title">All Doctors</h3>
-          <span className="dm-table-count">{filtered.length} records</span>
+          <h3 className="dm-table-title">
+  {activeTab === "approved" ? "Approved Doctors" : "Suspended Doctors"}
+</h3>
+          <div> 
+             <div className="dm-tabs">
+  <button
+    className={`dm-tab ${activeTab === "approved" ? "active" : ""}`}
+    onClick={() => setActiveTab("approved")}
+  >
+    Approved
+  </button>
+
+  <button
+    className={`dm-tab ${activeTab === "suspended" ? "active" : ""}`}
+    onClick={() => setActiveTab("suspended")}
+  >
+    Suspended
+  </button>
+            <span className="dm-table-count">{filtered.length} records</span>
+</div>
+          </div>
+         
         </div>
 
         {loading ? (
@@ -303,11 +419,43 @@ const DoctorManagement = () => {
                     </div>
                   </div>
 
-                  <div className="dm-modal-footer">
-                    <button className="dm-footer-btn btn-cancel" onClick={() => setViewDoc(null)}>
-                      Cancel
-                    </button>
-                  </div>
+                <div className="dm-modal-footer">
+  <button
+    className="dm-footer-btn btn-cancel"
+    onClick={() => setViewDoc(null)}
+  >
+    Cancel
+  </button>
+
+  {/* INPUT BOX (only for approved doctors) */}
+  {viewDoc.status === "approved" && (
+    <>
+      {/* <input
+        type="text"
+        placeholder="Enter suspension reason..."
+        value={suspendReason}
+        onChange={(e) => setSuspendReason(e.target.value)}
+        className="dm-suspend-input"
+      /> */}
+
+      <button
+        className="dm-footer-btn btn-suspend"
+        onClick={() => handleSuspend(viewDoc.id)}
+      >
+        Suspend
+      </button>
+    </>
+  )}
+
+  {viewDoc.status === "suspended" && (
+    <button
+      className="dm-footer-btn btn-activate"
+      onClick={() => handleActivate(viewDoc.id)}
+    >
+      Reactivate
+    </button>
+  )}
+</div>
                 </div>
               </div>
             )}

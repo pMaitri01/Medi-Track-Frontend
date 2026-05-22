@@ -131,7 +131,7 @@ function AppointmentCard({ appt, onCancel, onStartConsultation, isNext, onViewDe
       </div>
 
       <div className="PatApp-pa-card-footer">
-        {upcoming && appt.status !== "cancelled" && appt.status !== "completed" && (
+        {upcoming && appt.status !== "cancelled" && appt.status !== "completed" && appt.status !== "rejected" &&(
           <div className="PatApp-pa-doc-actions">
             <button
               className="PatApp-pa-btn-reschedule"

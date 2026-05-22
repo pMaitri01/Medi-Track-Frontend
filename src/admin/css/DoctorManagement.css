@@ -169,7 +169,7 @@
   font-size: 12px;
   color: #94a3b8;
   background: #f1f5f9;
-  padding: 3px 10px;
+  padding: 10px 10px;
   border-radius: 20px;
 }
 
@@ -679,4 +679,36 @@
   .dm-table td:nth-child(4) {
     display: none;
   }
+}
+.dm-suspend-input {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  margin-right: 10px;
+  width: 220px;
+}
+
+.dm-error-text {
+  color: red;
+  font-size: 12px;
+  margin-top: 5px;
+}
+.dm-tabs {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.dm-tab {
+  padding: 8px 16px;
+  border: none;
+  background: #eee;
+  cursor: pointer;
+  border-radius: 6px;
+  font-weight: 500;
+}
+
+.dm-tab.active {
+  background: #007bff;
+  color: white;
 }
