@@ -115,8 +115,7 @@ const RejectedPage = () => {
       <div className="drej-card">
 
         <div className="drej-band drej-band--rejected">
-          <div className="drej-band-icon">❌</div>
-          <h1>Application Rejected</h1>
+          <h1>❌Application Rejected</h1>
           <p>Unfortunately your registration was not approved.</p>
         </div>
 
