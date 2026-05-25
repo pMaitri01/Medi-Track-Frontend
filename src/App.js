@@ -43,6 +43,7 @@ import DoctorPrescription from './doctor/pages/DoctorPrescription';
 import UpdateDoctorProfile from './doctor/pages/UpdateDoctorProfile';
 import DoctorReviews from './doctor/pages/DoctorReview';
 import DoctorMedicalRecords from './doctor/pages/DoctorMedicalRecords';
+import DoctorSuspended from './doctor/pages/DoctorSuspended';
 // Admin Pages
 import AdminLayout from './admin/pages/AdminLayout';
 import AdminLogin from './admin/pages/AdminLogin';
@@ -173,7 +174,7 @@ function App() {
         } /> */}
         <Route path="/DoctorWaiting" element={<WaitingApproval />} />
           <Route path="/DoctorRejected" element={<RejectedPage />} />
-          
+        <Route path="/DoctorSuspended" element={<DoctorSuspended/>} />
           <Route path='/UpdateDoctorProfile' element={
             <ProtectedRoute role="doctor">
               <UpdateDoctorProfile />

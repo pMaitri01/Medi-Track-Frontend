@@ -89,9 +89,16 @@ const ProtectedRoute = ({ children, role }) => {
         // ✅ For admin (no user object usually)
         if (role === "admin") {
           setState({ loading: false, isAuth: true });
-        } 
+        }
         // ✅ For doctor/patient
         else if (data.user?.role === role) {
+          if (role === "doctor" && data.user.status === "suspended") {
+            setState({
+              loading: false,
+              isAuth: false,
+            });
+            return;
+          }
           setState({ loading: false, isAuth: true });
         } else {
           setState({ loading: false, isAuth: false });
@@ -107,7 +114,12 @@ const ProtectedRoute = ({ children, role }) => {
 
   if (state.loading) return <p>Loading...</p>;
 
-  return state.isAuth ? children : <Navigate to={redirectPath} replace />;
+if (role === "doctor" && state.loading === false && !state.isAuth) {
+  // check if it's because of suspension or normal login failure
+  return <Navigate to="/DoctorSuspended" replace />;
+}
+
+return state.isAuth ? children : <Navigate to={redirectPath} replace />;
 };
 
 export default ProtectedRoute;

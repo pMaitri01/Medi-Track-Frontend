@@ -103,7 +103,16 @@ export default function DoctorLogin() {
           navigate(
             doctor.isProfileComplete ? "/DoctorDashboard" : "/DoctorProfile",
           );
-        } else {
+          
+        } 
+        else if (status === "suspended") {
+  navigate("/DoctorSuspended", {
+    state: {
+      reason: fullDoctor.suspensionReason || "Account suspended by admin",
+      doctor,
+    },
+  });
+} else {
           setErrors({ status: "Unknown doctor status" });
         }
       } else {
