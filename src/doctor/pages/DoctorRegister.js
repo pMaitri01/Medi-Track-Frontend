@@ -3,8 +3,10 @@ import { Link, useNavigate } from "react-router-dom";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import "../css/DoctorRegister.css";
 import { toast } from "react-toastify";
+import Select from "react-select";
 
 const SPECIALIZATIONS = [
+  "General Physician",
   "Cardiologist",
   "Neurologist",
   "Orthopedic",
@@ -13,10 +15,52 @@ const SPECIALIZATIONS = [
   "Gynecologist",
   "Psychiatrist",
   "Ophthalmologist",
-  "General Physician",
   "ENT Specialist",
+  "Dentist",
+  "Urologist",
+  "Nephrologist",
+  "Endocrinologist",
+  "Gastroenterologist",
+  "Pulmonologist",
+  "Oncologist",
+  "Radiologist",
+  "Anesthesiologist",
+  "Pathologist",
+  "Hematologist",
+  "Rheumatologist",
+  "Immunologist",
+  "Infectious Disease Specialist",
+  "Allergist",
+  "Plastic Surgeon",
+  "General Surgeon",
+  "Neurosurgeon",
+  "Cardiothoracic Surgeon",
+  "Vascular Surgeon",
+  "Pediatric Surgeon",
+  "Orthopedic Surgeon",
+  "Emergency Medicine Specialist",
+  "Critical Care Specialist",
+  "Family Medicine Doctor",
+  "Sports Medicine Specialist",
+  "Geriatrician",
+  "Obstetrician",
+  "Andrologist",
+  "Sexologist",
+  "Diabetologist",
+  "Cosmetologist",
+  "Trichologist",
+  "Pain Management Specialist",
+  "Rehabilitation Specialist",
+  "Occupational Therapist",
+  "Physiotherapist",
+  "Speech Therapist",
+  "Dietitian / Nutritionist",
+  "Public Health Specialist"
 ];
-
+const specializationOptions = SPECIALIZATIONS.map((item) => ({
+  value: item,
+  label: item,
+}));
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 const init = {
@@ -68,7 +112,14 @@ const DoctorRegister = () => {
     }
 
     if (name === "dob") {
-      if (!t) msg = "Date of birth is required.";
+      if (!t) {
+        msg = "Date of birth is required.";
+      } else {
+        const age = getAge(value);
+        if (age < 25) {
+          msg = "Doctor must be at least 25 years old.";
+        }
+      }
     }
     if (name === "password") {
       if (!t) msg = "Password is required.";
@@ -120,7 +171,14 @@ const DoctorRegister = () => {
 
     if (!t("gender")) e.gender = "Please select gender.";
 
-    if (!t("dob")) e.dob = "Date of birth is required.";
+    if (!t("dob")) {
+      e.dob = "Date of birth is required.";
+    } else {
+      const age = getAge(form.dob);
+      if (age < 25) {
+        e.dob = "Doctor must be at least 25 years old.";
+      }
+    }
 
     if (!t("password")) e.password = "Password is required.";
     else if (form.password.length < 6)
@@ -214,7 +272,19 @@ const DoctorRegister = () => {
     onBlur: handleBlur,
     className: "dreg-input" + (errors[name] ? " err" : ""),
   });
+  const getAge = (dob) => {
+    const birthDate = new Date(dob);
+    const today = new Date();
 
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const m = today.getMonth() - birthDate.getMonth();
+
+    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+      age--;
+    }
+
+    return age;
+  };
   return (
     <div className="dreg-page">
       <div className="dreg-card">
@@ -379,22 +449,32 @@ const DoctorRegister = () => {
                   <label className="dreg-label">
                     Specialization <span className="dreg-req">*</span>
                   </label>
-                  <select
-                    name="specialization"
-                    value={form.specialization}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    className={
-                      "dreg-select" + (errors.specialization ? " err" : "")
-                    }
-                  >
-                    <option value="">Select specialization</option>
-                    {SPECIALIZATIONS.map((s) => (
-                      <option key={s} value={s}>
-                        {s}
-                      </option>
-                    ))}
-                  </select>
+                <Select
+  options={specializationOptions}
+  value={specializationOptions.find(
+    (opt) => opt.value === form.specialization
+  )}
+  onChange={(selectedOption) => {
+    setForm((prev) => ({
+      ...prev,
+      specialization: selectedOption ? selectedOption.value : "",
+    }));
+
+    if (errors.specialization) {
+      setErrors((prev) => ({ ...prev, specialization: "" }));
+    }
+  }}
+  onBlur={() => {
+    if (!form.specialization) {
+      setErrors((prev) => ({
+        ...prev,
+        specialization: "Please select a specialization.",
+      }));
+    }
+  }}
+  placeholder="Search & select specialization..."
+  classNamePrefix="react-select"
+/>
                   {errors.specialization && (
                     <span className="dreg-error">{errors.specialization}</span>
                   )}
