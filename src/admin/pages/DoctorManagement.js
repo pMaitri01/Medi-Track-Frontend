@@ -189,7 +189,14 @@ const askReason = () => {
           onChange={(e) => (reason = e.target.value)}
         />
         <button
-          style={{ marginTop: "8px" }}
+          style={{ marginTop: "8px", 
+                  padding: "5px",
+                  backgroundColor: "#dc3545",
+                  color: "#fff",
+                  border: "none",
+                  cursor: "pointer",
+                  borderRadius: "4px"
+          }}
           onClick={() => {
             closeToast();
             resolve(reason);

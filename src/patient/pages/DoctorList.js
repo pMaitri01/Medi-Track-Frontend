@@ -245,7 +245,8 @@ const DoctorList = () => {
       <main className="DocList-content">
         <nav className="DocList-navbar1">
           <div className="DocList-nav-logo">
-            <span className="DocList-logo-icon">🩺</span> Find a Doctor
+           
+            <h1 class="PatApp-pa-heading">  <span className="DocList-logo-icon">🩺</span> Find Your Doctor</h1>
           </div>
         </nav>
 
