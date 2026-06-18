@@ -75,6 +75,10 @@ const init = {
   qualification: "",
   experience: "",
   licenseNumber: "",
+
+  degreeCertificate: null,
+  licenseCertificate: null,
+  idProof: null,
 };
 
 const DoctorRegister = () => {
@@ -89,7 +93,18 @@ const DoctorRegister = () => {
     setForm((p) => ({ ...p, [name]: value }));
     if (errors[name]) setErrors((p) => ({ ...p, [name]: "" }));
   };
+const handleFileChange = (e) => {
+  const { name, files } = e.target;
 
+  setForm((prev) => ({
+    ...prev,
+    [name]: files[0],
+  }));
+
+  if (errors[name]) {
+    setErrors((prev) => ({ ...prev, [name]: "" }));
+  }
+};
   const handleBlur = (e) => {
     const { name, value } = e.target;
     const t = value.toString().trim();
@@ -201,66 +216,133 @@ const DoctorRegister = () => {
     if (!t("licenseNumber"))
       e.licenseNumber = "License registration number is required.";
 
+    if (!form.degreeCertificate)
+  e.degreeCertificate = "Degree certificate is required.";
+
+if (!form.licenseCertificate)
+  e.licenseCertificate = "License certificate is required.";
+
+if (!form.idProof)
+  e.idProof = "ID proof is required.";
+
     return e;
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const errs = validate();
-    if (Object.keys(errs).length > 0) {
-      setErrors(errs);
-      toast.warning("Please fill all required fields correctly");
-      return;
-    }
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   const errs = validate();
+  //   if (Object.keys(errs).length > 0) {
+  //     setErrors(errs);
+  //     toast.warning("Please fill all required fields correctly");
+  //     return;
+  //   }
 
-    setLoading(true);
-    try {
-      const res = await fetch(
-        `${process.env.REACT_APP_API_URL}/api/doctor/register`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            fullName: form.fullName,
-            email: form.email,
-            mobile: form.mobile,
-            gender: form.gender,
-            dob: form.dob,
-            password: form.password,
-            specialization: form.specialization,
-            qualification: form.qualification,
-            experience: Number(form.experience),
-            licenseNumber: form.licenseNumber,
-          }),
-        },
-      );
+  //   setLoading(true);
+  //   try {
+  //     const res = await fetch(
+  //       `${process.env.REACT_APP_API_URL}/api/doctor/register`,
+  //       {
+  //         method: "POST",
+  //         headers: { "Content-Type": "application/json" },
+  //         body: JSON.stringify({
+  //           fullName: form.fullName,
+  //           email: form.email,
+  //           mobile: form.mobile,
+  //           gender: form.gender,
+  //           dob: form.dob,
+  //           password: form.password,
+  //           specialization: form.specialization,
+  //           qualification: form.qualification,
+  //           experience: Number(form.experience),
+  //           licenseNumber: form.licenseNumber,
+  //         }),
+  //       },
+  //     );
 
-      const data = await res.json();
+  //     const data = await res.json();
 
-      if (res.ok) {
-        toast.success("Registration submitted successfully. Waiting for admin approval");
-        sessionStorage.setItem(
-          "pendingDoctor",
-          JSON.stringify({
-            name: form.fullName,
-            email: form.email,
-            specialization: form.specialization,
-          }),
-        );
-        navigate("/DoctorLogin");
-      } else {
-        toast.error(data.message || "Registration failed. Please try again.");
-        setErrors((p) => ({
-          ...p,
-          submit: data.message || "Registration failed. Please try again.",
-        }));
+  //     if (res.ok) {
+  //       toast.success("Registration submitted successfully. Waiting for admin approval");
+  //       sessionStorage.setItem(
+  //         "pendingDoctor",
+  //         JSON.stringify({
+  //           name: form.fullName,
+  //           email: form.email,
+  //           specialization: form.specialization,
+  //         }),
+  //       );
+  //       navigate("/DoctorLogin");
+  //     } else {
+  //       toast.error(data.message || "Registration failed. Please try again.");
+  //       setErrors((p) => ({
+  //         ...p,
+  //         submit: data.message || "Registration failed. Please try again.",
+  //       }));
+  //     }
+  //   } catch {
+  //     toast.error("Network error. Please try again.");
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  const errs = validate();
+
+  if (Object.keys(errs).length > 0) {
+    setErrors(errs);
+    toast.warning("Please fill all required fields correctly");
+    return;
+  }
+
+  setLoading(true);
+
+  try {
+    const formData = new FormData();
+
+    // text fields
+    formData.append("fullName", form.fullName);
+    formData.append("email", form.email);
+    formData.append("mobile", form.mobile);
+    formData.append("gender", form.gender);
+    formData.append("dob", form.dob);
+    formData.append("password", form.password);
+    formData.append("specialization", form.specialization);
+    formData.append("qualification", form.qualification);
+    formData.append("experience", form.experience);
+    formData.append("licenseNumber", form.licenseNumber);
+
+    // files
+    formData.append("degreeCertificate", form.degreeCertificate);
+    formData.append("licenseCertificate", form.licenseCertificate);
+    formData.append("idProof", form.idProof);
+
+    const res = await fetch(
+      `${process.env.REACT_APP_API_URL}/api/doctor/register`,
+      {
+        method: "POST",
+        body: formData, // ✅ NO headers here
       }
-    } catch {
-      toast.error("Network error. Please try again.");
-    } finally {
-      setLoading(false);
+    );
+
+    const data = await res.json();
+
+    if (res.ok) {
+      toast.success("Registration submitted successfully. Waiting for admin approval");
+      navigate("/DoctorLogin");
+    } else {
+      toast.error(data.msg || "Registration failed");
     }
-  };
+
+  } catch (err) {
+    toast.error("Network error");
+  } finally {
+    setLoading(false);
+  }
+};
+
+
 
   // Helper: builds common input props with prefixed className
   const inp = (name, type = "text", placeholder = "") => ({
@@ -511,6 +593,70 @@ const DoctorRegister = () => {
                 </div>
               </div>
             </div>
+
+
+
+{/* ── Documents Upload ── */}
+<div className="dreg-section">
+  <div className="dreg-section-title">
+    <div className="dreg-section-icon">📄</div> Documents Upload
+  </div>
+
+  <div className="dreg-grid-2">
+
+    {/* Degree Certificate */}
+    <div className="dreg-field">
+      <label className="dreg-label">
+        Medical Degree Certificate <span className="dreg-req">*</span>
+      </label>
+      <input
+        type="file"
+        name="degreeCertificate"
+        accept="image/*"
+        onChange={handleFileChange}
+      />
+      {errors.degreeCertificate && (
+        <span className="dreg-error">{errors.degreeCertificate}</span>
+      )}
+    </div>
+
+    {/* License Certificate */}
+    <div className="dreg-field">
+      <label className="dreg-label">
+        License Certificate <span className="dreg-req">*</span>
+      </label>
+      <input
+        type="file"
+        name="licenseCertificate"
+        accept="image/*"
+        onChange={handleFileChange}
+      />
+      {errors.licenseCertificate && (
+        <span className="dreg-error">{errors.licenseCertificate}</span>
+      )}
+    </div>
+
+    {/* ID Proof */}
+    <div className="dreg-field">
+      <label className="dreg-label">
+        ID Proof (Aadhar / PAN) <span className="dreg-req">*</span>
+      </label>
+      <input
+        type="file"
+        name="idProof"
+        accept="image/*"
+        onChange={handleFileChange}
+      />
+      {errors.idProof && (
+        <span className="dreg-error">{errors.idProof}</span>
+      )}
+    </div>
+
+  </div>
+</div>
+
+
+
 
             {/* Submit error */}
             {/* {errors.submit && (
