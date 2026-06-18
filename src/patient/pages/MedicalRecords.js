@@ -42,6 +42,10 @@ const capitalizeType = (type) => {
 
 function RecordCard({ record }) {
   const tc = TYPE_COLOR[record.type] || {};
+
+  const [loading, setLoading] = useState(false);
+  const [summary, setSummary] = useState("");
+  const [showSummary, setShowSummary] = useState(false);
   return (
     <div className="MedRec-mr-card">
       <div className="MedRec-mr-card-top">
@@ -76,7 +80,48 @@ function RecordCard({ record }) {
         >
           ⬇ Download
         </button>
+         <button
+    className="MedRec-mr-btn MedRec-mr-btn--ai"
+    onClick={() => {
+      setShowSummary(!showSummary);
+    }}
+    disabled={!record.file}
+  >
+    🧠 AI Summary
+  </button>
       </div>
+      {showSummary && (
+  <div className="MedRec-mr-ai-box">
+    {loading ? (
+      <p className="MedRec-mr-ai-loading">Generating AI summary...</p>
+    ) : summary ? (
+      <p className="MedRec-mr-ai-text">{summary}</p>
+    ) : (
+      <button
+        className="MedRec-mr-btn MedRec-mr-btn--generate"
+        onClick={async () => {
+          try {
+            setLoading(true);
+
+            // TEMP dummy
+            setTimeout(() => {
+              setSummary(
+                "This is a sample AI-generated summary of the medical report. It explains findings in simple language."
+              );
+              setLoading(false);
+            }, 1500);
+
+          } catch (err) {
+            toast.error("Failed to generate summary");
+            setLoading(false);
+          }
+        }}
+      >
+        Generate Summary
+      </button>
+    )}
+  </div>
+)}
     </div>
   );
 }
@@ -254,6 +299,7 @@ if (!data.records || !Array.isArray(data.records)) {
       {showUpload && (
         <UploadMedicalRecord onClose={() => setShowUpload(false)} />
       )}
+
     </div>
   );
 }
