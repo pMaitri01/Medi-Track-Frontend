@@ -2,22 +2,22 @@ import { useState, useEffect } from "react";
 import "../css/DoctorApproval.css";
 import userpic from "../../doctor/images/user.png"
 
-const PER_PAGE    = 5;
+const PER_PAGE = 5;
 // const STATUS_TABS = ["All", "Pending", "Approved", "Rejected"];
 
 const statusClass = {
-  pending:  "da-badge da-badge-pending",
+  pending: "da-badge da-badge-pending",
 };
 
 const DoctorApproval = () => {
   const [doctors, setDoctors] = useState([]);
   const [statusFilter, setStatusFilter] = useState("All");
-  const [page, setPage]                 = useState(1);
-  const [selectedDoc, setSelectedDoc]   = useState(null); // right panel
+  const [page, setPage] = useState(1);
+  const [selectedDoc, setSelectedDoc] = useState(null); // right panel
   const [rejectReason, setRejectReason] = useState("");
-  const [rejectError, setRejectError]   = useState("");
-  const [loading, setLoading]           = useState(null);
-  const [toast, setToast]               = useState(null);
+  const [rejectError, setRejectError] = useState("");
+  const [loading, setLoading] = useState(null);
+  const [toast, setToast] = useState(null);
 
   const showToast = (msg, type = "success") => {
     setToast({ msg, type });
@@ -32,42 +32,42 @@ const DoctorApproval = () => {
 
   // ── Approve ──
   const handleApprove = async () => {
-  try {
-    setLoading("approve");
+    try {
+      setLoading("approve");
 
-    const res = await fetch(
-      `${process.env.REACT_APP_API_URL}/api/doctor/${selectedDoc.id}/status`,
-      {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-        body: JSON.stringify({ status: "approved" }),
-      }
-    );
-
-    const data = await res.json();
-
-    if (res.ok) {
-      setDoctors(prev =>
-        prev.map(d =>
-          d.id === selectedDoc.id ? { ...d, status: "Approved" } : d
-        )
+      const res = await fetch(
+        `${process.env.REACT_APP_API_URL}/api/doctor/${selectedDoc.id}/status`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+          body: JSON.stringify({ status: "approved" }),
+        }
       );
 
-      showToast(`${selectedDoc.name} approved successfully!`, "success");
-      closePanel();
-    } else {
-      showToast(data.message || "Failed to approve doctor", "error");
+      const data = await res.json();
+
+      if (res.ok) {
+        setDoctors(prev =>
+          prev.map(d =>
+            d.id === selectedDoc.id ? { ...d, status: "Approved" } : d
+          )
+        );
+
+        showToast(`${selectedDoc.name} approved successfully!`, "success");
+        closePanel();
+      } else {
+        showToast(data.message || "Failed to approve doctor", "error");
+      }
+    } catch (err) {
+      console.error(err);
+      showToast("Something went wrong", "error");
+    } finally {
+      setLoading(null);
     }
-  } catch (err) {
-    console.error(err);
-    showToast("Something went wrong", "error");
-  } finally {
-    setLoading(null);
-  }
-};
+  };
 
   // ── Reject ──
   // const handleReject = () => {
@@ -83,103 +83,106 @@ const DoctorApproval = () => {
   //   }, 1000);
   // };
   const handleReject = async () => {
-  if (!rejectReason.trim()) {
-    setRejectError("Rejection reason is required.");
-    return;
-  }
+    if (!rejectReason.trim()) {
+      setRejectError("Rejection reason is required.");
+      return;
+    }
 
-  try {
-    setLoading("reject");
+    try {
+      setLoading("reject");
 
-    const res = await fetch(
-      `${process.env.REACT_APP_API_URL}/api/doctor/${selectedDoc.id}/status`,
-      {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-        body: JSON.stringify({
-          status: "rejected",
-         // rejectionReason: rejectReason, // optional (if backend supports)
-        }),
-      }
-    );
-
-    const data = await res.json();
-
-    if (res.ok) {
-      // ✅ update UI
-      setDoctors((prev) =>
-        prev.map((d) =>
-          d.id === selectedDoc.id ? { ...d, status: "rejected" } : d
-        )
+      const res = await fetch(
+        `${process.env.REACT_APP_API_URL}/api/doctor/${selectedDoc.id}/status`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+          body: JSON.stringify({
+            status: "rejected",
+            // rejectionReason: rejectReason, // optional (if backend supports)
+          }),
+        }
       );
 
-      showToast(`${selectedDoc.name} has been rejected.`, "error");
-      closePanel();
-    } else {
-      showToast(data.message || "Failed to reject doctor", "error");
+      const data = await res.json();
+
+      if (res.ok) {
+        // ✅ update UI
+        setDoctors((prev) =>
+          prev.map((d) =>
+            d.id === selectedDoc.id ? { ...d, status: "rejected" } : d
+          )
+        );
+
+        showToast(`${selectedDoc.name} has been rejected.`, "error");
+        closePanel();
+      } else {
+        showToast(data.message || "Failed to reject doctor", "error");
+      }
+    } catch (err) {
+      console.error(err);
+      showToast("Something went wrong", "error");
+    } finally {
+      setLoading(null);
     }
-  } catch (err) {
-    console.error(err);
-    showToast("Something went wrong", "error");
-  } finally {
-    setLoading(null);
-  }
-};
+  };
 
   // ── Filter + paginate ──
   const filtered = doctors.filter(d => d.status === "pending");
   const totalPages = Math.ceil(filtered.length / PER_PAGE);
-  const paginated  = filtered.slice((page - 1) * PER_PAGE, page * PER_PAGE);
+  const paginated = filtered.slice((page - 1) * PER_PAGE, page * PER_PAGE);
 
   useEffect(() => { setPage(1); }, [statusFilter]);
 
   const counts = {
-    total:    doctors.length,
-    pending:  doctors.filter(d => d.status === "Pending").length,
+    total: doctors.length,
+    pending: doctors.filter(d => d.status === "Pending").length,
     approved: doctors.filter(d => d.status === "Approved").length,
   };
   useEffect(() => {
-  const fetchDoctors = async () => {
-    try {
-      const res = await fetch(`${process.env.REACT_APP_API_URL}/api/doctor/all`, {
-        method: "GET",
-        credentials: "include",
-      });
+    const fetchDoctors = async () => {
+      try {
+        const res = await fetch(`${process.env.REACT_APP_API_URL}/api/doctor/all`, {
+          method: "GET",
+          credentials: "include",
+        });
 
-      const data = await res.json();
+        const data = await res.json();
 
-      if (data.success) {
-        const formatted = data.doctors.map(doc => ({
-          id: doc._id,
-          name: doc.fullName ? `Dr. ${doc.fullName}` : "",
-          email: doc.email,
-          mobile: doc.mobile,
-          specialization: doc.specialization,
-          experience: doc.experience,
-          qualification: doc.qualification,
-          regNo: doc.licenseNumber,
-          gender: doc.gender,
-          dob: doc.dob,
-          hospital: doc.clinicName,
-          city: doc.city,
-          state: doc.state,
-          about: doc.about,
-          status: (doc.status || "pending").toLowerCase(),
-          photo: `${userpic}` // optional
-        }));
+        if (data.success) {
+          const formatted = data.doctors.map(doc => ({
+            id: doc._id,
+            name: doc.fullName ? `Dr. ${doc.fullName}` : "",
+            email: doc.email,
+            mobile: doc.mobile,
+            specialization: doc.specialization,
+            experience: doc.experience,
+            qualification: doc.qualification,
+            regNo: doc.licenseNumber,
+            gender: doc.gender,
+            dob: doc.dob,
+            hospital: doc.clinicName,
+            city: doc.city,
+            state: doc.state,
+            about: doc.about,
+            status: (doc.status || "pending").toLowerCase(),
+            degreeCertificate: doc.degreeCertificate,
+            licenseCertificate: doc.licenseCertificate,
+            idProof: doc.idProof,
+            photo: `${userpic}` // optional
+          }));
 
-        setDoctors(formatted);
+          setDoctors(formatted);
+        }
+      } catch (err) {
+        console.error(err);
       }
-    } catch (err) {
-      console.error(err);
-    }
-  };
+    };
 
-  fetchDoctors();
-}, []);
+    fetchDoctors();
+  }, []);
   return (
     <div className="da-page">
 
@@ -374,11 +377,55 @@ const DoctorApproval = () => {
               </div>
 
               {/* Document */}
-              <div className="da-panel-doc-row">
+              {/* <div className="da-panel-doc-row">
                 <span className="da-panel-label">Uploaded Documents</span>
                 <a href="#!" className="da-doc-link">📄 View License Document</a>
-              </div>
+              </div> */}
+              <div className="da-panel-doc-row">
+  <span className="da-panel-label">Documents</span>
 
+  {/* Degree */}
+  {selectedDoc.degreeCertificate && (
+    <div className="da-doc-actions">
+      <span className="da-doc-title">🎓 Degree Certificate</span>
+      <a
+        href={selectedDoc.degreeCertificate.replace("/upload/", "/upload/fl_attachment/")}
+        download
+        className="da-doc-download"
+      >
+        ⬇ Download
+      </a>
+    </div>
+  )}
+
+  {/* License */}
+  {selectedDoc.licenseCertificate && (
+    <div className="da-doc-actions">
+      <span className="da-doc-title">📄 License Certificate</span>
+      <a
+        href={selectedDoc.licenseCertificate.replace("/upload/", "/upload/fl_attachment/")}
+        download
+        className="da-doc-download"
+      >
+        ⬇ Download
+      </a>
+    </div>
+  )}
+
+  {/* ID Proof */}
+  {selectedDoc.idProof && (
+    <div className="da-doc-actions">
+      <span className="da-doc-title">🪪 ID Proof</span>
+      <a
+        href={selectedDoc.idProof.replace("/upload/", "/upload/fl_attachment/")}
+        download
+        className="da-doc-download"
+      >
+        ⬇ Download
+      </a>
+    </div>
+  )}
+</div>
               {/* Reject reason input — shown only when status is not already Rejected */}
               {selectedDoc.status !== "Rejected" && (
                 <div className="da-panel-reject-section">

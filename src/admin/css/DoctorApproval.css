@@ -7,7 +7,10 @@
   grid-template-columns: repeat(3, 1fr);
   gap: 16px;
 }
-
+.da-doc-actions {
+  display: flex;
+  gap: 10px;}
+  
 .da-stat-card {
   background: #fff;
   border: 1px solid #e2e8f0;
