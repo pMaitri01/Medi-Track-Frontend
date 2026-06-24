@@ -1,31 +1,35 @@
+/* ===== BASE RESET ===== */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
 body {
   margin: 0;
   padding: 0;
-  overflow: hidden; /* removes both horizontal & vertical scroll */
 }
 
-/* Also ensure main container doesn’t overflow */
+/* ===== CONTAINER ===== */
 .login-container {
-  height: 100vh;
-  width: 100vw;
-  overflow: hidden;
-}
-
-.login-container {
-  height: 100vh;
-  background: linear-gradient(to right, #0aa5a5 50%, #f4f4f4 50%);
+  min-height: 100vh;
+  width: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
   position: relative;
+  background: linear-gradient(to right, #0aa5a5 50%, #f4f4f4 50%);
+  overflow-x: hidden;
 }
 
+/* ===== MAIN HEADING ===== */
 .main-heading {
   position: absolute;
   top: 60px;
   text-align: center;
   width: 100%;
+  z-index: 1;
+  pointer-events: none;
 }
 
 .main-heading h1 {
@@ -33,6 +37,8 @@ body {
   font-size: 50px;
   font-weight: 500;
   letter-spacing: 1px;
+  margin: 0;
+  line-height: 1.1;
 }
 
 .main-heading span {
@@ -46,19 +52,28 @@ body {
   letter-spacing: 1px;
   margin-right: -190px;
   color: #0aa5a5;
+  display: block;
 }
 
+/* ===== LOGIN CARD ===== */
 .login-card {
   width: 750px;
-  height: 400px;
+  max-width: calc(100% - 32px);
+  height: auto;
+  min-height: 400px;
   background: white;
   display: flex;
+  flex-direction: row;
   border-radius: 10px;
   box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.2);
   overflow: hidden;
-  margin-top: 80px;
+  margin-top: 200px;
+  margin-bottom: 40px;
+  position: relative;
+  z-index: 2;
 }
 
+/* ===== LEFT SECTION ===== */
 .left-section {
   width: 50%;
   padding: 40px 30px;
@@ -68,53 +83,38 @@ body {
   justify-content: center;
 }
 
-input {
-  margin-bottom: 2px;
-}
-
 .login-heading {
   font-size: 28px;
   font-weight: 700;
   color: #0aa5a5;
   margin-bottom: 25px;
-  text-align: center; /* keep it left aligned */
+  text-align: center;
 }
 
+/* ===== RIGHT SECTION ===== */
 .right-section {
   width: 50%;
-  height: 100%;
   background: #bfeaea !important;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  overflow: hidden;
 }
 
 .right-section img {
   width: 100%;
   height: 100%;
+  object-fit: cover;
+}
+
+/* ===== INPUTS ===== */
+input {
+  margin-bottom: 2px;
 }
 
 .password-wrapper {
   position: relative;
-}
-
-.password-field input {
-  border: 0 px solid #dee2e6 !important;
-}
-
-.password-wrapper input {
-  padding-right: 40px; /* space for eye icon */
-}
-
-.toggle-password {
-  position: absolute;
-  right: 50px;
-  top: 40%;
-  transform: translateY(-50%);
-  cursor: pointer;
-  font-size: 18px;
-  z-index: 2;
 }
 
 .password-field {
@@ -124,6 +124,7 @@ input {
 
 .password-field input {
   padding-right: 45px;
+  border: 0px solid #dee2e6 !important;
 }
 
 .toggle-eye {
@@ -137,6 +138,15 @@ input {
   transition: 0.3s;
 }
 
+.toggle-eye:hover {
+  color: #0aa5a5;
+}
+
+.password-field .form-control.is-invalid {
+  background-position: right 27px center;
+}
+
+/* ===== LINKS & MISC ===== */
 .text-primary {
   text-decoration: none;
   color: #0aa5a5 !important;
@@ -157,19 +167,156 @@ input {
   width: 100%;
 }
 
-.toggle-eye:hover {
-  color: #0aa5a5;
-}
-
 .ckb {
   width: 20px;
   margin-top: 0px !important;
 }
 
-.password-field .form-control.is-invalid {
-  background-position: right 27px center;
-}
-
 .btn {
   margin-top: -5px !important;
+}
+
+/* ===== RESPONSIVE: TABLET (≤768px) ===== */
+@media (max-width: 768px) {
+
+  /* Gradient becomes full teal on top half */
+  .login-container {
+    background: #f4f4f4;
+    padding-top: 0;
+  }
+
+  /* Teal top bar using a pseudo element so the card sits on white */
+  .login-container::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 220px;
+    background: #0aa5a5;
+    z-index: 0;
+  }
+
+  /* Heading sits inside the teal bar */
+  .main-heading {
+    position: relative;
+    top: auto;
+    width: 100%;
+    padding: 30px 16px 20px;
+    z-index: 1;
+  }
+
+  .main-heading h1 {
+    font-size: 36px;
+    color: white;
+  }
+
+  .headspan {
+    font-size: 22px;
+    margin-right: 0;
+    color: white;
+  }
+
+  .main-heading span {
+    color: white;
+    margin-left: -10px;
+  }
+
+  /* Card stacks vertically, image on top */
+  .login-card {
+    flex-direction: column-reverse;
+    width: calc(100% - 32px);
+    max-width: 460px;
+    margin-top: 0;
+    margin-bottom: 30px;
+    min-height: auto;
+    z-index: 1;
+  }
+
+  .left-section {
+    width: 100%;
+    padding: 30px 24px;
+  }
+
+  .right-section {
+    width: 100%;
+    height: 200px;
+    flex-shrink: 0;
+  }
+
+  .right-section img {
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+  }
+}
+
+/* ===== RESPONSIVE: MOBILE (≤480px) ===== */
+@media (max-width: 480px) {
+
+  .login-container::before {
+    height: 190px;
+  }
+
+  .main-heading {
+    padding: 24px 16px 16px;
+  }
+
+  .main-heading h1 {
+    font-size: 30px;
+  }
+
+  .headspan {
+    font-size: 18px;
+  }
+
+  .login-heading {
+    font-size: 22px;
+    margin-bottom: 18px;
+  }
+
+  .left-section {
+    padding: 24px 16px;
+  }
+
+  .right-section {
+    height: 170px;
+  }
+
+  .login-card {
+    width: calc(100% - 24px);
+  }
+
+  .toggle-eye {
+    right: 12px;
+    font-size: 16px;
+  }
+
+  .password-field input {
+    padding-right: 38px;
+  }
+}
+
+/* ===== RESPONSIVE: SMALL MOBILE (≤360px) ===== */
+@media (max-width: 360px) {
+
+  .login-container::before {
+    height: 170px;
+  }
+
+  .main-heading h1 {
+    font-size: 24px;
+  }
+
+  .headspan {
+    font-size: 15px;
+  }
+
+  .login-heading {
+    font-size: 20px;
+  }
+
+  .right-section {
+    height: 140px;
+  }
 }

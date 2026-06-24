@@ -140,7 +140,7 @@ export default function PatientResetPwd() {
               Remembered your password?{" "}
               <span
                 style={{ color: "#0aa5a5", cursor: "pointer" }}
-                onClick={() => navigate("/")}
+                onClick={() => navigate("/Patient/Login")}
               >
                 Login
               </span>

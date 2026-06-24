@@ -218,13 +218,154 @@
 .PatReg-form-box::-webkit-scrollbar { width: 4px; }
 .PatReg-form-box::-webkit-scrollbar-thumb { background: #0a8f8f; border-radius: 10px; }
 
-/* ── Responsive ─────────────────────────────────────────────────────────── */
-@media (max-width: 768px) {
-  .PatReg-card { flex-direction: column; max-width: 480px; }
-  .PatReg-left { display: none; }
-  .PatReg-right { padding: 20px 16px; }
+/* ── Responsive: Tablet (≤900px) ────────────────────────────────────────── */
+@media (max-width: 900px) {
+  .PatReg-card {
+    max-width: 700px;
+  }
+
+  .PatReg-left {
+    width: 42%;
+  }
+
+  .PatReg-right {
+    width: 58%;
+    padding: 16px 12px;
+  }
 }
 
+/* ── Responsive: Small Tablet / Large Mobile (≤768px) ───────────────────── */
+@media (max-width: 768px) {
+  .PatReg-container {
+    padding: 16px 12px;
+    align-items: flex-start;
+  }
+
+  .PatReg-card {
+    flex-direction: column;
+    max-width: 500px;
+    min-height: auto;
+    margin: 0 auto;
+  }
+
+  /* Hide image on mobile — form takes full width */
+  .PatReg-left {
+    display: none;
+  }
+
+  .PatReg-right {
+    width: 100%;
+    padding: 20px 16px;
+  }
+
+  .PatReg-form-box {
+    max-width: 100%;
+    padding: 16px 14px;
+  }
+
+  .PatReg-heading {
+    font-size: 18px;
+    margin-bottom: 10px;
+  }
+}
+
+/* ── Responsive: Mobile (≤480px) ────────────────────────────────────────── */
 @media (max-width: 480px) {
-  .PatReg-row { flex-direction: column; gap: 4px; }
+  .PatReg-container {
+    padding: 12px 8px;
+  }
+
+  .PatReg-card {
+    max-width: 100%;
+    border-radius: 12px;
+  }
+
+  .PatReg-right {
+    padding: 16px 10px;
+  }
+
+  .PatReg-form-box {
+    padding: 14px 10px;
+    border-radius: 10px;
+  }
+
+  .PatReg-heading {
+    font-size: 17px;
+  }
+
+  .PatReg-section-title {
+    font-size: 12px;
+    margin: 12px 0 6px;
+  }
+
+  /* Stack all rows vertically */
+  .PatReg-row {
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .PatReg-field {
+    width: 100%;
+  }
+
+  .PatReg-input {
+    font-size: 13px;
+    padding: 8px 10px;
+  }
+
+  .PatReg-textarea {
+    font-size: 13px;
+    padding: 8px 10px;
+    height: 55px;
+  }
+
+  .PatReg-btn {
+    font-size: 13px;
+    padding: 9px;
+    margin-top: 12px;
+  }
+
+  .PatReg-login-link {
+    font-size: 11px;
+    margin-top: 8px;
+  }
+
+  .PatReg-eye {
+    font-size: 14px;
+    right: 8px;
+  }
+
+  .PatReg-error {
+    font-size: 10px;
+  }
+}
+
+/* ── Responsive: Small Mobile (≤360px) ──────────────────────────────────── */
+@media (max-width: 360px) {
+  .PatReg-container {
+    padding: 8px 6px;
+  }
+
+  .PatReg-form-box {
+    padding: 12px 8px;
+  }
+
+  .PatReg-heading {
+    font-size: 15px;
+  }
+
+  .PatReg-section-title {
+    font-size: 11px;
+  }
+
+  .PatReg-input,
+  .PatReg-textarea {
+    font-size: 12px;
+    padding: 7px 9px;
+  }
+
+  .PatReg-btn {
+    font-size: 12px;
+    padding: 8px;
+  }
 }
