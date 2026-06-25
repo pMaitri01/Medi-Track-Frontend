@@ -68,6 +68,8 @@
   justify-content: space-between;
   padding: 18px 24px 14px;
   border-bottom: 1px solid #f1f5f9;
+  flex-wrap: wrap;
+  gap: 8px;
 }
 
 .ad-chart-title {
@@ -187,20 +189,6 @@
 .ad-badge-rejected { background: #fef3c7; color: #92400e; }
 .ad-badge-Approved { background: #d1fae5; color: #065f46; }
 
-/* ── RESPONSIVE ── */
-@media (max-width: 1024px) {
-  .ad-charts-row { grid-template-columns: 1fr; }
-}
-
-@media (max-width: 900px) {
-  .ad-cards-grid { grid-template-columns: repeat(2, 1fr); }
-}
-
-@media (max-width: 480px) {
-  .ad-cards-grid { grid-template-columns: 1fr; }
-  .ad-chart-body { padding: 16px; }
-  .ad-chart-pie-body { padding: 16px; }
-}
 /* PIE CENTERED */
 .ad-status-pie {
   display: flex;
@@ -214,6 +202,7 @@
   flex-direction: column;
   gap: 10px;
   align-items: center;
+  padding-bottom: 16px;
 }
 
 /* ROW */
@@ -240,41 +229,35 @@
   width: 10px;
   height: 10px;
   border-radius: 50%;
+  flex-shrink: 0;
 }
 
 /* VALUE */
 .status-value {
   font-weight: 600;
 }
+
 .AppointmentOverviewSelect{
   padding: 6px 10px;
   border: 1px solid #e2e8f0;
   border-radius: 8px;
 }
-.adminDashboard-sec{
-  display: flex;
-  gap: 24px;
-  display: flex;
-}
+
+/* ── DASHBOARD SECTION (Status + Doctor Performance) ── */
 .adminDashboard-sec {
   display: flex;
   gap: 24px;
   margin-top: 20px;
 }
+
 /* RIGHT SIDE */
 .doctor-performance {
   width: 60%;
 }
-.div-status{
-  width: 50%;
-}
+
 .div-status,
 .doctor-performance {
   width: 50%;
-}
-.ad-table {
-  width: 100%;
-  border-collapse: collapse;
 }
 
 .ad-table th, .ad-table td {
@@ -282,6 +265,7 @@
   text-align: center;
   border-bottom: 1px solid #eee;
 }
+
 .doctor-bar-card {
   margin-bottom: 20px;
   padding: 15px;
@@ -294,6 +278,8 @@
   display: flex;
   justify-content: space-between;
   margin-bottom: 8px;
+  flex-wrap: wrap;
+  gap: 4px;
 }
 
 .bar-container {
@@ -317,24 +303,29 @@
   justify-content: flex-start;
   font-size: 13px;
   color: #555;
+  flex-wrap: wrap;
+  gap: 8px;
 }
+
 .stat-item {
   position: relative;
   display: flex;
   align-items: center;
   gap: 6px;
-  width:50px;
+  width: 50px;
   cursor: pointer;
 }
+
 .stat-item1-rejected{
   padding: 3px 12px;
   border-radius: 20px;
 }
+
 /* HIDDEN TEXT */
 .tooltip-text {
   visibility: hidden;
   opacity: 0;
-  position: relative;
+  position: absolute;
   bottom: 125%;
   left: 50%;
   transform: translateX(-50%);
@@ -353,6 +344,8 @@
   visibility: visible;
   opacity: 1;
 }
+
+/* ── INSIGHTS ── */
 .insights-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -378,6 +371,8 @@
 .insight-card p {
   font-size: 16px;
   font-weight: 600;
+  margin: 0;
+  word-break: break-word;
 }
 
 /* COLORS */
@@ -386,78 +381,21 @@
 .insight-card.red { background: #ef4444; }
 .insight-card.orange { background: #f59e0b; }
 
-.behavior-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 16px;
-  margin-top: 10px;
-}
-
-.behavior-card {
-  padding: 16px;
-  border-radius: 12px;
-  color: #fff;
-  font-weight: 500;
-}
-
-.behavior-card h4 {
-  font-size: 14px;
-  margin-bottom: 6px;
-}
-
-.behavior-card p {
-  font-size: 20px;
-  font-weight: bold;
-}
-
-/* colors */
-.behavior-card.blue { background: #3b82f6; }
-.behavior-card.green { background: #22c55e; }
-.behavior-card.purple { background: #9333ea; }
-.behavior-card.red { background: #ef4444; }
-.behavior-card.orange { background: #f59e0b; }
-.patient-behavior {
-  padding: 20px;
-}
-
-.grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 20px;
-}
-
-.chart-box {
-  background: #fff;
-  padding: 15px;
-  border-radius: 10px;
-  min-height: 300px;
-}
-
-
-/* ================= SECTION ================= */
-.section-title {
-  font-size: 20px;
-  font-weight: 700;
-  margin-bottom: 16px;
-  color: #1e293b;
-}
-
-/* ================= PATIENT BEHAVIOR ================= */
- .div-patient{
+/* ── PATIENT BEHAVIOR ── */
+.div-patient {
   margin-top: 20px;
- }
+}
+
 .patient-behavior {
   padding: 20px;
 }
 
-/* GRID */
 .behavior-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 20px;
 }
 
-/* CARD */
 .behavior-card {
   background: #ffffff;
   border-radius: 14px;
@@ -472,7 +410,6 @@
   box-shadow: 0 8px 20px rgba(0,0,0,0.08);
 }
 
-/* TITLE */
 .behavior-card h4 {
   font-size: 14px;
   font-weight: 600;
@@ -480,17 +417,11 @@
   color: #334155;
 }
 
-/* ================= RESPONSIVE ================= */
-@media (max-width: 900px) {
-  .behavior-grid {
-    grid-template-columns: 1fr;
-  }
-}
-/* ================= SYSTEM GROWTH ================= */
-.div-growth{
+/* ── SYSTEM GROWTH ── */
+.div-growth {
   margin-top: 20px;
 }
-/* GRID */
+
 .growth-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -498,7 +429,6 @@
   margin-top: 20px;
 }
 
-/* CARD */
 .growth-card {
   background: #f8fafc;
   border-radius: 12px;
@@ -513,7 +443,6 @@
   box-shadow: 0 6px 14px rgba(0,0,0,0.08);
 }
 
-/* TEXT */
 .growth-card h4 {
   font-size: 13px;
   color: #64748b;
@@ -524,11 +453,269 @@
   font-size: 22px;
   font-weight: 700;
   color: #1e293b;
+  margin: 0;
 }
 
-/* RESPONSIVE */
+/* ── SECTION TITLE ── */
+.section-title {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 16px;
+  color: #1e293b;
+}
+
+
+/* ═══════════════════════════════════════════
+   RESPONSIVE BREAKPOINTS
+   ═══════════════════════════════════════════ */
+
+/* ── Large tablet / small desktop (≤1200px) ── */
+@media (max-width: 1200px) {
+  .insights-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* ── Tablet landscape (≤1024px) ── */
+@media (max-width: 1024px) {
+  .ad-charts-row {
+    grid-template-columns: 1fr;
+  }
+
+  .adminDashboard-sec {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .div-status,
+  .doctor-performance {
+    width: 100%;
+  }
+
+  .status-row {
+    width: 70%;
+  }
+
+  .insights-grid {
+    grid-template-columns: repeat(2, 1fr);
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+}
+
+/* ── Tablet portrait (≤900px) ── */
 @media (max-width: 900px) {
+  .ad-cards-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .behavior-grid {
+    grid-template-columns: 1fr;
+  }
+
   .growth-grid {
     grid-template-columns: 1fr;
+  }
+
+  .status-row {
+    width: 80%;
+  }
+}
+
+/* ── Large mobile (≤600px) ── */
+@media (max-width: 600px) {
+  .ad-cards-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+
+  .ad-card {
+    padding: 16px 14px;
+    gap: 12px;
+  }
+
+  .ad-card-icon {
+    width: 44px;
+    height: 44px;
+    font-size: 20px;
+    border-radius: 10px;
+  }
+
+  .ad-card-value {
+    font-size: 22px;
+  }
+
+  .ad-card-label {
+    font-size: 11px;
+  }
+
+  .ad-chart-header {
+    padding: 14px 16px 12px;
+  }
+
+  .ad-chart-title {
+    font-size: 14px;
+  }
+
+  .ad-chart-body {
+    padding: 14px 16px 16px;
+  }
+
+  .adminDashboard-sec {
+    gap: 16px;
+    margin-top: 16px;
+  }
+
+  .insights-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    padding-left: 12px;
+    padding-right: 12px;
+    padding-bottom: 12px;
+  }
+
+  .insight-card {
+    padding: 12px;
+  }
+
+  .insight-card h4 {
+    font-size: 12px;
+  }
+
+  .insight-card p {
+    font-size: 14px;
+  }
+
+  .status-row {
+    width: 90%;
+  }
+
+  .doctor-bar-card {
+    padding: 12px;
+  }
+
+  .doctor-bar-header h4 {
+    font-size: 13px;
+  }
+
+  .growth-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .growth-card p {
+    font-size: 20px;
+  }
+
+  .div-patient,
+  .div-growth {
+    margin-top: 16px;
+  }
+}
+
+/* ── Small mobile (≤480px) ── */
+@media (max-width: 480px) {
+  .ad-cards-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .ad-chart-body {
+    padding: 12px;
+  }
+
+  .ad-chart-pie-body {
+    padding: 12px;
+  }
+
+  .ad-chart-body > div[style] {
+    height: 260px !important;
+  }
+
+  .insights-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  .status-row {
+    width: 100%;
+  }
+
+  .ad-status-list-vertical {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  .behavior-card {
+    padding: 14px;
+  }
+
+  .behavior-card h4 {
+    font-size: 13px;
+  }
+
+  .doctor-bar-details {
+    gap: 6px;
+  }
+
+  .stat-item {
+    width: 44px;
+    font-size: 12px;
+  }
+
+  .growth-card {
+    padding: 14px;
+  }
+
+  .section-title {
+    font-size: 16px;
+  }
+
+  .AppointmentOverviewSelect {
+    font-size: 13px;
+    padding: 5px 8px;
+  }
+}
+
+/* ── Extra small mobile (≤380px) ── */
+@media (max-width: 380px) {
+  .ad-card {
+    padding: 12px 10px;
+    gap: 10px;
+  }
+
+  .ad-card-icon {
+    width: 38px;
+    height: 38px;
+    font-size: 18px;
+  }
+
+  .ad-card-value {
+    font-size: 20px;
+  }
+
+  .ad-card-label {
+    font-size: 10px;
+  }
+
+  .insights-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .insight-card {
+    padding: 10px 12px;
+  }
+
+  .ad-chart-title {
+    font-size: 13px;
+  }
+
+  .behavior-card {
+    padding: 12px;
+  }
+
+  .growth-card p {
+    font-size: 18px;
   }
 }

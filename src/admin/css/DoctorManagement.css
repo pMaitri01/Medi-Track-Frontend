@@ -36,6 +36,7 @@
   border-radius: 20px;
   border: 1px solid #bfdbfe;
   align-self: center;
+  white-space: nowrap;
 }
 
 /* ── TOOLBAR ── */
@@ -60,7 +61,7 @@
   border-radius: 8px;
   padding: 0 12px;
   flex: 1;
-  min-width: 200px;
+  min-width: 50%;
   transition: border-color 0.2s, box-shadow 0.2s;
 }
 
@@ -156,6 +157,8 @@
   justify-content: space-between;
   padding: 16px 20px;
   border-bottom: 1px solid #f1f5f9;
+  flex-wrap: wrap;
+  gap: 10px;
 }
 
 .dm-table-title {
@@ -215,17 +218,20 @@
 
 .dm-empty p {
   font-size: 14px;
+  text-align: center;
 }
 
 /* ── TABLE ── */
 .dm-table-wrap {
   overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .dm-table {
   width: 100%;
   border-collapse: collapse;
   font-size: 14px;
+  min-width: 480px; /* prevents columns from squishing too hard */
 }
 
 .dm-table thead tr {
@@ -311,6 +317,7 @@
 .dm-actions {
   display: flex;
   gap: 8px;
+  flex-wrap: wrap;
 }
 
 .dm-btn {
@@ -366,7 +373,6 @@
   background: #fff;
   border-radius: 16px;
   width: 38% !important;
-
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.18);
   overflow: hidden;
 }
@@ -399,6 +405,7 @@
   align-items: center;
   justify-content: center;
   transition: background 0.15s;
+  flex-shrink: 0;
 }
 
 .dm-modal-close:hover {
@@ -407,6 +414,8 @@
 
 .dm-modal-body {
   padding: 20px 22px;
+  max-height: 70vh;
+  overflow-y: auto;
 }
 
 .dm-modal-profile {
@@ -437,7 +446,6 @@
 /* Modal Container */
 .dm-modal {
   max-width: 650px;
-  /* Wider like the image */
   border-radius: 12px;
   background: #fff;
   overflow: hidden;
@@ -462,6 +470,7 @@
   align-items: center;
   gap: 20px;
   padding: 10px 0 25px 0;
+  flex-wrap: wrap;
 }
 
 .dm-main-avatar {
@@ -470,6 +479,7 @@
   border-radius: 50%;
   border: 3px solid #3b82f6;
   object-fit: cover;
+  flex-shrink: 0;
 }
 
 .dm-doctor-name {
@@ -492,7 +502,6 @@
   font-weight: 600;
   background: #fffbeb;
   color: #d97706;
-  /* Pending Gold */
   border: 1px solid #fef3c7;
 }
 
@@ -521,6 +530,7 @@
   font-size: 0.95rem;
   color: #334155;
   font-weight: 500;
+  word-break: break-word;
 }
 
 /* About Box */
@@ -546,12 +556,15 @@
 .dm-modal-footer {
   display: flex;
   gap: 12px;
-  padding: 20px 25px;
+  padding: 14px 22px;
   background: #fff;
+  border-top: 1px solid #f1f5f9;
+  justify-content: flex-end;
+  flex-wrap: wrap;
 }
 
 .dm-footer-btn {
-  padding: 12px;
+  padding: 10px 20px;
   border-radius: 8px;
   font-weight: 600;
   font-size: 0.9rem;
@@ -561,25 +574,24 @@
   gap: 8px;
   cursor: pointer;
   border: 1px solid transparent;
-  width: 100px;
+  min-width: 90px;
+  white-space: nowrap;
 }
 
 .btn-cancel {
   background: #f1f5f9;
   color: #475569;
-  border-color: #e2e8f0
+  border-color: #e2e8f0;
 }
 
 .btn-cancel:hover {
   color: white;
 }
 
-/* Scrollbar for long content */
-.dm-modal-body {
-  max-height: 70vh;
-  overflow-y: auto;
-  padding: 25px;
-}
+/* Scrollbar for modal */
+.dm-modal-body::-webkit-scrollbar { width: 4px; }
+.dm-modal-body::-webkit-scrollbar-track { background: transparent; }
+.dm-modal-body::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 4px; }
 
 .dm-modal-grid {
   display: grid;
@@ -605,18 +617,7 @@
   font-size: 14px;
   color: #1e293b;
   font-weight: 500;
-}
-
-.dm-modal-footer {
-  display: flex;
-  justify-content: flex-end;
-  padding: 14px 22px;
-  border-top: 1px solid #f1f5f9;
-}
-
-.dm-modal-footer .dm-btn {
-  padding: 9px 22px;
-  font-size: 13px;
+  word-break: break-word;
 }
 
 /* ── DELETE DIALOG ── */
@@ -653,6 +654,7 @@
   display: flex;
   gap: 10px;
   justify-content: center;
+  flex-wrap: wrap;
 }
 
 .dm-dialog-actions .dm-btn {
@@ -660,26 +662,31 @@
   font-size: 13px;
 }
 
-/* ── RESPONSIVE ── */
-@media (max-width: 640px) {
-  .dm-toolbar {
-    flex-direction: column;
-  }
-
-  .dm-search-wrap {
-    min-width: unset;
-    width: 100%;
-  }
-
-  .dm-modal-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .dm-table th:nth-child(4),
-  .dm-table td:nth-child(4) {
-    display: none;
-  }
+/* ── TABS ── */
+.dm-tabs {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+  flex-wrap: wrap;
+  align-items: center;
 }
+
+.dm-tab {
+  padding: 8px 16px;
+  border: none;
+  background: #eee;
+  cursor: pointer;
+  border-radius: 6px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.dm-tab.active {
+  background: #007bff;
+  color: white;
+}
+
+/* ── SUSPEND INPUT ── */
 .dm-suspend-input {
   padding: 8px;
   border: 1px solid #ccc;
@@ -693,22 +700,225 @@
   font-size: 12px;
   margin-top: 5px;
 }
-.dm-tabs {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 15px;
+
+
+/* ═══════════════════════════════════════════
+   RESPONSIVE BREAKPOINTS
+   ═══════════════════════════════════════════ */
+
+/* ── Large tablet (≤1024px) ── */
+@media (max-width: 1024px) {
+  .dm-modal {
+    width: 60% !important;
+  }
+
+  .dm-filter-select {
+    width: auto;
+    flex: 1;
+    min-width: 130px;
+  }
 }
 
-.dm-tab {
-  padding: 8px 16px;
-  border: none;
-  background: #eee;
-  cursor: pointer;
-  border-radius: 6px;
-  font-weight: 500;
+/* ── Tablet portrait (≤768px) ── */
+@media (max-width: 768px) {
+  .dm-modal {
+    width: 85% !important;
+    max-width: 85%;
+  }
+
+  .dm-filter-select {
+    width: 100%;
+    flex: 1 1 calc(50% - 5px);
+    min-width: unset;
+  }
+
+  .dm-info-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+
+  .dm-modal-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .dm-table-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 }
 
-.dm-tab.active {
-  background: #007bff;
-  color: white;
+/* ── Large mobile (≤640px) ── */
+@media (max-width: 640px) {
+  .dm-toolbar {
+    flex-direction: column;
+    padding: 12px 14px;
+    gap: 8px;
+  }
+
+  .dm-search-wrap {
+    min-width: unset;
+    width: 100%;
+  }
+
+  .dm-filter-select {
+    width: 100%;
+    flex: unset;
+  }
+
+  .dm-reset-btn {
+    width: 100%;
+    text-align: center;
+  }
+
+  .dm-modal {
+    width: 96% !important;
+    max-width: 96%;
+    border-radius: 12px;
+  }
+
+  .dm-modal-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .dm-info-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .dm-profile-section {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    padding-bottom: 16px;
+  }
+
+  .dm-modal-footer {
+    justify-content: stretch;
+    padding: 12px 16px;
+  }
+
+  .dm-footer-btn {
+    flex: 1;
+    min-width: unset;
+  }
+
+  .dm-modal-body {
+    padding: 16px;
+    max-height: 65vh;
+  }
+
+  .dm-modal-header {
+    padding: 14px 16px;
+  }
+
+  /* hide experience column on small screens */
+  .dm-table th:nth-child(4),
+  .dm-table td:nth-child(4) {
+    display: none;
+  }
+
+  .dm-tabs {
+    gap: 6px;
+  }
+
+  .dm-tab {
+    padding: 6px 12px;
+    font-size: 13px;
+  }
+
+  .dm-dialog {
+    padding: 28px 20px;
+  }
+}
+
+/* ── Small mobile (≤480px) ── */
+@media (max-width: 480px) {
+  .dm-title {
+    font-size: 17px;
+  }
+
+  .dm-subtitle {
+    font-size: 12px;
+  }
+
+  .dm-table th,
+  .dm-table td {
+    padding: 10px 12px;
+    font-size: 13px;
+  }
+
+  .dm-doc-name {
+    font-size: 13px;
+  }
+
+  .dm-doc-email {
+    font-size: 11px;
+  }
+
+  .dm-doc-avatar {
+    width: 30px;
+    height: 30px;
+  }
+
+  .dm-doctor-name {
+    font-size: 1.1rem;
+  }
+
+  .dm-main-avatar {
+    width: 64px;
+    height: 64px;
+  }
+
+  .dm-table-title {
+    font-size: 13px;
+  }
+
+  /* hide specialization column too on very small screens */
+  .dm-table th:nth-child(3),
+  .dm-table td:nth-child(3) {
+    display: none;
+  }
+
+  .dm-suspend-input {
+    width: 100%;
+    margin-right: 0;
+    margin-bottom: 8px;
+  }
+
+  .dm-dialog {
+    padding: 24px 16px;
+    border-radius: 12px;
+  }
+
+  .dm-dialog h3 {
+    font-size: 16px;
+  }
+}
+
+/* ── Extra small (≤380px) ── */
+@media (max-width: 380px) {
+  .dm-modal-body {
+    max-height: 60vh;
+    padding: 12px;
+  }
+
+  .dm-table th,
+  .dm-table td {
+    padding: 8px 10px;
+    font-size: 12px;
+  }
+
+  .dm-footer-btn {
+    font-size: 0.8rem;
+    padding: 8px 12px;
+  }
+
+  .dm-tabs {
+    gap: 4px;
+  }
+
+  .dm-tab {
+    padding: 6px 10px;
+    font-size: 12px;
+  }
 }

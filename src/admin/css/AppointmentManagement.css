@@ -36,6 +36,7 @@
   border-radius: 20px;
   border: 1px solid #bfdbfe;
   align-self: center;
+  white-space: nowrap;
 }
 
 /* ── FILTER TABS ── */
@@ -58,6 +59,7 @@
   color: #475569;
   cursor: pointer;
   transition: all 0.18s;
+  white-space: nowrap;
 }
 
 .am-filter-btn:hover {
@@ -89,7 +91,8 @@
   border: 1px solid #e2e8f0;
   border-radius: 14px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-  overflow: hidden;
+  overflow-x: auto;              /* horizontal scroll instead of hiding columns */
+  -webkit-overflow-scrolling: touch;
 }
 
 .am-empty {
@@ -106,6 +109,7 @@
   width: 100%;
   border-collapse: collapse;
   font-size: 14px;
+  min-width: 680px;              /* all 7 columns always visible, table scrolls */
 }
 
 .am-table thead tr { background: #f8fafc; }
@@ -143,22 +147,11 @@
   font-weight: 600;
 }
 
-.am-badge-pending  { background: #f3e8ff; color: #6b21a8; }
-.am-badge-approved { background: #d1fae5; color: #065f46; }
-.am-badge-rejected { background: #fef3c7; color: #92400e; }
+.am-badge-pending   { background: #f3e8ff; color: #6b21a8; }
+.am-badge-approved  { background: #d1fae5; color: #065f46; }
+.am-badge-rejected  { background: #fef3c7; color: #92400e; }
 .am-badge-completed { background: #dbeafe; color: #1e40af; }
 .am-badge-cancelled { background: #fee2e2; color: #991b1b; }
-
-/* ── RESPONSIVE ── */
-@media (max-width: 700px) {
-  .am-table th:nth-child(4),
-  .am-table td:nth-child(4) { display: none; }
-}
-
-@media (max-width: 520px) {
-  .am-table th:nth-child(3),
-  .am-table td:nth-child(3) { display: none; }
-}
 
 /* ── LOADING ── */
 .am-loading {
@@ -191,4 +184,39 @@
   padding: 14px 18px;
   font-size: 13px;
   font-weight: 600;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 600px) {
+  .am-title {
+    font-size: 17px;
+  }
+
+  .am-filters {
+    gap: 6px;
+  }
+
+  .am-filter-btn {
+    padding: 7px 12px;
+    font-size: 12px;
+  }
+
+  .am-table th,
+  .am-table td {
+    padding: 11px 14px;
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 400px) {
+  .am-filter-btn {
+    padding: 6px 10px;
+    font-size: 11px;
+  }
+
+  .am-table th,
+  .am-table td {
+    padding: 10px 12px;
+    font-size: 12px;
+  }
 }

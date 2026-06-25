@@ -698,90 +698,6 @@ setRejected(data.rejectedDoctors);
 
   </div>
 </div>
-      {/* <div className="patient-behavior">
-        <h2>Patient Behavior Analysis</h2>
-
-        <div className="grid">
-          <div className="chart-box">Peak Time Chart<BarChart width={300} height={250} data={behaviorData.barTimeData}>
-            <XAxis dataKey="name" />
-            <YAxis />
-            <Tooltip />
-            <Bar dataKey="value" fill="#4CAF50" />
-          </BarChart></div>
-          <div className="chart-box">Repeat vs New<PieChart width={300} height={250}>
-            <Pie
-              data={behaviorData.pieData}
-              dataKey="value"
-              nameKey="name"
-              outerRadius={80}
-              label
-            />
-            <Tooltip />
-          </PieChart></div>
-          <div className="chart-box">Cancellation<RadialBarChart
-            width={300}
-            height={250}
-            innerRadius="60%"
-            outerRadius="100%"
-            data={behaviorData.cancellationData}
-          >
-            <RadialBar dataKey="value" />
-            <Tooltip />
-          </RadialBarChart></div>
-          <div className="chart-box">Active Day<BarChart width={300} height={250} data={behaviorData.dayData}>
-            <XAxis dataKey="name" />
-            <YAxis />
-            <Tooltip />
-            <Bar dataKey="value" fill="#2196F3" />
-          </BarChart></div>
-        </div>
-      </div> */}
-      {/* <div className="system-growth">
-        <h2>System Growth Analysis</h2>
-
-        <div className="growth-chart">
-        <ResponsiveContainer width="100%" height={320}>
-  <LineChart data={dailyGrowth}>
-    <CartesianGrid strokeDasharray="3 3" />
-    <XAxis dataKey="date" />
-    <YAxis />
-    <Tooltip />
-    <Legend />
-
-    <Line type="monotone" dataKey="count" stroke="#2563eb" />
-  </LineChart>
-</ResponsiveContainer>
-        </div>
-
-        <div className="growth-cards-grid">
-
-          <div className="growth-card">
-            <h4>📅 Total Days Tracked</h4>
-            <p>{dailyGrowth?.length || 0}</p>
-          </div>
-
-          <div className="growth-card">
-            <h4>👥 Total Patients</h4>
-            <p>
-              {dailyGrowth?.reduce(
-                (sum, d) => sum + (d.patients || 0),
-                0
-              )}
-            </p>
-          </div>
-
-          <div className="growth-card">
-            <h4>📊 Total Appointments</h4>
-            <p>
-              {dailyGrowth?.reduce(
-                (sum, d) => sum + (d.appointments || 0),
-                0
-              )}
-            </p>
-          </div>
-
-        </div>
-      </div> */}
       <div className="ad-chart-card ad-chart-full div-growth">
 
   {/* HEADER */}
@@ -843,7 +759,6 @@ setRejected(data.rejectedDoctors);
 
   </div>
 </div>
-      {/* </div> */}
     </>
   );
 };

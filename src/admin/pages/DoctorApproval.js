@@ -28,6 +28,7 @@ const DoctorApproval = () => {
     setSelectedDoc(null);
     setRejectReason("");
     setRejectError("");
+    document.body.classList.remove("da-panel-open"); // ← ADD THIS
   };
 
   // ── Approve ──
@@ -263,7 +264,7 @@ const DoctorApproval = () => {
                   <tr
                     key={doc.id}
                     className={"da-row-clickable" + (selectedDoc?.id === doc.id ? " da-row-selected" : "")}
-                    onClick={() => { setSelectedDoc(doc); setRejectReason(""); setRejectError(""); }}
+                    onClick={() => { setSelectedDoc(doc); setRejectReason(""); setRejectError(""); document.body.classList.add("da-panel-open"); }}
                     title="Click to view details"
                   >
                     <td>{(page - 1) * PER_PAGE + i + 1}</td>
