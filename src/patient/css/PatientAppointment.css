@@ -257,6 +257,60 @@
     width: 100%;
     text-align: center;
   }
+
+  .PatApp-pa-page-nav {
+    height: auto;
+    padding: 16px;
+  }
+
+  .PatApp-pa-page-icon { font-size: 28px; }
+
+  .PatApp-pa-modal {
+    width: 90%;
+    max-width: 90%;
+  }
+
+  .star-container { font-size: 24px; gap: 6px; }
+}
+
+/* Mobile phones */
+@media (max-width: 480px) {
+  .PatApp-pa-page-nav {
+    flex-wrap: wrap;
+    padding: 14px;
+  }
+
+  .PatApp-pa-heading { font-size: 20px; }
+  .PatApp-pa-page-icon { font-size: 24px; }
+
+  .PatApp-pa-doc-card { padding: 16px; }
+
+  .PatApp-pa-doc-info { gap: 10px; }
+  .PatApp-pa-doc-img { width: 56px; height: 56px; }
+
+  .PatApp-pa-badge--top {
+    top: 8px;
+    right: 8px;
+  }
+
+  .PatApp-pa-modal {
+    width: 94%;
+    padding: 16px;
+  }
+
+  .review-title { font-size: 17px; }
+
+  .review-actions {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .review-submit,
+  .review-close {
+    width: 100%;
+  }
+
+  .star-container { font-size: 22px; }
 }
 
 /* ── Next appointment highlight ─────────────────────────────────────────── */
@@ -290,6 +344,7 @@
   justify-content: center;
   align-items: center;
   z-index: 1000;
+  padding: 16px;
 }
 
 .PatApp-pa-modal {
@@ -297,6 +352,9 @@
   padding: 20px;
   border-radius: 12px;
   width: 500px;
+  max-width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
 }
 .review-modal {
   padding: 20px;

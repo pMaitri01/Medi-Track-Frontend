@@ -9,14 +9,20 @@
   justify-content: center;
   align-items: center;
   z-index: 1000;
+  padding: 16px;
+  box-sizing: border-box;
 }
 
 .RescheduleApp-rs-modal {
   width: 850px;
+  max-width: 100%;
   background: #fff;
   border-radius: 12px;
   padding: 25px;
   box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.15);
+  box-sizing: border-box;
+  max-height: 90vh;
+  overflow-y: auto;
 }
 
 .RescheduleApp-rs-header {
@@ -28,6 +34,11 @@
   margin-bottom: 15px;
 }
 
+.RescheduleApp-rs-header h2 {
+  font-size: 18px;
+  margin: 0;
+}
+
 .RescheduleApp-rs-body {
   display: flex;
   gap: 40px;
@@ -36,6 +47,7 @@
 .RescheduleApp-rs-left,
 .RescheduleApp-rs-right {
   flex: 1;
+  min-width: 0;
 }
 
 .RescheduleApp-rs-section {
@@ -55,9 +67,10 @@
   border: 1px solid #ddd;
   border-radius: 6px;
   font-size: 14px;
+  word-break: break-word;
 }
 
-/* Calendar Styling to match image */
+/* Calendar Styling */
 .react-calendar {
   border: 1px solid #ddd !important;
   border-radius: 8px;
@@ -70,6 +83,7 @@
   padding: 10px;
   border-radius: 6px;
   border: 1px solid #ccc;
+  box-sizing: border-box;
 }
 
 /* Slots Grid */
@@ -77,8 +91,8 @@
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
-
 }
+
 .RescheduleApp-rs-slot {
   padding: 10px;
   border-radius: 20px;
@@ -86,25 +100,16 @@
   cursor: pointer;
   background: white;
   transition: all 0.2s ease;
+  font-size: 13px;
 }
+
 .RescheduleApp-rs-slot.RescheduleApp-active {
   background: #0aa5a5;
   color: white;
   border: 1px solid #0aa5a5;
 }
-/* .RescheduleApp-rs-slot:hover{
-  background: #f3f4f6;
-} */
 
-/* .RescheduleApp-rs-slot {
-  background: #e5e7eb;
-  color: #999;
-  cursor: not-allowed;
-  opacity: 0.6;
-} */
-
-
-/* Footer alignment inside the right column */
+/* Footer */
 .RescheduleApp-rs-footer {
   display: flex;
   gap: 10px;
@@ -112,7 +117,7 @@
 }
 
 .RescheduleApp-rs-confirm {
-  background: #0aa5a5; /* Teal green matching your image */
+  background: #0aa5a5;
   color: white;
   padding: 12px 20px;
   border: none;
@@ -143,15 +148,18 @@
   color: #666;
   font-size: 13px;
 }
+
 .RescheduleApp-rs-close {
   background: white !important;
   border: none;
   font-size: 20px;
   cursor: pointer;
-  color:black!important;
+  color: black !important;
   width: 50px;
   height: 35px;
+  flex-shrink: 0;
 }
+
 .RescheduleApp-rs-close:hover {
   background: #0aa5a5 !important;
   border: none;
@@ -160,4 +168,162 @@
   color: white !important;
   width: 50px;
   height: 35px;
+}
+
+/* ── Responsive: Tablet (≤900px) ─────────────────────────────────────────── */
+@media (max-width: 900px) {
+  .RescheduleApp-rs-modal {
+    width: 100%;
+    padding: 20px;
+  }
+
+  .RescheduleApp-rs-body {
+    gap: 24px;
+  }
+}
+
+/* ── Responsive: Small Tablet / Mobile (≤768px) ──────────────────────────── */
+@media (max-width: 768px) {
+  .RescheduleApp-rs-overlay {
+    align-items: flex-start;
+    padding: 12px;
+    overflow-y: auto;
+  }
+
+  .RescheduleApp-rs-modal {
+    max-height: none;
+    overflow-y: visible;
+    padding: 18px 16px;
+    border-radius: 10px;
+  }
+
+  .RescheduleApp-rs-header h2 {
+    font-size: 16px;
+  }
+
+  /* Stack left and right vertically */
+  .RescheduleApp-rs-body {
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .RescheduleApp-rs-left,
+  .RescheduleApp-rs-right {
+    width: 100%;
+  }
+
+  .react-calendar {
+    width: 100% !important;
+    font-size: 13px;
+  }
+
+  .RescheduleApp-rs-slots {
+    gap: 6px;
+  }
+
+  .RescheduleApp-rs-slot {
+    padding: 8px 10px;
+    font-size: 12px;
+  }
+
+  .RescheduleApp-rs-footer {
+    margin-top: 20px;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .RescheduleApp-rs-confirm,
+  .RescheduleApp-rs-cancel {
+    width: 100%;
+    flex: none;
+    padding: 12px;
+    text-align: center;
+  }
+}
+
+/* ── Responsive: Mobile (≤480px) ─────────────────────────────────────────── */
+@media (max-width: 480px) {
+  .RescheduleApp-rs-overlay {
+    padding: 8px;
+  }
+
+  .RescheduleApp-rs-modal {
+    padding: 14px 12px;
+    border-radius: 10px;
+  }
+
+  .RescheduleApp-rs-header {
+    padding-bottom: 12px;
+    margin-bottom: 12px;
+  }
+
+  .RescheduleApp-rs-header h2 {
+    font-size: 15px;
+  }
+
+  .RescheduleApp-rs-section {
+    margin-bottom: 16px;
+  }
+
+  .RescheduleApp-rs-section label {
+    font-size: 13px;
+  }
+
+  .RescheduleApp-doctor-display {
+    font-size: 13px;
+    padding: 8px;
+  }
+
+  .react-calendar {
+    font-size: 12px;
+  }
+
+  .RescheduleApp-type-select {
+    font-size: 13px;
+    padding: 8px;
+  }
+
+  .RescheduleApp-rs-slot {
+    padding: 7px 9px;
+    font-size: 11px;
+    border-radius: 16px;
+  }
+
+  .RescheduleApp-rs-confirm,
+  .RescheduleApp-rs-cancel {
+    font-size: 13px;
+    padding: 10px;
+  }
+
+  .RescheduleApp-rs-close {
+    width: 38px;
+    height: 30px;
+    font-size: 18px;
+  }
+}
+
+/* ── Responsive: Small Mobile (≤360px) ───────────────────────────────────── */
+@media (max-width: 360px) {
+  .RescheduleApp-rs-modal {
+    padding: 12px 10px;
+  }
+
+  .RescheduleApp-rs-header h2 {
+    font-size: 14px;
+  }
+
+  .react-calendar {
+    font-size: 11px;
+  }
+
+  .RescheduleApp-rs-slot {
+    padding: 6px 8px;
+    font-size: 11px;
+  }
+
+  .RescheduleApp-rs-confirm,
+  .RescheduleApp-rs-cancel {
+    font-size: 12px;
+    padding: 9px;
+  }
 }

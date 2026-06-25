@@ -497,3 +497,146 @@ button {
 .DocList-info-group p {
   margin: 4px 0 !important;
 }
+
+/* ============================
+   RESPONSIVE MEDIA QUERIES
+   ============================ */
+
+/* Tablets / small laptops */
+@media (max-width: 1024px) {
+  .DocList-content { padding: 0 16px 40px; }
+
+  .DocList-search-footer {
+    margin-left: 0;
+    display: flex;
+    gap: 10px;
+  }
+
+  .DocList-doctor-list-grid {
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  }
+
+  .DocList-booking-modal,
+  .DocList-details-modal {
+    width: 90%;
+    max-width: 500px;
+  }
+}
+
+/* Tablets / narrow screens */
+@media (max-width: 768px) {
+  .DocList-navbar1 {
+    height: auto;
+    font-size: 26px;
+    padding: 16px;
+  }
+
+  .DocList-filter-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+
+  .DocList-filter-header input {
+    width: 100% !important;
+  }
+
+  .DocList-DL-collapse-btn {
+    width: 100%;
+  }
+
+  .DocList-filter-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .DocList-search-footer {
+    margin-left: 0;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .DocList-DL-main-search-btn,
+  .DocList-DL-btn-secondary {
+    width: 100%;
+    margin-right: 0 !important;
+  }
+
+  .DocList-doctor-list-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .DocList-doc-footer {
+    flex-direction: column;
+  }
+
+  .DocList-booking-modal,
+  .DocList-details-modal {
+    width: 92%;
+    max-width: 92%;
+  }
+
+  .DocList-close-btn {
+    margin-top: 0;
+    margin-left: 0;
+  }
+
+  .DocList-success-card {
+    min-width: unset;
+    width: 90%;
+    padding: 30px 20px;
+  }
+
+  .DocList-details-body {
+    padding: 1.25rem;
+  }
+}
+
+/* Mobile phones */
+@media (max-width: 480px) {
+  .DocList-navbar1 {
+    font-size: 20px;
+    padding: 14px;
+  }
+
+  .DocList-filter-card {
+    padding: 14px;
+  }
+
+  .DocList-doc-card {
+    padding: 16px;
+  }
+
+  .DocList-doc-info {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .DocList-booking-header h3,
+  .DocList-details-modal h2 {
+    font-size: 16px;
+  }
+
+  .DocList-doctor-summary img {
+    width: 70px;
+    height: 70px;
+  }
+
+  .DocList-booking-footer {
+    flex-direction: column;
+  }
+
+  .DocList-cancel-btn,
+  .DocList-confirm-btn {
+    width: 100% !important;
+  }
+
+  .DocList-success-card {
+    padding: 24px 16px;
+  }
+
+  .DocList-details-body {
+    padding: 1rem;
+  }
+}

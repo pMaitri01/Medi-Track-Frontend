@@ -47,7 +47,7 @@ UploadMedRec-upload-close {
   border: none;
   font-size: 20px;
   cursor: pointer;
-  color:black !important;
+  color: black !important;
   width: 50px;
   height: 35px;
 }
@@ -100,7 +100,7 @@ UploadMedRec-upload-form textarea {
 UploadMedRec-upload-form input:focus,
 UploadMedRec-upload-form select:focus,
 UploadMedRec-upload-form textarea:focus {
-border: none;
+  border: none;
 }
 
 /* Textarea */
@@ -108,9 +108,10 @@ UploadMedRec-upload-form textarea {
   min-height: 80px;
 }
 textarea {
-    resize: vertical;
-    margin-left: 2px !important;
+  resize: vertical;
+  margin-left: 2px !important;
 }
+
 /* File input */
 UploadMedRec-upload-form input[type="file"] {
   padding: 8px;
@@ -119,7 +120,7 @@ UploadMedRec-upload-form input[type="file"] {
   cursor: pointer;
 }
 
-/* Buttons section - EXACT SAME ALIGNMENT */
+/* Buttons section */
 UploadMedRec-upload-btn-group {
   display: flex;
   justify-content: flex-end;
@@ -127,7 +128,7 @@ UploadMedRec-upload-btn-group {
   margin-top: 10px;
 }
 
-/* Primary button (same as confirm appointment) */
+/* Primary button */
 UploadMedRec-upload-btn-primary {
   padding: 10px 18px;
   background: #2563eb;
@@ -156,6 +157,7 @@ UploadMedRec-upload-btn-cancel:hover {
   background: #f3f4f6;
 }
 
+/* ── Proper class-based styles ───────────────────────────────────────────── */
 
 /* Overlay */
 .UploadMedRec-upload-modal-overlay {
@@ -168,17 +170,22 @@ UploadMedRec-upload-btn-cancel:hover {
   justify-content: center;
   align-items: center;
   z-index: 1000;
+  padding: 16px;
+  box-sizing: border-box;
 }
 
 /* Modal Container */
 .UploadMedRec-upload-modal {
   background: #ffffff;
   width: 650px;
-  max-width: 95%;
+  max-width: 100%;
   border-radius: 12px;
   padding: 30px;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
   position: relative;
+  box-sizing: border-box;
+  max-height: 90vh;
+  overflow-y: auto;
 }
 
 /* Header */
@@ -206,7 +213,7 @@ UploadMedRec-upload-btn-cancel:hover {
 /* FORM GRID */
 .UploadMedRec-upload-form {
   display: grid;
-  grid-template-columns: 1fr 1fr; /* Two equal columns */
+  grid-template-columns: 1fr 1fr;
   gap: 16px;
 }
 
@@ -219,10 +226,10 @@ UploadMedRec-upload-btn-cancel:hover {
   border-radius: 6px;
   border: 1px solid #d1d5db;
   font-size: 14px;
-  box-sizing: border-box; /* Crucial for alignment */
+  box-sizing: border-box;
 }
 
-/* Spanning full width for specific fields */
+/* Full width fields */
 .UploadMedRec-upload-form textarea,
 .UploadMedRec-upload-form .file-input-wrapper,
 .UploadMedRec-upload-btn-group {
@@ -232,6 +239,11 @@ UploadMedRec-upload-btn-cancel:hover {
 .UploadMedRec-upload-form textarea {
   min-height: 100px;
   resize: vertical;
+}
+
+/* File input full width */
+.UploadMedRec-upload-form input[type="file"] {
+  grid-column: span 2;
 }
 
 /* Buttons */
@@ -252,6 +264,10 @@ UploadMedRec-upload-btn-cancel:hover {
   cursor: pointer;
 }
 
+.UploadMedRec-upload-btn-primary:hover {
+  background: #088c8c;
+}
+
 .UploadMedRec-upload-btn-cancel {
   padding: 10px 24px;
   background: #f3f4f6;
@@ -259,4 +275,118 @@ UploadMedRec-upload-btn-cancel:hover {
   border: 1px solid #d1d5db;
   border-radius: 6px;
   cursor: pointer;
+}
+
+.UploadMedRec-upload-btn-cancel:hover {
+  background: #e5e7eb;
+}
+
+/* ── Responsive: Tablet (≤768px) ─────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .UploadMedRec-upload-modal-overlay {
+    align-items: flex-end;
+    padding: 0;
+  }
+
+  .UploadMedRec-upload-modal {
+    width: 100%;
+    max-width: 100%;
+    border-radius: 16px 16px 0 0;
+    padding: 24px 20px;
+    max-height: 92vh;
+  }
+
+  /* Stack to single column */
+  .UploadMedRec-upload-form {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  /* All fields full width on mobile */
+  .UploadMedRec-upload-form textarea,
+  .UploadMedRec-upload-form .file-input-wrapper,
+  .UploadMedRec-upload-form input[type="file"],
+  .UploadMedRec-upload-btn-group {
+    grid-column: span 1;
+  }
+
+  .UploadMedRec-upload-modal h2 {
+    font-size: 18px;
+    margin-bottom: 16px;
+    padding-right: 40px; /* space for close btn */
+  }
+
+  .UploadMedRec-upload-btn-group {
+    flex-direction: column-reverse;
+    gap: 10px;
+  }
+
+  .UploadMedRec-upload-btn-primary,
+  .UploadMedRec-upload-btn-cancel {
+    width: 100%;
+    text-align: center;
+    padding: 12px;
+  }
+}
+
+/* ── Responsive: Mobile (≤480px) ─────────────────────────────────────────── */
+@media (max-width: 480px) {
+  .UploadMedRec-upload-modal {
+    padding: 20px 14px;
+    max-height: 95vh;
+  }
+
+  .UploadMedRec-upload-modal h2 {
+    font-size: 16px;
+    margin-bottom: 14px;
+  }
+
+  .UploadMedRec-upload-form input,
+  .UploadMedRec-upload-form select,
+  .UploadMedRec-upload-form textarea {
+    font-size: 13px;
+    padding: 9px 10px;
+  }
+
+  .UploadMedRec-upload-form textarea {
+    min-height: 80px;
+  }
+
+  .UploadMedRec-upload-btn-primary,
+  .UploadMedRec-upload-btn-cancel {
+    font-size: 13px;
+    padding: 10px;
+  }
+
+  .UploadMedRec-upload-close {
+    top: 14px;
+    right: 14px;
+    font-size: 20px;
+    width: 36px;
+    height: 30px;
+  }
+}
+
+/* ── Responsive: Small Mobile (≤360px) ───────────────────────────────────── */
+@media (max-width: 360px) {
+  .UploadMedRec-upload-modal {
+    padding: 16px 12px;
+  }
+
+  .UploadMedRec-upload-modal h2 {
+    font-size: 15px;
+  }
+
+  .UploadMedRec-upload-form input,
+  .UploadMedRec-upload-form select,
+  .UploadMedRec-upload-form textarea {
+    font-size: 12px;
+    padding: 8px 10px;
+  }
+
+  .UploadMedRec-upload-btn-primary,
+  .UploadMedRec-upload-btn-cancel {
+    font-size: 12px;
+    padding: 9px;
+  }
 }

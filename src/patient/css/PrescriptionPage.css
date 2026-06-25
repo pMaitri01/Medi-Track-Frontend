@@ -259,7 +259,7 @@
 }
 
 /* ── Modal overlay ──────────────────────────────────────────────────────── */
-.PrescriptionPage-rx-overlay {
+/* .PrescriptionPage-rx-overlay {
   position: fixed;
   inset: 0;
   background: rgba(0, 0, 0, 0.PrescriptionPage-45);
@@ -268,6 +268,35 @@
   justify-content: center;
   z-index: 9999;
   padding: 20px;
+} */
+ 
+.PrescriptionPage-rx-overlay {
+  position: fixed;
+  inset: 0;
+
+  /* Dark overlay */
+  background: rgba(76, 76, 76, 0.8); /* #4c4c4c with opacity */
+
+  /* Blur effect */
+  backdrop-filter: blur(1.5px);
+  -webkit-backdrop-filter: blur(3px);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  padding: 20px;
+
+  animation: fadeOverlay 0.25s ease;
+}
+
+@keyframes fadeOverlay {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 .PrescriptionPage-rx-modal {

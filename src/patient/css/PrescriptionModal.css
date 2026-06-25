@@ -5,34 +5,38 @@
   left: 0;
   width: 100%;
   height: 100%;
- background: rgba(0, 0, 0, 0.7);
+  background: rgba(0, 0, 0, 0.7);
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 999;
+  padding: 16px;
+  box-sizing: border-box;
 }
 
-.PrescriptionModal-modal-header{
+.PrescriptionModal-modal-header {
   font-size: 22px;
-    font-weight: 600;
-    margin-top: 0;
-    margin-bottom: 20px;
-    /* width: 90%; */
-    color: #1f2937;
-    border-bottom: 1px solid #e5e7eb;
-    padding-bottom: 12px;
-    margin-left:20px;
-    margin-right: 20px;
-    justify-content: center;
+  font-weight: 600;
+  margin-top: 0;
+  margin-bottom: 20px;
+  color: #1f2937;
+  border-bottom: 1px solid #e5e7eb;
+  padding-bottom: 12px;
+  margin-left: 20px;
+  margin-right: 20px;
+  justify-content: center;
 }
 
 .PrescriptionModal-modal-container {
   width: 700px;
-  max-width: 95%;
+  max-width: 100%;
   background: #fff;
   border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
 }
 
 /* Header */
@@ -43,6 +47,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-shrink: 0;
 }
 
 .PrescriptionModal-close-btn {
@@ -51,7 +56,9 @@
   font-size: 22px;
   color: black;
   cursor: pointer;
+  flex-shrink: 0;
 }
+
 .PrescriptionModal-close-btn:hover {
   background: #0AA5A5;
   border: none;
@@ -64,8 +71,9 @@
 /* Body */
 .PrescriptionModal-modal-body {
   padding: 15px;
-  max-height: 60vh;
+  max-height: 70vh;
   overflow-y: auto;
+  flex: 1;
 }
 
 /* List item */
@@ -131,6 +139,7 @@
   width: 100%;
   border-collapse: collapse;
   font-size: 13px;
+  margin-top: 10px;
 }
 
 .PrescriptionModal-medicine-table th,
@@ -154,23 +163,6 @@
   color: #2563eb;
 }
 
-.PrescriptionModal-modal-body {
-  max-height: 70vh;
-  overflow-y: auto;
-}
-
-/* List card */
-.PrescriptionModal-list-card {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 12px;
-  margin-bottom: 10px;
-  border: 1px solid #e5e7eb;
-  border-radius: 8px;
-  background: #fff;
-}
-
 /* View button */
 .PrescriptionModal-view-btn {
   background: #0AA5A5;
@@ -179,6 +171,8 @@
   padding: 6px 12px;
   border-radius: 6px;
   cursor: pointer;
+  flex-shrink: 0;
+  white-space: nowrap;
 }
 
 /* Back button */
@@ -197,20 +191,171 @@
   padding: 10px;
 }
 
-/* Table fix */
-.PrescriptionModal-medicine-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 10px;
+/* ── Responsive: Tablet (≤768px) ─────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .PrescriptionModal-modal-overlay {
+    align-items: center;
+    padding: 16px;
+  }
+
+  .PrescriptionModal-modal-container {
+    width: 100%;
+    max-width: 480px;
+    border-radius: 12px;
+    max-height: 88vh;
+  }
+
+  .PrescriptionModal-modal-header {
+    padding: 14px 16px;
+    margin-left: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+  }
+
+  .PrescriptionModal-modal-header h2 {
+    font-size: 18px;
+  }
+
+  .PrescriptionModal-modal-body {
+    padding: 12px;
+    max-height: 75vh;
+  }
+
+  /* List card stacks on small screens */
+  .PrescriptionModal-list-card {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .PrescriptionModal-view-btn {
+    width: 100%;
+    text-align: center;
+    padding: 8px 12px;
+  }
+
+  /* Table scrollable */
+  .PrescriptionModal-prescription-detail {
+    padding: 6px;
+  }
+
+  .PrescriptionModal-medicine-table-wrapper {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .PrescriptionModal-medicine-table {
+    min-width: 400px;
+  }
+
+  .PrescriptionModal-back-btn {
+    width: 100%;
+    text-align: center;
+    padding: 10px;
+  }
 }
 
-.PrescriptionModal-medicine-table th,
-.PrescriptionModal-medicine-table td {
-  border: 1px solid #ddd;
-  padding: 6px;
-  text-align: left;
+/* ── Responsive: Mobile (≤480px) ─────────────────────────────────────────── */
+@media (max-width: 480px) {
+  .PrescriptionModal-modal-overlay {
+    padding: 12px;
+  }
+
+  .PrescriptionModal-modal-container {
+    max-width: 100%;
+    border-radius: 12px;
+    max-height: 92vh;
+  }
+
+  .PrescriptionModal-modal-header {
+    padding: 12px 14px;
+  }
+
+  .PrescriptionModal-modal-header h2 {
+    font-size: 16px;
+  }
+
+  .PrescriptionModal-close-btn {
+    font-size: 20px;
+  }
+
+  .PrescriptionModal-modal-body {
+    padding: 10px;
+  }
+
+  .PrescriptionModal-list-card {
+    padding: 10px;
+  }
+
+  .PrescriptionModal-list-card h4 {
+    font-size: 14px;
+    margin: 0 0 4px 0;
+  }
+
+  .PrescriptionModal-list-card p {
+    font-size: 12px;
+    margin: 2px 0;
+  }
+
+  .PrescriptionModal-medicine-table {
+    font-size: 12px;
+    min-width: 360px;
+  }
+
+  .PrescriptionModal-medicine-table th,
+  .PrescriptionModal-medicine-table td {
+    padding: 5px 4px;
+    font-size: 12px;
+  }
+
+  .PrescriptionModal-section-box {
+    padding: 8px;
+  }
+
+  .PrescriptionModal-section-box h4 {
+    font-size: 13px;
+  }
+
+  .PrescriptionModal-section-box p {
+    font-size: 13px;
+  }
+
+  .PrescriptionModal-prescription-detail h3 {
+    font-size: 15px;
+  }
+
+  .PrescriptionModal-prescription-detail h4 {
+    font-size: 13px;
+  }
 }
 
-.PrescriptionModal-medicine-table th {
-  background: #f3f4f6;
+/* ── Responsive: Small Mobile (≤360px) ───────────────────────────────────── */
+@media (max-width: 360px) {
+  .PrescriptionModal-modal-header h2 {
+    font-size: 15px;
+  }
+
+  .PrescriptionModal-modal-body {
+    padding: 8px;
+  }
+
+  .PrescriptionModal-list-card {
+    padding: 8px;
+  }
+
+  .PrescriptionModal-medicine-table {
+    font-size: 11px;
+    min-width: 320px;
+  }
+
+  .PrescriptionModal-medicine-table th,
+  .PrescriptionModal-medicine-table td {
+    padding: 4px 3px;
+  }
+
+  .PrescriptionModal-view-btn,
+  .PrescriptionModal-back-btn {
+    font-size: 12px;
+    padding: 8px;
+  }
 }

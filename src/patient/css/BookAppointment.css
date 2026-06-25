@@ -1,7 +1,16 @@
+* {
+  box-sizing: border-box;
+}
+
 .BookApp-appointment-card {
   padding: 18px;
   background: #fff;
   border-radius: 12px;
+  max-width: 100%;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .BookApp-appointment-header {
@@ -10,6 +19,17 @@
   align-items: center;
   border-bottom: 2px solid #f1f5f9;
   margin-bottom: 25px;
+  flex-wrap: nowrap;
+  position: sticky;
+  top: 0;
+  background: #fff;
+  z-index: 2;
+  padding-bottom: 8px;
+}
+
+.BookApp-appointment-header h2 {
+  margin: 0;
+  word-break: break-word;
 }
 
 .BookApp-close-modal {
@@ -18,7 +38,9 @@
   font-size: 28px;
   color: #64748b;
   cursor: pointer;
-  width: 5%;
+  width: auto;
+  flex-shrink: 0;
+  padding: 0 8px;
 }
 
 .BookApp-close-modal:hover {
@@ -30,38 +52,60 @@
   display: grid;
   grid-template-columns: 1.2fr 0.8fr;
   gap: 40px;
-  overflow-y: auto;
 }
+
 .BookApp-calendar-container {
   width: 80%;
 }
+
+.react-calendar {
+  width: 100%;
+  max-width: 100%;
+}
+
 .react-calendar__tile.react-calendar__tile--now.react-calendar__month-view__days__day {
   background: #0aa5a5;
   color: white;
   border-radius: 50%;
   border: 5px solid #0aa5a5;
 }
+
 .react-calendar__tile.react-calendar__tile--active.react-calendar__tile--range.react-calendar__tile--rangeStart.react-calendar__tile--rangeEnd.react-calendar__tile--rangeBothEnds.react-calendar__month-view__days__day {
   background: white;
   color: #0aa5a5;
   border-radius: 50%;
   border: 2px solid #0aa5a5;
 }
+
 .BookApp-slots-container {
   margin-left: -100px;
+  min-width: 0;
 }
+
 .BookApp-doctor-dropdown {
   width: 100%;
   padding: 7px;
   border: 1px solid #ccc;
   border-radius: 8px;
 }
+
 .BookApp-label-text,
 .BookApp-label-date {
   display: block;
   font-weight: 700;
   color: #1e293b;
   font-size: 0.95rem;
+}
+
+.slots-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.BookApp-slots-grid {
+  width: 100%;
+  min-width: 0;
 }
 
 .BookApp-slot-pill {
@@ -71,6 +115,7 @@
   cursor: pointer;
   background: white;
   margin: 5px;
+  white-space: nowrap;
 }
 
 .BookApp-slot-pill.selected {
@@ -88,6 +133,13 @@
   background-color: #e5e7eb;
   cursor: not-allowed;
   opacity: 0.6;
+}
+
+.BookApp-button-group {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  padding-bottom: 10px;
 }
 
 .BookApp-booking-submit-btn {
@@ -116,4 +168,120 @@
   border-radius: 8px;
   font-weight: 700;
   margin-left: 30px;
+}
+
+/* ============================
+   RESPONSIVE MEDIA QUERIES
+   ============================ */
+
+/* Laptops / small desktops */
+@media (max-width: 1024px) {
+  .BookApp-appointment-grid {
+    gap: 24px;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .BookApp-slots-container {
+    margin-left: 0;
+  }
+
+  .BookApp-calendar-container {
+    width: 100%;
+  }
+}
+
+/* Tablets */
+@media (max-width: 900px) {
+  .BookApp-appointment-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .BookApp-slots-container {
+    margin-left: 0;
+  }
+
+  .BookApp-calendar-container {
+    width: 100%;
+  }
+
+  .BookApp-appointment-type-select {
+    width: 100%;
+  }
+}
+
+/* Mobile phones */
+@media (max-width: 600px) {
+  .BookApp-appointment-card {
+    padding: 12px;
+    border-radius: 8px;
+    max-height: 95vh;
+  }
+
+  .BookApp-appointment-header h2 {
+    font-size: 1.1rem;
+  }
+
+  .BookApp-close-modal {
+    font-size: 24px;
+  }
+
+  .BookApp-appointment-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .BookApp-calendar-container,
+  .BookApp-slots-container {
+    width: 100%;
+    margin-left: 0;
+  }
+
+  .BookApp-doctor-dropdown,
+  .BookApp-appointment-type-select {
+    width: 100%;
+    font-size: 0.9rem;
+  }
+
+  .react-calendar {
+    font-size: 0.85rem;
+  }
+
+  .slots-grid {
+    gap: 4px;
+  }
+
+  .BookApp-slot-pill {
+    padding: 8px 10px;
+    font-size: 0.85rem;
+    margin: 3px;
+  }
+
+  .BookApp-button-group {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .BookApp-booking-submit-btn,
+  .BookApp-cancel-btn {
+    width: 100%;
+    margin-top: 10px;
+    margin-left: 0;
+  }
+}
+
+/* Very small phones */
+@media (max-width: 380px) {
+  .BookApp-appointment-header h2 {
+    font-size: 1rem;
+  }
+
+  .react-calendar {
+    font-size: 0.75rem;
+  }
+
+  .BookApp-slot-pill {
+    padding: 6px 8px;
+    font-size: 0.8rem;
+  }
 }

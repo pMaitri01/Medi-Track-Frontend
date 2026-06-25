@@ -408,9 +408,65 @@
 .pps-success p  { font-size: 14px; color: #64748b; margin-bottom: 28px; }
 
 /* ── RESPONSIVE ── */
+
+/* Tablets */
+@media (max-width: 768px) {
+  .pps-page { padding: 24px 12px 50px; }
+  .pps-header { padding: 20px 22px 0; }
+  .pps-section-title { padding: 0 22px 18px; }
+  .pps-body { padding: 0 22px 22px; }
+  .pps-footer { padding: 18px 22px 24px; }
+  .pps-dot { width: 30px; height: 30px; font-size: 11px; }
+}
+
+/* Mobile phones */
 @media (max-width: 560px) {
   .pps-grid-2 { grid-template-columns: 1fr; }
   .pps-body, .pps-footer, .pps-section-title { padding-left: 16px; padding-right: 16px; }
   .pps-header { padding: 16px 16px 0; }
   .pps-radio-group { flex-direction: column; }
+
+  .pps-page { padding: 16px 8px 40px; }
+  .pps-banner { padding: 10px 16px; font-size: 13px; }
+  .pps-card { border-radius: 14px; }
+
+  .pps-step-info { flex-wrap: wrap; gap: 4px; }
+  .pps-step-label,
+  .pps-step-count { font-size: 12px; }
+
+  .pps-dots { gap: 6px; flex-wrap: wrap; }
+  .pps-dot { width: 28px; height: 28px; font-size: 11px; }
+
+  .pps-section-title { font-size: 15px; gap: 8px; }
+  .pps-section-icon { width: 30px; height: 30px; font-size: 16px; }
+
+  .pps-checkbox-group { gap: 8px; }
+  .pps-checkbox-label,
+  .pps-radio-label { font-size: 13px; padding: 7px 12px; }
+
+  .pps-photo-wrap { flex-wrap: wrap; gap: 12px; }
+  .pps-photo-preview,
+  .pps-photo-placeholder { width: 64px; height: 64px; }
+
+  .pps-footer { flex-direction: column-reverse; gap: 10px; }
+  .pps-btn-back,
+  .pps-btn-next,
+  .pps-btn-submit {
+    width: 100%;
+    margin-left: 0;
+    text-align: center;
+  }
+
+  .pps-success { padding: 36px 20px; }
+  .pps-success-icon { font-size: 48px; }
+  .pps-success h2 { font-size: 19px; }
+}
+
+/* Very small phones */
+@media (max-width: 380px) {
+  .pps-banner { font-size: 12px; padding: 9px 12px; }
+  .pps-dot { width: 25px; height: 25px; font-size: 10px; }
+  .pps-section-title { font-size: 14px; }
+  .pps-input, .pps-select, .pps-textarea { font-size: 13px; padding: 9px 11px; }
+  .pps-btn { padding: 10px 20px; font-size: 13px; }
 }

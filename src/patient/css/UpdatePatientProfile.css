@@ -17,6 +17,14 @@ body {
   color: #1D3040;
 }
 
+/* ── Global mobile overflow guard ── */
+@media (max-width: 768px) {
+  html, body {
+    overflow-x: hidden;
+    max-width: 100%;
+  }
+}
+
 /* ── Animations ── */
 @keyframes fadeUp {
   from { opacity: 0; transform: translateY(8px); }
@@ -139,6 +147,7 @@ body {
   cursor: pointer;
   font-family: 'DM Sans', sans-serif;
   transition: background 0.15s;
+  white-space: nowrap;
 }
 
 .back-btn:hover {
@@ -244,15 +253,16 @@ body {
   margin-bottom: 18px;
   flex-wrap: wrap;
   animation: fadeUp 0.3s ease both;
-  width: 860px !important;
+  width: 100% !important;
 }
 
 .hero-inner {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 18px;
   flex-direction: row;
-  align-items: flex-start;
+  flex: 1;
+  min-width: 0;
 }
 
 .hero__name {
@@ -280,14 +290,13 @@ body {
   gap: 12px;
   align-items: center;
   justify-content: flex-end;
-  flex-wrap: nowrap;
+  flex-wrap: wrap;
 }
 
 .hero-actions button {
   flex-shrink: 0;
   white-space: nowrap;
 }
-
 
 /* ═══════════════════════════════════════
    TAG CHIP
@@ -314,20 +323,16 @@ body {
 /* ═══════════════════════════════════════
    SECTION CARD
 ═══════════════════════════════════════ */
-/* .section-card {
+.section-card {
+  flex: 1;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
   background: #fff;
   border-radius: 14px;
   border: 1px solid #E4EEF0;
   box-shadow: 0 1px 6px rgba(15, 40, 50, 0.04);
   overflow: hidden;
-} */
-
-.section-card {
-  flex: 1;
-  width: 100%;
-   /* ✅ ensures full stretch */
-  display: flex;
-  flex-direction: column;
 }
 
 .section-card--flex {
@@ -383,7 +388,7 @@ body {
 }
 
 .row > * {
-  display: flex;          /* 🔥 THIS FIXES IT */
+  display: flex;
 }
 
 .row.single {
@@ -455,6 +460,25 @@ body {
 
 .field__value--empty {
   color: #CBD5E1;
+}
+
+.field__input {
+  padding: 9px 13px;
+  border-radius: 8px;
+  border: 1.5px solid #E4EEF0;
+  font-size: 13.5px;
+  color: #1D3040;
+  background: #fff;
+  outline: none;
+  width: 100%;
+  box-sizing: border-box;
+  font-family: 'DM Sans', sans-serif;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.field__input:focus {
+  border-color: #14B8A6;
+  box-shadow: 0 0 0 3px rgba(20, 184, 166, 0.08);
 }
 
 /* ═══════════════════════════════════════
@@ -531,17 +555,6 @@ body {
 /* ═══════════════════════════════════════
    SAVE BAR
 ═══════════════════════════════════════ */
-/* .save-bar {
-  background: #fff;
-  border-radius: 14px;
-  padding: 14px 22px;
-  border: 1px solid #E4EEF0;
-  display: flex;
-  justify-content: flex-end;
-  gap: 10px;
-  box-shadow: 0 1px 6px rgba(15, 40, 50, 0.04);
-} */
-
 .save-bar {
   background: #fff;
   border-radius: 14px;
@@ -550,7 +563,7 @@ body {
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  gap: 12px; /* ✅ important */
+  gap: 12px;
   box-shadow: 0 1px 6px rgba(15, 40, 50, 0.04);
 }
 
@@ -578,26 +591,302 @@ body {
   background: white;
   margin-top: 8px;
   border-radius: 12px;
-  width: 860px;
+  width: 100%;
 }
 
 /* ═══════════════════════════════════════
-   RESPONSIVE
+   RESPONSIVE: Large Tablet (≤900px)
 ═══════════════════════════════════════ */
-@media (max-width: 640px) {
+@media (max-width: 900px) {
+  .page-body {
+    padding: 20px 14px 50px;
+  }
+
+  .hero-card {
+    padding: 16px 18px;
+  }
+
+  .hero__name {
+    font-size: 16px;
+  }
+}
+
+/* ═══════════════════════════════════════
+   RESPONSIVE: Tablet (≤768px)
+═══════════════════════════════════════ */
+@media (max-width: 768px) {
+  /* Nuclear overflow fix */
+  .page-wrapper,
+  .page-body,
+  .cols,
+  .row,
+  .row.single,
+  .hero-card,
+  .hero-inner,
+  .section-card,
+  .two-col,
+  .three-col,
+  .stack,
+  .edit-grid2,
+  .edit-grid3,
+  .section__body,
+  .field,
+  .field__value,
+  .field__input,
+  .edit-input,
+  .edit-select,
+  .edit-textarea {
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+    overflow-x: hidden;
+    min-width: 0;
+  }
+
+  .topbar {
+    padding: 0 14px;
+    height: 48px;
+  }
+
+  .topbar__breadcrumb {
+    display: none;
+  }
+
+  .topbar__divider {
+    display: none;
+  }
+
+  .page-body {
+    padding: 16px 12px 40px;
+    width: 100%;
+  }
+
+  /* Hero stacks vertically */
+  .hero-card {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 16px;
+    gap: 14px;
+    width: 100%;
+  }
+
+  .hero-inner {
+    width: 100%;
+  }
+
+  .hero-actions {
+    width: 100%;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+  }
+
+  /* ALL rows — single column, no exceptions */
+  .row,
+  .row.single {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    width: 100% !important;
+  }
+
+  /* row children must not use flex that causes overflow */
+  .row > * {
+    display: block !important;
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  /* Section cards full width */
+  .section-card {
+    width: 100% !important;
+    min-width: 0;
+    display: flex !important;
+    flex-direction: column !important;
+  }
+
+  /* All inner grids */
   .two-col,
   .edit-grid2 {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr !important;
   }
 
   .three-col,
   .edit-grid3 {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr 1fr !important;
   }
 
-  /* .row,
-  .side-by-side {
-    flex-direction: column;
-  } */
+  .two-col,
+  .stack {
+    height: auto;
+  }
 
+  .section__body {
+    padding: 14px 16px;
+  }
+
+  .section__header {
+    padding: 12px 16px;
+  }
+}
+
+/* ═══════════════════════════════════════
+   RESPONSIVE: Mobile (≤480px)
+═══════════════════════════════════════ */
+@media (max-width: 480px) {
+  .topbar {
+    padding: 0 10px;
+  }
+
+  .back-btn {
+    font-size: 12px;
+    padding: 5px 10px;
+  }
+
+  .page-body {
+    padding: 12px 8px 32px;
+    width: 100%;
+    overflow-x: hidden;
+  }
+
+  .hero-card {
+    padding: 14px 12px;
+    gap: 12px;
+    width: 100%;
+  }
+
+  .hero__name {
+    font-size: 15px;
+    word-break: break-word;
+  }
+
+  .hero__sub {
+    font-size: 12px;
+    margin-bottom: 8px;
+  }
+
+  .avatar--lg {
+    width: 52px;
+    height: 52px;
+    font-size: 17px;
+  }
+
+  .hero-actions {
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .teal-btn {
+    font-size: 12px;
+    padding: 8px 14px;
+  }
+
+  /* Force all grid cols to single on mobile */
+  .row,
+  .row.single,
+  .two-col,
+  .edit-grid2,
+  .three-col,
+  .edit-grid3 {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    width: 100% !important;
+  }
+
+  .row > * {
+    display: block !important;
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  .section-card {
+    width: 100% !important;
+    min-width: 0;
+    display: flex !important;
+    flex-direction: column !important;
+  }
+
+  /* Inputs never overflow */
+  .field__input,
+  .edit-input,
+  .edit-select,
+  .edit-textarea {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .section__body {
+    padding: 12px;
+  }
+
+  .section__header {
+    padding: 10px 12px;
+  }
+
+  .field__value {
+    font-size: 13px;
+    padding: 8px 10px;
+  }
+
+  .field__input {
+    font-size: 13px;
+    padding: 8px 10px;
+  }
+
+  .field__label {
+    font-size: 9px;
+  }
+
+  .chip {
+    font-size: 11px;
+    padding: 3px 10px;
+  }
+
+  .cols {
+    gap: 12px;
+  }
+
+  .two-col,
+  .stack {
+    height: auto;
+  }
+
+  .Pfooter {
+    font-size: 11px;
+    padding: 14px;
+  }
+}
+
+/* ═══════════════════════════════════════
+   RESPONSIVE: Small Mobile (≤360px)
+═══════════════════════════════════════ */
+@media (max-width: 360px) {
+  .hero__name {
+    font-size: 14px;
+  }
+
+  .avatar--lg {
+    width: 44px;
+    height: 44px;
+    font-size: 15px;
+  }
+
+  .teal-btn {
+    font-size: 11px;
+    padding: 7px 10px;
+    gap: 4px;
+  }
+
+  .field__value,
+  .field__input {
+    font-size: 12px;
+    padding: 7px 9px;
+  }
+
+  .section__title {
+    font-size: 10px;
+  }
+
+  .back-btn {
+    font-size: 11px;
+    padding: 4px 8px;
+  }
 }
