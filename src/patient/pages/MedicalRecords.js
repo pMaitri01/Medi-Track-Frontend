@@ -41,98 +41,152 @@ const capitalizeType = (type) => {
   return type.charAt(0).toUpperCase() + type.slice(1);
 };
 
+function SummaryModal({ summary, record, onClose }) {
+  // Close on backdrop click
+  const handleBackdropClick = (e) => {
+    if (e.target === e.currentTarget) onClose();
+  };
+
+  // Close on Escape key
+  useEffect(() => {
+    const handleKey = (e) => { if (e.key === "Escape") onClose(); };
+    document.addEventListener("keydown", handleKey);
+    return () => document.removeEventListener("keydown", handleKey);
+  }, [onClose]);
+
+  return (
+    <div className="MedRec-summary-backdrop" onClick={handleBackdropClick}>
+      <div className="MedRec-summary-modal">
+        {/* Modal Header */}
+        <div className="MedRec-summary-modal-header">
+          <div className="MedRec-summary-modal-title">
+            <span className="MedRec-summary-modal-icon">🧠</span>
+            <div>
+              <h2>AI Medical Summary</h2>
+              <p className="MedRec-summary-modal-subtitle">{record.title}</p>
+            </div>
+          </div>
+          <button className="MedRec-summary-close-btn" onClick={onClose}>✕</button>
+        </div>
+
+        {/* Divider */}
+        <div className="MedRec-summary-divider" />
+
+        {/* Modal Body — Markdown Content */}
+        <div className="MedRec-summary-modal-body">
+          <div className="MedRec-summary-markdown">
+            <ReactMarkdown>{summary}</ReactMarkdown>
+          </div>
+        </div>
+
+        {/* Modal Footer */}
+        <div className="MedRec-summary-modal-footer">
+          <span className="MedRec-summary-disclaimer">
+            ⚠️ AI-generated summary. Not a medical diagnosis. Consult your doctor.
+          </span>
+          <button className="MedRec-summary-close-footer-btn" onClick={onClose}>
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function RecordCard({ record }) {
   const tc = TYPE_COLOR[record.type] || {};
 
   const [loading, setLoading] = useState(false);
   const [summary, setSummary] = useState("");
-  const [showSummary, setShowSummary] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+
+  const handleAISummary = async () => {
+    // If summary already generated, just open modal
+    if (summary) {
+      setShowModal(true);
+      return;
+    }
+
+    // Start generating
+    try {
+      setLoading(true);
+      const res = await fetch(
+        `${process.env.REACT_APP_API_URL}/api/record/generate-summary/${record.id}`,
+        { method: "POST", credentials: "include" }
+      );
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || "Failed to generate summary");
+      setSummary(data.summary);
+      setShowModal(true); // Auto-open modal after generation
+    } catch (err) {
+      console.error(err);
+      toast.error("Failed to generate AI summary");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <>
-    <div className="MedRec-mr-card">
-      <div className="MedRec-mr-card-top">
-        <div className="MedRec-mr-card-icon" style={{ background: tc.bg, color: tc.color }}>
-          {TYPE_ICON[record.type] || "📄"}
+      <div className="MedRec-mr-card">
+        <div className="MedRec-mr-card-top">
+          <div className="MedRec-mr-card-icon" style={{ background: tc.bg, color: tc.color }}>
+            {TYPE_ICON[record.type] || "📄"}
+          </div>
+          <div className="MedRec-mr-card-info">
+            <h3 className="MedRec-mr-card-title">{record.title}</h3>
+            <span className="MedRec-mr-type-tag" style={{ background: tc.bg, color: tc.color }}>
+              {record.type}
+            </span>
+          </div>
         </div>
-        <div className="MedRec-mr-card-info">
-          <h3 className="MedRec-mr-card-title">{record.title}</h3>
-          <span className="MedRec-mr-type-tag" style={{ background: tc.bg, color: tc.color }}>
-            {record.type}
-          </span>
+
+        <div className="MedRec-mr-card-meta">
+          <span>📅 {formatDate(record.date)}</span>
+          <span>👨‍⚕️ {record.doctor}</span>
+        </div>
+
+        <p className="MedRec-mr-card-desc">{record.description}</p>
+
+        <div className="MedRec-mr-card-actions">
+          <button
+            className="MedRec-mr-btn MedRec-mr-btn--download"
+            onClick={() => {
+              if (record.file) {
+                window.open(record.file, "_blank");
+              } else {
+                toast.info("No file available for this record");
+              }
+            }}
+          >
+            ⬇ Download
+          </button>
+
+          {/* AI Summary Button — changes to View Summary after generation */}
+          <button
+            className={`MedRec-mr-btn ${summary ? "MedRec-mr-btn--view" : "MedRec-mr-btn--ai"}`}
+            onClick={handleAISummary}
+            disabled={!record.file || loading}
+          >
+            {loading ? (
+              <span className="MedRec-mr-btn-spinner">⏳ Generating...</span>
+            ) : summary ? (
+              "📄 View Summary"
+            ) : (
+              "🧠 AI Summary"
+            )}
+          </button>
         </div>
       </div>
 
-      <div className="MedRec-mr-card-meta">
-        <span>📅 {formatDate(record.date)}</span>
-        <span>👨‍⚕️ {record.doctor}</span>
-      </div>
-
-      <p className="MedRec-mr-card-desc">{record.description}</p>
-
-      <div className="MedRec-mr-card-actions">
-        <button
-          className="MedRec-mr-btn MedRec-mr-btn--download"
-          onClick={() => {
-            if (record.file) {
-              window.open(record.file, "_blank");
-            } else {
-              toast.info("No file available for this record");
-            }
-          }}
-        >
-          ⬇ Download
-        </button>
-         <button
-    className="MedRec-mr-btn MedRec-mr-btn--ai"
-    onClick={async () => {
-  if (!record.file) return;
-
-  try {
-    setLoading(true);
-
-    const res = await fetch(
-      `${process.env.REACT_APP_API_URL}/api/record/generate-summary/${record.id}`,
-      { method: "POST", credentials: "include" }
-    );
-
-    const data = await res.json();
-    if (!res.ok) throw new Error(data.message);
-
-    setSummary(data.summary);
-    setShowSummary(true);  
-  } catch (err) {
-    console.error(err);
-    toast.error("Failed to generate summary");
-  } finally {
-    setLoading(false);
-  }
-}}
-    disabled={!record.file}
-  >
-    🧠 AI Summary
-  </button>
-      </div>
-    
-
-    </div>
-    {showSummary && (
-  <div className="MedRec-mr-modal-overlay">
-    <div className="MedRec-mr-modal">
-      <h2>AI Summary</h2>
-
-      <div className="MedRec-mr-modal-content">
-        <ReactMarkdown>{summary}</ReactMarkdown>
-      </div>
-
-      <button
-        className="MedRec-mr-btn MedRec-mr-btn--close"
-        onClick={() => setShowSummary(false)}
-      >
-        Close
-      </button>
-    </div>
-  </div>
-)}
+      {/* Summary Modal */}
+      {showModal && (
+        <SummaryModal
+          summary={summary}
+          record={record}
+          onClose={() => setShowModal(false)}
+        />
+      )}
     </>
   );
 }
@@ -290,7 +344,7 @@ if (!data.records || !Array.isArray(data.records)) {
             </button>
           </div>
         </div>
-          
+
         {filtered.length === 0 ? (
           <p className="MedRec-mr-empty">No records found.</p>
         ) : viewMode === "card" ? (
@@ -310,8 +364,7 @@ if (!data.records || !Array.isArray(data.records)) {
       {showUpload && (
         <UploadMedicalRecord onClose={() => setShowUpload(false)} />
       )}
-      
+
     </div>
-    
   );
 }
