@@ -4,6 +4,7 @@ import "../css/MedicalRecords.css";
 import UploadMedicalRecord from "./UploadMedicalRecord";
 import defaultDoctorImg from "../images/user.png";
 import { toast } from "react-toastify";
+import ReactMarkdown from "react-markdown";
 
 const TABS = ["All Records", "Report", "Scan", "Prescription"];
 const DATES = ["All Time", "Last 7 Days", "Last Month"];
@@ -93,39 +94,32 @@ function RecordCard({ record }) {
       {showSummary && (
   <div className="MedRec-mr-ai-box">
     {loading ? (
-      <p className="MedRec-mr-ai-loading">Generating AI summary...</p>
+      <p className="MedRec-mr-ai-loading">⏳ Generating AI summary...</p>
     ) : summary ? (
-      <p className="MedRec-mr-ai-text">{summary}</p>
+      // ✅ Use ReactMarkdown here, not <p>
+      <div className="MedRec-mr-ai-text">
+        <ReactMarkdown>{summary}</ReactMarkdown>
+      </div>
     ) : (
       <button
         className="MedRec-mr-btn MedRec-mr-btn--generate"
         onClick={async () => {
-  try {
-    setLoading(true);
-
-    const res = await fetch(
-      `${process.env.REACT_APP_API_URL}/api/record/generate-summary/${record.id}`,
-      {
-        method: "POST",
-        credentials: "include",
-      }
-    );
-
-    const data = await res.json();
-
-    if (!res.ok) {
-      throw new Error(data.message || "Failed to generate summary");
-    }
-
-    setSummary(data.summary);
-
-  } catch (err) {
-    console.error(err);
-    toast.error("Failed to generate summary");
-  } finally {
-    setLoading(false);
-  }
-}}
+          try {
+            setLoading(true);
+            const res = await fetch(
+              `${process.env.REACT_APP_API_URL}/api/record/generate-summary/${record.id}`,
+              { method: "POST", credentials: "include" }
+            );
+            const data = await res.json();
+            if (!res.ok) throw new Error(data.message || "Failed to generate summary");
+            setSummary(data.summary);
+          } catch (err) {
+            console.error(err);
+            toast.error("Failed to generate summary");
+          } finally {
+            setLoading(false);
+          }
+        }}
       >
         Generate Summary
       </button>
