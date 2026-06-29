@@ -100,22 +100,32 @@ function RecordCard({ record }) {
       <button
         className="MedRec-mr-btn MedRec-mr-btn--generate"
         onClick={async () => {
-          try {
-            setLoading(true);
+  try {
+    setLoading(true);
 
-            // TEMP dummy
-            setTimeout(() => {
-              setSummary(
-                "This is a sample AI-generated summary of the medical report. It explains findings in simple language."
-              );
-              setLoading(false);
-            }, 1500);
+    const res = await fetch(
+      `${process.env.REACT_APP_API_URL}/api/record/generate-summary/${record.id}`,
+      {
+        method: "POST",
+        credentials: "include",
+      }
+    );
 
-          } catch (err) {
-            toast.error("Failed to generate summary");
-            setLoading(false);
-          }
-        }}
+    const data = await res.json();
+
+    if (!res.ok) {
+      throw new Error(data.message || "Failed to generate summary");
+    }
+
+    setSummary(data.summary);
+
+  } catch (err) {
+    console.error(err);
+    toast.error("Failed to generate summary");
+  } finally {
+    setLoading(false);
+  }
+}}
       >
         Generate Summary
       </button>
