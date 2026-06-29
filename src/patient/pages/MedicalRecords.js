@@ -48,6 +48,7 @@ function RecordCard({ record }) {
   const [summary, setSummary] = useState("");
   const [showSummary, setShowSummary] = useState(false);
   return (
+    <>
     <div className="MedRec-mr-card">
       <div className="MedRec-mr-card-top">
         <div className="MedRec-mr-card-icon" style={{ background: tc.bg, color: tc.color }}>
@@ -83,50 +84,56 @@ function RecordCard({ record }) {
         </button>
          <button
     className="MedRec-mr-btn MedRec-mr-btn--ai"
-    onClick={() => {
-      setShowSummary(!showSummary);
-    }}
+    onClick={async () => {
+  if (!record.file) return;
+
+  try {
+    setLoading(true);
+
+    const res = await fetch(
+      `${process.env.REACT_APP_API_URL}/api/record/generate-summary/${record.id}`,
+      { method: "POST", credentials: "include" }
+    );
+
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.message);
+
+    setSummary(data.summary);
+    setShowSummary(true);  
+  } catch (err) {
+    console.error(err);
+    toast.error("Failed to generate summary");
+  } finally {
+    setLoading(false);
+  }
+}}
     disabled={!record.file}
   >
     🧠 AI Summary
   </button>
       </div>
-      {showSummary && (
-  <div className="MedRec-mr-ai-box">
-    {loading ? (
-      <p className="MedRec-mr-ai-loading">⏳ Generating AI summary...</p>
-    ) : summary ? (
-      // ✅ Use ReactMarkdown here, not <p>
-      <div className="MedRec-mr-ai-text">
+    
+
+    </div>
+    {showSummary && (
+  <div className="MedRec-mr-modal-overlay">
+    <div className="MedRec-mr-modal">
+      <h2>AI Summary</h2>
+
+      <div className="MedRec-mr-modal-content">
         <ReactMarkdown>{summary}</ReactMarkdown>
       </div>
-    ) : (
+
       <button
-        className="MedRec-mr-btn MedRec-mr-btn--generate"
-        onClick={async () => {
-          try {
-            setLoading(true);
-            const res = await fetch(
-              `${process.env.REACT_APP_API_URL}/api/record/generate-summary/${record.id}`,
-              { method: "POST", credentials: "include" }
-            );
-            const data = await res.json();
-            if (!res.ok) throw new Error(data.message || "Failed to generate summary");
-            setSummary(data.summary);
-          } catch (err) {
-            console.error(err);
-            toast.error("Failed to generate summary");
-          } finally {
-            setLoading(false);
-          }
-        }}
+        className="MedRec-mr-btn MedRec-mr-btn--close"
+        onClick={() => setShowSummary(false)}
       >
-        Generate Summary
+        Close
       </button>
-    )}
+    </div>
   </div>
 )}
-    </div>
+    </>
   );
 }
 
@@ -283,7 +290,7 @@ if (!data.records || !Array.isArray(data.records)) {
             </button>
           </div>
         </div>
-
+          
         {filtered.length === 0 ? (
           <p className="MedRec-mr-empty">No records found.</p>
         ) : viewMode === "card" ? (
@@ -303,7 +310,8 @@ if (!data.records || !Array.isArray(data.records)) {
       {showUpload && (
         <UploadMedicalRecord onClose={() => setShowUpload(false)} />
       )}
-
+      
     </div>
+    
   );
 }
